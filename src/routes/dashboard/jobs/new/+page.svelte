@@ -57,7 +57,12 @@
 
 			// Handle headings
 			if (markdownBuffer.startsWith('#')) {
+				// We start by removing the markdown symbol
+				
 				const level = Math.min(markdownBuffer.length, 4);
+				// const heading = currentLine.replace(markdownBuffer, '');
+				range.setStart(range.startContainer, 0);
+				range.deleteContents();
 				document.execCommand('formatBlock', false, `h${level}`);
 				const selection = window.getSelection();
 				if (selection) {
