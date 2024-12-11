@@ -29,30 +29,62 @@
 		console.log(job_id);
 	});
 
-	let insertUnorderedList = false;
+	let markdownBuffer = '';
+
 	function handleKeydown(event: KeyboardEvent) {
+		const selection = window.getSelection();
+		if (!selection) return;
+
 		if (event.key === 'Tab') {
 			event.preventDefault();
-			document.execCommand('insertText', false, '\t');
+			const range = selection.getRangeAt(0);
+			const tabNode = document.createTextNode('\t');
+			range.insertNode(tabNode);
+			range.setStartAfter(tabNode);
+			range.setEndAfter(tabNode);
+			return;
 		}
 
+		// Start collecting markdown symbols
 		if (event.key === 'Enter') {
-			// Start of a new line
-			insertUnorderedList = true;
-		} else if (insertUnorderedList && (event.key === '-' || event.key === '*')) {
-			// User typed '-' or '*', waiting for space
-		} else if (insertUnorderedList && event.key === ' ') {
-			// User typed space after '-' or '*', trigger unordered list
+			markdownBuffer = '';
+		} else if (event.key === '#' || event.key === '-' || event.key === '*') {
+			markdownBuffer += event.key;
+		} else if (event.key === ' ' && markdownBuffer) {
 			event.preventDefault();
-			// Remove the '-' or '*' and space
-			document.execCommand('delete', false);
-			document.execCommand('delete', false);
-			// Insert unordered list
-			format('insertUnorderedList');
-			insertUnorderedList = false;
+			const range = selection.getRangeAt(0);
+			const currentLine = range.startContainer.textContent || '';
+
+			// Handle headings
+			if (markdownBuffer.startsWith('#')) {
+				const level = Math.min(markdownBuffer.length, 4);
+				document.execCommand('formatBlock', false, `h${level}`);
+				const selection = window.getSelection();
+				if (selection) {
+					const node = selection.anchorNode;
+					if (node && node.nodeType === 3) {
+						const parent = node.parentNode;
+						if (parent && parent.nodeName === `H${level}`) {
+							const sizes = ['text-4xl', 'text-3xl', 'text-2xl', 'text-xl'];
+							(parent as HTMLElement).classList.add(sizes[level - 1]);
+						}
+					}
+				}
+			}
+			// Handle lists
+			else if (markdownBuffer === '-' || markdownBuffer === '*') {
+				const ul = document.createElement('ul');
+				ul.className = 'list-inside list-disc';
+				const li = document.createElement('li');
+				ul.appendChild(li);
+				range.setStart(range.startContainer, 0);
+				range.deleteContents();
+				range.insertNode(ul);
+				li.focus();
+			}
+			markdownBuffer = '';
 		} else {
-			// Reset flag for any other key
-			insertUnorderedList = false;
+			markdownBuffer = '';
 		}
 	}
 
