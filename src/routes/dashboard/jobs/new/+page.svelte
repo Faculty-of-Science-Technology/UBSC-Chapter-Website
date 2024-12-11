@@ -2,11 +2,17 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import RichTextEditor from '$lib/components/RichTextEditor.svelte';
-	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
+	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
+	import { Input } from '$lib/components/vendor/ui/input';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
-	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
+
+	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	const job_id = $page.params.job_id;
 	onMount(() => {
@@ -25,11 +31,6 @@
 	<form class="text-inter flex flex-wrap items-start gap-8 self-stretch" method="POST" use:enhance>
 		<!-- Left Column -->
 		<l-column class="flex w-fit flex-col items-start gap-6">
-			<Card.Root class="w-full">
-				<Card.Title class="items-center justify-center py-2 text-center text-2xl">
-					<p>Explore Available Jobs</p>
-				</Card.Title>
-			</Card.Root>
 			<JobCard.Root class="w-[305px] lg:w-[320px]">
 				<JobCard.Content class="flex flex-col gap-4">
 					<JobCard.Title>
@@ -39,12 +40,12 @@
 					<card-description class="flex flex-col gap-2">
 						<JobCard.Description>HireLATAM</JobCard.Description>
 						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<Briefcase strokeWidth="2" size="16" />
-							<p>Belize (In-Person)</p>
+							<DollarSign strokeWidth="2" size="16" />
+							<p>$24/hr &ndash; $40/hr</p>
 						</div>
 						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<Clock3 strokeWidth="2" size="16" />
-							<p>5m ago</p>
+							<Briefcase strokeWidth="2" size="16" />
+							<p>Belize (In-Person)</p>
 						</div>
 						<Button>Continue application</Button>
 					</card-description>
@@ -53,141 +54,107 @@
 		</l-column>
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<RichTextEditor
-				oninput={(e) => {
-					console.log(e);
-				}}
-			></RichTextEditor>
 			<Card.Root class="w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-					<p>Post by HireLATAM</p>
+					<input
+						type="text"
+						class="w-full bg-transparent focus:outline-none"
+						placeholder="Type in a job title"
+					/>
 				</Card.Title>
 			</Card.Root>
 
 			<JobCard.Root class="w-full">
-				<JobCard.Content class="flex flex-col gap-4">
-					<JobCard.Title class="flex flex-col gap-2">
-						<p>Remote Senior Backend Software Engineer</p>
-					</JobCard.Title>
+				<JobCard.Content class="flex w-[305px] flex-col gap-4 lg:w-[550px]">
 					<card-description class="flex flex-col gap-6">
-						<div class="flex flex-col gap-2">
-							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-								<DollarSign strokeWidth="2" size="16" />
-								<p>$24/hr &ndash; $40/hr</p>
-							</div>
-							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-								<Briefcase strokeWidth="2" size="16" />
-								<p>Belize (In-Person)</p>
-							</div>
-							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-								<Clock3 strokeWidth="2" size="16" />
-								<p>5m ago</p>
-							</div>
-						</div>
-						<Button class="w-fit">Apply for this job</Button>
 						<article>
 							<section class="flex flex-col gap-4 text-black">
 								<div>
-									<h4 class="text-xl font-semibold leading-7 tracking-tight">About the job</h4>
-									<p class="text-base font-normal leading-5">LLM Go Developer</p>
+									<h4 class="text-xl font-semibold leading-7 tracking-tight">Basic Details</h4>
+									<p class="text-base font-normal leading-5">
+										Basic details such as the hourly rate and type of job
+									</p>
 								</div>
-								<p class="text-base font-bold leading-5">Experience</p>
-								<ul class="list-inside list-disc">
-									<li>6 - 20 Years</li>
-									<li>Location: Permanent Remote Anywhere in the world</li>
-									<li>Contract Duration: 6 - 12 Months</li>
-									<li>Opportunity: Full Time, 8 hours, 4 hours Mandatory overlap with PST</li>
-									<li>Total Years Of Experience: Min 6+ years Mandatory software engineer exp.</li>
-									<li>Mandatory Skills: Go (min 5 yrs)</li>
-								</ul>
-								<p class="text-base font-bold leading-5">Job Requirements</p>
-								<ul class="list-inside list-disc">
-									<li>
-										Bachelor's/Master's degree in Engineering, Computer Science, or equivalent
-										experience.
-									</li>
-									<li>
-										At least 6+ years of relevant experience as a software engineer, with a focus on
-										backend development.
-									</li>
-									<li>
-										Demonstrated leadership ability, preferably with experience overseeing a team of
-										software engineers.
-									</li>
-									<li>
-										In-depth knowledge of the Go programming language and best practices in software
-										development.
-									</li>
-									<li>
-										Some experience with AI systems and code-creation technologies is desirable.
-									</li>
-									<li>
-										Strong problem-solving abilities and the capacity for critical and strategic
-										thinking.
-									</li>
-									<li>
-										Exceptional communication skills, with proficiency in English, both written and
-										verbal.
-									</li>
-								</ul>
+								<div class="grid w-full max-w-sm items-center gap-1.5">
+									<Label for="min-hourly-rate">Minimum hourly rate*</Label>
+									<Input
+										type="number"
+										step="0.25"
+										min="0"
+										id="min-hourly-rate"
+										placeholder="Type in a minimum hourly rate"
+									/>
+								</div>
+								<div class="grid w-full max-w-sm items-center gap-1.5">
+									<Label for="max-hourly-rate">Maximum hourly rate*</Label>
+									<Input
+										type="number"
+										step="0.25"
+										min="0"
+										id="max-hourly-rate"
+										placeholder="Type in a maximum hourly rate"
+									/>
+								</div>
+								<div class="grid w-full max-w-sm items-center gap-1.5">
+									<Label>Type of job*</Label>
 
-								<p class="text-base font-bold leading-5">About The Role</p>
-								<p class="text-base font-normal leading-5">
-									A well-established company that is leveraging advanced technology to bring the
-									science-fiction fantasy of collaborative and open-ended computer dialogues to life
-									is seeking experienced Go Developers. The ideal candidate will work closely with
-									cross-functional teams to define, design, and deliver new features for the next
-									generation of dialog agents. These agents will have diverse applications in
-									education, entertainment, and general question-answering. This is an exciting
-									opportunity for engineers eager to work in a fast-paced environment and contribute
-									to innovative projects.
-								</p>
-
-								<p class="text-base font-bold leading-5">Job Responsibilities</p>
-								<ul class="list-inside list-disc">
-									<li>
-										Review code and solutions generated by AI systems, ensuring adherence to quality
-										standards and best practices.
-									</li>
-									<li>
-										Organize the development cycle, manage project priorities, and set goals and
-										deadlines.
-									</li>
-									<li>
-										Utilize expertise in Go programming to resolve complex coding issues that arise
-										during AI validation.
-									</li>
-									<li>
-										Foster a collaborative team environment that encourages innovation,
-										communication, and continuous improvement.
-									</li>
-									<li>
-										Verify the accuracy, efficiency, and reliability of AI-generated code by
-										conducting validation checks.
-									</li>
-									<li>
-										Work with cross-functional teams to enhance the AI system's capabilities and
-										integrate it with other components.
-									</li>
-									<li>
-										Analyze team members' code and provide constructive feedback to ensure
-										high-quality software development.
-									</li>
-								</ul>
-
-								<p class="text-base font-bold leading-5">Skills:</p>
-								<p class="text-base font-normal leading-5">
-									code creation technologies, code-review, project management, strategic thinking,
-									code analysis, software engineering, code-creation technologies, go programming,
-									leadership ability, backend development, communication, collaboration, go, problem
-									solving, communication skills, software, software development, go (golang), code
-									validation, ai systems, code review, critical thinking, quality assurance, code
-									reviews, problem-solving, software development best practices, team leadership,
-									software engineer, leadership, coding standards
-								</p>
+									<Select.Root type="single">
+										<Select.Trigger class="w-full">Select an option</Select.Trigger>
+										<Select.Content>
+											<Select.Item value="in-person">Hybrid</Select.Item>
+											<Select.Item value="hybrid">In-person</Select.Item>
+											<Select.Item value="remote">Remote</Select.Item>
+										</Select.Content>
+									</Select.Root>
+								</div>
+								<div class="grid w-full max-w-sm items-center gap-1.5">
+									<Label>Job description*</Label>
+									<RichTextEditor
+										oninput={(e) => {
+											console.log(e);
+										}}
+									></RichTextEditor>
+								</div>
+								<div class="mt-12 mb-6">
+									<h4 class="text-xl font-semibold leading-7 tracking-tight">
+										Additional Questions
+									</h4>
+									<p class="text-base font-normal leading-5">
+										Additional questions which you can specify as the employer.
+									</p>
+								</div>
+								<div class="gap-0.25 flex flex-col items-start">
+									<p class="flex flex-col items-start font-medium italic">
+										1. How many years of experience do you have in Go/Golang Development?
+									</p>
+									<p class="flex flex-col items-start italic">Short Answer Question</p>
+								</div>
+								<div
+									class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
+								>
+									<p class="text-lg font-semibold">Currently editing #4</p>
+									<Textarea placeholder="Type the question content here." />
+									<p class="text-lg font-semibold">Question Type</p>
+									<RadioGroup.Root value="yes-no" name="questionType">
+										<div class="flex items-center space-x-2">
+											<RadioGroup.Item value="yes-no" id="r1" />
+											<Label for="r1">Yes/No</Label>
+										</div>
+										<div class="flex items-center space-x-2">
+											<RadioGroup.Item value="short-answer" id="r2" />
+											<Label for="r2">Short answer</Label>
+										</div>
+									</RadioGroup.Root>
+									<Button>Save</Button>
+								</div>
+								<Button class="w-fit">New Question</Button>
 							</section>
 						</article>
 					</card-description>
+					<div class="flex items-start gap-4">
+						<Button class="w-fit">Publish</Button>
+						<Button class="w-fit">Save Draft</Button>
+					</div>
 				</JobCard.Content>
 			</JobCard.Root>
 		</r-column>

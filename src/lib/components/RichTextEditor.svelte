@@ -144,7 +144,7 @@
 </script>
 
 <rt-editor-root
-	class="relative max-h-[500px] w-full overflow-auto rounded-md border border-slate-300"
+	class="relative max-h-[500px] w-full resize overflow-auto rounded-md border border-slate-300 pb-2"
 >
 	<div
 		class="sticky top-0 z-10 flex w-full flex-wrap gap-2 rounded-md border border-slate-100 bg-white p-2"
@@ -231,9 +231,9 @@
 			oninput={sanitizeContent}
 		></div>
 	</div>
-	<div class="sticky bottom-0 mx-2 bg-white py-2 text-sm font-light text-slate-600">
+	<!-- <div class="sticky bottom-0 mx-2 bg-white py-2 text-sm font-light text-slate-600">
 		<p>Note: Type "# " below any text to make it a heading.</p>
-	</div>
+	</div> -->
 </rt-editor-root>
 
 <style>
