@@ -13,6 +13,7 @@
 		Briefcase,
 		Clock3,
 		DollarSign,
+		Heading,
 		List,
 		ListOrdered,
 		Redo,
@@ -27,8 +28,66 @@
 	onMount(() => {
 		console.log(job_id);
 	});
+
+	let insertUnorderedList = false;
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Tab') {
+			event.preventDefault();
+			document.execCommand('insertText', false, '\t');
+		}
+
+		if (event.key === 'Enter') {
+			// Start of a new line
+			insertUnorderedList = true;
+		} else if (insertUnorderedList && (event.key === '-' || event.key === '*')) {
+			// User typed '-' or '*', waiting for space
+		} else if (insertUnorderedList && event.key === ' ') {
+			// User typed space after '-' or '*', trigger unordered list
+			event.preventDefault();
+			// Remove the '-' or '*' and space
+			document.execCommand('delete', false);
+			document.execCommand('delete', false);
+			// Insert unordered list
+			format('insertUnorderedList');
+			insertUnorderedList = false;
+		} else {
+			// Reset flag for any other key
+			insertUnorderedList = false;
+		}
+	}
+
 	function format(command: string, imgString?: string) {
 		document.execCommand(command, false, imgString);
+		if (command === 'heading') {
+			document.execCommand('formatBlock', false, 'h2');
+			const selection = window.getSelection();
+			if (selection) {
+				const node = selection.anchorNode;
+				if (node && node.nodeType === 3) {
+					const parent = node.parentNode;
+					if (parent && parent.nodeName === 'H2') {
+						(parent as HTMLElement).classList.add('text-2xl');
+					}
+				}
+			}
+		}
+		if (command === 'insertUnorderedList' || command === 'insertOrderedList') {
+			// Hot-patch the execCommand to add classes to the stuff
+			const selection = window.getSelection();
+			if (selection) {
+				let node = selection.anchorNode;
+				const tagName = command === 'insertUnorderedList' ? 'UL' : 'OL';
+				while (node && node.nodeName !== tagName) {
+					node = node.parentNode;
+				}
+				if (node && node.nodeName === tagName) {
+					(node as HTMLElement).classList.add(
+						'list-inside',
+						tagName === 'UL' ? 'list-disc' : 'list-decimal'
+					);
+				}
+			}
+		}
 	}
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
@@ -77,7 +136,7 @@
 			</Card.Root>
 
 			<rt-editor
-				class="relative max-h-[500px] w-full overflow-auto rounded-md border border-slate-300"
+				class="relative max-h-[500px] w-full overflow-auto rounded-md border border-slate-300 pb-2"
 			>
 				<div
 					class="sticky top-0 z-10 flex w-full flex-wrap gap-2 rounded-md border border-slate-100 bg-white p-2"
@@ -88,6 +147,15 @@
 					<Button aria-label="Redo" onclick={() => format('redo')}>
 						<Redo />
 					</Button>
+					<ToggleGroup.Root type="single">
+						<ToggleGroup.Item
+							value="heading"
+							aria-label="heading"
+							onclick={() => format('heading')}
+						>
+							<Heading />
+						</ToggleGroup.Item></ToggleGroup.Root
+					>
 					<ToggleGroup.Root type="multiple">
 						<ToggleGroup.Item value="bold" aria-label="Bold" onclick={() => format('bold')}>
 							<Bold />
@@ -152,9 +220,10 @@
 				</div>
 				<div class="relative mx-3 mt-4 h-full min-h-[150px]">
 					<div
-						class="contenteditable h-full focus:outline-none min-h-60"
+						class="contenteditable h-full min-h-60 focus:outline-none"
 						contenteditable="true"
 						data-placeholder="Start typing here..."
+						onkeydown={handleKeydown}
 					></div>
 				</div>
 			</rt-editor>
