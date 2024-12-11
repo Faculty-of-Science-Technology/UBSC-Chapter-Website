@@ -1,32 +1,45 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
-	import * as ToggleGroup from "$lib/components/vendor/ui/toggle-group";
-	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
-	import Bold from "lucide-svelte/icons/bold";
-	import Italic from "lucide-svelte/icons/italic";
-	import Underline from "lucide-svelte/icons/underline";
+	import * as ToggleGroup from '$lib/components/vendor/ui/toggle-group';
+	import {
+		AlignCenter,
+		AlignLeft,
+		AlignRight,
+		Briefcase,
+		Clock3,
+		DollarSign,
+		List,
+		ListOrdered,
+		Redo,
+		Strikethrough,
+		Undo
+	} from 'lucide-svelte';
+	import Bold from 'lucide-svelte/icons/bold';
+	import Italic from 'lucide-svelte/icons/italic';
+	import Underline from 'lucide-svelte/icons/underline';
 	import { onMount } from 'svelte';
 	const job_id = $page.params.job_id;
 	onMount(() => {
 		console.log(job_id);
 	});
-	function format(command) {
-    document.execCommand(command, false, null);
-  }
+	function format(command: string, imgString?: string) {
+		document.execCommand(command, false, imgString);
+	}
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
 <!-- svelte-ignore component_name_lowercase -->
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
-		<h1 class="text-5xl font-extralight lg:text-6xl">View Jobs</h1>
-		<p class="text-lg lg:text-2xl">View and apply for a job</p>
+		<h1 class="text-5xl font-extralight lg:text-6xl">New Job Listing</h1>
+		<p class="text-lg lg:text-2xl">Create a new job that interns can apply to</p>
 	</section>
-	<main class="text-inter flex flex-wrap items-start gap-8 self-stretch">
+	<form class="text-inter flex flex-wrap items-start gap-8 self-stretch" method="POST" use:enhance>
 		<!-- Left Column -->
 		<l-column class="flex w-fit flex-col items-start gap-6">
 			<Card.Root class="w-full">
@@ -63,22 +76,88 @@
 				</Card.Title>
 			</Card.Root>
 
-
-			  <ToggleGroup.Root type="multiple">
-				<ToggleGroup.Item value="bold" aria-label="Toggle bold" onclick={() => format('bold')}>
-				  <Bold />
-				</ToggleGroup.Item>
-				<ToggleGroup.Item value="italic" aria-label="Toggle italic" onclick={() => format('italic')}>
-				  <Italic />
-				</ToggleGroup.Item>
-				<ToggleGroup.Item value="underline" aria-label="Toggle underline" onclick={() => format('underline')}>
-				  <Underline />
-				</ToggleGroup.Item>
-			  </ToggleGroup.Root>
-			  
-			  <div id="editor" contenteditable="true" style="border: 1px solid #ccc; padding: 10px; min-height: 200px;">
-				Type your text here...
-			  </div>
+			<rt-editor
+				class="relative max-h-[500px] w-full overflow-auto rounded-md border border-slate-300"
+			>
+				<div
+					class="sticky top-0 z-10 flex w-full flex-wrap gap-2 rounded-md border border-slate-100 bg-white p-2"
+				>
+					<Button aria-label="Undo" onclick={() => format('undo')}>
+						<Undo />
+					</Button>
+					<Button aria-label="Redo" onclick={() => format('redo')}>
+						<Redo />
+					</Button>
+					<ToggleGroup.Root type="multiple">
+						<ToggleGroup.Item value="bold" aria-label="Bold" onclick={() => format('bold')}>
+							<Bold />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item value="italic" aria-label="Italic" onclick={() => format('italic')}>
+							<Italic />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="underline"
+							aria-label="Underline"
+							onclick={() => format('underline')}
+						>
+							<Underline />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="strikethrough"
+							aria-label="Strikethrough"
+							onclick={() => format('strikethrough')}
+						>
+							<Strikethrough />
+						</ToggleGroup.Item>
+					</ToggleGroup.Root>
+					<ToggleGroup.Root type="single">
+						<ToggleGroup.Item
+							value="justifyLeft"
+							aria-label="Align Left"
+							onclick={() => format('justifyLeft')}
+						>
+							<AlignLeft />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="justifyCenter"
+							aria-label="Align Center"
+							onclick={() => format('justifyCenter')}
+						>
+							<AlignCenter />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="justifyRight"
+							aria-label="Align Right"
+							onclick={() => format('justifyRight')}
+						>
+							<AlignRight />
+						</ToggleGroup.Item>
+					</ToggleGroup.Root>
+					<ToggleGroup.Root type="single">
+						<ToggleGroup.Item
+							value="insertUnorderedList"
+							aria-label="Bullet List"
+							onclick={() => format('insertUnorderedList')}
+						>
+							<List />
+						</ToggleGroup.Item>
+						<ToggleGroup.Item
+							value="insertOrderedList"
+							aria-label="Numbered List"
+							onclick={() => format('insertOrderedList')}
+						>
+							<ListOrdered />
+						</ToggleGroup.Item>
+					</ToggleGroup.Root>
+				</div>
+				<div class="relative mx-3 mt-4 h-full min-h-[150px]">
+					<div
+						class="contenteditable h-full focus:outline-none min-h-60"
+						contenteditable="true"
+						data-placeholder="Start typing here..."
+					></div>
+				</div>
+			</rt-editor>
 			<JobCard.Root class="w-full">
 				<JobCard.Content class="flex flex-col gap-4">
 					<JobCard.Title class="flex flex-col gap-2">
@@ -206,5 +285,13 @@
 				</JobCard.Content>
 			</JobCard.Root>
 		</r-column>
-	</main>
+	</form>
 </page>
+
+<style>
+	.contenteditable:empty::before {
+		content: attr(data-placeholder);
+		color: #a0aec0; /* Light placeholder text color */
+		pointer-events: none;
+	}
+</style>
