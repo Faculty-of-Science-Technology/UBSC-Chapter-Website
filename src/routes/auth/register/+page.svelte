@@ -36,8 +36,8 @@
 				<form class="flex w-full flex-col items-center gap-4 text-left">
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="account-type">Who are you?</Label>
-						<div class="flex w-full flex-row items-center gap-2 self-stretch">
-							<span bind:this={JSOnly} class="hidden">
+						<span bind:this={JSOnly} class="hidden self-stretch">
+							<div class="flex w-full flex-row items-center gap-2 self-stretch">
 								<Button
 									onclick={() => (accountType = 'student')}
 									class={cn(
@@ -56,11 +56,11 @@
 									)}>I am a host</Button
 								>
 								<input type="hidden" id="account-type" value={accountType} />
-							</span>
-							<noscript class="w-full">
-								<Input type="text" id="account-type" placeholder="Type 'student' or 'host'" />
-							</noscript>
-						</div>
+							</div>
+						</span>
+						<noscript>
+							<Input type="text" id="account-type" placeholder="Type 'student' or 'host'" />
+						</noscript>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="full-name">Full name</Label>
