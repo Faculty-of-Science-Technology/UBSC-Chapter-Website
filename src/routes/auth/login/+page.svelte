@@ -68,11 +68,11 @@
 						</div>
 					</button>
 				</form>
-				<p class="text-sm font-normal">
+				<!-- <p class="text-sm font-normal">
 					By signing in, you agree to abide by the <underline class="underline"
 						>UB Student Conduct Policy</underline
 					>.
-				</p>
+				</p> -->
 			</card-content>
 		</Card.Root>
 		<section class="block text-center">
