@@ -6,15 +6,21 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { cn } from '$lib/components/vendor/utils';
 	import { onMount } from 'svelte';
-	let accountType = 'who-knows';
-
+	import SuperDebug from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms/client';
+	import { type PageData } from './$types';
 	let JSOnly: HTMLSpanElement;
+	let { data }: PageData = $props();
+	const { form } = superForm(data);
+	let accountType = $state('');
+	accountType = $form.account_type;
 
 	onMount(() => {
 		JSOnly.classList.remove('hidden');
 	});
 </script>
 
+<SuperDebug bind:data={$form} />
 <page
 	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
 >
@@ -33,7 +39,10 @@
 					</Card.Title>
 					<Logo />
 				</div>
-				<form class="flex w-full flex-col items-center gap-4 text-left">
+				<form
+					method="POST"
+					class="flex w-full flex-col items-center gap-4 text-left"
+				>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="account-type">Who are you?</Label>
 						<span bind:this={JSOnly} class="hidden self-stretch">
@@ -55,36 +64,70 @@
 											: ''
 									)}>I am a host</Button
 								>
-								<input type="hidden" id="account-type" value={accountType} />
+								<input
+									type="hidden"
+									id="account-type"
+									name="account_type"
+									bind:value={accountType}
+								/>
 							</div>
 						</span>
 						<noscript>
-							<Input type="text" id="account-type" placeholder="Type 'student' or 'host'" />
+							<Input
+								type="text"
+								id="account-type"
+								name="account_type"
+								placeholder="Type 'student' or 'host'"
+								bind:value={accountType}
+							/>
 						</noscript>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="full-name">Full name</Label>
 						<Input
-							class="invalid:bg-red-500"
+							class="invalid:border-red-500"
 							type="text"
 							id="full-name"
+							name="full_name"
 							placeholder="Type in your full name"
 							pattern="[A-Za-z\s]+"
+							bind:value={$form.full_name}
 						/>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="email">Email address</Label>
-						<Input type="email" id="email" placeholder="Type in your email address" />
+						<Input
+							class="invalid:border-red-500"
+							type="email"
+							name="email"
+							id="email"
+							placeholder="Type in your email address"
+							bind:value={$form.email}
+						/>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="password">Password</Label>
-						<Input type="password" id="password" placeholder="Your password" />
+						<Input
+							class="invalid:border-red-500"
+							type="password"
+							id="password"
+							name="password"
+							placeholder="Your password"
+							bind:value={$form.password}
+						/>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="confirm-password">Confirm password</Label>
-						<Input type="password" id="confirm-password" placeholder="Your password once more" />
+						<Input
+							class="invalid:border-red-500"
+							type="password"
+							id="confirm-password"
+							name="confirm_password"
+							placeholder="Your password once more"
+							bind:value={$form.password_confirmation}
+						/>
 					</div>
-					<Button class="w-full">Join the network</Button>
+					<Button type="submit" class="w-full">Join the network</Button>
 
 					<p class="text-center text-sm font-normal">
 						By signing up, you agree to abide by the <underline class="underline"
@@ -94,6 +137,7 @@
 				</form>
 			</card-content>
 		</Card.Root>
+
 		<section class="block text-center">
 			<p>
 				Already a part of the network? <a href="/auth/login" class="hover:opacity-90"
