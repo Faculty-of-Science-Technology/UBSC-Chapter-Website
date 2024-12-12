@@ -61,6 +61,7 @@
 				effortlessly. With just one glance, you'll discover the skilled professionals you need to
 				bring your vision to life. Register as a host below.
 			</p>
+			<Button class="w-fit" onclick={() => goto('/auth/register')}>Register as a Host</Button>
 		</call-to-action>
 	</page-content>
 </page>
@@ -75,6 +76,7 @@
 				talentpool connects you with people in tech from all around Belize quickly and effortlessly.
 				Join our community and select from our growing selection of candidates today :)
 			</p>
+
 		</about-us>
 		<Button
 			onclick={() => goto('/auth/login')}
