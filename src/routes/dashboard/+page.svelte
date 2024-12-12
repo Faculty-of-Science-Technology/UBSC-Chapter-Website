@@ -21,7 +21,7 @@
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
 					<UserCard.Title>
-						<p>Immanuel Garcia</p>
+						<h1>Immanuel Garcia</h1>
 						<span class="tracking-wide"><Badge>Hireable</Badge></span>
 					</UserCard.Title>
 					<card-description class="flex flex-col gap-2">
@@ -35,13 +35,13 @@
 			</UserCard.Root>
 			<Card.Root class="w-full">
 				<Card.Title class="items-center justify-center py-2 text-center text-2xl">
-					<p>Submitted Applications</p>
+					<h1>Submitted Applications</h1>
 				</Card.Title>
 			</Card.Root>
 			<JobCard.Root class="w-[305px] lg:w-[320px]">
 				<JobCard.Content class="flex flex-col gap-4">
 					<JobCard.Title>
-						<p>Remote Senior Backend Software Engineer</p>
+						<h2>Remote Senior Backend Software Engineer</h2>
 						<span class="tracking-wide"><Badge>Draft</Badge></span>
 					</JobCard.Title>
 					<card-description class="flex flex-col gap-2">
@@ -63,13 +63,13 @@
 		<r-column class="flex flex-1 flex-col items-start gap-6">
 			<Card.Root class="w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-					<p>Explore Available Jobs</p>
+					<h1>Explore Available Jobs</h1>
 				</Card.Title>
 			</Card.Root>
 			<JobCard.Root class="w-full">
 				<JobCard.Content class="flex flex-col gap-4">
 					<JobCard.Title class="flex flex-col gap-2">
-						<p>Remote Senior Backend Software Engineer</p>
+						<h2>Remote Senior Backend Software Engineer</h2>
 						<Badge class="w-fit text-base">$24/hr - $40/hr</Badge>
 					</JobCard.Title>
 					<card-description class="flex flex-col gap-6">

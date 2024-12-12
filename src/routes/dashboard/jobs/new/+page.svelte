@@ -23,7 +23,16 @@
 </script>
 
 <!-- svelte-ignore component_name_lowercase -->
-<page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
+<noscript>
+	<section class="header text-archivo mx-2 my-8 flex flex-col space-y-1 lg:mx-8">
+		<h1 class="text-5xl font-extralight lg:text-6xl">Sorry, This Feature is Disabled</h1>
+		<p class="text-lg lg:text-2xl">
+			You need JavaScript in order to do this. Enable it and try reloading.
+		</p>
+	</section>
+</noscript>
+<!-- svelte-ignore component_name_lowercase -->
+<page class="jsonly mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
 		<h1 class="text-5xl font-extralight lg:text-6xl">New Job Listing</h1>
 		<p class="text-lg lg:text-2xl">Create a new job that interns can apply to</p>

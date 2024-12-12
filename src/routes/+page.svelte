@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import { CheckSquare, Mail, Rocket } from 'lucide-svelte';
@@ -15,17 +14,21 @@
 				class="flex flex-1 flex-col items-start gap-4 self-stretch rounded-lg border border-slate-300 p-4 lg:border-0"
 			>
 				<Rocket size="84" strokeWidth="1" />
-				<p>Kickstart Your <span class="font-medium underline">Career</span></p>
+				<h2>Kickstart Your <span class="font-medium underline">Career</span></h2>
 				<p class="text-inter text-xl font-medium">Find your next job</p>
-				<Button class="w-fit" onclick={() => goto('/auth/register')}>Register as an Intern</Button>
+				<a href="/auth/register">
+					<Button class="w-fit">Register as an Intern</Button>
+				</a>
 			</kickstart-career>
 			<acquire-talent
 				class="flex flex-1 flex-col items-start gap-4 self-stretch border border-slate-300 p-4 lg:border-0"
 			>
 				<CheckSquare size="84" strokeWidth="1" />
-				<p>Acquire <span class="font-medium underline">Talent</span></p>
+				<h2>Acquire <span class="font-medium underline">Talent</span></h2>
 				<p class="text-inter text-xl font-medium">Because, why look anywhere else?</p>
-				<Button class="w-fit" onclick={() => goto('/auth/register')}>Register as a Host</Button>
+				<a href="/auth/register">
+					<Button class="w-fit">Register as a Host</Button>
+				</a>
 			</acquire-talent>
 		</options-container>
 	</hero>
@@ -33,9 +36,9 @@
 		<call-to-action
 			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
 		>
-			<p class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">
+			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">
 				Not <span class="italic">JUST</span> your typical hiring platform.
-			</p>
+			</h1>
 			<p class="text-xl lg:w-[720px]">
 				We connect you with locals nearby. People willing to work. 99.9% of the time available. Does
 				this sound good to you? <b>Continue reading</b> along.
@@ -44,9 +47,9 @@
 		<article
 			class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg p-8 text-left"
 		>
-			<p class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
+			<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
 				We understand. Hiring people is a tricky task.
-			</p>
+			</h1>
 			<p class="text-xl lg:w-[720px]">
 				Finding the right talent can be a challenge&mdash;and that's just a fact of life. But that's
 				where we come in.
@@ -55,40 +58,42 @@
 		<call-to-action
 			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
 		>
-			<p class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">What we do to fix this?</p>
+			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">What we do to fix this?</h1>
 			<p class="text-xl lg:w-[720px]">
 				Our platform is designed to help employers connect with the perfect candidates quickly and
 				effortlessly. With just one glance, you'll discover the skilled professionals you need to
 				bring your vision to life. Register as a host below.
 			</p>
-			<Button class="w-fit" onclick={() => goto('/auth/register')}>Register as a Host</Button>
+			<a href="/auth/register">
+				<Button class="w-fit">Register as a Host</Button>
+			</a>
 		</call-to-action>
 	</page-content>
 </page>
 
 <footer
-	class="flex flex-col lg:flex-row w-full items-start lg:items-center justify-start lg:justify-center gap-20 self-stretch border-t border-slate-300 bg-slate-50 px-16 py-8"
+	class="flex w-full flex-col items-start justify-start gap-20 self-stretch border-t border-slate-300 bg-slate-50 px-16 py-8 lg:flex-row lg:items-center lg:justify-center"
 >
 	<frame-1 class="flex flex-[2] flex-col items-start gap-4">
-		<about-us class="flex lg:w-5/12 flex-col items-start gap-2">
+		<about-us class="flex flex-col items-start gap-2 lg:w-5/12">
 			<Logo />
 			<p>
 				talentpool connects you with people in tech from all around Belize quickly and effortlessly.
 				Join our community and select from our growing selection of candidates today :)
 			</p>
-
 		</about-us>
-		<Button
-			onclick={() => goto('/auth/login')}
-			class="flex w-fit items-center justify-center gap-2"
-		>
-			<Mail />
-			<p>Login with email</p>
-		</Button>
+		<a href="/auth/login">
+			<Button class="flex w-fit items-center justify-center gap-2">
+				<Mail />
+				<p>Login with email</p>
+			</Button>
+		</a>
 	</frame-1>
 	<frame-2 class="flex flex-1 flex-col items-center justify-start lg:justify-between">
 		<nav class="w-full">
-			<ul class="flex flex-col lg:flex-row w-full gap-4 items-start justify-start lg:justify-between">
+			<ul
+				class="flex w-full flex-col items-start justify-start gap-4 lg:flex-row lg:justify-between"
+			>
 				<li>
 					<p class="text-md font-medium">Product</p>
 					<ul>

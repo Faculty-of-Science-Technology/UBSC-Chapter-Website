@@ -44,16 +44,19 @@
 			</svelte:fragment>
 			<svelte:fragment slot="shards">
 				<NavShard.Link
+					a11yLink="/dashboard/"
 					title="Explore"
 					active={active_link === 0}
 					onclick={() => goto('/dashboard/')}
 				/>
 				<!-- <NavShard.Link
+					a11yLink="/dashboard/profile"
 					title="Manage profile"
 					onclick={() => goto('/dashboard/profile')}
 					active={active_link === 1}
 				/>
 				<NavShard.Link
+					a11yLink="/dashboard/submissions"
 					title="Manage submissions"
 					onclick={() => goto('/dashboard/submissions')}
 					active={active_link === 2}
@@ -66,11 +69,13 @@
 			</svelte:fragment>
 			<svelte:fragment slot="shards">
 				<NavShard.Link
+					a11yLink="/dashboard/jobs/new"
 					title="New job listing"
 					onclick={() => goto('/dashboard/jobs/new')}
 					active={active_link === 3}
 				/>
 				<!-- <NavShard.Link
+					a11yLink="/dashboard/jobs"
 					title="Manage job listings"
 					onclick={() => goto('/dashboard/jobs/new')}
 					active={active_link === 4}
@@ -83,11 +88,13 @@
 			</svelte:fragment>
 			<svelte:fragment slot="shards">
 				<NavShard.Link
+					a11yLink="/dashboard/jobs/applicants"
 					title="View applicants"
 					onclick={() => goto('/dashboard/jobs/applicants')}
 					active={active_link === 5}
 				/>
 				<NavShard.Link
+					a11yLink="/dashboard/settings"
 					title="Settings & Privacy"
 					onclick={() => goto('/dashboard/settings')}
 					active={active_link === 6}
