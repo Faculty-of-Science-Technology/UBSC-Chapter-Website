@@ -47,7 +47,6 @@
 							<Briefcase strokeWidth="2" size="16" />
 							<p>Belize (In-Person)</p>
 						</div>
-						<Button>Continue application</Button>
 					</card-description>
 				</JobCard.Content>
 			</JobCard.Root>
@@ -115,7 +114,7 @@
 										}}
 									></RichTextEditor>
 								</div>
-								<div class="mt-12 mb-6">
+								<div class="mb-6 mt-12">
 									<h4 class="text-xl font-semibold leading-7 tracking-tight">
 										Additional Questions
 									</h4>
