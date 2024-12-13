@@ -8,11 +8,13 @@
 	import { onMount } from 'svelte';
 	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { type PageData } from './$types';
+	// import { type RegisterForm } from './+page';
 	let JSOnly: HTMLSpanElement;
-	let { data }: PageData = $props();
-	const { form } = superForm(data);
+	let data = $props();
 	let accountType = $state('');
+	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data, {
+		taintedMessage: 'You have unsaved changes. Are you sure you want to leave?'
+	});
 	accountType = $form.account_type;
 
 	onMount(() => {
@@ -41,7 +43,9 @@
 				</div>
 				<form
 					method="POST"
+					action="?/register"
 					class="flex w-full flex-col items-center gap-4 text-left"
+					use:enhance
 				>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="account-type">Who are you?</Label>
@@ -78,9 +82,11 @@
 								id="account-type"
 								name="account_type"
 								placeholder="Type 'student' or 'host'"
+								{...$constraints.account_type}
 								bind:value={accountType}
 							/>
 						</noscript>
+						<p class="text-sm text-red-600">{$errors.account_type}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="full-name">Full name</Label>
@@ -92,7 +98,9 @@
 							placeholder="Type in your full name"
 							pattern="[A-Za-z\s]+"
 							bind:value={$form.full_name}
+							{...$constraints.full_name}
 						/>
+						<p class="text-sm text-red-600">{$errors.full_name}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="email">Email address</Label>
@@ -103,7 +111,9 @@
 							id="email"
 							placeholder="Type in your email address"
 							bind:value={$form.email}
+							{...$constraints.email}
 						/>
+						<p class="text-sm text-red-600">{$errors.email}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="password">Password</Label>
@@ -114,7 +124,9 @@
 							name="password"
 							placeholder="Your password"
 							bind:value={$form.password}
+							{...$constraints.password}
 						/>
+						<p class="text-sm text-red-600">{$errors.password}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="confirm-password">Confirm password</Label>
@@ -122,10 +134,12 @@
 							class="invalid:border-red-500"
 							type="password"
 							id="confirm-password"
-							name="confirm_password"
+							name="password_confirmation"
 							placeholder="Your password once more"
 							bind:value={$form.password_confirmation}
+							{...$constraints.password_confirmation}
 						/>
+						<p class="text-sm text-red-600">{$errors.password_confirmation}</p>
 					</div>
 					<Button type="submit" class="w-full">Join the network</Button>
 
