@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 import { boolean, integer, pgEnum, pgTable, real, text, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner']);
@@ -61,3 +61,55 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 	}),
 	content: varchar('content', { length: 512 }).notNull()
 });
+export const UsersRelations = relations(Users, ({ many }) => ({
+	jobs: many(Jobs),
+	jobApplications: many(JobApplications)
+}));
+
+export const JobTypesRelations = relations(JobTypes, ({ many }) => ({
+	jobs: many(Jobs)
+}));
+
+export const JobsRelations = relations(Jobs, ({ one, many }) => ({
+	jobType: one(JobTypes, {
+		fields: [Jobs.JobTypeId],
+		references: [JobTypes.Id]
+	}),
+	user: one(Users, {
+		fields: [Jobs.UserId],
+		references: [Users.Id]
+	}),
+	questions: many(Questions),
+	jobApplications: many(JobApplications)
+}));
+
+export const QuestionsRelations = relations(Questions, ({ one, many }) => ({
+	job: one(Jobs, {
+		fields: [Questions.JobsId],
+		references: [Jobs.Id]
+	}),
+	jobQuestionResponses: many(JobQuestionResponses)
+}));
+
+export const JobApplicationsRelations = relations(JobApplications, ({ one, many }) => ({
+	job: one(Jobs, {
+		fields: [JobApplications.JobsId],
+		references: [Jobs.Id]
+	}),
+	user: one(Users, {
+		fields: [JobApplications.UserId],
+		references: [Users.Id]
+	}),
+	jobQuestionResponses: many(JobQuestionResponses)
+}));
+
+export const JobQuestionResponsesRelations = relations(JobQuestionResponses, ({ one }) => ({
+	question: one(Questions, {
+		fields: [JobQuestionResponses.QuestionsId],
+		references: [Questions.Id]
+	}),
+	jobApplication: one(JobApplications, {
+		fields: [JobQuestionResponses.JobApplicationId],
+		references: [JobApplications.Id]
+	})
+}));
