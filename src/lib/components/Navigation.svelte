@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { Button } from '$lib/components/vendor/ui/button';
 	import Logo from './Logo.svelte';
+	interface NavigationProps {
+		authenticated: boolean;
+	}
+	let { authenticated }: NavigationProps = $props();
 </script>
 
 <nav
@@ -9,5 +13,11 @@
 	<a href="/"><Logo /></a>
 	<div class="flex-grow"></div>
 	<!-- <a href="/login" class="text-slate-400 hover:text-slate-500">Login</a> -->
-	<a href="/dashboard"><Button>Dashboard</Button></a>
+	{#if authenticated}
+		<a href="/dashboard"><Button>Dashboard</Button></a>
+		<a href="/auth/logout"><Button>Logout</Button></a>
+	{:else}
+		<a href="/auth/login"><Button>Login</Button></a>
+		<a href="/auth/register"><Button>Register</Button></a>
+	{/if}
 </nav>

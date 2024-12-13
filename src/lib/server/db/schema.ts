@@ -1,7 +1,7 @@
 import { sql } from 'drizzle-orm';
 import { boolean, integer, pgEnum, pgTable, real, text, uuid, varchar } from 'drizzle-orm/pg-core';
 
-export const accountTypeEnum = pgEnum('account_type', ['Host', 'Student', 'Owner']);
+export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner']);
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 
 export const Users = pgTable('Users', {
@@ -12,6 +12,7 @@ export const Users = pgTable('Users', {
 	Email: varchar('email', { length: 64 }).unique().notNull(),
 	Password: text('password').notNull(),
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
+	Session: text('session').unique(),
 });
 
 export const JobTypes = pgTable('JobTypes', {

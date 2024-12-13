@@ -4,11 +4,12 @@
 	import { i18n } from '$lib/i18n';
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
 	import '../app.css';
-	let { children } = $props();
+	let data = $props();
+	const authenticated = data.authenticated;
 </script>
 
-<Navigation />
+<Navigation {authenticated} />
 <ParaglideJS {i18n}>
 	<Toaster />
-	{@render children()}
+	{@render data.children()}
 </ParaglideJS>

@@ -1,6 +1,10 @@
+import { db } from '$lib/server/db';
+import { Users } from '$lib/server/db/schema';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import argon2 from 'argon2';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
+import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import type { Actions } from './$types';
 
@@ -50,7 +54,7 @@ export const actions: Actions = {
 
 		try {
 			registerSchema.parse(form);
-			// const super_form = await superValidate(formData, zod(registerSchema));
+			const super_form = await superValidate(formData, zod(registerSchema));
 			// console.log('SUCCESS', super_form);
 			cookies.set('message_title', 'Verification Required', { path: '/' });
 			cookies.set('message_title2', 'Check your email', { path: '/' });
@@ -61,6 +65,14 @@ export const actions: Actions = {
 				path: '/'
 			});
 			cookies.set('authenticated', 'false', { path: '/' });
+			await db.insert(Users).values({
+				AccountType: super_form.data.account_type,
+				FirstName: super_form.data.full_name.split(' ')[0],
+				LastName: super_form.data.full_name.split(' ')[1],
+				Email: super_form.data.email,
+				Password: await argon2.hash(super_form.data.password),
+				ActivationCode: uuidv4()
+			});
 
 			throw redirect(303, '/backend/message');
 		} catch (e) {
