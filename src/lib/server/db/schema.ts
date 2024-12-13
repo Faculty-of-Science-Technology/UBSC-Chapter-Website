@@ -12,7 +12,7 @@ export const Users = pgTable('Users', {
 	Email: varchar('email', { length: 64 }).unique().notNull(),
 	Password: text('password').notNull(),
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
-	Session: text('session').unique(),
+	//Session: text('session').unique(),
 });
 
 export const JobTypes = pgTable('JobTypes', {
