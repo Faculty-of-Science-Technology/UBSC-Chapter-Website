@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import { onMount } from 'svelte';
@@ -34,9 +33,13 @@
 
 			<action-container class="flex w-full flex-row">
 				{#if authenticated}
-					<Button class="w-fit" onclick={() => goto('/auth/register')}>Return to dashboard</Button>
+					<a href="/auth/login">
+						<Button class="w-fit">Return to dashboard</Button>
+					</a>
 				{:else}
-					<Button class="w-fit" onclick={() => goto('/')}>Return Home</Button>
+					<a href="/">
+						<Button class="w-fit">Return Home</Button>
+					</a>
 				{/if}
 			</action-container>
 		</card-description>

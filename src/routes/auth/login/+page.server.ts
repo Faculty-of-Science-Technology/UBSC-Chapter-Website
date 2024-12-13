@@ -28,7 +28,7 @@ export const actions = {
 			loginSchema.parse(form);
 			// const super_form = await superValidate(formData, zod(loginSchema));
 			// console.log('SUCCESS', super_form);
-			cookies.set('message_title', 'Login Sucess', { path: '/' });
+			cookies.set('message_title', 'Login Success', { path: '/' });
 			cookies.set('message_title2', 'You are now signed in', { path: '/' });
 			cookies.set('message_description', 'You are authenticated', {
 				path: '/'
@@ -36,8 +36,8 @@ export const actions = {
 			cookies.set('message_description2', 'Click below to go into your dashboard', {
 				path: '/'
 			});
-			cookies.set('authenticated', 'true', { path: '/backend/message' });
-			throw redirect(303, '/');
+			cookies.set('authenticated', 'true', { path: '/' });
+			throw redirect(303, '/backend/message');
 		} catch (error) {
 			// Check if this is a Redirect
 			if (isRedirect(error)) {
