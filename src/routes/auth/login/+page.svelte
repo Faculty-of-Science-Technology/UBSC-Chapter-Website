@@ -4,13 +4,26 @@
 	import * as Card from '$lib/components/vendor/ui/card';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$types';
+	interface LoginData extends PageData {
+		form?: {
+			super_form: any;
+		};
+	}
+	let data: LoginData = $props();
+	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
 </script>
 
-<page class="flex my-8 lg:m-0 lg:h-[90vh] w-full items-center justify-center self-stretch bg-slate-100">
-	<r-column class="hidden lg:flex h-full flex-[2] flex-col items-center justify-end gap-2 self-stretch">
+<page
+	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
+>
+	<r-column
+		class="hidden h-full flex-[2] flex-col items-center justify-end gap-2 self-stretch lg:flex"
+	>
 		<div class="flex flex-col items-start justify-center self-stretch px-20 py-20"><Logo /></div>
 	</r-column>
-	<l-column class="flex h-full lg:flex-1 flex-col items-center justify-center lg:gap-8 bg-slate-50">
+	<l-column class="flex h-full flex-col items-center justify-center bg-slate-50 lg:flex-1 lg:gap-8">
 		<Card.Root class="w-[305px] py-4 lg:w-[375px]">
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
@@ -20,16 +33,30 @@
 					</Card.Title>
 					<Logo />
 				</div>
-				<form class="flex w-full flex-col items-center gap-4 text-left">
+				<form
+					method="POST"
+					action="?/login"
+					class="flex w-full flex-col items-center gap-4 text-left"
+					use:enhance
+				>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="email">Email address</Label>
-						<Input type="email" id="email" placeholder="Type in your email address" />
+						<Input
+							bind:value={$form.email}
+							type="email"
+							id="email"
+							name="email"
+							placeholder="Type in your email address"
+							{...$constraints.email}
+						/>
+						<p class="text-sm text-red-600">{$errors.email}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="password">Password</Label>
-						<Input type="password" id="password" placeholder="Your password" />
+						<Input type="password" id="password" name="password" placeholder="Your password" />
+						<p class="text-sm text-red-600">{$errors.password}</p>
 					</div>
-					<Button class="w-full">Sign in</Button>
+					<Button type="submit" class="w-full">Sign in</Button>
 					<button
 						class="flex w-full flex-col items-center justify-center self-stretch rounded-lg border border-slate-300 py-2 hover:bg-slate-100"
 					>
@@ -76,7 +103,9 @@
 			</card-content>
 		</Card.Root>
 		<section class="block text-center">
-			<p>Are you new here? <a href="/auth/register" class="hover:opacity-90"><b>Join here</b></a></p>
+			<p>
+				Are you new here? <a href="/auth/register" class="hover:opacity-90"><b>Join here</b></a>
+			</p>
 			<p>(All Hosts and Students)</p>
 		</section>
 	</l-column>

@@ -6,7 +6,6 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { cn } from '$lib/components/vendor/utils';
 	import { onMount } from 'svelte';
-	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	// import { type RegisterForm } from './+page';
 	let JSOnly: HTMLSpanElement;
@@ -22,7 +21,7 @@
 	});
 </script>
 
-<SuperDebug bind:data={$form} />
+<!-- <SuperDebug bind:data={$form} /> -->
 <page
 	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
 >
