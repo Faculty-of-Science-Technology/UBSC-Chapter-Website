@@ -1,10 +1,11 @@
+import { sql } from 'drizzle-orm';
 import { boolean, integer, pgEnum, pgTable, real, text, uuid, varchar } from 'drizzle-orm/pg-core';
 
 export const accountTypeEnum = pgEnum('account_type', ['Host', 'Student', 'Owner']);
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 
 export const Users = pgTable('Users', {
-	Id: uuid('id').default('uuid_generate_v4()').unique().primaryKey(),
+	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
 	AccountType: accountTypeEnum('account_type').notNull(),
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),
@@ -27,7 +28,7 @@ export const Questions = pgTable('Questions', {
 });
 
 export const Jobs = pgTable('Jobs', {
-	Id: uuid('id').default('uuid_generate_v4()').unique().primaryKey(),
+	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
 	Title: varchar('title', { length: 255 }).notNull(),
 	MinRate: real('min_rate').notNull(),
 	MmaxRate: real('max_rate').notNull(),
@@ -38,7 +39,7 @@ export const Jobs = pgTable('Jobs', {
 });
 
 export const JobApplications = pgTable('JobApplications', {
-	Id: uuid('id').default('uuid_generate_v4()').unique().primaryKey(),
+	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
 	JobsId: uuid('jobs_id').references(() => Jobs.Id, { onDelete: 'cascade' }),
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),
