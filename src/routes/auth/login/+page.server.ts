@@ -20,7 +20,14 @@ const loginSchema = z.object({
 		.trim()
 });
 
-export const load = async ({ request }) => {
+export const load = async (event) => {
+	const request = event.request;
+	const cookies = event.cookies;
+	const session = cookies.get('session');
+	const authenticated = cookies.get('authenticated');
+	if (session && authenticated) {
+		throw redirect(303, '/dashboard');
+	}
 	return await superValidate(request, zod(loginSchema));
 };
 
