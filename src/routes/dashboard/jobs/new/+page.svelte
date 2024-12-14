@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import RichTextEditor from '$lib/components/RichTextEditor.svelte';
 	import { Badge } from '$lib/components/vendor/ui/badge';
@@ -14,11 +13,15 @@
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$types';
 	const job_id = $page.params.job_id;
+	let data: PageData = $props();
 	onMount(() => {
 		console.log(job_id);
 	});
 
+	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
@@ -37,7 +40,7 @@
 		<h1 class="text-5xl font-extralight lg:text-6xl">New Job Listing</h1>
 		<p class="text-lg lg:text-2xl">Create a new job that interns can apply to</p>
 	</section>
-	<form class="text-inter flex flex-wrap items-start gap-8 self-stretch" method="POST" use:enhance>
+	<div class="text-inter flex flex-wrap items-start gap-8 self-stretch">
 		<!-- Left Column -->
 		<l-column class="flex w-fit flex-col items-start gap-6">
 			<JobCard.Root class="w-[305px] lg:w-[320px]">
@@ -62,11 +65,18 @@
 		</l-column>
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
+			<form id="JobForm" action="?/createJob" method="POST" use:enhance></form>
+			<form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form>
+
 			<Card.Root class="w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
 					<input
 						type="text"
+						form="JobForm"
+						name="title"
 						class="w-full bg-transparent focus:outline-none"
+						{...$constraints.title}
+						value={$form.title}
 						placeholder="Type in a job title"
 					/>
 				</Card.Title>
@@ -89,6 +99,9 @@
 										type="number"
 										step="0.25"
 										min="0"
+										form="JobForm"
+										name="min_rate"
+										{...$constraints.min_rate}
 										id="min-hourly-rate"
 										placeholder="Type in a minimum hourly rate"
 									/>
@@ -99,6 +112,9 @@
 										type="number"
 										step="0.25"
 										min="0"
+										form="JobForm"
+										{...$constraints.max_rate}
+										name="max_rate"
 										id="max-hourly-rate"
 										placeholder="Type in a maximum hourly rate"
 									/>
@@ -106,18 +122,28 @@
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Type of job*</Label>
 
-									<Select.Root type="single">
+									<Select.Root
+										type="single"
+										{...$constraints.job_type}
+										bind:value={$form.job_type}
+										name="job_type"
+										form="JobForm"
+									>
 										<Select.Trigger class="w-full">Select an option</Select.Trigger>
 										<Select.Content>
-											<Select.Item value="in-person">Hybrid</Select.Item>
-											<Select.Item value="hybrid">In-person</Select.Item>
-											<Select.Item value="remote">Remote</Select.Item>
+											<Select.Item value="1">Hybrid</Select.Item>
+											<Select.Item value="2">In-person</Select.Item>
+											<Select.Item value="3">Remote</Select.Item>
 										</Select.Content>
 									</Select.Root>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Job description*</Label>
 									<RichTextEditor
+										bind:value={$form.job_type}
+										form="JobForm"
+										name="description"
+										{...$constraints.description}
 										oninput={(e) => {
 											console.log(e);
 										}}
@@ -141,9 +167,15 @@
 									class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
 								>
 									<p class="text-lg font-semibold">Currently editing #4</p>
-									<Textarea placeholder="Type the question content here." />
+									<Textarea form="QuestionForm" placeholder="Type the question content here." />
 									<p class="text-lg font-semibold">Question Type</p>
-									<RadioGroup.Root value="yes-no" name="questionType">
+									<RadioGroup.Root
+										onchange={(e) => {
+											console.log(e);
+										}}
+										value="yes-no"
+										name="questionType"
+									>
 										<div class="flex items-center space-x-2">
 											<RadioGroup.Item value="yes-no" id="r1" />
 											<Label for="r1">Yes/No</Label>
@@ -160,11 +192,11 @@
 						</article>
 					</card-description>
 					<div class="flex items-start gap-4">
-						<Button class="w-fit">Publish</Button>
-						<Button class="w-fit">Save Draft</Button>
+						<Button class="w-fit" type="submit" form="JobForm">Publish</Button>
+						<Button class="w-fit" type="submit" form="JobForm">Save Draft</Button>
 					</div>
 				</JobCard.Content>
 			</JobCard.Root>
 		</r-column>
-	</form>
+	</div>
 </page>

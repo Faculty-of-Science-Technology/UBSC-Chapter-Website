@@ -19,8 +19,9 @@
 
 	let markdownBuffer = '';
 	let createList = false;
-	let { oninput } = $props();
+	let { oninput, value = $bindable(), form = '', name = '' } = $props();
 	function dispatchInputEvent(content: string) {
+		value = content;
 		oninput(content);
 	}
 	function sanitizeContent(event: Event) {
@@ -143,6 +144,7 @@
 	}
 </script>
 
+<input type="hidden" {form} {name} bind:value />
 <rt-editor-root
 	class="relative max-h-[500px] w-full resize overflow-auto rounded-md border border-slate-300 pb-2"
 >
