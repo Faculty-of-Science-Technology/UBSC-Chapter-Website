@@ -13,6 +13,7 @@
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 	const job_id = $page.params.job_id;
@@ -25,6 +26,7 @@
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
+<SuperDebug data={$form} />
 <!-- svelte-ignore component_name_lowercase -->
 <noscript>
 	<section class="header text-archivo mx-2 my-8 flex flex-col space-y-1 lg:mx-8">
@@ -101,6 +103,7 @@
 										min="0"
 										form="JobForm"
 										name="min_rate"
+										value={$form.min_rate}
 										{...$constraints.min_rate}
 										id="min-hourly-rate"
 										placeholder="Type in a minimum hourly rate"
@@ -113,6 +116,7 @@
 										step="0.25"
 										min="0"
 										form="JobForm"
+										value={$form.max_rate}
 										{...$constraints.max_rate}
 										name="max_rate"
 										id="max-hourly-rate"
@@ -129,7 +133,9 @@
 										name="job_type"
 										form="JobForm"
 									>
-										<Select.Trigger class="w-full">Select an option</Select.Trigger>
+										<Select.Trigger class="w-full"
+											>{$form.job_type ? $form.job_type : 'Select an option'}</Select.Trigger
+										>
 										<Select.Content>
 											<Select.Item value="1">Hybrid</Select.Item>
 											<Select.Item value="2">In-person</Select.Item>
@@ -140,13 +146,10 @@
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Job description*</Label>
 									<RichTextEditor
-										bind:value={$form.job_type}
+										bind:value={$form.description}
 										form="JobForm"
 										name="description"
 										{...$constraints.description}
-										oninput={(e) => {
-											console.log(e);
-										}}
 									></RichTextEditor>
 								</div>
 								<div class="mb-6 mt-12">
