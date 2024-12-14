@@ -41,6 +41,7 @@ export const actions = {
 			cookies.set('message_description2', 'Click below to go into your dashboard', {
 				path: '/'
 			});
+			cookies.set('message_button_text', 'Go to Dashboard', { path: '/' });
 			cookies.set('authenticated', 'true', { path: '/' });
 
 			// Lookup the user by their email

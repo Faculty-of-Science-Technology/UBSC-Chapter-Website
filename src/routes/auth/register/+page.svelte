@@ -124,7 +124,7 @@
 								: 'Type in your email address'}
 							bind:value={$form.email}
 							{...$constraints.email}
-							required={JSOnly ? true : false}
+							required={false}
 							onfocusout={(e) => {
 								clearTimeout(accountTimeout);
 								accountTimeout = setTimeout(() => {
@@ -147,6 +147,7 @@
 								id="email"
 								placeholder="Type in your email address"
 								bind:value={$form.email}
+								required={false}
 								{...$constraints.email}
 							/>
 						</noscript>

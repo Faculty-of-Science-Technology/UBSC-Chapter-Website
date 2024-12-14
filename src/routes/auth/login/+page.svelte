@@ -65,7 +65,7 @@
 						<p class="text-sm text-red-600">{$errors.password}</p>
 					</div>
 					<Button type="submit" class="w-full">Sign in</Button>
-					<button
+					<!-- <button
 						class="flex w-full flex-col items-center justify-center self-stretch rounded-lg border border-slate-300 py-2 hover:bg-slate-100"
 					>
 						<div class="flex flex-row items-center gap-2">
@@ -101,7 +101,7 @@
 								<p>Sign in with Google</p>
 							</svg>
 						</div>
-					</button>
+					</button> -->
 				</form>
 				<!-- <p class="text-sm font-normal">
 					By signing in, you agree to abide by the <underline class="underline"
