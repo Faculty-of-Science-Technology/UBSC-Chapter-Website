@@ -1,9 +1,9 @@
 import { ACT_JWT_SECRET } from '$env/static/private';
+import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
-import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -59,11 +59,7 @@ export const actions: Actions = {
 			const super_form = await superValidate(formData, zod(registerSchema));
 
 			// Check if the email already exists
-			const user = await db
-				.select()
-				.from(Users)
-				.where(eq(Users.Email, super_form.data.email))
-				.execute();
+			const user = await checkUser(Users.Email, super_form.data.email);
 			if (user.length > 0) {
 				return setError(super_form, 'email', 'Email already exists');
 			}

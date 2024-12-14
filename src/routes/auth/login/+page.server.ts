@@ -1,4 +1,5 @@
 import { ACT_JWT_SECRET, JWT_SECRET } from '$env/static/private';
+import { getUser } from '$lib/functions/users';
 import { db } from '$lib/server/db/index.js';
 import { Users } from '$lib/server/db/schema.js';
 import { fail, isActionFailure, isRedirect, redirect } from '@sveltejs/kit';
@@ -53,9 +54,7 @@ export const actions = {
 
 			// Lookup the user by their email
 			// db.select().from(Users).where(eq(Users.Email, super_form.data.email)).execute()
-			const findUser = await db.query.Users.findFirst({
-				where: eq(Users.Email, super_form.data.email)
-			});
+			const findUser = await getUser(Users.Email, super_form.data.email);
 
 			// Check if the user exists
 			if (!findUser) {

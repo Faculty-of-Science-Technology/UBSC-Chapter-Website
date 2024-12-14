@@ -32,7 +32,7 @@ export const Jobs = pgTable('Jobs', {
 	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
 	Title: varchar('title', { length: 255 }).notNull(),
 	MinRate: real('min_rate').notNull(),
-	MmaxRate: real('max_rate').notNull(),
+	MaxRate: real('max_rate').notNull(),
 	Description: text('description').notNull(),
 	JobTypeId: integer('job_type_id').references(() => JobTypes.Id, { onDelete: 'cascade' }),
 	Draft: boolean('draft').notNull(),
