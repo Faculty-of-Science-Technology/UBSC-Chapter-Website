@@ -33,12 +33,16 @@
 
 			<action-container class="flex w-full flex-row">
 				{#if authenticated}
-					<a href="/auth/login">
-						<Button class="w-fit">Return to dashboard</Button>
+					<a href={data.message_button_path ? '/' + data.message_button_path : '/auth/login'}>
+						<Button class="w-fit"
+							>{data.message_button ? data.message_button : 'Return to dashboard'}</Button
+						>
 					</a>
 				{:else}
-					<a href="/">
-						<Button class="w-fit">Return Home</Button>
+					<a href={data.message_button_path ? '/' + data.message_button_path : '/'}>
+						<Button class="w-fit"
+							>{data.message_button ? data.message_button : 'Return Home'}</Button
+						>
 					</a>
 				{/if}
 			</action-container>

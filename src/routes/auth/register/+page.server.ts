@@ -3,8 +3,9 @@ import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
+import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
-import { superValidate } from 'sveltekit-superforms';
+import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions } from './$types';
@@ -56,20 +57,18 @@ export const actions: Actions = {
 		try {
 			registerSchema.parse(form);
 			const super_form = await superValidate(formData, zod(registerSchema));
-			// console.log('SUCCESS', super_form);
-			cookies.set('message_title', 'Verification Required', { path: '/' });
-			cookies.set('message_title2', 'Check your email', { path: '/' });
-			cookies.set('message_description', 'Please check your email for a verification link', {
-				path: '/'
-			});
-			cookies.set(
-				'message_description2',
-				'Click the link in the email to verify your account within 1 hour, or try signing in to request another one.',
-				{
-					path: '/'
-				}
-			);
-			cookies.set('authenticated', 'false', { path: '/' });
+
+			// Check if the email already exists
+			const user = await db
+				.select()
+				.from(Users)
+				.where(eq(Users.Email, super_form.data.email))
+				.execute();
+			if (user.length > 0) {
+				return setError(super_form, 'email', 'Email already exists');
+			}
+
+			// Insert the user if the email doesn't exist
 			await db.insert(Users).values({
 				AccountType: super_form.data.account_type,
 				FirstName: super_form.data.full_name.split(' ')[0].trim(),
@@ -78,6 +77,25 @@ export const actions: Actions = {
 				Password: await argon2.hash(super_form.data.password),
 				ActivationCode: Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' })
 			});
+			cookies.set('message_title', 'Check Your Inbox', { path: '/' });
+			cookies.set('message_title2', "Didn't get the message?", { path: '/' });
+			cookies.set(
+				'message_description',
+				'Check your email for a verification link and click on it',
+				{
+					path: '/'
+				}
+			);
+			cookies.set(
+				'message_description2',
+				'Try signing in on the login page to request another one. Note that links expire within 1 hour.',
+				{
+					path: '/'
+				}
+			);
+			cookies.set('message_button', 'Login', { path: '/' });
+			cookies.set('message_button_path', 'auth/login', { path: '/' });
+			cookies.set('authenticated', 'false', { path: '/' });
 
 			throw redirect(303, '/backend/message');
 		} catch (e) {
@@ -85,6 +103,7 @@ export const actions: Actions = {
 			if (isRedirect(e)) {
 				throw e;
 			}
+			// console.log('FAIL', e);/
 			const super_form = await superValidate(form, zod(registerSchema));
 
 			// @ts-expect-error - this is a hack to remove the password fields from the response
