@@ -18,6 +18,7 @@
 	import type { PageData } from './$types';
 	const job_id = $page.params.job_id;
 	let data: PageData = $props();
+	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
 	});
@@ -48,7 +49,10 @@
 			<JobCard.Root class="w-[305px] lg:w-[320px]">
 				<JobCard.Content class="flex flex-col gap-4">
 					<JobCard.Title>
-						<p>Remote Senior Backend Software Engineer</p>
+						<noscript>
+							<p>Type in a title to the left to begin</p>
+						</noscript>
+						<p class="jsonly">{JobTitle}</p>
 						<span class="tracking-wide"><Badge>Draft</Badge></span>
 					</JobCard.Title>
 					<card-description class="flex flex-col gap-2">
@@ -73,6 +77,16 @@
 			<Card.Root class="w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
 					<input
+						oninput={(e: Event) => {
+							if (!e) return;
+							const target = e.target as HTMLInputElement;
+							const value = target.value;
+							if (!value || value.trim() === '') {
+								JobTitle = 'Type a title to the left to begin';
+								return;
+							}
+							JobTitle = target.value;
+						}}
 						type="text"
 						form="JobForm"
 						name="title"
