@@ -10,6 +10,7 @@
 	// import { type RegisterForm } from './+page';
 	let JSOnly: HTMLSpanElement;
 	let data = $props();
+	let accountTimeout: ReturnType<typeof setTimeout>;
 	let accountType = $state('');
 	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data, {
 		taintedMessage: 'You have unsaved changes. Are you sure you want to leave?'
@@ -88,13 +89,17 @@
 						<p class="text-sm text-red-600">{$errors.account_type}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
-						<Label for="full-name">Full name</Label>
+						<Label for="full-name"
+							>{accountType === 'student' ? 'Full name' : 'Organization name'}</Label
+						>
 						<Input
 							class="invalid:border-red-500"
 							type="text"
 							id="full-name"
 							name="full_name"
-							placeholder="Type in your full name"
+							placeholder={accountType === 'student'
+								? 'Type in your full name'
+								: 'Type in an account name'}
 							pattern="[A-Za-z\s]+"
 							bind:value={$form.full_name}
 							{...$constraints.full_name}
@@ -102,16 +107,49 @@
 						<p class="text-sm text-red-600">{$errors.full_name}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
-						<Label for="email">Email address</Label>
+						<Label for="email" class="jsonly"
+							>{accountType === 'student' ? 'UB Student ID' : 'Email address'}</Label
+						>
+						<noscript>
+							<Label for="email">Email address</Label>
+						</noscript>
+
 						<Input
-							class="invalid:border-red-500"
+							class="jsonly invalid:border-red-500"
 							type="email"
 							name="email"
 							id="email"
-							placeholder="Type in your email address"
+							placeholder={accountType === 'student'
+								? 'Type in your Student ID'
+								: 'Type in your email address'}
 							bind:value={$form.email}
 							{...$constraints.email}
+							required={JSOnly ? true : false}
+							onfocusout={(e) => {
+								clearTimeout(accountTimeout);
+								accountTimeout = setTimeout(() => {
+									const event: Event = e;
+									if (!event) return;
+									if (accountType === 'student' && event.target.value.trim() === '') return;
+									if (accountType === 'student' && !event.target.value.includes('@ub.edu.bz')) {
+										event.target.value = (
+											event.target.value.replace(/@.*$/, '') + '@ub.edu.bz'
+										).trim();
+									}
+								}, 590);
+							}}
 						/>
+						<noscript>
+							<Input
+								class=" invalid:border-red-500"
+								type="email"
+								name="email"
+								id="email"
+								placeholder="Type in your email address"
+								bind:value={$form.email}
+								{...$constraints.email}
+							/>
+						</noscript>
 						<p class="text-sm text-red-600">{$errors.email}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
