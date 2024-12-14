@@ -4,6 +4,7 @@
 	import * as Card from '$lib/components/vendor/ui/card';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 	interface LoginData extends PageData {
@@ -13,8 +14,10 @@
 	}
 	let data: LoginData = $props();
 	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
+	// console.log(JSON.parse(JSON.stringify(data)));
 </script>
 
+<SuperDebug data={$form}/>
 <page
 	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
 >
@@ -53,7 +56,13 @@
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="password">Password</Label>
-						<Input type="password" id="password" name="password" placeholder="Your password" />
+						<Input
+							type="password"
+							id="password"
+							name="password"
+							placeholder="Your password"
+							bind:value={$form.password}
+						/>
 						<p class="text-sm text-red-600">{$errors.password}</p>
 					</div>
 					<Button type="submit" class="w-full">Sign in</Button>

@@ -1,10 +1,11 @@
+import { ACT_JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
+import Jwt from 'jsonwebtoken';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import type { Actions } from './$types';
 
@@ -49,7 +50,7 @@ export const load = async ({ request }) => {
 export const actions: Actions = {
 	register: async (event) => {
 		const formData = await event.request.formData();
-		const form = Object.fromEntries(await formData);
+		const form = Object.fromEntries(formData);
 		const cookies = event.cookies;
 
 		try {
@@ -61,17 +62,21 @@ export const actions: Actions = {
 			cookies.set('message_description', 'Please check your email for a verification link', {
 				path: '/'
 			});
-			cookies.set('message_description2', 'Click the link in the email to verify your account', {
-				path: '/'
-			});
+			cookies.set(
+				'message_description2',
+				'Click the link in the email to verify your account within 1 hour, or try signing in to request another one.',
+				{
+					path: '/'
+				}
+			);
 			cookies.set('authenticated', 'false', { path: '/' });
 			await db.insert(Users).values({
 				AccountType: super_form.data.account_type,
-				FirstName: super_form.data.full_name.split(' ')[0],
-				LastName: super_form.data.full_name.split(' ')[1],
+				FirstName: super_form.data.full_name.split(' ')[0].trim(),
+				LastName: super_form.data.full_name.split(' ')[1].trim(),
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
-				ActivationCode: uuidv4()
+				ActivationCode: Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' })
 			});
 
 			throw redirect(303, '/backend/message');

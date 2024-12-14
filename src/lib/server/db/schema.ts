@@ -61,6 +61,8 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 	}),
 	content: varchar('content', { length: 512 }).notNull()
 });
+
+// Database relations
 export const UsersRelations = relations(Users, ({ many }) => ({
 	jobs: many(Jobs),
 	jobApplications: many(JobApplications)
