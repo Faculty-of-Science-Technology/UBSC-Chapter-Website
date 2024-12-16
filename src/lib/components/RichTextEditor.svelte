@@ -239,7 +239,9 @@
 			contenteditable="true"
 			data-placeholder="Start typing here..."
 			onkeydown={handleKeydown}
-			oninput={sanitizeContent}
+			onblur={sanitizeContent}
+			role="textbox"
+			tabindex="0"
 		>
 			{@html justSanitize(value)}
 		</div>
