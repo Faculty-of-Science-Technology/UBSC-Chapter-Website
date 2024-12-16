@@ -1,7 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Jobs, Questions, Users } from '$lib/server/db/schema';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { setError, superValidate } from 'sveltekit-superforms';
@@ -9,6 +9,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 import { getUser } from '$lib/functions/users';
+let job_id: string | null = null;
 
 const jobSchema = z.object({
 	title: z
@@ -41,14 +42,35 @@ const questionSchema = z.object({
 	// draft: z.boolean() // Generated on submit by the server
 });
 
-// export const load = async () => {
-// 	// Different schemas, no id required.
-// 	const jobForm = await superValidate(zod(questionSchema));
-// 	const questionForm = await superValidate(zod(jobSchema));
+export const load = async (event) => {
+	// Get page query parameters
+	const { cookies, url } = event;
+	const query = new URLSearchParams(url.search);
+	job_id = query.get('job_id');
+	console.log(job_id);
 
-// 	// Return them both
-// 	return { jobForm, questionForm };
-// };
+	if (job_id) {
+		// Lookup the job
+		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
+		// console.log(job);
+
+		if (!job) return;
+		const job_found = job[0];
+		// Map the job to the form
+		const mapped_job = {
+			title: job_found.Title,
+			description: job_found.Description,
+			min_rate: job_found.MinRate,
+			max_rate: job_found.MaxRate,
+			job_type: job_found.JobTypeId ?? 1, // Default to 1 if null
+			draft: job_found.Draft
+		};
+
+		const super_form = await superValidate(mapped_job, zod(jobSchema));
+		// console.log(super_form);
+		return { super_form };
+	}
+};
 
 export const actions: Actions = {
 	createJob: async (event) => {
@@ -74,6 +96,25 @@ export const actions: Actions = {
 			const user = await getUser(Users.Email, jwt['email']);
 			if (!user) throw redirect(301, '/auth/login');
 
+			if (job_id !== null) {
+				// Update the job
+				const updatedJob = await db
+					.update(Jobs)
+					.set({
+						Title: super_form.data.title,
+						Description: super_form.data.description,
+						MinRate: super_form.data.min_rate,
+						MaxRate: super_form.data.max_rate,
+						JobTypeId: super_form.data.job_type,
+						Draft: super_form.data.draft,
+						UserId: user.Id
+					})
+					.where(eq(Jobs.Id, job_id))
+					.returning({ Id: Jobs.Id });
+				console.log('Updating job...');
+				throw redirect(303, '/dashboard/jobs/new?job_id=' + updatedJob[0].Id);
+			}
+
 			// Check if the job already exists
 			const job = await db.select().from(Jobs).where(eq(Jobs.Title, super_form.data.title));
 			if (job.length > 0) {
@@ -97,7 +138,7 @@ export const actions: Actions = {
 			if (!super_form.data.draft) {
 				// return redirect(`/dashboard/jobs/${job.Id}`);
 				cookies.set('message_title', 'Job Published', { path: '/' });
-				cookies.set('message_title2', newJob.Title, { path: '/' });
+				cookies.set('message_title2', newJob[0].Title, { path: '/' });
 				cookies.set('message_description', 'Your listing has been published', {
 					path: '/'
 				});
@@ -113,9 +154,11 @@ export const actions: Actions = {
 				throw redirect(303, '/backend/message');
 				// return super_form;
 			}
-			throw redirect(303, '/dashboard/jobs/new?job');
+			throw redirect(303, '/dashboard/jobs/new?job_id=' + newJob[0].Id);
 		} catch (e) {
-			console.log(e);
+			if (isRedirect(e)) {
+				throw e;
+			}
 			const super_form = await superValidate(formData, zod(jobSchema));
 			return { super_form };
 		}

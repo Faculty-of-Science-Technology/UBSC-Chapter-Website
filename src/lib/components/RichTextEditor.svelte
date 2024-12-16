@@ -24,6 +24,15 @@
 		value = content;
 		if (oninput) oninput(content);
 	}
+	function justSanitize(html: string) {
+		const content = sanitizeHtml(html, {
+			allowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'strong', 'em', 'u', 'strike', 'ul', 'ol', 'li'],
+			allowedAttributes: {
+				'*': ['class']
+			}
+		});
+		return content;
+	}
 	function sanitizeContent(event: Event) {
 		const htmlContent = event.target.innerHTML;
 		const content = sanitizeHtml(htmlContent, {
@@ -231,7 +240,9 @@
 			data-placeholder="Start typing here..."
 			onkeydown={handleKeydown}
 			oninput={sanitizeContent}
-		></div>
+		>
+			{@html justSanitize(value)}
+		</div>
 	</div>
 	<!-- <div class="sticky bottom-0 mx-2 bg-white py-2 text-sm font-light text-slate-600">
 		<p>Note: Type "# " below any text to make it a heading.</p>

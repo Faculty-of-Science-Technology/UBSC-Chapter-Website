@@ -24,10 +24,14 @@
 		console.log(job_id);
 	});
 
-	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data, {
-		resetForm: false,
-		invalidateAll: false
-	});
+	// console.log(data);
+	const { form, errors, constraints, enhance } = superForm(
+		data.data?.super_form ?? data.form?.super_form ?? data.data,
+		{
+			resetForm: false,
+			invalidateAll: false
+		}
+	);
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
@@ -163,9 +167,9 @@
 										form="JobForm"
 									>
 										<option disabled selected hidden>Select an option</option>
-										<option value="1">Hybrid</option>
-										<option value="2">In-person</option>
-										<option value="3">Remote</option>
+										<option selected={$form.job_type === 1} value="1">Hybrid</option>
+										<option selected={$form.job_type === 2} value="2">In-person</option>
+										<option selected={$form.job_type === 3} value="3">Remote</option>
 									</Select>
 									<p class="text-sm text-red-600">{$errors.job_type}</p>
 								</div>
