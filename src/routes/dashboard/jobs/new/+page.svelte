@@ -81,7 +81,15 @@
 							<p>Type in a title to the left to begin</p>
 						</noscript>
 						<p class="jsonly">{JobTitle}</p>
-						<span class="tracking-wide"><Badge>{$form.draft ? 'Draft' : 'Live'}</Badge></span>
+						<span class="tracking-wide"
+							><Badge
+								>{$form.draft === undefined
+									? 'Draft'
+									: $form.draft === true
+										? 'Draft'
+										: 'Live'}</Badge
+							></span
+						>
 					</JobCard.Title>
 					<card-description class="flex flex-col gap-2">
 						<JobCard.Description>HireLATAM</JobCard.Description>
@@ -244,7 +252,7 @@
 											</div>
 										</RadioGroup.Root>
 										<p class="text-sm text-red-600">
-											{$questionErrors.question_type}{$errors.title}
+											{$questionErrors.question_type}{$questionErrors.title}
 										</p>
 										<Button type="submit">Save</Button>
 									</div>

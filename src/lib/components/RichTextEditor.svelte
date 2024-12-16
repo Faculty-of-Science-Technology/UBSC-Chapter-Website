@@ -19,9 +19,11 @@
 
 	let markdownBuffer = '';
 	let createList = false;
+	let editor: HTMLDivElement;
 	let { oninput = () => {}, value = $bindable(), form = '', name = '' } = $props();
 	function dispatchInputEvent(content: string) {
 		value = content;
+		editor.innerHTML = content;
 		if (oninput) oninput(content);
 	}
 	function justSanitize(html: string) {
@@ -36,7 +38,7 @@
 	function sanitizeContent(event: Event) {
 		const htmlContent = event.target.innerHTML;
 		const content = sanitizeHtml(htmlContent, {
-			allowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'strong', 'em', 'u', 'strike', 'ul', 'ol', 'li'],
+			allowedTags: ['p', 'h1', 'h2', 'br', 'h3', 'h4', 'strong', 'em', 'u', 'strike', 'ul', 'ol', 'li'],
 			allowedAttributes: {
 				'*': ['class']
 			}
@@ -60,6 +62,11 @@
 		// Start collecting markdown symbols
 		if (event.key === 'Enter') {
 			markdownBuffer = '';
+			// const range = selection.getRangeAt(0);
+			// const br = document.createElement('br');
+			// range.insertNode(br);
+			// range.setStartAfter(br);
+			// range.setEndAfter(br);
 			createList = true;
 		} else if (event.key === '#' || event.key === '-' || event.key === '*') {
 			markdownBuffer += event.key;
@@ -235,6 +242,7 @@
 	</div>
 	<div class="relative mx-3 mt-4 h-full min-h-[150px] pb-10">
 		<div
+			bind:this={editor}
 			class="contenteditable h-full min-h-60 focus:outline-none"
 			contenteditable="true"
 			data-placeholder="Start typing here..."
