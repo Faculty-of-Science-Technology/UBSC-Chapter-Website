@@ -5,6 +5,7 @@
 	let {
 		ref = $bindable(null),
 		class: className,
+		value = $bindable(),
 		...restProps
 	}: RadioGroupPrimitive.RootProps = $props();
 </script>

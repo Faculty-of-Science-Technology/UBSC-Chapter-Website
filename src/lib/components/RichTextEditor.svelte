@@ -19,7 +19,7 @@
 
 	let markdownBuffer = '';
 	let createList = false;
-	let { oninput, value = $bindable(), form = '', name = '' } = $props();
+	let { oninput = () => {}, value = $bindable(), form = '', name = '' } = $props();
 	function dispatchInputEvent(content: string) {
 		value = content;
 		if (oninput) oninput(content);

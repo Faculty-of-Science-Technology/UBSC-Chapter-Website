@@ -66,9 +66,10 @@ export const load = async (event) => {
 			draft: job_found.Draft
 		};
 
-		const super_form = await superValidate(mapped_job, zod(jobSchema));
+		const jobForm = await superValidate(mapped_job, zod(jobSchema));
+		const questionForm = await superValidate(zod(questionSchema));
 		// console.log(super_form);
-		return { super_form };
+		return { jobForm, questionForm };
 	}
 };
 
@@ -92,7 +93,7 @@ export const actions: Actions = {
 		try {
 			jobSchema.parse(form);
 			const jwt: Jwt.JwtPayload = Jwt.verify(session, JWT_SECRET) as Jwt.JwtPayload;
-			const super_form = await superValidate(formData, zod(jobSchema));
+			const jobForm = await superValidate(formData, zod(jobSchema));
 			const user = await getUser(Users.Email, jwt['email']);
 			if (!user) throw redirect(301, '/auth/login');
 
@@ -101,12 +102,12 @@ export const actions: Actions = {
 				const updatedJob = await db
 					.update(Jobs)
 					.set({
-						Title: super_form.data.title,
-						Description: super_form.data.description,
-						MinRate: super_form.data.min_rate,
-						MaxRate: super_form.data.max_rate,
-						JobTypeId: super_form.data.job_type,
-						Draft: super_form.data.draft,
+						Title: jobForm.data.title,
+						Description: jobForm.data.description,
+						MinRate: jobForm.data.min_rate,
+						MaxRate: jobForm.data.max_rate,
+						JobTypeId: jobForm.data.job_type,
+						Draft: jobForm.data.draft,
 						UserId: user.Id
 					})
 					.where(eq(Jobs.Id, job_id))
@@ -116,26 +117,26 @@ export const actions: Actions = {
 			}
 
 			// Check if the job already exists
-			const job = await db.select().from(Jobs).where(eq(Jobs.Title, super_form.data.title));
+			const job = await db.select().from(Jobs).where(eq(Jobs.Title, jobForm.data.title));
 			if (job.length > 0) {
-				return setError(super_form, 'title', 'A job with this name already exists');
+				return setError(jobForm, 'title', 'A job with this name already exists');
 			}
 
 			// Create the job
 			const newJob = await db
 				.insert(Jobs)
 				.values({
-					Title: super_form.data.title,
-					Description: super_form.data.description,
-					MinRate: super_form.data.min_rate,
-					MaxRate: super_form.data.max_rate,
-					JobTypeId: super_form.data.job_type,
-					Draft: super_form.data.draft,
+					Title: jobForm.data.title,
+					Description: jobForm.data.description,
+					MinRate: jobForm.data.min_rate,
+					MaxRate: jobForm.data.max_rate,
+					JobTypeId: jobForm.data.job_type,
+					Draft: jobForm.data.draft,
 					UserId: user.Id
 				})
 				.returning({ Id: Jobs.Id, Title: Jobs.Title });
 			console.log(newJob);
-			if (!super_form.data.draft) {
+			if (!jobForm.data.draft) {
 				// return redirect(`/dashboard/jobs/${job.Id}`);
 				cookies.set('message_title', 'Job Published', { path: '/' });
 				cookies.set('message_title2', newJob[0].Title, { path: '/' });
@@ -152,15 +153,15 @@ export const actions: Actions = {
 				cookies.set('authenticated', 'true', { path: '/' });
 
 				throw redirect(303, '/backend/message');
-				// return super_form;
+				// return jobForm;
 			}
 			throw redirect(303, '/dashboard/jobs/new?job_id=' + newJob[0].Id);
 		} catch (e) {
 			if (isRedirect(e)) {
 				throw e;
 			}
-			const super_form = await superValidate(formData, zod(jobSchema));
-			return { super_form };
+			const jobForm = await superValidate(formData, zod(jobSchema));
+			return { jobForm };
 		}
 	},
 	createQuestion: async (event) => {
@@ -168,7 +169,7 @@ export const actions: Actions = {
 		const form = Object.fromEntries(formData);
 		const cookies = event.cookies;
 		const session = cookies.get('session');
-		console.log(form);
+		// console.log(form);
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
 
@@ -180,27 +181,37 @@ export const actions: Actions = {
 		}
 
 		try {
+			if (job_id === null) {
+				const questionForm = await superValidate(formData, zod(jobSchema));
+				setError(
+					questionForm,
+					'title',
+					'First, save this as a draft. You must create a job before adding questions'
+				);
+				return { questionForm };
+			}
+
 			questionSchema.parse(form);
 			const jwt: Jwt.JwtPayload = Jwt.verify(session, JWT_SECRET) as Jwt.JwtPayload;
-			const super_form = await superValidate(formData, zod(questionSchema));
+			const questionForm = await superValidate(formData, zod(questionSchema));
 
 			// Create the question
 			const user = await getUser(Users.Email, jwt['email']);
 			if (!user) throw redirect(301, '/auth/login');
 
 			const question = await db.insert(Questions).values({
-				Content: super_form.data.question_content,
-				Type: super_form.data.question_type === 'true-false' ? 1 : 0,
+				Content: questionForm.data.question_content,
+				Type: questionForm.data.question_type === 'true-false' ? 1 : 0,
 				Draft: false
 			});
 
 			// return redirect(`/dashboard/jobs/${question.Id}`);
-			// const super_form_job = await superValidate(formData, zod(jobSchema));
-			// return super_form_job;
-			return { super_form };
+			// const questionForm_job = await superValidate(formData, zod(jobSchema));
+			// return questionForm_job;
+			return { questionForm };
 		} catch {
-			const super_form = await superValidate(formData, zod(questionSchema));
-			return { super_form };
+			const questionForm = await superValidate(formData, zod(questionSchema));
+			return { questionForm };
 		}
 	}
 };

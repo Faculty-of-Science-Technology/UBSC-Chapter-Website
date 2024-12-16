@@ -1,6 +1,13 @@
 <script lang="ts">
 	import { cn } from '$lib/components/vendor/utils';
-	let { class: className, value = $bindable(), ...restProps } = $props();
+	import type { HTMLAttributes } from 'svelte/elements';
+	interface SelectProps extends HTMLAttributes<HTMLSelectElement> {
+		class?: string;
+		value?: string;
+		name: string;
+		form?: string;
+	}
+	let { class: className, value = $bindable(), ...restProps }: SelectProps = $props();
 </script>
 
 <select

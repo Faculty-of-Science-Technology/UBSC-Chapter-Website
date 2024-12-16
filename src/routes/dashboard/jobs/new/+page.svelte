@@ -18,7 +18,15 @@
 	import type { PageData } from './$types';
 	const job_id = $page.params.job_id;
 	let drafting = $state(false);
-	let data: PageData = $props();
+	const props = $props();
+	const page_data: JobsData = {
+		...props,
+		data: props.data || {}
+	};
+	type JobsData = PageData & {
+		data: Record<string, any>;
+	};
+	const { data }: JobsData = page_data;
 	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
@@ -26,7 +34,19 @@
 
 	// console.log(data);
 	const { form, errors, constraints, enhance } = superForm(
-		data.data?.super_form ?? data.form?.super_form ?? data.data,
+		data.jobForm, //?? data.super_form ?? props.form?.super_form ?? data
+		{
+			resetForm: false,
+			invalidateAll: false
+		}
+	);
+	const {
+		form: questionForm,
+		errors: questionErrors,
+		constraints: questionConstraints,
+		enhance: qEnhance
+	} = superForm(
+		data.questionForm, //?? data.super_form ?? props.form?.super_form ?? data
 		{
 			resetForm: false,
 			invalidateAll: false
@@ -61,7 +81,7 @@
 							<p>Type in a title to the left to begin</p>
 						</noscript>
 						<p class="jsonly">{JobTitle}</p>
-						<span class="tracking-wide"><Badge>Draft</Badge></span>
+						<span class="tracking-wide"><Badge>{$form.draft ? 'Draft' : 'Live'}</Badge></span>
 					</JobCard.Title>
 					<card-description class="flex flex-col gap-2">
 						<JobCard.Description>HireLATAM</JobCard.Description>
@@ -78,16 +98,10 @@
 			</JobCard.Root>
 		</l-column>
 		<!-- Right Column -->
-		<!-- <r-column class="flex flex-1 flex-col items-start gap-6"> -->
-		<!-- For debug: action="https://formtester.goodbytes.be/post.php" -->
-		<!-- <form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form> -->
-		<form
-			id="JobForm"
-			action="?/createJob"
-			method="POST"
-			class="flex flex-1 flex-col items-start gap-6"
-			use:enhance
-		>
+		<r-column class="flex flex-1 flex-col items-start gap-6">
+			<!-- For debug: action="https://formtester.goodbytes.be/post.php" -->
+			<!-- <form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form> -->
+
 			<div class="w-[305px] lg:w-full">
 				<Card.Root class="w-full">
 					<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
@@ -120,109 +134,122 @@
 					<card-description class="flex flex-col gap-6">
 						<article>
 							<section class="flex flex-col gap-4 text-black">
-								<div>
-									<h4 class="text-xl font-semibold leading-7 tracking-tight">Basic Details</h4>
-									<p class="text-base font-normal leading-5">
-										Basic details such as the hourly rate and type of job
-									</p>
-								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label for="min-hourly-rate">Minimum hourly rate*</Label>
-									<Input
-										type="number"
-										step="0.25"
-										min="0"
-										form="JobForm"
-										name="min_rate"
-										bind:value={$form.min_rate}
-										{...$constraints.min_rate}
-										id="min-hourly-rate"
-										placeholder="Type in a minimum hourly rate"
-									/>
-								</div>
-								<p class="text-sm text-red-600">{$errors.min_rate}</p>
-
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label for="max-hourly-rate">Maximum hourly rate*</Label>
-									<Input
-										type="number"
-										step="0.25"
-										min="0"
-										form="JobForm"
-										bind:value={$form.max_rate}
-										{...$constraints.max_rate}
-										name="max_rate"
-										id="max-hourly-rate"
-										placeholder="Type in a maximum hourly rate"
-									/>
-									<p class="text-sm text-red-600">{$errors.max_rate}</p>
-								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label>Type of job*</Label>
-
-									<Select
-										{...$constraints.job_type}
-										bind:value={$form.job_type}
-										name="job_type"
-										form="JobForm"
-									>
-										<option disabled selected hidden>Select an option</option>
-										<option selected={$form.job_type === 1} value="1">Hybrid</option>
-										<option selected={$form.job_type === 2} value="2">In-person</option>
-										<option selected={$form.job_type === 3} value="3">Remote</option>
-									</Select>
-									<p class="text-sm text-red-600">{$errors.job_type}</p>
-								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label>Job description*</Label>
-									<RichTextEditor
-										bind:value={$form.description}
-										form="JobForm"
-										name="description"
-										{...$constraints.description}
-									></RichTextEditor>
-									<p class="text-sm text-red-600">{$errors.description}</p>
-								</div>
-								<div class="mb-6 mt-12">
-									<h4 class="text-xl font-semibold leading-7 tracking-tight">
-										Additional Questions
-									</h4>
-									<p class="text-base font-normal leading-5">
-										Additional questions which you can specify as the employer.
-									</p>
-								</div>
-								<div class="gap-0.25 flex flex-col items-start">
-									<p class="flex flex-col items-start font-medium italic">
-										1. How many years of experience do you have in Go/Golang Development?
-									</p>
-									<p class="flex flex-col items-start italic">Short Answer Question</p>
-								</div>
-								<div
-									class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
+								<form
+									id="JobForm"
+									action="?/createJob"
+									method="POST"
+									class="flex flex-1 flex-col items-start gap-6"
+									use:enhance
 								>
-									<p class="text-lg font-semibold">Currently editing #4</p>
-									<Textarea
-										form="JobForm"
-										name="question_content"
-										{...$constraints.question_content}
-										placeholder="Type the question content here."
-									/>
-									<p class="text-sm text-red-600">{$errors.question_content}</p>
-									<p class="text-lg font-semibold">Question Type</p>
-									<RadioGroup.Root name="question_type">
-										<div class="flex items-center space-x-2">
-											<RadioGroup.Item value="true-false" form="JobForm" id="r2" />
-											<Label for="r1">Yes/No</Label>
-										</div>
-										<div class="flex items-center space-x-2">
-											<RadioGroup.Item value="short-answer" form="JobForm" id="r2" />
-											<Label for="r2">Short answer</Label>
-										</div>
-									</RadioGroup.Root>
-									<p class="text-sm text-red-600">{$errors.question_type}</p>
-									<Button type="submit" formaction="?/createQuestion">Save</Button>
-								</div>
-								<Button class="w-fit">New Question</Button>
+									<div>
+										<h4 class="text-xl font-semibold leading-7 tracking-tight">Basic Details</h4>
+										<p class="text-base font-normal leading-5">
+											Basic details such as the hourly rate and type of job
+										</p>
+									</div>
+									<div class="grid w-full max-w-sm items-center gap-1.5">
+										<Label for="min-hourly-rate">Minimum hourly rate*</Label>
+										<Input
+											type="number"
+											step="0.25"
+											min="0"
+											form="JobForm"
+											name="min_rate"
+											bind:value={$form.min_rate}
+											{...$constraints.min_rate}
+											id="min-hourly-rate"
+											placeholder="Type in a minimum hourly rate"
+										/>
+									</div>
+									<p class="text-sm text-red-600">{$errors.min_rate}</p>
+
+									<div class="grid w-full max-w-sm items-center gap-1.5">
+										<Label for="max-hourly-rate">Maximum hourly rate*</Label>
+										<Input
+											type="number"
+											step="0.25"
+											min="0"
+											form="JobForm"
+											bind:value={$form.max_rate}
+											{...$constraints.max_rate}
+											name="max_rate"
+											id="max-hourly-rate"
+											placeholder="Type in a maximum hourly rate"
+										/>
+										<p class="text-sm text-red-600">{$errors.max_rate}</p>
+									</div>
+									<div class="grid w-full max-w-sm items-center gap-1.5">
+										<Label>Type of job*</Label>
+
+										<Select
+											{...$constraints.job_type}
+											bind:value={$form.job_type}
+											name="job_type"
+											form="JobForm"
+										>
+											<option disabled selected hidden>Select an option</option>
+											<option selected={$form.job_type === 1} value="1">Hybrid</option>
+											<option selected={$form.job_type === 2} value="2">In-person</option>
+											<option selected={$form.job_type === 3} value="3">Remote</option>
+										</Select>
+										<p class="text-sm text-red-600">{$errors.job_type}</p>
+									</div>
+									<div class="grid w-full max-w-sm items-center gap-1.5">
+										<Label>Job description*</Label>
+										<RichTextEditor
+											bind:value={$form.description}
+											form="JobForm"
+											name="description"
+											{...$constraints.description}
+										></RichTextEditor>
+										<p class="text-sm text-red-600">{$errors.description}</p>
+									</div>
+								</form>
+								<form id="QuestionForm" action="?/createQuestion" method="POST" use:qEnhance>
+									<div class="mb-6 mt-12">
+										<h4 class="text-xl font-semibold leading-7 tracking-tight">
+											Additional Questions
+										</h4>
+										<p class="text-base font-normal leading-5">
+											Additional questions which you can specify as the employer.
+										</p>
+									</div>
+									<div class="gap-0.25 flex flex-col items-start">
+										<p class="flex flex-col items-start font-medium italic">
+											1. How many years of experience do you have in Go/Golang Development?
+										</p>
+										<p class="flex flex-col items-start italic">Short Answer Question</p>
+									</div>
+									<div
+										class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
+									>
+										<p class="text-lg font-semibold">Currently editing #4</p>
+										<Textarea
+											form="questionForm"
+											name="question_content"
+											bind:value={$questionForm.question_content}
+											{...$questionConstraints.question_content}
+											placeholder="Type the question content here."
+										/>
+										<p class="text-sm text-red-600">{$questionErrors.question_content}</p>
+										<p class="text-lg font-semibold">Question Type</p>
+										<RadioGroup.Root name="question_type" bind:value={$questionForm.question_type}>
+											<div class="flex items-center space-x-2">
+												<RadioGroup.Item value="true-false" form="questionForm" id="r2" />
+												<Label for="r1">Yes/No</Label>
+											</div>
+											<div class="flex items-center space-x-2">
+												<RadioGroup.Item value="short-answer" form="questionForm" id="r2" />
+												<Label for="r2">Short answer</Label>
+											</div>
+										</RadioGroup.Root>
+										<p class="text-sm text-red-600">
+											{$questionErrors.question_type}{$errors.title}
+										</p>
+										<Button type="submit">Save</Button>
+									</div>
+									<Button class="w-fit">New Question</Button>
+								</form>
 							</section>
 						</article>
 					</card-description>
@@ -238,7 +265,6 @@
 					<p class="text-sm text-red-600">{$errors.title}</p>
 				</JobCard.Content>
 			</JobCard.Root>
-		</form>
-		<!-- </r-column> -->
+		</r-column>
 	</div>
 </page>
