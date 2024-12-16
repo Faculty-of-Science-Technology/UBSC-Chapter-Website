@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Select from '$lib/components/compatibility/select.svelte';
 	import RichTextEditor from '$lib/components/RichTextEditor.svelte';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
@@ -8,7 +9,6 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
-	import * as Select from '$lib/components/vendor/ui/select';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
@@ -17,13 +17,17 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 	const job_id = $page.params.job_id;
+	let drafting = $state(false);
 	let data: PageData = $props();
 	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
 	});
 
-	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
+	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data, {
+		resetForm: false,
+		invalidateAll: false
+	});
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
@@ -70,33 +74,42 @@
 			</JobCard.Root>
 		</l-column>
 		<!-- Right Column -->
-		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<form id="JobForm" action="?/createJob" method="POST" use:enhance></form>
-			<form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form>
-
-			<Card.Root class="w-[305px] lg:w-full">
-				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-					<input
-						oninput={(e: Event) => {
-							if (!e) return;
-							const target = e.target as HTMLInputElement;
-							const value = target.value;
-							if (!value || value.trim() === '') {
-								JobTitle = 'Type a title to the left to begin';
-								return;
-							}
-							JobTitle = target.value;
-						}}
-						type="text"
-						form="JobForm"
-						name="title"
-						class="w-full bg-transparent focus:outline-none"
-						{...$constraints.title}
-						value={$form.title}
-						placeholder="Type in a job title"
-					/>
-				</Card.Title>
-			</Card.Root>
+		<!-- <r-column class="flex flex-1 flex-col items-start gap-6"> -->
+		<!-- For debug: action="https://formtester.goodbytes.be/post.php" -->
+		<!-- <form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form> -->
+		<form
+			id="JobForm"
+			action="?/createJob"
+			method="POST"
+			class="flex flex-1 flex-col items-start gap-6"
+			use:enhance
+		>
+			<div class="w-[305px] lg:w-full">
+				<Card.Root class="w-full">
+					<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
+						<input
+							oninput={(e: Event) => {
+								if (!e) return;
+								const target = e.target as HTMLInputElement;
+								const value = target.value;
+								if (!value || value.trim() === '') {
+									JobTitle = 'Type a title to the left to begin';
+									return;
+								}
+								JobTitle = target.value;
+							}}
+							type="text"
+							form="JobForm"
+							name="title"
+							class="w-full bg-transparent focus:outline-none"
+							{...$constraints.title}
+							bind:value={$form.title}
+							placeholder="Type in a job title"
+						/>
+					</Card.Title>
+				</Card.Root>
+				<p class="text-sm text-red-600">{$errors.title}</p>
+			</div>
 
 			<JobCard.Root class="w-full">
 				<JobCard.Content class="flex w-[305px] flex-col gap-4 lg:w-[550px]">
@@ -117,12 +130,14 @@
 										min="0"
 										form="JobForm"
 										name="min_rate"
-										value={$form.min_rate}
+										bind:value={$form.min_rate}
 										{...$constraints.min_rate}
 										id="min-hourly-rate"
 										placeholder="Type in a minimum hourly rate"
 									/>
 								</div>
+								<p class="text-sm text-red-600">{$errors.min_rate}</p>
+
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label for="max-hourly-rate">Maximum hourly rate*</Label>
 									<Input
@@ -130,32 +145,29 @@
 										step="0.25"
 										min="0"
 										form="JobForm"
-										value={$form.max_rate}
+										bind:value={$form.max_rate}
 										{...$constraints.max_rate}
 										name="max_rate"
 										id="max-hourly-rate"
 										placeholder="Type in a maximum hourly rate"
 									/>
+									<p class="text-sm text-red-600">{$errors.max_rate}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Type of job*</Label>
 
-									<Select.Root
-										type="single"
+									<Select
 										{...$constraints.job_type}
 										bind:value={$form.job_type}
 										name="job_type"
 										form="JobForm"
 									>
-										<Select.Trigger class="w-full"
-											>{$form.job_type ? $form.job_type : 'Select an option'}</Select.Trigger
-										>
-										<Select.Content>
-											<Select.Item value="1">Hybrid</Select.Item>
-											<Select.Item value="2">In-person</Select.Item>
-											<Select.Item value="3">Remote</Select.Item>
-										</Select.Content>
-									</Select.Root>
+										<option disabled selected hidden>Select an option</option>
+										<option value="1">Hybrid</option>
+										<option value="2">In-person</option>
+										<option value="3">Remote</option>
+									</Select>
+									<p class="text-sm text-red-600">{$errors.job_type}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Job description*</Label>
@@ -165,6 +177,7 @@
 										name="description"
 										{...$constraints.description}
 									></RichTextEditor>
+									<p class="text-sm text-red-600">{$errors.description}</p>
 								</div>
 								<div class="mb-6 mt-12">
 									<h4 class="text-xl font-semibold leading-7 tracking-tight">
@@ -184,36 +197,44 @@
 									class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
 								>
 									<p class="text-lg font-semibold">Currently editing #4</p>
-									<Textarea form="QuestionForm" placeholder="Type the question content here." />
+									<Textarea
+										form="JobForm"
+										name="question_content"
+										{...$constraints.question_content}
+										placeholder="Type the question content here."
+									/>
+									<p class="text-sm text-red-600">{$errors.question_content}</p>
 									<p class="text-lg font-semibold">Question Type</p>
-									<RadioGroup.Root
-										onchange={(e) => {
-											console.log(e);
-										}}
-										value="yes-no"
-										name="questionType"
-									>
+									<RadioGroup.Root name="question_type">
 										<div class="flex items-center space-x-2">
-											<RadioGroup.Item value="yes-no" id="r1" />
+											<RadioGroup.Item value="true-false" form="JobForm" id="r2" />
 											<Label for="r1">Yes/No</Label>
 										</div>
 										<div class="flex items-center space-x-2">
-											<RadioGroup.Item value="short-answer" id="r2" />
+											<RadioGroup.Item value="short-answer" form="JobForm" id="r2" />
 											<Label for="r2">Short answer</Label>
 										</div>
 									</RadioGroup.Root>
-									<Button>Save</Button>
+									<p class="text-sm text-red-600">{$errors.question_type}</p>
+									<Button type="submit" formaction="?/createQuestion">Save</Button>
 								</div>
 								<Button class="w-fit">New Question</Button>
 							</section>
 						</article>
 					</card-description>
 					<div class="flex items-start gap-4">
-						<Button class="w-fit" type="submit" form="JobForm">Publish</Button>
-						<Button class="w-fit" type="submit" form="JobForm">Save Draft</Button>
+						<input type="hidden" name="draft" value={drafting} form="JobForm" />
+						<Button class="w-fit" type="submit" onclick={() => (drafting = false)} form="JobForm"
+							>Publish</Button
+						>
+						<Button class="w-fit" type="submit" onclick={() => (drafting = true)} form="JobForm"
+							>Save Draft</Button
+						>
 					</div>
+					<p class="text-sm text-red-600">{$errors.title}</p>
 				</JobCard.Content>
 			</JobCard.Root>
-		</r-column>
+		</form>
+		<!-- </r-column> -->
 	</div>
 </page>

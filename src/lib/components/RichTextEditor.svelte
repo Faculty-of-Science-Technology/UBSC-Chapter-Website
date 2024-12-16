@@ -22,7 +22,7 @@
 	let { oninput, value = $bindable(), form = '', name = '' } = $props();
 	function dispatchInputEvent(content: string) {
 		value = content;
-		oninput(content);
+		if (oninput) oninput(content);
 	}
 	function sanitizeContent(event: Event) {
 		const htmlContent = event.target.innerHTML;
