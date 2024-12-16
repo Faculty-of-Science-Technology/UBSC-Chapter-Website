@@ -71,6 +71,9 @@ export const load = async (event) => {
 		// console.log(super_form);
 		return { jobForm, questionForm };
 	}
+	const jobForm = await superValidate(zod(jobSchema));
+	const questionForm = await superValidate(zod(questionSchema));
+	return { jobForm, questionForm };
 };
 
 export const actions: Actions = {
