@@ -26,7 +26,16 @@
 	type JobsData = PageData & {
 		data: Record<string, any>;
 	};
+	interface IQuestion {
+		id: number;
+		Content: string;
+		Type: boolean;
+		Draft: boolean;
+		JobsId: string; // UUID
+	}
 	const { data }: JobsData = page_data;
+	const questions: IQuestion[] = data.questions;
+	console.log(questions);
 	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
@@ -84,9 +93,9 @@
 						<span class="tracking-wide"
 							><Badge
 								>{$form.draft === undefined
-									? 'Draft'
+									? 'Draft (Unsaved)'
 									: $form.draft === true
-										? 'Draft'
+										? 'Draft (Saved)'
 										: 'Live'}</Badge
 							></span
 						>
@@ -233,7 +242,7 @@
 									>
 										<p class="text-lg font-semibold">Currently editing #4</p>
 										<Textarea
-											form="questionForm"
+											form="QuestionForm"
 											name="question_content"
 											bind:value={$questionForm.question_content}
 											{...$questionConstraints.question_content}
@@ -243,16 +252,16 @@
 										<p class="text-lg font-semibold">Question Type</p>
 										<RadioGroup.Root name="question_type" bind:value={$questionForm.question_type}>
 											<div class="flex items-center space-x-2">
-												<RadioGroup.Item value="true-false" form="questionForm" id="r2" />
+												<RadioGroup.Item value="true-false" form="QuestionForm" id="r2" />
 												<Label for="r1">Yes/No</Label>
 											</div>
 											<div class="flex items-center space-x-2">
-												<RadioGroup.Item value="short-answer" form="questionForm" id="r2" />
+												<RadioGroup.Item value="short-answer" form="QuestionForm" id="r2" />
 												<Label for="r2">Short answer</Label>
 											</div>
 										</RadioGroup.Root>
 										<p class="text-sm text-red-600">
-											{$questionErrors.question_type}{$questionErrors.title}
+											{$questionErrors.question_type}
 										</p>
 										<Button type="submit">Save</Button>
 									</div>

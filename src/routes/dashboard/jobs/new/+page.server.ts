@@ -1,15 +1,13 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db';
-import { Jobs, Questions, Users } from '$lib/server/db/schema';
+import { Jobs, Questions } from '$lib/server/db/schema';
 import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
+import { setContext } from 'svelte';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-
-import { getUser } from '$lib/functions/users';
-let job_id: string | null = null;
 
 const jobSchema = z.object({
 	title: z
@@ -46,11 +44,13 @@ export const load = async (event) => {
 	// Get page query parameters
 	const { cookies, url } = event;
 	const query = new URLSearchParams(url.search);
-	job_id = query.get('job_id');
+	const job_id = query.get('job_id');
+	// Set the cookie
 	console.log(job_id);
 
 	if (job_id) {
 		// Lookup the job
+		cookies.set('job_id', job_id, { path: '/' });
 		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
 		// console.log(job);
 
@@ -68,8 +68,11 @@ export const load = async (event) => {
 
 		const jobForm = await superValidate(mapped_job, zod(jobSchema));
 		const questionForm = await superValidate(zod(questionSchema));
+		// Return all the questions for the job
+		const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
 		// console.log(super_form);
-		return { jobForm, questionForm };
+		setContext('questions', questions);
+		return { jobForm, questions, questionForm };
 	}
 	const jobForm = await superValidate(zod(jobSchema));
 	const questionForm = await superValidate(zod(questionSchema));
@@ -79,10 +82,11 @@ export const load = async (event) => {
 export const actions: Actions = {
 	createJob: async (event) => {
 		const formData = await event.request.formData();
-		const cookies = event.cookies;
+		const { cookies } = event;
 		const session = cookies.get('session');
 		const form = Object.fromEntries(formData);
-		console.log(form);
+		// const query = new URLSearchParams(url.search);
+		// console.log(form);
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
 
@@ -95,9 +99,9 @@ export const actions: Actions = {
 
 		try {
 			jobSchema.parse(form);
-			const jwt: Jwt.JwtPayload = Jwt.verify(session, JWT_SECRET) as Jwt.JwtPayload;
 			const jobForm = await superValidate(formData, zod(jobSchema));
-			const user = await getUser(Users.Email, jwt['email']);
+			const user = event.locals.user;
+			const job_id = cookies.get('job_id') ?? null;
 			if (!user) throw redirect(301, '/auth/login');
 
 			if (job_id !== null) {
@@ -168,9 +172,11 @@ export const actions: Actions = {
 		}
 	},
 	createQuestion: async (event) => {
+        console.log(event.locals.user);
 		const formData = await event.request.formData();
 		const form = Object.fromEntries(formData);
 		const cookies = event.cookies;
+		const job_id = cookies.get('job_id') ?? null;
 		const session = cookies.get('session');
 		// console.log(form);
 		// Check if the user is authenticated
@@ -185,33 +191,38 @@ export const actions: Actions = {
 
 		try {
 			if (job_id === null) {
-				const questionForm = await superValidate(formData, zod(jobSchema));
+				const questionForm = await superValidate(formData, zod(questionSchema));
 				setError(
 					questionForm,
-					'title',
-					'First, save this as a draft. You must create a job before adding questions'
+					'question_type',
+					'First, save this job as a draft. You must create a job before adding questions'
 				);
 				return { questionForm };
 			}
 
+			// console.log(form);
 			questionSchema.parse(form);
-			const jwt: Jwt.JwtPayload = Jwt.verify(session, JWT_SECRET) as Jwt.JwtPayload;
 			const questionForm = await superValidate(formData, zod(questionSchema));
 
 			// Create the question
-			const user = await getUser(Users.Email, jwt['email']);
+			const user = event.locals.user;
 			if (!user) throw redirect(301, '/auth/login');
 
-			const question = await db.insert(Questions).values({
+			await db.insert(Questions).values({
 				Content: questionForm.data.question_content,
-				Type: questionForm.data.question_type === 'true-false' ? 1 : 0,
-				Draft: false
+				Type: questionForm.data.question_type === 'true-false',
+				Draft: false,
+				JobsId: job_id
 			});
+
+			// Return all the questions for the job
+			const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
 
 			// return redirect(`/dashboard/jobs/${question.Id}`);
 			// const questionForm_job = await superValidate(formData, zod(jobSchema));
 			// return questionForm_job;
-			return { questionForm };
+			setContext('questions', questions);
+			return { questions, questionForm };
 		} catch {
 			const questionForm = await superValidate(formData, zod(questionSchema));
 			return { questionForm };
