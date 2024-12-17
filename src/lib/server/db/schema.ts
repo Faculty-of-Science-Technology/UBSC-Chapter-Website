@@ -1,5 +1,16 @@
 import { relations, sql } from 'drizzle-orm';
-import { boolean, integer, pgEnum, pgTable, real, text, uuid, varchar } from 'drizzle-orm/pg-core';
+import {
+	boolean,
+	date,
+	integer,
+	pgEnum,
+	pgTable,
+	real,
+	text,
+	timestamp,
+	uuid,
+	varchar
+} from 'drizzle-orm/pg-core';
 
 export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner']);
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
@@ -14,13 +25,21 @@ export const Users = pgTable('Users', {
 	LastName: varchar('last_name', { length: 255 }).notNull(),
 	Email: varchar('email', { length: 64 }).unique().notNull(),
 	Password: text('password').notNull(),
-	ActivationCode: varchar('activation_code', { length: 255 }).unique()
+	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
+	Bio: varchar('bio', { length: 255 }),
+	Hireable: boolean('hireable').notNull().default(false),
+	CreatedAt: date('__created_at__')
+		.default(sql`CURRENT_DATE`)
+		.notNull()
 	//Session: text('session').unique(),
 });
 
 export const JobTypes = pgTable('JobTypes', {
 	Id: integer('id').unique().primaryKey().generatedAlwaysAsIdentity(),
-	Name: varchar('name', { length: 255 }).notNull()
+	Name: varchar('name', { length: 255 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const Questions = pgTable('Questions', {
@@ -28,7 +47,10 @@ export const Questions = pgTable('Questions', {
 	JobsId: uuid('jobs_id').references(() => Jobs.Id, { onDelete: 'cascade' }),
 	Content: varchar('content', { length: 255 }).notNull(),
 	Type: boolean('type').notNull(),
-	Draft: boolean('draft').notNull()
+	Draft: boolean('draft').notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const Jobs = pgTable('Jobs', {
@@ -42,7 +64,10 @@ export const Jobs = pgTable('Jobs', {
 	Description: text('description').notNull(),
 	JobTypeId: integer('job_type_id').references(() => JobTypes.Id, { onDelete: 'cascade' }),
 	Draft: boolean('draft').notNull(),
-	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' })
+	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const JobApplications = pgTable('JobApplications', {
@@ -59,7 +84,10 @@ export const JobApplications = pgTable('JobApplications', {
 	NoticePeriod: integer('notice_period').notNull(),
 	Draft: boolean('draft').notNull(),
 	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
-	Status: jobTypeStatusEnum('status').notNull()
+	Status: jobTypeStatusEnum('status').notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const JobQuestionResponses = pgTable('JobQuestionResponses', {
@@ -68,7 +96,10 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 	JobApplicationId: uuid('job_application_id').references(() => JobApplications.Id, {
 		onDelete: 'cascade'
 	}),
-	content: varchar('content', { length: 512 }).notNull()
+	content: varchar('content', { length: 512 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 // Database relations

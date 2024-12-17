@@ -5,8 +5,19 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
+	import { onMount } from 'svelte';
+	import { type PageData } from './$types.js';
+	const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'short' });
+	const { data: props } = $props();
+	const data: PageData = props;
+	const user = data.user;
+	const jobs = data.jobs;
 
 	// import * as m from '$lib/paraglide/messages.js';
+	onMount(() => {
+		console.log('mounted');
+		console.log(user);
+	});
 </script>
 
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
@@ -21,14 +32,18 @@
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
 					<UserCard.Title>
-						<h1>Immanuel Garcia</h1>
-						<span class="tracking-wide"><Badge>Hireable</Badge></span>
+						<h1>{user.FirstName + ' ' + user.LastName}</h1>
+						<span class="tracking-wide">
+							{#if user.Hireable}
+								<Badge>Hireable</Badge>
+							{/if}
+						</span>
 					</UserCard.Title>
 					<card-description class="flex flex-col gap-2">
-						<UserCard.Description>A little something about myself.</UserCard.Description>
+						<UserCard.Description>{user.Bio}</UserCard.Description>
 						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 							<Calendar strokeWidth="2" size="16" />
-							<p>Joined December 2021</p>
+							<p>Joined {new Date(user.CreatedAt).toLocaleDateString()}</p>
 						</div>
 					</card-description>
 				</UserCard.Content>
@@ -66,28 +81,70 @@
 					<h1>Explore Available Jobs</h1>
 				</Card.Title>
 			</Card.Root>
-			<JobCard.Root class="w-full">
-				<JobCard.Content class="flex flex-col gap-4">
-					<JobCard.Title class="flex flex-col gap-2">
-						<h2>Remote Senior Backend Software Engineer</h2>
-						<Badge class="w-fit text-base">$24/hr - $40/hr</Badge>
-					</JobCard.Title>
-					<card-description class="flex flex-col gap-6">
-						<div class="flex flex-col gap-2">
-							<JobCard.Description>HireLATAM</JobCard.Description>
-							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-								<Briefcase strokeWidth="2" size="16" />
-								<p>Belize (In-Person)</p>
+			{#each jobs as job}
+				<JobCard.Root class="w-full">
+					<JobCard.Content class="flex flex-col gap-4">
+						<JobCard.Title class="flex flex-col gap-2">
+							<h2>{job.Jobs.Title}</h2>
+							<Badge class="w-fit text-base"
+								>${job.Jobs.MinRate}/hr &ndash; ${job.Jobs.MaxRate}/hr</Badge
+							>
+						</JobCard.Title>
+						<card-description class="flex flex-col gap-6">
+							<div class="flex flex-col gap-2">
+								<JobCard.Description
+									>{job.Users?.FirstName + ' ' + job.Users?.LastName}</JobCard.Description
+								>
+								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
+									<Briefcase strokeWidth="2" size="16" />
+									<p>{job.JobTypes?.Name}</p>
+								</div>
+								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
+									<Clock3 strokeWidth="2" size="16" />
+									{#if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / 1000) < 60}
+										<p>
+											{rtf1.format(
+												Math.round((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / 1000),
+												'seconds'
+											)}
+										</p>
+									{:else if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60)) < 60}
+										<p>
+											{rtf1.format(
+												Math.round(
+													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60)
+												),
+												'minutes'
+											)}
+										</p>
+									{:else if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 30)) < 12}
+										<p>
+											{rtf1.format(
+												Math.round(
+													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) /
+														(1000 * 60 * 60 * 24 * 30)
+												),
+												'months'
+											)}
+										</p>
+									{:else}
+										<p>
+											{rtf1.format(
+												Math.round(
+													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) /
+														(1000 * 60 * 60 * 24 * 365)
+												),
+												'years'
+											)}
+										</p>
+									{/if}
+								</div>
 							</div>
-							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-								<Clock3 strokeWidth="2" size="16" />
-								<p>5m ago</p>
-							</div>
-						</div>
-						<Button class="w-fit">Apply for this job</Button>
-					</card-description>
-				</JobCard.Content>
-			</JobCard.Root>
+							<Button class="w-fit">Apply for this job</Button>
+						</card-description>
+					</JobCard.Content>
+				</JobCard.Root>
+			{/each}
 		</r-column>
 	</main>
 </page>

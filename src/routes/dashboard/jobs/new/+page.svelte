@@ -18,7 +18,6 @@
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
-	import SuperDebug from 'sveltekit-superforms';
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
 	const job_id = $page.params.job_id;
@@ -73,7 +72,7 @@
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 <!-- svelte-ignore component_name_lowercase -->
 <noscript>
 	<section class="header text-archivo mx-2 my-8 flex flex-col space-y-1 lg:mx-8">
@@ -259,7 +258,7 @@
 									<div
 										class="my-4 flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
 									>
-										<p class="text-lg font-semibold">Currently editing #4</p>
+										<p class="text-lg font-semibold">Create a new question</p>
 										<Textarea
 											form="QuestionForm"
 											name="question_content"

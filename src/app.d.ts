@@ -4,7 +4,18 @@ declare global {
 	namespace App {
 		// interface Error {}
 		interface Locals {
-			user?: { Id: string; Password: string; Email: string }; // specify the correct type for user
+			user?: {
+				Id: string;
+				AccountType: string;
+				FirstName: string;
+				LastName: string;
+				Email: string;
+				Password: string;
+				ActivationCode: string | null;
+				Bio: string;
+				CreatedAt: Date;
+				Hireable: boolean;
+			};
 		}
 		// interface PageData {}
 		// interface PageState {}
@@ -12,4 +23,5 @@ declare global {
 	}
 }
 
-export {};
+export { };
+
