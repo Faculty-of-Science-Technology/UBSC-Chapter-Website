@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { eq, or } from 'drizzle-orm';
 
 export const load = async (event) => {
 	const cookies = event.cookies;
@@ -24,7 +24,7 @@ export const load = async (event) => {
 		.from(Jobs)
 		.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
 		.leftJoin(Users, eq(Jobs.UserId, Users.Id))
-		.where(eq(Jobs.Draft, false)) // Only show published jobs
+		.where(or(eq(Jobs.Draft, false), eq(Jobs.UserId, user.Id))) // Only show published jobs
 		.limit(10);
 
 	return { user, jobs };

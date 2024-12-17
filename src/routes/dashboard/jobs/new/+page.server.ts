@@ -46,6 +46,7 @@ export const load = async (event) => {
 	}
 	// Get page query parameters
 	const { cookies, url } = event;
+	cookies.delete('job_id', { path: '/' });
 	const query = new URLSearchParams(url.search);
 	const job_id = query.get('job_id');
 	// Set the cookie

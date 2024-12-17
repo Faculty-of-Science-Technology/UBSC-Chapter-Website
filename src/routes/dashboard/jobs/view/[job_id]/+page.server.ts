@@ -19,7 +19,8 @@ export const load = async (event) => {
 		.from(Jobs)
 		.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
 		.leftJoin(Users, eq(Jobs.UserId, Users.Id))
-		.where(eq(Jobs.Id, resourceId)) // Only show published jobs
-		.limit(1).then((res) => res[0]); // Turn the array into an object
+		.where(eq(Jobs.Id, resourceId)) // Only show published jobs or jobs owned by the user
+		.limit(1)
+		.then((res) => res[0]); // Turn the array into an object
 	return { user, job };
 };
