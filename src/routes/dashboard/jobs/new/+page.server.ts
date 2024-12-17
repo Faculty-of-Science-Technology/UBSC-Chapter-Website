@@ -49,12 +49,11 @@ export const load = async (event) => {
 	cookies.delete('job_id', { path: '/' });
 	const query = new URLSearchParams(url.search);
 	const job_id = query.get('job_id');
-	// Set the cookie
-	console.log(job_id);
 
 	if (job_id) {
-		// Lookup the job
+		// Set the cookie
 		cookies.set('job_id', job_id, { path: '/' });
+		// Lookup the job
 		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
 
 		if (!job) return;
@@ -127,7 +126,7 @@ export const actions: Actions = {
 					})
 					.where(eq(Jobs.Id, job_id))
 					.returning({ Id: Jobs.Id });
-				console.log('Updating job...');
+
 				throw redirect(303, '/dashboard/jobs/new?job_id=' + updatedJob[0].Id);
 			}
 
@@ -150,7 +149,7 @@ export const actions: Actions = {
 					UserId: user.Id
 				})
 				.returning({ Id: Jobs.Id, Title: Jobs.Title });
-			console.log(newJob);
+
 			if (!jobForm.data.draft) {
 				// return redirect(`/dashboard/jobs/${job.Id}`);
 				cookies.set('message_title', 'Job Published', { path: '/' });

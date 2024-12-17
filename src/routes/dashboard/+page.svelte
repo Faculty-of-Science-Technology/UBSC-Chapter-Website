@@ -5,7 +5,6 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
-	import { onMount } from 'svelte';
 	import { type PageData } from './$types.js';
 	const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'short' });
 	const { data: props } = $props();
@@ -14,10 +13,6 @@
 	const jobs = data.jobs;
 
 	// import * as m from '$lib/paraglide/messages.js';
-	onMount(() => {
-		console.log('mounted');
-		console.log(user);
-	});
 </script>
 
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">

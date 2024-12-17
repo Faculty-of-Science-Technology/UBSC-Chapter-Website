@@ -4,7 +4,6 @@
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
-	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	const { data: props } = $props();
 	const data: PageData = props;
@@ -14,9 +13,6 @@
 	const job_creator = job_obj.Users;
 	const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'short' });
 
-	onMount(() => {
-		console.log(data);
-	});
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 

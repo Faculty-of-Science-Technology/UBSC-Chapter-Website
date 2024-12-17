@@ -12,7 +12,6 @@ export const load = async (event) => {
 	const user = event.locals.user;
 	if (!user) throw redirect(301, '/auth/login');
 
-	console.log('resourceId:', resourceId);
 	// Get all jobs
 	const job = await db // { Jobs: object, JobTypes: object, Users: object }
 		.select()

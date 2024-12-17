@@ -16,13 +16,13 @@
 		} else {
 			active_link = 0; // Default value if URL not found
 		}
-		console.log(active_link);
+		
 	});
 
 	afterNavigate(() => {
 		// Get the current URL and replace the slashes with dashes
 		const url = window.location.pathname.replace(/\//g, '-');
-		console.log(url);
+		
 
 		// Set active_link based on the current url
 		if (url in NavLinkIndexes) {
@@ -30,7 +30,7 @@
 		} else {
 			active_link = 0; // Default value if URL not found
 		}
-		console.log(active_link);
+		
 	});
 </script>
 

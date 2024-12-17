@@ -17,7 +17,7 @@
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
 	const job_id = $page.params.job_id;
@@ -40,9 +40,6 @@
 	const { data }: JobsData = page_data;
 	let questions: IQuestion[] = $state($page.data.questions);
 	let JobTitle: string = $state('Type a title to the left to begin');
-	onMount(() => {
-		console.log(job_id);
-	});
 
 	const { form, errors, constraints, enhance } = superForm(
 		data.jobForm, //?? data.super_form ?? props.form?.super_form ?? data
@@ -65,7 +62,7 @@
 			onUpdate: ({ form, result }) => {
 				const action = result.data as FormResult<ActionData>;
 				if (action.questions) questions = action.questions as unknown as IQuestion[];
-				console.log(form, action);
+				
 			}
 		}
 	);
