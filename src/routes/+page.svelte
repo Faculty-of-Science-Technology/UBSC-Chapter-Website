@@ -58,7 +58,9 @@
 		<call-to-action
 			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
 		>
-			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">What we do to fix this?</h1>
+			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">
+				What we do to fix this?
+			</h1>
 			<p class="text-xl lg:w-[720px]">
 				Our platform is designed to help employers connect with the perfect candidates quickly and
 				effortlessly. With just one glance, you'll discover the skilled professionals you need to

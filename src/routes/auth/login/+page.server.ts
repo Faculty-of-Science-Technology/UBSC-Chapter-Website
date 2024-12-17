@@ -79,7 +79,6 @@ export const actions = {
 					'Your account is not activated, please check your email for an activation link'
 				);
 			}
-			console.log(findUser, Jwt);
 
 			// Assign the session
 			cookies.set(

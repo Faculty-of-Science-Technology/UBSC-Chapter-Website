@@ -38,7 +38,21 @@
 	function sanitizeContent(event: Event) {
 		const htmlContent = event.target.innerHTML;
 		const content = sanitizeHtml(htmlContent, {
-			allowedTags: ['p', 'h1', 'h2', 'br', 'h3', 'h4', 'strong', 'em', 'u', 'strike', 'ul', 'ol', 'li'],
+			allowedTags: [
+				'p',
+				'h1',
+				'h2',
+				'br',
+				'h3',
+				'h4',
+				'strong',
+				'em',
+				'u',
+				'strike',
+				'ul',
+				'ol',
+				'li'
+			],
 			allowedAttributes: {
 				'*': ['class']
 			}

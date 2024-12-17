@@ -25,7 +25,7 @@
 	{...restProps}
 >
 	{#snippet children({ checked })}
-		<div class="relative float-left w-fit h-full flex items-center gap-2 cursor-pointer">
+		<div class="relative float-left flex h-full w-fit cursor-pointer items-center gap-2">
 			{#if checked}
 				<input
 					type="hidden"

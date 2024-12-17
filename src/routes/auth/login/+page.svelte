@@ -13,7 +13,6 @@
 	}
 	let data: LoginData = $props();
 	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
-	// console.log(JSON.parse(JSON.stringify(data)));
 </script>
 
 <!-- <SuperDebug data={$form}/> -->

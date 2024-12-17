@@ -16,7 +16,7 @@ export const checkAuth = async (event: ServerLoadEvent) => {
 		if (!jwt) {
 			return false;
 		}
-		// console.log(jwt);
+
 		// Is this less than 24 hours away from expiring?
 		if (jwt.exp && jwt.exp - Date.now() / 1000 < 86400) {
 			// Refresh the JWT

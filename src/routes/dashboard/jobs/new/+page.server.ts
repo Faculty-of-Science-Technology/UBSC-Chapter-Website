@@ -41,6 +41,9 @@ const questionSchema = z.object({
 });
 
 export const load = async (event) => {
+	if (!event.locals.user) {
+		return redirect(301, '/auth/login');
+	}
 	// Get page query parameters
 	const { cookies, url } = event;
 	const query = new URLSearchParams(url.search);
@@ -52,10 +55,15 @@ export const load = async (event) => {
 		// Lookup the job
 		cookies.set('job_id', job_id, { path: '/' });
 		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
-		// console.log(job);
 
 		if (!job) return;
 		const job_found = job[0];
+
+		// Check if the user is the owner of the job
+		if (job_found.UserId !== event.locals.user.Id) {
+			return redirect(301, '/dashboard/');
+		}
+
 		// Map the job to the form
 		const mapped_job = {
 			title: job_found.Title,
@@ -70,7 +78,7 @@ export const load = async (event) => {
 		const questionForm = await superValidate(zod(questionSchema));
 		// Return all the questions for the job
 		const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
-		// console.log(super_form);
+
 		setContext('questions', questions);
 		return { jobForm, questions, questionForm };
 	}
@@ -86,7 +94,7 @@ export const actions: Actions = {
 		const session = cookies.get('session');
 		const form = Object.fromEntries(formData);
 		// const query = new URLSearchParams(url.search);
-		// console.log(form);
+
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
 
@@ -172,13 +180,12 @@ export const actions: Actions = {
 		}
 	},
 	createQuestion: async (event) => {
-        console.log(event.locals.user);
 		const formData = await event.request.formData();
 		const form = Object.fromEntries(formData);
 		const cookies = event.cookies;
 		const job_id = cookies.get('job_id') ?? null;
 		const session = cookies.get('session');
-		// console.log(form);
+
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
 
@@ -200,7 +207,6 @@ export const actions: Actions = {
 				return { questionForm };
 			}
 
-			// console.log(form);
 			questionSchema.parse(form);
 			const questionForm = await superValidate(formData, zod(questionSchema));
 

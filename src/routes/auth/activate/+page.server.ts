@@ -11,7 +11,6 @@ export const load = async (event) => {
 	const query = new URLSearchParams(url.search);
 	const activation_code = query.get('activation_code');
 	if (!activation_code) {
-		console.log('activation code not found');
 		throw redirect(301, '/auth/login');
 	}
 
@@ -19,20 +18,18 @@ export const load = async (event) => {
 	try {
 		const jwt: Jwt.JwtPayload = Jwt.verify(activation_code, ACT_JWT_SECRET) as Jwt.JwtPayload;
 		if (!jwt) {
-			console.log('jwt not found');
 			throw redirect(301, '/auth/login');
 		}
 		// Is this expired?
 		if (jwt.exp && Date.now() > jwt.exp * 1000) {
-			console.log('jwt expired');
 			throw redirect(301, '/auth/login');
 		}
-        await db
-            .update(Users)
-            .set({
-                ActivationCode: null
-            })
-            .where(eq(Users.Email, jwt['email']));
+		await db
+			.update(Users)
+			.set({
+				ActivationCode: null
+			})
+			.where(eq(Users.Email, jwt['email']));
 		cookies.set('message_title', 'Activation Successful', { path: '/' });
 		cookies.set('message_title2', 'Your account has been activated', { path: '/' });
 		cookies.set('message_description', 'You can now log in with your credentials', {

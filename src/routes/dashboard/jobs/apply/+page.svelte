@@ -133,10 +133,10 @@
 							</section>
 						</article>
 					</card-description>
-					<p class="text-sm mb-3">
+					<p class="mb-3 text-sm">
 						By clicking "Submit," you acknowledge that the responsibility for all subsequent actions
-						rests solely with the employer. TalentPool nor The University of Belize is liable for any issues, disputes, or
-						shortcomings that may arise.
+						rests solely with the employer. TalentPool nor The University of Belize is liable for
+						any issues, disputes, or shortcomings that may arise.
 					</p>
 					<div class="flex items-start gap-4">
 						<Button class="w-fit">Submit for review</Button>

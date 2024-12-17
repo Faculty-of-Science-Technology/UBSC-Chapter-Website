@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { cn } from "$lib/components/vendor/utils.js";
-	import type { WithElementRef } from "bits-ui";
-	import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from '$lib/components/vendor/utils.js';
+	import type { WithElementRef } from 'bits-ui';
+	import type { HTMLAttributes } from 'svelte/elements';
 
 	let {
 		ref = $bindable(null),
@@ -13,7 +13,7 @@
 
 <div
 	bind:this={ref}
-	class={cn("bg-card text-card-foreground rounded-xl border shadow overflow-clip", className)}
+	class={cn('overflow-clip rounded-xl border bg-card text-card-foreground shadow', className)}
 	{...restProps}
 >
 	{@render children?.()}

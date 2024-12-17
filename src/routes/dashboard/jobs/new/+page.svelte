@@ -12,7 +12,7 @@
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
-	import { onMount } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
@@ -34,14 +34,12 @@
 		JobsId: string; // UUID
 	}
 	const { data }: JobsData = page_data;
-	const questions: IQuestion[] = data.questions;
-	console.log(questions);
+	const questions: IQuestion[] = $state($page.data.questions);
 	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
 	});
 
-	// console.log(data);
 	const { form, errors, constraints, enhance } = superForm(
 		data.jobForm, //?? data.super_form ?? props.form?.super_form ?? data
 		{
@@ -231,14 +229,24 @@
 											Additional questions which you can specify as the employer.
 										</p>
 									</div>
-									<div class="gap-0.25 flex flex-col items-start">
-										<p class="flex flex-col items-start font-medium italic">
-											1. How many years of experience do you have in Go/Golang Development?
-										</p>
-										<p class="flex flex-col items-start italic">Short Answer Question</p>
-									</div>
+									<ul class="my-8 flex list-inside list-none flex-col items-start gap-2">
+										{JSON.stringify(getContext('questions'))}
+										{#each questions as question, index}
+											<li>
+												<div class="gap-0.25 flex flex-col items-start">
+													<p class="flex flex-col items-start font-medium italic">
+														{index + 1 + '. '}
+														{question.Content}
+													</p>
+													<p class="flex flex-col items-start italic">
+														{question.Type === false ? 'Short Answer Question' : 'Yes/No Question'}
+													</p>
+												</div>
+											</li>
+										{/each}
+									</ul>
 									<div
-										class="flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
+										class="my-4 flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
 									>
 										<p class="text-lg font-semibold">Currently editing #4</p>
 										<Textarea

@@ -5,13 +5,16 @@ export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 
 export const Users = pgTable('Users', {
-	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.unique()
+		.primaryKey(),
 	AccountType: accountTypeEnum('account_type').notNull(),
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),
 	Email: varchar('email', { length: 64 }).unique().notNull(),
 	Password: text('password').notNull(),
-	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
+	ActivationCode: varchar('activation_code', { length: 255 }).unique()
 	//Session: text('session').unique(),
 });
 
@@ -29,7 +32,10 @@ export const Questions = pgTable('Questions', {
 });
 
 export const Jobs = pgTable('Jobs', {
-	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.unique()
+		.primaryKey(),
 	Title: varchar('title', { length: 255 }).notNull(),
 	MinRate: real('min_rate').notNull(),
 	MaxRate: real('max_rate').notNull(),
@@ -40,7 +46,10 @@ export const Jobs = pgTable('Jobs', {
 });
 
 export const JobApplications = pgTable('JobApplications', {
-	Id: uuid('id').$defaultFn(()=>sql.raw('uuid_generate_v4()')).unique().primaryKey(),
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.unique()
+		.primaryKey(),
 	JobsId: uuid('jobs_id').references(() => Jobs.Id, { onDelete: 'cascade' }),
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),

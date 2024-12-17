@@ -99,7 +99,7 @@ export const actions: Actions = {
 			if (isRedirect(e)) {
 				throw e;
 			}
-			// console.log('FAIL', e);/
+
 			const super_form = await superValidate(form, zod(registerSchema));
 
 			// @ts-expect-error - this is a hack to remove the password fields from the response
@@ -107,7 +107,7 @@ export const actions: Actions = {
 			// @ts-expect-error - we intentionally remove the password_confirmation field from the response
 			// We don't want to be passing sensitive data back to the client
 			delete super_form.data.password_confirmation;
-			console.log(super_form);
+
 			return fail(400, {
 				super_form
 			});
