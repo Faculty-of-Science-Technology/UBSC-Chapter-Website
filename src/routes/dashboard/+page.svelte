@@ -140,7 +140,9 @@
 									{/if}
 								</div>
 							</div>
-							<Button class="w-fit">Apply for this job</Button>
+							<a href="/dashboard/jobs/view/{job.Jobs.Id}">
+								<Button class="w-fit">Apply for this job</Button></a
+							>
 						</card-description>
 					</JobCard.Content>
 				</JobCard.Root>
