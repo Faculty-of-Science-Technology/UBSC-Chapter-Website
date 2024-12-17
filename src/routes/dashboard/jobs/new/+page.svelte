@@ -62,7 +62,6 @@
 			onUpdate: ({ form, result }) => {
 				const action = result.data as FormResult<ActionData>;
 				if (action.questions) questions = action.questions as unknown as IQuestion[];
-				
 			}
 		}
 	);
