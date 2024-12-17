@@ -14,8 +14,8 @@
 	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { getContext, onMount } from 'svelte';
 	import SuperDebug from 'sveltekit-superforms';
-	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
+	import { superForm, type FormResult } from 'sveltekit-superforms/client';
+	import type { ActionData, PageData } from './$types';
 	const job_id = $page.params.job_id;
 	let drafting = $state(false);
 	const props = $props();
@@ -34,7 +34,7 @@
 		JobsId: string; // UUID
 	}
 	const { data }: JobsData = page_data;
-	const questions: IQuestion[] = $state($page.data.questions);
+	let questions: IQuestion[] = $state($page.data.questions);
 	let JobTitle: string = $state('Type a title to the left to begin');
 	onMount(() => {
 		console.log(job_id);
@@ -50,13 +50,19 @@
 	const {
 		form: questionForm,
 		errors: questionErrors,
+		message: questionMessage,
 		constraints: questionConstraints,
 		enhance: qEnhance
 	} = superForm(
 		data.questionForm, //?? data.super_form ?? props.form?.super_form ?? data
 		{
-			resetForm: false,
-			invalidateAll: false
+			resetForm: true,
+			invalidateAll: true,
+			onUpdate: ({ form, result }) => {
+				const action = result.data as FormResult<ActionData>;
+				if (action.questions) questions = action.questions as unknown as IQuestion[];
+				console.log(form, action);
+			}
 		}
 	);
 	// import * as m from '$lib/paraglide/messages.js';
@@ -270,6 +276,9 @@
 										</RadioGroup.Root>
 										<p class="text-sm text-red-600">
 											{$questionErrors.question_type}
+										</p>
+										<p class="text-sm text-green-600">
+											{$questionMessage}
 										</p>
 										<Button type="submit">Save</Button>
 									</div>

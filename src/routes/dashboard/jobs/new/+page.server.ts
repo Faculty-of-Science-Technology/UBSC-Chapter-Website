@@ -5,7 +5,7 @@ import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { setContext } from 'svelte';
-import { setError, superValidate } from 'sveltekit-superforms';
+import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
@@ -79,7 +79,6 @@ export const load = async (event) => {
 		// Return all the questions for the job
 		const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
 
-		setContext('questions', questions);
 		return { jobForm, questions, questionForm };
 	}
 	const jobForm = await superValidate(zod(jobSchema));
@@ -228,7 +227,8 @@ export const actions: Actions = {
 			// const questionForm_job = await superValidate(formData, zod(jobSchema));
 			// return questionForm_job;
 			setContext('questions', questions);
-			return { questions, questionForm };
+			message(questionForm, 'Your question has been created');
+			return { questionForm, questions };
 		} catch {
 			const questionForm = await superValidate(formData, zod(questionSchema));
 			return { questionForm };
