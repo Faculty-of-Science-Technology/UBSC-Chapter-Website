@@ -121,7 +121,14 @@
 								<p>{@render posted_relative_time()}</p>
 							</div>
 						</div>
-						<Button class="w-fit">Apply for this job</Button>
+						<div class="flex gap-3">
+							<a href="/dashboard/jobs/apply?job_id={job.Id}"
+								><Button class="w-fit">Apply for this job</Button></a
+							>
+							<a href="/dashboard/jobs/new?job_id={job.Id}"
+								><Button class="w-fit">Edit job</Button></a
+							>
+						</div>
 						<article>
 							<section class="flex flex-col gap-4 text-black">
 								{@html job.Description}
