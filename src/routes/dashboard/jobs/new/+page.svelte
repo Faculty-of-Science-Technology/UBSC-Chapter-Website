@@ -1,3 +1,8 @@
+<!---- TODO 
+- [ ] Add a way to delete questions
+- [ ] Add a way to edit questions
+- [ ] Add a way to reorder questions
+-->
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Select from '$lib/components/compatibility/select.svelte';
