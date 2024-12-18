@@ -7,7 +7,7 @@ import {
     Questions,
     Users
 } from '$lib/server/db/schema';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -139,24 +139,110 @@ export const load = async (event) => {
 export const actions: Actions = {
 	createApplication: async (event) => {
 		const formData = await event.request.formData();
-		//const { cookies } = event;
-		//const session = cookies.get('session');
+		const { cookies } = event;
+		const job_id = cookies.get('job_id');
 		// const form = Object.fromEntries(formData);
 
 		// Check if the user is authenticated
 		const user = event.locals.user;
-		if (!user) throw redirect(301, '/auth/login');
+		if (!user || !job_id) throw redirect(301, '/auth/login');
 		const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 		console.log(applicationForm.data);
 		try {
 			JobApplicationSchema.parse(applicationForm.data);
-			return { applicationForm };
-		} catch {
+
+			// First and foremost, let's check if the job exists
+			const job = await db
+				.select()
+				.from(Jobs)
+				.where(eq(Jobs.Id, job_id))
+				.limit(1)
+				.then((res) => res[0]);
+
+			if (!job) {
+				setError(
+					applicationForm,
+					'draft',
+					'The job you are applying for has just been deleted or never existed'
+				);
+				return { applicationForm };
+			}
+
+			// Check if the user has already applied for the job
+			const jobApplication = await db
+				.select()
+				.from(JobApplications)
+				.where(and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, user.Id)))
+				.limit(1)
+				.then((res) => res[0]);
+
+			if (jobApplication) {
+				setError(
+					applicationForm,
+					'draft',
+					'You have already applied for this job. You can only apply once'
+				);
+				return { applicationForm };
+			}
+
+			// Check if the user has answered all the questions
+			const questions = await db
+				.select()
+				.from(Questions)
+				.where(and(eq(Questions.JobsId, job_id), eq(Questions.Draft, false)));
+
+			if (questions.length !== applicationForm.data.question_response_array.length) {
+				setError(applicationForm, 'draft', 'You need to answer all the questions');
+				return { applicationForm };
+			}
+
+			// Save the application
+			const jobApplicationId = await db
+				.insert(JobApplications)
+				.values({
+					UserId: user.Id,
+					JobsId: job_id,
+					FirstName: applicationForm.data.first_name,
+					LastName: applicationForm.data.last_name,
+					PhoneNumber: applicationForm.data.phone,
+					EmailAddress: applicationForm.data.email,
+					ResumeUrl: applicationForm.data.resume,
+					NoticePeriod: applicationForm.data.notice_period,
+					Draft: applicationForm.data.draft,
+					Status: 'pending'
+				})
+				.returning({ Id: JobApplications.Id });
+
+			// Save the question responses
+			for (const response of applicationForm.data.question_response_array) {
+				await db.insert(JobQuestionResponses).values({
+					JobApplicationId: jobApplicationId[0].Id,
+					QuestionsId: response.question_id,
+					Content: response.response
+				});
+			}
+
+			// Redirect to the backend message page
+			cookies.set('message_title', 'Application Submitted', { path: '/' });
+			cookies.set('message_title2', job.Title, { path: '/' });
+			cookies.set('message_description', 'Response recorded.', { path: '/' });
+			cookies.set(
+				'message_description2',
+				'Thank you for applying. We will notify you via email once the employer reviews your application and decides on the next steps.',
+				{ path: '/' }
+			);
+			cookies.set('authenticated', 'true', { path: '/' });
+
+			throw redirect(303, '/backend/message');
+		} catch (e) {
+			if (isRedirect(e)) {
+				throw e;
+			}
 			const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 			setError(
 				applicationForm,
 				'draft',
-				'Something happened on our end, try checking your response and trying to submit again one more time'
+				'Something happened on our end. Try checking over your response and trying to submit again once more'
 			);
 			return { applicationForm };
 		}
