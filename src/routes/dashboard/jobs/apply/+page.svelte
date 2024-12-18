@@ -10,7 +10,6 @@
 	import { posted_relative_time } from '$lib/snippets/time/index';
 
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
-	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types.js';
 	let isDragOver = $state(false); // Dragging over the file input
@@ -27,6 +26,8 @@
 	const questions = data.questions;
 
 	const application_form = data.applicationForm;
+	const application_id = data.applicationId;
+	const application_status = data.applicationStatus;
 
 	application_form.data.first_name = user.FirstName;
 	application_form.data.last_name = user.LastName;
@@ -51,7 +52,7 @@
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 <!-- svelte-ignore component_name_lowercase -->
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
@@ -171,6 +172,16 @@
 									<p class="text-sm text-muted-foreground">
 										Click to select a file or drop on top of the above button
 									</p>
+									<a
+										class="block text-sm text-slate-800 underline"
+										href="/backend/resume?applicationID={application_id}"
+										target="_blank"
+										aria-label="Review your past resume uploaded"
+									>
+										{application_form.data.draft && application_status === 'pending'
+											? 'Review your past resume uploaded'
+											: ''}</a
+									>
 									<p class="text-sm text-red-600">{$errors.resume}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -184,58 +195,61 @@
 									/>
 									<p class="text-sm text-red-600">{$errors.notice_period}</p>
 								</div>
-								<div class="mb-6 mt-12">
-									<h4 class="text-xl font-semibold leading-7 tracking-tight">
-										Additional Questions
-									</h4>
-									<p class="text-base font-normal leading-5">
-										Additional questions specified by the employer.
-									</p>
-								</div>
-								{#each questions as question, index}
-									{#if question.Type === true}
-										<short-question>
-											<div class="grid w-full max-w-sm items-center gap-1.5">
-												<Label>{question.Content}*</Label>
-												<Input
-													type="text"
-													name="question_response"
-													placeholder="Enter a valid answer"
-													bind:value={$form.question_response_array[index].response}
-													{...$constraints.question_response_array}
-													disabled={!$form.draft}
-												/>
-											</div>
-											<p class="text-sm text-red-600">
-												{$errors.question_response_array?.[index].response}
-											</p>
-										</short-question>
-									{:else}
-										<bool-question>
-											<div class="grid w-full max-w-sm items-center gap-1.5">
-												<Label>{question.Content}*</Label>
-												<RadioGroup.Root
-													name="question_response"
-													onValueChange={(value) =>
-														($form.question_response_array[index].response = value)}
-													bind:value={$form.question_response_array[index].response}
-												>
-													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="YES" id="yes" disabled={!$form.draft} />
-														<Label for="yes">Yes</Label>
-													</div>
-													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="NO" id="no" disabled={!$form.draft} />
-														<Label for="no">No</Label>
-													</div>
-												</RadioGroup.Root>
+
+								{#if questions.length > 0}
+									<div class="mb-6 mt-12">
+										<h4 class="text-xl font-semibold leading-7 tracking-tight">
+											Additional Questions
+										</h4>
+										<p class="text-base font-normal leading-5">
+											Additional questions specified by the employer.
+										</p>
+									</div>
+									{#each questions as question, index}
+										{#if question.Type === true}
+											<short-question>
+												<div class="grid w-full max-w-sm items-center gap-1.5">
+													<Label>{question.Content}*</Label>
+													<Input
+														type="text"
+														name="question_response"
+														placeholder="Enter a valid answer"
+														bind:value={$form.question_response_array[index].response}
+														{...$constraints.question_response_array}
+														disabled={!$form.draft}
+													/>
+												</div>
 												<p class="text-sm text-red-600">
 													{$errors.question_response_array?.[index].response}
 												</p>
-											</div>
-										</bool-question>
-									{/if}
-								{/each}
+											</short-question>
+										{:else}
+											<bool-question>
+												<div class="grid w-full max-w-sm items-center gap-1.5">
+													<Label>{question.Content}*</Label>
+													<RadioGroup.Root
+														name="question_response"
+														onValueChange={(value) =>
+															($form.question_response_array[index].response = value)}
+														bind:value={$form.question_response_array[index].response}
+													>
+														<div class="flex items-center space-x-2">
+															<RadioGroup.Item value="YES" id="yes" disabled={!$form.draft} />
+															<Label for="yes">Yes</Label>
+														</div>
+														<div class="flex items-center space-x-2">
+															<RadioGroup.Item value="NO" id="no" disabled={!$form.draft} />
+															<Label for="no">No</Label>
+														</div>
+													</RadioGroup.Root>
+													<p class="text-sm text-red-600">
+														{$errors.question_response_array?.[index].response}
+													</p>
+												</div>
+											</bool-question>
+										{/if}
+									{/each}
+								{/if}
 							</section>
 						</article>
 					</card-description>

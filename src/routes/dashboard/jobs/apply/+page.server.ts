@@ -1,11 +1,11 @@
 import { db } from '$lib/server/db';
 import {
-    JobApplications,
-    JobQuestionResponses,
-    Jobs,
-    JobTypes,
-    Questions,
-    Users
+	JobApplications,
+	JobQuestionResponses,
+	Jobs,
+	JobTypes,
+	Questions,
+	Users
 } from '$lib/server/db/schema';
 import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
@@ -44,7 +44,7 @@ const JobApplicationSchema = z.object({
 		.min(1, { message: "You can't start right away. Enter a longer notice period." })
 		.max(180, {
 			message:
-				"Hey, that's way too long. Enter a reasonable notice period preferably less than 90 days but no longer than 180 days."
+				"That's too long. Enter a reasonable notice period preferably less than 90 days but no longer than 180 days."
 		}),
 	draft: z.boolean({ required_error: 'Something happened on our end, try that one more time' }),
 	question_response_array: z.array(
@@ -101,6 +101,7 @@ export const load = async (event) => {
 		if (!jobForm || jobForm.length === 0) {
 			// Return an empty application form
 			const applicationForm = await superValidate(zod(JobApplicationSchema));
+			applicationForm.data.draft = true;
 			return { applicationForm, job, questions, user };
 		}
 		const application_found = jobForm[0];
@@ -131,7 +132,16 @@ export const load = async (event) => {
 		// Return the application form
 		// @ts-expect-error - We can't manually assign a file to a form field
 		const applicationForm = await superValidate(mapped_application, zod(JobApplicationSchema));
-		return { applicationForm, job, questions, user };
+		// Change the error message from the resume field to make it more applicable.
+		applicationForm.errors.resume = ['For security reasons, you need to re-upload your resume.'];
+		return {
+			applicationForm,
+			job,
+			questions,
+			user,
+			applicationId: application_found.Id,
+			applicationStatus: application_found.Status
+		};
 	}
 	throw redirect(301, '/dashboard/');
 };
@@ -196,6 +206,13 @@ export const actions: Actions = {
 					return { applicationForm };
 				}
 
+				// Prepare the file
+				const mimetype = applicationForm.data.resume.type;
+				const arrayBuff = await applicationForm.data.resume.arrayBuffer();
+				const resume_data_uri: string = applicationForm.data.resume
+					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
+					: '';
+
 				// Save the application
 				const jobApplicationId = await db
 					.insert(JobApplications)
@@ -206,14 +223,7 @@ export const actions: Actions = {
 						LastName: applicationForm.data.last_name,
 						PhoneNumber: applicationForm.data.phone,
 						EmailAddress: applicationForm.data.email,
-						ResumeUrl: applicationForm.data.resume
-							? await new Promise((resolve, reject) => {
-									const reader = new FileReader();
-									reader.onload = () => resolve(reader.result as string);
-									reader.onerror = reject;
-									reader.readAsDataURL(applicationForm.data.resume);
-								})
-							: '',
+						ResumeUrl: applicationForm.data.resume ? resume_data_uri.toString() : '',
 						NoticePeriod: applicationForm.data.notice_period,
 						Draft: applicationForm.data.draft,
 						Status: 'pending'
@@ -299,6 +309,7 @@ export const actions: Actions = {
 			if (isRedirect(e)) {
 				throw e;
 			}
+			// console.log(e);
 			const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 			setError(
 				applicationForm,
