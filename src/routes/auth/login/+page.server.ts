@@ -54,7 +54,7 @@ export const actions = {
 			if (!verificationResult) {
 				return setError(super_form, 'password', 'Incorrect username or password');
 			}
-			if (findUser.ActivationCode) {
+			if (findUser.ActivationCode !== null) {
 				await db
 					.update(Users)
 					.set({

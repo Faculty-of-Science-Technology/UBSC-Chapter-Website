@@ -21,5 +21,6 @@ export const load = async (event) => {
 		.where(eq(Jobs.Id, resourceId)) // Only show published jobs or jobs owned by the user
 		.limit(1)
 		.then((res) => res[0]); // Turn the array into an object
+	if (job.Jobs.Draft) throw redirect(301, '/dashboard/'); // Redirect if the job is a draft
 	return { user, job };
 };

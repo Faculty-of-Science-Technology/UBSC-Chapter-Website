@@ -82,7 +82,8 @@ export const load = async (event) => {
 			.where(eq(Jobs.Id, job_id))
 			.limit(1)
 			.then((res) => res[0]); // Turn the array into an object
-		if (!job) throw redirect(301, '/dashboard/');
+		if (!job) throw redirect(301, '/dashboard/'); // Redirect if the job doesn't exist
+		if(job.Jobs.Draft) throw redirect(301, '/dashboard/'); // Redirect if the job is a draft
 
 		// Lookup the questions
 		const questions = await db
