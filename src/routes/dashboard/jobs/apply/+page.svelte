@@ -14,6 +14,7 @@
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types.js';
 	let isDragOver = $state(false); // Dragging over the file input
+	let emailSwitch: Switch;
 	let { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
@@ -42,8 +43,8 @@
 		dataType: 'json'
 	});
 
-	function toggleEmail() {
-		$form.email = $form.email === user.Email ? '' : user.Email;
+	function toggleEmail(checked: boolean) {
+		$form.email = checked ? user.Email : $form.email; // non-destructive
 	}
 
 	// import * as m from '$lib/paraglide/messages.js';
@@ -94,13 +95,21 @@
 										<h4 class="text-xl font-semibold leading-7 tracking-tight">Personal Details</h4>
 										<p class="text-base font-normal leading-5">Taken from your profile.</p>
 										<ul class="list-inside list-disc">
-											<li>First Name: <b>{user.FirstName}</b></li>
-											<li>Last Name: <b>{user.LastName}</b></li>
+											<li>
+												First Name: <b>{user.FirstName}</b>
+											</li>
+											<p class="text-sm text-red-600">{$errors.first_name}</p>
+											<li>
+												Last Name: <b>{user.LastName}</b>
+											</li>
+											<p class="text-sm text-red-600">{$errors.last_name}</p>
 										</ul>
 									</div>
-									<p>
-										Change this in <a href="/dashboard/settings" class="underline">settings</a>.
-									</p>
+									<article>
+										<p>
+											Change this in <a href="/dashboard/settings" class="underline">settings</a>.
+										</p>
+									</article>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label for="mphone-number">Mobile phone number*</Label>
@@ -111,6 +120,7 @@
 										bind:value={$form.phone}
 										{...$constraints.phone}
 									/>
+									<p class="text-sm text-red-600">{$errors.phone}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label for="email">Email address*</Label>
@@ -118,13 +128,23 @@
 										type="email"
 										id="email"
 										placeholder="Type in your email address"
+										onblur={(e) => {
+											const event = e as FocusEvent;
+											// Yes this code works, but it's probably not the best way to do it
+											if (event.target.value !== user.Email) {
+												emailSwitch.checked = false;
+											} else {
+												emailSwitch.checked = true;
+											}
+										}}
 										bind:value={$form.email}
 										{...$constraints.email}
 									/>
 									<div class="flex items-center space-x-2" aria-label="Toggle email">
-										<Switch onclick={toggleEmail} id="email-alt" />
+										<Switch bind:this={emailSwitch} onCheckedChange={toggleEmail} id="email-alt" />
 										<Label for="email-alt">Use the one from my profile</Label>
 									</div>
+									<p class="text-sm text-red-600">{$errors.email}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label for="resume">Attach your resume*</Label>
@@ -141,6 +161,7 @@
 									<p class="text-sm text-muted-foreground">
 										Click to select a file or drop on top of the above button
 									</p>
+									<p class="text-sm text-red-600">{$errors.resume}</p>
 								</div>
 								<div class="grid w-full max-w-sm items-center gap-1.5">
 									<Label>Please enter notice period in days. Example: 45*</Label>
@@ -148,9 +169,9 @@
 										type="number"
 										id="notice-period"
 										bind:value={$form.notice_period}
-										{...$constraints.notice_period}
 										placeholder="Enter you notice period in days"
 									/>
+									<p class="text-sm text-red-600">{$errors.notice_period}</p>
 								</div>
 								<div class="mb-6 mt-12">
 									<h4 class="text-xl font-semibold leading-7 tracking-tight">
@@ -178,6 +199,9 @@
 													{...$constraints.question_response_array}
 												/>
 											</div>
+											<p class="text-sm text-red-600">
+												{$errors.question_response_array?.[index].response}
+											</p>
 										</short-question>
 									{:else}
 										<bool-question>
@@ -198,6 +222,9 @@
 														<Label for="no">No</Label>
 													</div>
 												</RadioGroup.Root>
+												<p class="text-sm text-red-600">
+													{$errors.question_response_array?.[index].response}
+												</p>
 											</div>
 										</bool-question>
 									{/if}
@@ -210,9 +237,14 @@
 						rests solely with the employer. TalentPool nor The University of Belize is liable for
 						any issues, disputes, or shortcomings that may arise.
 					</p>
+					<p class="text-sm text-red-600">{$errors.draft}</p>
 					<div class="flex items-start gap-4">
-						<Button class="w-fit" type="submit">Submit for review</Button>
-						<Button class="w-fit">Save Draft</Button>
+						<Button class="w-fit" type="submit" onclick={() => ($form.draft = false)}
+							>Submit for review</Button
+						>
+						<Button class="w-fit" type="submit" onclick={() => ($form.draft = true)}
+							>Save Draft</Button
+						>
 					</div>
 				</JobCard.Content>
 			</JobCard.Root>

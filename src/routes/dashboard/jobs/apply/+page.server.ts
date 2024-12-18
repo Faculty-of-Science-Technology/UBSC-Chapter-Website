@@ -9,25 +9,54 @@ import {
 } from '$lib/server/db/schema';
 import { redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
-import { superValidate } from 'sveltekit-superforms';
+import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 
 const JobApplicationSchema = z.object({
-	first_name: z.string().min(1).max(255),
-	last_name: z.string().min(1).max(255),
+	first_name: z
+		.string({ required_error: "Looks like your first name isn't set. Go change it in settings" })
+		.min(2, {
+			message:
+				'There was an error processing your details. You need to go re-enter your first name in settings.'
+		})
+		.max(255, { message: 'Your first name is unfortunately too long' }),
+	last_name: z
+		.string({ required_error: "Looks like your last name isn't set. Go change it in settings" })
+		.min(2, {
+			message:
+				'There was an error processing your details. You need to go re-enter your last name in settings.'
+		})
+		.max(255, { message: 'Your last name is unfortunately too long' }),
 	phone: z
-		.string()
-		.min(7)
-		.max(15)
+		.string({ required_error: 'Please enter a valid phone number' })
+		.min(7, { message: 'Check your phone number for errors' })
+		.max(15, { message: 'Enter a valid phone number' })
 		.regex(/^\+[1-9]\d{3,14}$/),
-	email: z.string().email(),
-	resume: z.string(),
-	notice_period: z.coerce.number().min(1).max(90),
+	email: z
+		.string({ required_error: 'Please enter a valid email address.' })
+		.email({ message: 'Please enter a valid email address.' }),
+	resume: z.string({ required_error: 'Your resume is required' }),
+	notice_period: z.coerce
+		.number({ required_error: 'Enter a notice period between 1 and 90' })
+		.min(1, { message: "You can't start right away. Enter a longer notice period." })
+		.max(180, {
+			message:
+				"Hey, that's way too long. Enter a reasonable notice period preferably less than 90 days but no longer than 180 days."
+		}),
+	draft: z.boolean({ required_error: 'Something happened on our end, try that one more time' }),
 	question_response_array: z.array(
-		z.object({ question_id: z.number(), response: z.string().min(1).max(512) })
+		z.object({
+			question_id: z.number({
+				required_error: 'Something happened on our end, try that again one more time'
+			}),
+			response: z
+				.string({ required_error: 'You need to answer this question' })
+				.trim()
+				.min(2, { message: 'Your answer is too short or completely missing' })
+				.max(512, { message: 'Your answer is too long for this question' })
+		})
 	)
-	// short_answer: z.string().min(1).max(512)
 });
 
 export const load = async (event) => {
@@ -112,12 +141,24 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		//const { cookies } = event;
 		//const session = cookies.get('session');
-		const form = Object.fromEntries(formData);
+		// const form = Object.fromEntries(formData);
 
 		// Check if the user is authenticated
 		const user = event.locals.user;
 		if (!user) throw redirect(301, '/auth/login');
 		const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 		console.log(applicationForm.data);
+		try {
+			JobApplicationSchema.parse(applicationForm.data);
+			return { applicationForm };
+		} catch {
+			const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
+			setError(
+				applicationForm,
+				'draft',
+				'Something happened on our end, try checking your response and trying to submit again one more time'
+			);
+			return { applicationForm };
+		}
 	}
 };
