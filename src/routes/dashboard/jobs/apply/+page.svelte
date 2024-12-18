@@ -120,7 +120,7 @@
 										placeholder="Type in your mobile phone number"
 										bind:value={$form.phone}
 										{...$constraints.phone}
-										disabled={$form.draft}
+										disabled={!$form.draft}
 									/>
 									<p class="text-sm text-red-600">{$errors.phone}</p>
 								</div>
@@ -141,14 +141,14 @@
 										}}
 										bind:value={$form.email}
 										{...$constraints.email}
-										disabled={$form.draft}
+										disabled={!$form.draft}
 									/>
 									<div class="flex items-center space-x-2" aria-label="Toggle email">
 										<Switch
 											bind:this={emailSwitch}
 											onCheckedChange={toggleEmail}
 											id="email-alt"
-											disabled={$form.draft}
+											disabled={!$form.draft}
 										/>
 										<Label for="email-alt">Use the one from my profile</Label>
 									</div>
@@ -168,7 +168,7 @@
 										ondragenter={() => (isDragOver = true)}
 										ondragleave={() => (isDragOver = false)}
 										ondrop={() => (isDragOver = false)}
-										disabled={$form.draft}
+										disabled={!$form.draft}
 									/>
 									<p class="text-sm text-muted-foreground">
 										Click to select a file or drop on top of the above button
@@ -182,7 +182,7 @@
 										id="notice-period"
 										bind:value={$form.notice_period}
 										placeholder="Enter you notice period in days"
-										disabled={$form.draft}
+										disabled={!$form.draft}
 									/>
 									<p class="text-sm text-red-600">{$errors.notice_period}</p>
 								</div>
@@ -205,7 +205,7 @@
 													placeholder="Enter a valid answer"
 													bind:value={$form.question_response_array[index].response}
 													{...$constraints.question_response_array}
-													disabled={$form.draft}
+													disabled={!$form.draft}
 												/>
 											</div>
 											<p class="text-sm text-red-600">
@@ -223,11 +223,11 @@
 													bind:value={$form.question_response_array[index].response}
 												>
 													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="YES" id="yes" disabled={$form.draft} />
+														<RadioGroup.Item value="YES" id="yes" disabled={!$form.draft} />
 														<Label for="yes">Yes</Label>
 													</div>
 													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="NO" id="no" disabled={$form.draft} />
+														<RadioGroup.Item value="NO" id="no" disabled={!$form.draft} />
 														<Label for="no">No</Label>
 													</div>
 												</RadioGroup.Root>
@@ -252,13 +252,13 @@
 							class="w-fit"
 							type="submit"
 							onclick={() => ($form.draft = false)}
-							disabled={$form.draft}>Submit for review</Button
+							disabled={!$form.draft}>Submit for review</Button
 						>
 						<Button
 							class="w-fit"
 							type="submit"
 							onclick={() => ($form.draft = true)}
-							disabled={$form.draft}>Save Draft</Button
+							disabled={!$form.draft}>Save Draft</Button
 						>
 					</div>
 				</JobCard.Content>
