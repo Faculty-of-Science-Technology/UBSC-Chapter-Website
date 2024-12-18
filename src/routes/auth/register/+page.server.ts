@@ -65,13 +65,14 @@ export const actions: Actions = {
 			}
 
 			// Insert the user if the email doesn't exist
+			const activation_code = Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' });
 			await db.insert(Users).values({
 				AccountType: super_form.data.account_type,
 				FirstName: super_form.data.full_name.split(' ')[0].trim(),
 				LastName: super_form.data.full_name.split(' ')[1].trim(),
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
-				ActivationCode: Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' })
+				ActivationCode: activation_code
 			});
 			cookies.set('message_title', 'Check Your Inbox', { path: '/' });
 			cookies.set('message_title2', "Didn't get the message?", { path: '/' });
@@ -84,7 +85,7 @@ export const actions: Actions = {
 			);
 			cookies.set(
 				'message_description2',
-				'Try signing in on the login page to request another one. Note that links expire within 1 hour.',
+				`Try signing in on the login page to request another one. Note that links expire within 1 hour. ...You are in debug mode. Your code is: ${activation_code}`,
 				{
 					path: '/'
 				}

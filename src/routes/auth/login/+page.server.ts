@@ -41,16 +41,6 @@ export const actions = {
 		try {
 			loginSchema.parse(form);
 			const super_form = await superValidate(formData, zod(loginSchema));
-			cookies.set('message_title', 'Login Success', { path: '/' });
-			cookies.set('message_title2', 'You are now signed in', { path: '/' });
-			cookies.set('message_description', 'You are authenticated', {
-				path: '/'
-			});
-			cookies.set('message_description2', 'Click below to go into your dashboard', {
-				path: '/'
-			});
-			cookies.set('message_button_text', 'Go to Dashboard', { path: '/' });
-			cookies.set('authenticated', 'true', { path: '/' });
 
 			// Lookup the user by their email
 			// db.select().from(Users).where(eq(Users.Email, super_form.data.email)).execute()
@@ -89,7 +79,7 @@ export const actions = {
 				{ path: '/' }
 			);
 
-			throw redirect(303, '/backend/message');
+			throw redirect(303, '/dashboard');
 		} catch (error) {
 			if (isActionFailure(error)) {
 				throw error;
