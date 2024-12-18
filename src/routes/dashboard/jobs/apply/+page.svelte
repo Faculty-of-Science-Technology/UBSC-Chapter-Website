@@ -59,6 +59,7 @@
 		<p class="text-lg lg:text-2xl">Start your application to apply for this job</p>
 	</section>
 	<form
+		enctype="multipart/form-data"
 		class="text-inter flex flex-wrap items-start gap-8 self-stretch"
 		method="POST"
 		action="?/createApplication"
@@ -159,10 +160,7 @@
 									<Input
 										id="resume"
 										type="file"
-										onchange={(e) => {
-											console.log(e);
-											//$form.resume
-										}}
+										oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
 										{...$constraints.resume}
 										class={isDragOver ? 'bg-black' : ''}
 										ondragenter={() => (isDragOver = true)}

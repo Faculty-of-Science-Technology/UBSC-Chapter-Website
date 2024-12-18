@@ -36,7 +36,9 @@ const JobApplicationSchema = z.object({
 	email: z
 		.string({ required_error: 'Please enter a valid email address.' })
 		.email({ message: 'Please enter a valid email address.' }),
-	resume: z.string({ required_error: 'Your resume is required' }),
+	resume: z
+		.instanceof(File, { message: 'Your resume is required' })
+		.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.'),
 	notice_period: z.coerce
 		.number({ required_error: 'Enter a notice period between 1 and 90' })
 		.min(1, { message: "You can't start right away. Enter a longer notice period." })
@@ -77,7 +79,7 @@ export const load = async (event) => {
 			.from(Jobs)
 			.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
 			.leftJoin(Users, eq(Jobs.UserId, Users.Id))
-			.where(eq(Jobs.Id, job_id)) // Only show published jobs or jobs owned by the user
+			.where(eq(Jobs.Id, job_id))
 			.limit(1)
 			.then((res) => res[0]); // Turn the array into an object
 		if (!job) throw redirect(301, '/dashboard/');
@@ -120,13 +122,14 @@ export const load = async (event) => {
 			last_name: application_found.LastName,
 			phone: application_found.PhoneNumber,
 			email: application_found.EmailAddress,
-			resume: application_found.ResumeUrl,
+			resume: null,
 			notice_period: application_found.NoticePeriod,
 			draft: application_found.Draft,
 			question_response_array: question_response_array
 		};
 
 		// Return the application form
+		// @ts-expect-error - We can't manually assign a file to a form field
 		const applicationForm = await superValidate(mapped_application, zod(JobApplicationSchema));
 		return { applicationForm, job, questions, user };
 	}
@@ -203,7 +206,14 @@ export const actions: Actions = {
 						LastName: applicationForm.data.last_name,
 						PhoneNumber: applicationForm.data.phone,
 						EmailAddress: applicationForm.data.email,
-						ResumeUrl: applicationForm.data.resume,
+						ResumeUrl: applicationForm.data.resume
+							? await new Promise((resolve, reject) => {
+									const reader = new FileReader();
+									reader.onload = () => resolve(reader.result as string);
+									reader.onerror = reject;
+									reader.readAsDataURL(applicationForm.data.resume);
+								})
+							: '',
 						NoticePeriod: applicationForm.data.notice_period,
 						Draft: applicationForm.data.draft,
 						Status: 'pending'
@@ -222,6 +232,11 @@ export const actions: Actions = {
 
 			// Update the job application if it's a draft
 			if (jobApplication?.Draft) {
+				const mimetype = applicationForm.data.resume.type;
+				const arrayBuff = await applicationForm.data.resume.arrayBuffer();
+				const resume_data_uri: string = applicationForm.data.resume
+					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
+					: '';
 				await db
 					.update(JobApplications)
 					.set({
@@ -229,7 +244,7 @@ export const actions: Actions = {
 						LastName: applicationForm.data.last_name,
 						PhoneNumber: applicationForm.data.phone,
 						EmailAddress: applicationForm.data.email,
-						ResumeUrl: applicationForm.data.resume,
+						ResumeUrl: applicationForm.data.resume ? resume_data_uri.toString() : '',
 						NoticePeriod: applicationForm.data.notice_period,
 						Draft: applicationForm.data.draft,
 						Status: 'pending'
