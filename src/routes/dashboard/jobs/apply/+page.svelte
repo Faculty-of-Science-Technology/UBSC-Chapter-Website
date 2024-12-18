@@ -28,14 +28,15 @@
 
 	const application_form = data.applicationForm;
 
-	// console.log(data, props);
 	application_form.data.first_name = user.FirstName;
 	application_form.data.last_name = user.LastName;
 
-	application_form.data.question_response_array = questions.map((question) => ({
-		question_id: question.Id,
-		response: ''
-	}));
+	if (application_form.data.question_response_array.length !== questions.length) {
+		application_form.data.question_response_array = questions.map((question) => ({
+			question_id: question.Id,
+			response: ''
+		}));
+	}
 
 	const { form, constraints, enhance, message, errors } = superForm(data.applicationForm, {
 		resetForm: false,
@@ -119,6 +120,7 @@
 										placeholder="Type in your mobile phone number"
 										bind:value={$form.phone}
 										{...$constraints.phone}
+										disabled={$form.draft}
 									/>
 									<p class="text-sm text-red-600">{$errors.phone}</p>
 								</div>
@@ -139,9 +141,15 @@
 										}}
 										bind:value={$form.email}
 										{...$constraints.email}
+										disabled={$form.draft}
 									/>
 									<div class="flex items-center space-x-2" aria-label="Toggle email">
-										<Switch bind:this={emailSwitch} onCheckedChange={toggleEmail} id="email-alt" />
+										<Switch
+											bind:this={emailSwitch}
+											onCheckedChange={toggleEmail}
+											id="email-alt"
+											disabled={$form.draft}
+										/>
 										<Label for="email-alt">Use the one from my profile</Label>
 									</div>
 									<p class="text-sm text-red-600">{$errors.email}</p>
@@ -151,12 +159,16 @@
 									<Input
 										id="resume"
 										type="file"
-										bind:value={$form.resume}
+										onchange={(e) => {
+											console.log(e);
+											//$form.resume
+										}}
 										{...$constraints.resume}
 										class={isDragOver ? 'bg-black' : ''}
 										ondragenter={() => (isDragOver = true)}
 										ondragleave={() => (isDragOver = false)}
 										ondrop={() => (isDragOver = false)}
+										disabled={$form.draft}
 									/>
 									<p class="text-sm text-muted-foreground">
 										Click to select a file or drop on top of the above button
@@ -170,6 +182,7 @@
 										id="notice-period"
 										bind:value={$form.notice_period}
 										placeholder="Enter you notice period in days"
+										disabled={$form.draft}
 									/>
 									<p class="text-sm text-red-600">{$errors.notice_period}</p>
 								</div>
@@ -186,17 +199,13 @@
 										<short-question>
 											<div class="grid w-full max-w-sm items-center gap-1.5">
 												<Label>{question.Content}*</Label>
-												<input
-													type="hidden"
-													name="question_response"
-													bind:value={$form.question_response_array[index].question_id}
-												/>
 												<Input
 													type="text"
 													name="question_response"
 													placeholder="Enter a valid answer"
 													bind:value={$form.question_response_array[index].response}
 													{...$constraints.question_response_array}
+													disabled={$form.draft}
 												/>
 											</div>
 											<p class="text-sm text-red-600">
@@ -214,11 +223,11 @@
 													bind:value={$form.question_response_array[index].response}
 												>
 													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="YES" id="yes" />
+														<RadioGroup.Item value="YES" id="yes" disabled={$form.draft} />
 														<Label for="yes">Yes</Label>
 													</div>
 													<div class="flex items-center space-x-2">
-														<RadioGroup.Item value="NO" id="no" />
+														<RadioGroup.Item value="NO" id="no" disabled={$form.draft} />
 														<Label for="no">No</Label>
 													</div>
 												</RadioGroup.Root>
@@ -239,11 +248,17 @@
 					</p>
 					<p class="text-sm text-red-600">{$errors.draft}</p>
 					<div class="flex items-start gap-4">
-						<Button class="w-fit" type="submit" onclick={() => ($form.draft = false)}
-							>Submit for review</Button
+						<Button
+							class="w-fit"
+							type="submit"
+							onclick={() => ($form.draft = false)}
+							disabled={$form.draft}>Submit for review</Button
 						>
-						<Button class="w-fit" type="submit" onclick={() => ($form.draft = true)}
-							>Save Draft</Button
+						<Button
+							class="w-fit"
+							type="submit"
+							onclick={() => ($form.draft = true)}
+							disabled={$form.draft}>Save Draft</Button
 						>
 					</div>
 				</JobCard.Content>

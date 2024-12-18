@@ -108,10 +108,10 @@ export const load = async (event) => {
 		const questionResponse = await db
 			.select()
 			.from(JobQuestionResponses)
-			.where(eq(JobQuestionResponses.JobApplicationId, JobApplications.Id));
+			.where(eq(JobQuestionResponses.JobApplicationId, application_found.Id));
 
 		const question_response_array = questionResponse.map((question) => ({
-			question_id: question.Id,
+			question_id: question.QuestionsId ?? 0, // Ensure question_id is a number
 			response: question.Content
 		}));
 
@@ -127,8 +127,6 @@ export const load = async (event) => {
 			question_response_array: question_response_array
 		};
 
-		console.log(mapped_application);
-
 		// Return the application form
 		const applicationForm = await superValidate(mapped_application, zod(JobApplicationSchema));
 		return { applicationForm, job, questions, user };
@@ -141,7 +139,6 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		const { cookies } = event;
 		const job_id = cookies.get('job_id');
-		// const form = Object.fromEntries(formData);
 
 		// Check if the user is authenticated
 		const user = event.locals.user;
@@ -220,6 +217,21 @@ export const actions: Actions = {
 					QuestionsId: response.question_id,
 					Content: response.response
 				});
+			}
+
+			if (applicationForm.data.draft) {
+				cookies.set('message_title', 'Application Drafted', { path: '/' });
+				cookies.set('message_title2', job.Title, { path: '/' });
+				cookies.set('message_description', 'Your application has been saved as a draft', {
+					path: '/'
+				});
+				cookies.set(
+					'message_description2',
+					'You can continue editing your application and submit it later',
+					{ path: '/' }
+				);
+				cookies.set('authenticated', 'true', { path: '/' });
+				throw redirect(303, '/backend/message');
 			}
 
 			// Redirect to the backend message page
