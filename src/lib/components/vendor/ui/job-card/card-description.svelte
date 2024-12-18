@@ -1,16 +1,16 @@
 <script lang="ts">
+	import { cn } from '$lib/components/vendor/utils.js';
 	import type { WithElementRef } from 'bits-ui';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { cn } from '$lib/components/vendor/utils.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLParagraphElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLElement>> = $props();
 </script>
 
-<p bind:this={ref} class={cn('text-sm text-muted-foreground', className)} {...restProps}>
+<article bind:this={ref} class={cn('text-sm text-muted-foreground', className)} {...restProps}>
 	{@render children?.()}
-</p>
+</article>

@@ -54,8 +54,7 @@ export const load = async (event) => {
 		cookies.set('job_id', job_id, { path: '/' });
 		// Lookup the job
 		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
-
-		if (!job) return;
+		if (!job) throw redirect(301, '/dashboard/');
 		const job_found = job[0];
 
 		// Check if the user is the owner of the job
@@ -89,7 +88,6 @@ export const actions: Actions = {
 		const { cookies } = event;
 		const session = cookies.get('session');
 		const form = Object.fromEntries(formData);
-		// const query = new URLSearchParams(url.search);
 
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
