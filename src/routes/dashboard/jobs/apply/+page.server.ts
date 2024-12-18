@@ -68,7 +68,6 @@ export const load = async (event) => {
 	const query = new URLSearchParams(url.search);
 	const user = event.locals.user;
 	const job_id = query.get('job_id');
-	console.log(job_id);
 	if (job_id) {
 		// Set the cookie
 		cookies.set('job_id', job_id, { path: '/' });
@@ -144,7 +143,6 @@ export const actions: Actions = {
 		const user = event.locals.user;
 		if (!user || !job_id) throw redirect(301, '/auth/login');
 		const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
-		console.log(applicationForm.data);
 		try {
 			JobApplicationSchema.parse(applicationForm.data);
 
@@ -173,7 +171,7 @@ export const actions: Actions = {
 				.limit(1)
 				.then((res) => res[0]);
 
-			if (jobApplication) {
+			if (jobApplication && !jobApplication.Draft) {
 				setError(
 					applicationForm,
 					'draft',
@@ -182,43 +180,79 @@ export const actions: Actions = {
 				return { applicationForm };
 			}
 
-			// Check if the user has answered all the questions
-			const questions = await db
-				.select()
-				.from(Questions)
-				.where(and(eq(Questions.JobsId, job_id), eq(Questions.Draft, false)));
+			// Create a new job application
+			if (!jobApplication) {
+				// Check if the user has answered all the questions
+				const questions = await db
+					.select()
+					.from(Questions)
+					.where(and(eq(Questions.JobsId, job_id), eq(Questions.Draft, false)));
 
-			if (questions.length !== applicationForm.data.question_response_array.length) {
-				setError(applicationForm, 'draft', 'You need to answer all the questions');
-				return { applicationForm };
+				if (questions.length !== applicationForm.data.question_response_array.length) {
+					setError(applicationForm, 'draft', 'You need to answer all the questions');
+					return { applicationForm };
+				}
+
+				// Save the application
+				const jobApplicationId = await db
+					.insert(JobApplications)
+					.values({
+						UserId: user.Id,
+						JobsId: job_id,
+						FirstName: applicationForm.data.first_name,
+						LastName: applicationForm.data.last_name,
+						PhoneNumber: applicationForm.data.phone,
+						EmailAddress: applicationForm.data.email,
+						ResumeUrl: applicationForm.data.resume,
+						NoticePeriod: applicationForm.data.notice_period,
+						Draft: applicationForm.data.draft,
+						Status: 'pending'
+					})
+					.returning({ Id: JobApplications.Id });
+
+				// Save the question responses
+				for (const response of applicationForm.data.question_response_array) {
+					await db.insert(JobQuestionResponses).values({
+						JobApplicationId: jobApplicationId[0].Id,
+						QuestionsId: response.question_id,
+						Content: response.response
+					});
+				}
 			}
 
-			// Save the application
-			const jobApplicationId = await db
-				.insert(JobApplications)
-				.values({
-					UserId: user.Id,
-					JobsId: job_id,
-					FirstName: applicationForm.data.first_name,
-					LastName: applicationForm.data.last_name,
-					PhoneNumber: applicationForm.data.phone,
-					EmailAddress: applicationForm.data.email,
-					ResumeUrl: applicationForm.data.resume,
-					NoticePeriod: applicationForm.data.notice_period,
-					Draft: applicationForm.data.draft,
-					Status: 'pending'
-				})
-				.returning({ Id: JobApplications.Id });
+			// Update the job application if it's a draft
+			if (jobApplication?.Draft) {
+				await db
+					.update(JobApplications)
+					.set({
+						FirstName: applicationForm.data.first_name,
+						LastName: applicationForm.data.last_name,
+						PhoneNumber: applicationForm.data.phone,
+						EmailAddress: applicationForm.data.email,
+						ResumeUrl: applicationForm.data.resume,
+						NoticePeriod: applicationForm.data.notice_period,
+						Draft: applicationForm.data.draft,
+						Status: 'pending'
+					})
+					.where(eq(JobApplications.Id, jobApplication.Id));
 
-			// Save the question responses
-			for (const response of applicationForm.data.question_response_array) {
-				await db.insert(JobQuestionResponses).values({
-					JobApplicationId: jobApplicationId[0].Id,
-					QuestionsId: response.question_id,
-					Content: response.response
-				});
+				// Update the question responses
+				for (const response of applicationForm.data.question_response_array) {
+					await db
+						.update(JobQuestionResponses)
+						.set({
+							Content: response.response
+						})
+						.where(
+							and(
+								eq(JobQuestionResponses.JobApplicationId, jobApplication.Id),
+								eq(JobQuestionResponses.QuestionsId, response.question_id)
+							)
+						);
+				}
 			}
 
+			// Show a message if the application is a draft
 			if (applicationForm.data.draft) {
 				cookies.set('message_title', 'Application Drafted', { path: '/' });
 				cookies.set('message_title2', job.Title, { path: '/' });

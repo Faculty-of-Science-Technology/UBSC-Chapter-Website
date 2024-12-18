@@ -252,7 +252,7 @@
 							class="w-fit"
 							type="submit"
 							onclick={() => ($form.draft = false)}
-							disabled={!$form.draft}>Submit for review</Button
+							disabled={!application_form.data.draft}>Submit for review</Button
 						>
 						<Button
 							class="w-fit"
