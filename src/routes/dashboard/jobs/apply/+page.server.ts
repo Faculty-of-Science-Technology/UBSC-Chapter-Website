@@ -209,9 +209,10 @@ export const actions: Actions = {
 				// Prepare the file
 				const mimetype = applicationForm.data.resume.type;
 				const arrayBuff = await applicationForm.data.resume.arrayBuffer();
+				// https://medium.com/@wahidsaeed1/encoded-decoding-data-url-with-buffer-api-nodejs-41a28f435a1e
 				const resume_data_uri: string = applicationForm.data.resume
 					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
-					: '';
+					: ''; // Maybe one day UB pays for blob storage :/ 
 
 				// Save the application
 				const jobApplicationId = await db
