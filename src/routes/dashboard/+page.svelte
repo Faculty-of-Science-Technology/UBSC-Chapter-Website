@@ -4,9 +4,10 @@
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
+	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
-	const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'short' });
+
 	const { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
@@ -96,43 +97,7 @@
 								</div>
 								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 									<Clock3 strokeWidth="2" size="16" />
-									{#if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / 1000) < 60}
-										<p>
-											{rtf1.format(
-												Math.round((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / 1000),
-												'seconds'
-											)}
-										</p>
-									{:else if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60)) < 60}
-										<p>
-											{rtf1.format(
-												Math.round(
-													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60)
-												),
-												'minutes'
-											)}
-										</p>
-									{:else if Math.abs((new Date(job.Jobs.CreatedAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 30)) < 12}
-										<p>
-											{rtf1.format(
-												Math.round(
-													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) /
-														(1000 * 60 * 60 * 24 * 30)
-												),
-												'months'
-											)}
-										</p>
-									{:else}
-										<p>
-											{rtf1.format(
-												Math.round(
-													(new Date(job.Jobs.CreatedAt).getTime() - Date.now()) /
-														(1000 * 60 * 60 * 24 * 365)
-												),
-												'years'
-											)}
-										</p>
-									{/if}
+									{@render posted_relative_time(job)}
 								</div>
 							</div>
 							<a href="/dashboard/jobs/view/{job.Jobs.Id}">

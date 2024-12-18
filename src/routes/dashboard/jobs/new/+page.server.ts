@@ -4,7 +4,6 @@ import { Jobs, Questions } from '$lib/server/db/schema';
 import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
-import { setContext } from 'svelte';
 import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -60,9 +59,7 @@ export const load = async (event) => {
 		const job_found = job[0];
 
 		// Check if the user is the owner of the job
-		if (job_found.UserId !== event.locals.user.Id) {
-			return redirect(301, '/dashboard/');
-		}
+		if (job_found.UserId !== event.locals.user.Id) throw redirect(301, '/dashboard/');
 
 		// Map the job to the form
 		const mapped_job = {
@@ -222,15 +219,11 @@ export const actions: Actions = {
 
 			// Return all the questions for the job
 			const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
-
-			// return redirect(`/dashboard/jobs/${question.Id}`);
-			// const questionForm_job = await superValidate(formData, zod(jobSchema));
-			// return questionForm_job;
-			setContext('questions', questions);
 			message(questionForm, 'Your question has been created');
 			return { questionForm, questions };
 		} catch {
 			const questionForm = await superValidate(formData, zod(questionSchema));
+			setError(questionForm, 'question_type', 'Something went wrong, try again');
 			return { questionForm };
 		}
 	}

@@ -74,7 +74,7 @@
 				<!-- <NavShard.Link
 					a11yLink="/dashboard/jobs"
 					title="Manage job listings"
-					onclick={() => goto('/dashboard/jobs/new')}
+					onclick={() => goto('/dashboard/jobs')}
 					active={active_link === 4}
 				/> -->
 			</svelte:fragment>

@@ -96,7 +96,7 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 	JobApplicationId: uuid('job_application_id').references(() => JobApplications.Id, {
 		onDelete: 'cascade'
 	}),
-	content: varchar('content', { length: 512 }).notNull(),
+	Content: varchar('content', { length: 512 }).notNull(),
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull()

@@ -17,10 +17,8 @@
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 
 	import { Briefcase, DollarSign } from 'lucide-svelte';
-	import { getContext } from 'svelte';
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
-	const job_id = $page.params.job_id;
 	let drafting = $state(false);
 	const props = $props();
 	const page_data: JobsData = {
@@ -236,7 +234,16 @@
 										</p>
 									</div>
 									<ul class="my-8 flex list-inside list-none flex-col items-start gap-2">
-										{JSON.stringify(getContext('questions'))}
+										{#if questions?.length === 0 || questions === undefined}
+											<li>
+												<p>No questions have been added yet.</p>
+												<p class="text-sm font-normal">
+													You can add additional questions for the applicants to answer in addition
+													to the pre-set questions. These questions can help you gather more
+													information about the candidates.
+												</p>
+											</li>
+										{/if}
 										{#each questions as question, index}
 											<li>
 												<div class="gap-0.25 flex flex-col items-start">
@@ -254,7 +261,9 @@
 									<div
 										class="my-4 flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
 									>
-										<p class="text-lg font-semibold">Create a new question</p>
+										<div>
+											<p class="text-lg font-semibold">Create a new question (optional)</p>
+										</div>
 										<Textarea
 											form="QuestionForm"
 											name="question_content"

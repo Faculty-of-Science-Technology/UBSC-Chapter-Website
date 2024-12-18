@@ -3,6 +3,7 @@
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
+	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	const { data: props } = $props();
@@ -11,39 +12,9 @@
 	const job = job_obj.Jobs;
 	const job_type = job_obj.JobTypes;
 	const job_creator = job_obj.Users;
-	const rtf1 = new Intl.RelativeTimeFormat('en', { style: 'short' });
 
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
-
-{#snippet posted_relative_time()}
-	{#if Math.abs((new Date(job.CreatedAt).getTime() - Date.now()) / 1000) < 60}
-		<p>
-			{rtf1.format(Math.round((new Date(job.CreatedAt).getTime() - Date.now()) / 1000), 'seconds')}
-		</p>
-	{:else if Math.abs((new Date(job.CreatedAt).getTime() - Date.now()) / (1000 * 60)) < 60}
-		<p>
-			{rtf1.format(
-				Math.round((new Date(job.CreatedAt).getTime() - Date.now()) / (1000 * 60)),
-				'minutes'
-			)}
-		</p>
-	{:else if Math.abs((new Date(job.CreatedAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 30)) < 12}
-		<p>
-			{rtf1.format(
-				Math.round((new Date(job.CreatedAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 30)),
-				'months'
-			)}
-		</p>
-	{:else}
-		<p>
-			{rtf1.format(
-				Math.round((new Date(job.CreatedAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24 * 365)),
-				'years'
-			)}
-		</p>
-	{/if}
-{/snippet}
 
 <!-- svelte-ignore component_name_lowercase -->
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
@@ -83,7 +54,7 @@
 						</div>
 						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 							<Clock3 strokeWidth="2" size="16" />
-							{@render posted_relative_time()}
+							{@render posted_relative_time(job_obj)}
 						</div>
 						<Button>Continue application</Button>
 					</card-description>
@@ -114,7 +85,7 @@
 							</div>
 							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 								<Clock3 strokeWidth="2" size="16" />
-								<p>{@render posted_relative_time()}</p>
+								<p>{@render posted_relative_time(job_obj)}</p>
 							</div>
 						</div>
 						<div class="flex gap-3">
