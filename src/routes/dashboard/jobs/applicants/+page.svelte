@@ -16,6 +16,7 @@
 	const dataLength = data.dataLength;
 
 	const jobApplications = data.jobApplications; // typeof (optional)
+	const job = data.job; // typeof (optional)
 	const jobs = data.jobs; // typeof (optional)
 
 	const offset = data.offset;
@@ -29,7 +30,9 @@
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
 		<h1 class="text-5xl font-extralight lg:text-6xl">
-			{jobApplications ? 'Applications For: ' + jobApplications[0].Jobs?.Title : 'Job Applications'}
+			{jobApplications
+				? 'Applications For: ' + (job?.Title ?? jobApplications[0]?.Jobs?.Title)
+				: 'Job Applications'}
 		</h1>
 		<p class="text-lg lg:text-2xl">View and manage submissions</p>
 	</section>
@@ -71,10 +74,10 @@
 			</Card.Root>
 			{#if dataLength === 0}
 				<Card.Root class="w-full">
-					<Card.Title class="items-center justify-center py-2 text-center text-2xl">
-						<h1>No data to show for this</h1>
+					<Card.Title class="items-center justify-center pb-2 pt-3 text-center text-2xl">
+						<h1>There isn't any data to show for this</h1>
 					</Card.Title>
-					<Card.Description class="text-center">
+					<Card.Description class="pb-4 text-center">
 						<p>Try viewing something else?</p>
 					</Card.Description>
 				</Card.Root>
@@ -114,7 +117,7 @@
 									</div>
 								</div>
 								<div class="flex gap-3">
-									<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}">
+									<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}" data-sveltekit-reload>
 										<Button class="w-fit">View submission data</Button></a
 									>
 								</div>
@@ -153,9 +156,9 @@
 								</div>
 
 								{#if application.JobApplications.Draft === undefined && !application.Jobs?.Draft}
-									<a class="w-fit" href="#drafting"><Button class="w-full">Drafting</Button></a>
+									<Button class="w-full lg:w-fit">Drafting</Button>
 								{:else if application.JobApplications.Draft === true && !application.Jobs?.Draft}
-									<a class="w-fit" href="#drafting"><Button class="w-full">Drafting</Button></a>
+									<Button class="w-full lg:w-fit">Drafting</Button>
 								{:else if application.JobApplications.Draft === true && application.Jobs?.Draft}
 									<a
 										class="w-fit cursor-not-allowed select-none"
@@ -182,8 +185,9 @@
 					{#snippet children({ pages, currentPage })}
 						<Pagination.Content>
 							<Pagination.Item>
-								<a href="/dashboard/jobs/applicants?page={currentPage < 1 ? 1 : currentPage}"
-									><Pagination.PrevButton /></a
+								<a
+									href="/dashboard/jobs/applicants?page={currentPage < 1 ? 1 : currentPage}"
+									data-sveltekit-reload><Pagination.PrevButton /></a
 								>
 							</Pagination.Item>
 							{#each pages as page (page.key)}
@@ -193,7 +197,7 @@
 									</Pagination.Item>
 								{:else}
 									<Pagination.Item>
-										<a href="/dashboard/jobs/applicants?page={page.value}">
+										<a href="/dashboard/jobs/applicants?page={page.value}" data-sveltekit-reload>
 											<Pagination.Link {page} isActive={currentPage === page.value}>
 												{page.value}
 											</Pagination.Link></a

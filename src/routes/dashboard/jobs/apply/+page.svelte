@@ -220,7 +220,8 @@
 													/>
 												</div>
 												<p class="text-sm text-red-600">
-													{$errors.question_response_array?.[index].response}
+													<!-- {JSON.stringify($errors.question_response_array?.[index])} -->
+													{$errors.question_response_array?.[index]?.response}
 												</p>
 											</short-question>
 										{:else}
@@ -243,7 +244,7 @@
 														</div>
 													</RadioGroup.Root>
 													<p class="text-sm text-red-600">
-														{$errors.question_response_array?.[index].response}
+														{$errors.question_response_array?.[index]?.response}
 													</p>
 												</div>
 											</bool-question>

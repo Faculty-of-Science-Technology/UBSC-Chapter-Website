@@ -40,12 +40,22 @@ export const load = async (event) => {
 			.offset(offset) // Move forward by the offset
 			.limit(10); // Stop after 10 jobs
 
-		return { user, dataLength, jobApplications: undefined, jobs, offset: page };
+		return { user, dataLength, jobApplications: undefined, jobs, job: undefined, offset: page };
 	}
 
 	// Get all job applications
 	// The total number of jobs stored in the database
-	const dataLength = await db.$count(JobApplications, eq(JobApplications.UserId, user.Id));
+	const dataLength = await db
+		.select({ count: count() })
+		.from(JobApplications)
+		.where(and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, user.Id)))
+		.then((res) => res[0].count);
+
+	const job = await db
+		.select()
+		.from(Jobs)
+		.where(eq(Jobs.Id, job_id))
+		.then((res) => res[0]);
 
 	// Get all submitted applications and populate
 	const jobApplications = await db
@@ -58,5 +68,5 @@ export const load = async (event) => {
 		.offset(offset) // Move forward by the offset
 		.limit(10); // Stop after 10 jobs
 
-	return { user, dataLength, jobApplications, jobs: undefined, offset: page };
+	return { user, dataLength, jobApplications, jobs: undefined, job, offset: page };
 };

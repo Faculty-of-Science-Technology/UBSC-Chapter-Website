@@ -102,7 +102,11 @@ export const load = async (event) => {
 				and(
 					eq(JobApplications.JobsId, job_id),
 					application_id
-						? and(eq(JobApplications.Id, application_id), eq(Jobs.UserId, user.Id)) // Get the job application form whereby the user is the owner of the job
+						? and(
+								eq(JobApplications.Id, application_id),
+								eq(Jobs.UserId, user.Id),
+								eq(JobApplications.Draft, false)
+							) // Get the job application form whereby the user is the owner of the job
 						: eq(JobApplications.UserId, event.locals.user.Id) // Get the job application form owned by the user whereby the application_id is not set
 				)
 			); // Get the job application form owned by the user
@@ -179,13 +183,7 @@ export const actions: Actions = {
 			JobApplicationSchema.parse(applicationForm.data);
 
 			// First and foremost, let's check if the job exists
-			const job = await db
-				.select()
-				.from(Jobs)
-				.where(eq(Jobs.Id, job_id))
-				.limit(1)
-				.then((res) => res[0]);
-
+			const job = await getJob(job_id);
 			if (!job) {
 				setError(
 					applicationForm,
@@ -196,13 +194,7 @@ export const actions: Actions = {
 			}
 
 			// Check if the user has already applied for the job
-			const jobApplication = await db
-				.select()
-				.from(JobApplications)
-				.where(and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, user.Id)))
-				.limit(1)
-				.then((res) => res[0]);
-
+			const jobApplication = await getJobApplication(job_id, user.Id);
 			if (jobApplication && !jobApplication.Draft) {
 				setError(
 					applicationForm,
@@ -225,38 +217,26 @@ export const actions: Actions = {
 					return { applicationForm };
 				}
 
-				// Prepare the file
-				const mimetype = applicationForm.data.resume.type;
-				const arrayBuff = await applicationForm.data.resume.arrayBuffer();
-				// https://medium.com/@wahidsaeed1/encoded-decoding-data-url-with-buffer-api-nodejs-41a28f435a1e
-				const resume_data_uri: string = applicationForm.data.resume
-					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
-					: ''; // Maybe one day UB pays for blob storage :/
-
-				// Save the application
-				const jobApplicationId = await db
-					.insert(JobApplications)
-					.values({
-						UserId: user.Id,
-						JobsId: job_id,
-						FirstName: applicationForm.data.first_name,
-						LastName: applicationForm.data.last_name,
-						PhoneNumber: applicationForm.data.phone,
-						EmailAddress: applicationForm.data.email,
-						ResumeUrl: applicationForm.data.resume ? resume_data_uri.toString() : '',
-						NoticePeriod: applicationForm.data.notice_period,
-						Draft: applicationForm.data.draft,
-						Status: 'pending'
-					})
-					.returning({ Id: JobApplications.Id });
-
-				// Save the question responses
-				for (const response of applicationForm.data.question_response_array) {
-					await db.insert(JobQuestionResponses).values({
-						JobApplicationId: jobApplicationId[0].Id,
-						QuestionsId: response.question_id,
-						Content: response.response
-					});
+				console.log('SUBMIT:', applicationForm.data.question_response_array);
+				const return_success = await createApplication({
+					first_name: applicationForm.data.first_name,
+					last_name: applicationForm.data.last_name,
+					phone: applicationForm.data.phone,
+					email: applicationForm.data.email,
+					resume: applicationForm.data.resume,
+					notice_period: applicationForm.data.notice_period,
+					draft: applicationForm.data.draft,
+					question_response_array: applicationForm.data.question_response_array,
+					job_id,
+					userId: user.Id
+				});
+				if (!return_success) {
+					setError(
+						applicationForm,
+						'draft',
+						'Something happened on our end. Try checking over your response and trying to submit again once more'
+					);
+					return { applicationForm };
 				}
 			}
 
@@ -272,75 +252,43 @@ export const actions: Actions = {
 
 			// Update the job application if it's a draft
 			if (jobApplication?.Draft) {
-				const mimetype = applicationForm.data.resume.type;
-				const arrayBuff = await applicationForm.data.resume.arrayBuffer();
-				const resume_data_uri: string = applicationForm.data.resume
-					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
-					: '';
-				await db
-					.update(JobApplications)
-					.set({
-						FirstName: applicationForm.data.first_name,
-						LastName: applicationForm.data.last_name,
-						PhoneNumber: applicationForm.data.phone,
-						EmailAddress: applicationForm.data.email,
-						ResumeUrl: applicationForm.data.resume ? resume_data_uri.toString() : '',
-						NoticePeriod: applicationForm.data.notice_period,
-						Draft: applicationForm.data.draft,
-						Status: 'pending'
-					})
-					.where(eq(JobApplications.Id, jobApplication.Id));
-
-				// Update the question responses
-				for (const response of applicationForm.data.question_response_array) {
-					await db
-						.update(JobQuestionResponses)
-						.set({
-							Content: response.response
-						})
-						.where(
-							and(
-								eq(JobQuestionResponses.JobApplicationId, jobApplication.Id),
-								eq(JobQuestionResponses.QuestionsId, response.question_id)
-							)
-						);
+				// Show a message if the application is a draft
+				console.log('DRAFT_SUBMIT: ');
+				const returned_success = await updateJobApplication({
+					first_name: applicationForm.data.first_name,
+					last_name: applicationForm.data.last_name,
+					phone: applicationForm.data.phone,
+					email: applicationForm.data.email,
+					resume: applicationForm.data.resume,
+					notice_period: applicationForm.data.notice_period,
+					draft: applicationForm.data.draft,
+					question_response_array: applicationForm.data.question_response_array,
+					job_id: jobApplication.Id
+				});
+				if (!returned_success) {
+					setError(
+						applicationForm,
+						'draft',
+						'Something happened on our end. Try checking over your response and trying to submit again once more'
+					);
+					return { applicationForm };
 				}
 			}
 
-			// Show a message if the application is a draft
 			if (applicationForm.data.draft) {
-				cookies.set('message_title', 'Application Drafted', { path: '/' });
-				cookies.set('message_title2', job.Title, { path: '/' });
-				cookies.set('message_description', 'Your application has been saved as a draft', {
-					path: '/'
-				});
-				cookies.set(
-					'message_description2',
-					'You can continue editing your application and submit it later',
-					{ path: '/' }
-				);
-				cookies.set('authenticated', 'true', { path: '/' });
+				setDraftMessages(cookies, job.Title as unknown as string);
 				throw redirect(303, '/backend/message');
 			}
 
-			// Redirect to the backend message page
-			cookies.set('message_title', 'Application Submitted', { path: '/' });
-			cookies.set('message_title2', job.Title, { path: '/' });
-			cookies.set('message_description', 'Response recorded.', { path: '/' });
-			cookies.set(
-				'message_description2',
-				'Thank you for applying. We will notify you via email once the employer reviews your application and decides on the next steps.',
-				{ path: '/' }
-			);
-			cookies.set('authenticated', 'true', { path: '/' });
-
+			setSubmitMessages(cookies, job.Title as unknown as string);
 			throw redirect(303, '/backend/message');
 		} catch (e) {
 			if (isRedirect(e)) {
 				throw e;
 			}
-			// console.log(e);
+			console.log(e);
 			const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
+			applicationForm.data.draft = true;
 			setError(
 				applicationForm,
 				'draft',
@@ -349,4 +297,208 @@ export const actions: Actions = {
 			return { applicationForm };
 		}
 	}
+};
+
+const getJob = async (job_id: string): Promise<typeof Jobs | undefined> => {
+	return (await db
+		.select()
+		.from(Jobs)
+		.where(eq(Jobs.Id, job_id))
+		.limit(1)
+		.then((res) => res[0])) as typeof Jobs | undefined;
+};
+
+const getJobApplication = async (job_id: string, user_id: string) => {
+	return await db
+		.select()
+		.from(JobApplications)
+		.where(and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, user_id)))
+		.limit(1)
+		.then((res) => res[0]);
+};
+
+interface QuestionResponse {
+	question_id: number;
+	response: string;
+}
+
+interface Cookies {
+	set(name: string, value: string, options?: { path: string }): void;
+}
+
+const setDraftMessages = (cookies: Cookies, jobTitle: string): void => {
+	cookies.set('message_title', 'Application Drafted', { path: '/' });
+	cookies.set('message_title2', jobTitle, { path: '/' });
+	cookies.set('message_description', 'Your application has been saved as a draft', {
+		path: '/'
+	});
+	cookies.set(
+		'message_description2',
+		'You can continue editing your application and submit it later',
+		{ path: '/' }
+	);
+	cookies.set('authenticated', 'true', { path: '/' });
+};
+
+const setSubmitMessages = (cookies: Cookies, jobTitle: string): void => {
+	// Redirect to the backend message page
+	cookies.set('message_title', 'Application Submitted', { path: '/' });
+	cookies.set('message_title2', jobTitle, { path: '/' });
+	cookies.set('message_description', 'Response recorded.', { path: '/' });
+	cookies.set(
+		'message_description2',
+		'Thank you for applying. We will notify you via email once the employer reviews your application and decides on the next steps.',
+		{ path: '/' }
+	);
+	cookies.set('authenticated', 'true', { path: '/' });
+};
+
+const getResumeDataUri = async (mimetype: string, resume: File): Promise<string | undefined> => {
+	// Prepare the file
+	const arrayBuff = await resume.arrayBuffer();
+	// https://medium.com/@wahidsaeed1/encoded-decoding-data-url-with-buffer-api-nodejs-41a28f435a1e
+	const resume_data_uri: string = resume
+		? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
+		: ''; // Maybe one day UB pays for blob storage :/
+	return resume_data_uri;
+};
+
+const updateJobApplication = async ({
+	first_name,
+	last_name,
+	phone,
+	email,
+	resume,
+	notice_period,
+	draft,
+	question_response_array,
+	job_id
+}: {
+	first_name: string;
+	last_name: string;
+	phone: string;
+	email: string;
+	resume: File;
+	notice_period: number;
+	draft: boolean;
+	question_response_array: QuestionResponse[];
+	job_id: string;
+}): Promise<boolean> => {
+	const upload_mimetype = resume.type;
+	const resume_data_uri = await getResumeDataUri(upload_mimetype, resume);
+	if (!resume_data_uri) {
+		return false;
+	}
+
+	console.log('ENTRY_TO:UPDATE:', question_response_array);
+	await db
+		.update(JobApplications)
+		.set({
+			FirstName: first_name,
+			LastName: last_name,
+			PhoneNumber: phone,
+			EmailAddress: email,
+			ResumeUrl: resume ? resume_data_uri.toString() : '',
+			NoticePeriod: notice_period,
+			Draft: draft,
+			Status: 'pending'
+		})
+		.where(eq(JobApplications.Id, job_id));
+
+	// Update the question responses
+	for (const response of question_response_array) {
+		console.log('CREATE_OR_UPDATE_QUESTION_RESPONSE: ', JSON.stringify(response));
+		// Search for the question response
+		const questionResponse = await db
+			.select()
+			.from(JobQuestionResponses)
+			.where(
+				and(
+					eq(JobQuestionResponses.JobApplicationId, job_id),
+					eq(JobQuestionResponses.QuestionsId, response.question_id)
+				)
+			);
+
+		if (questionResponse.length === 0) {
+			// Insert the question response if it doesn't exist
+			await db.insert(JobQuestionResponses).values({
+				JobApplicationId: job_id,
+				QuestionsId: response.question_id,
+				Content: response.response
+			});
+		} else {
+			// Update the question response if it already exists
+			await db
+				.update(JobQuestionResponses)
+				.set({
+					Content: response.response
+				})
+				.where(
+					and(
+						eq(JobQuestionResponses.JobApplicationId, job_id),
+						eq(JobQuestionResponses.QuestionsId, response.question_id)
+					)
+				);
+		}
+	}
+
+	return true;
+};
+
+const createApplication = async ({
+	first_name,
+	last_name,
+	phone,
+	email,
+	resume,
+	notice_period,
+	draft,
+	question_response_array,
+	job_id,
+	userId
+}: {
+	first_name: string;
+	last_name: string;
+	phone: string;
+	email: string;
+	resume: File;
+	notice_period: number;
+	draft: boolean;
+	question_response_array: QuestionResponse[];
+	job_id: string;
+	userId: string;
+}): Promise<boolean> => {
+	const upload_mimetype = resume.type;
+	const resume_data_uri = await getResumeDataUri(upload_mimetype, resume);
+	if (!resume_data_uri) {
+		return false;
+	}
+
+	// Save the application
+	const jobApplicationId = await db
+		.insert(JobApplications)
+		.values({
+			UserId: userId,
+			JobsId: job_id,
+			FirstName: first_name,
+			LastName: last_name,
+			PhoneNumber: phone,
+			EmailAddress: email,
+			ResumeUrl: resume_data_uri,
+			NoticePeriod: notice_period,
+			Draft: draft,
+			Status: 'pending'
+		})
+		.returning({ Id: JobApplications.Id });
+
+	// Save the question responses
+	for (const response of question_response_array) {
+		console.log('CREATE_QUESTION_RESPONSE: ', JSON.stringify(response));
+		await db.insert(JobQuestionResponses).values({
+			JobApplicationId: jobApplicationId[0].Id,
+			QuestionsId: response.question_id,
+			Content: response.response
+		});
+	}
+	return true;
 };
