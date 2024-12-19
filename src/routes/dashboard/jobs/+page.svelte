@@ -57,7 +57,10 @@
 		<r-column class="flex flex-1 flex-col items-start gap-6">
 			<Card.Root class="sticky top-20 w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-					<h1>Your jobs</h1>
+					<div class="flex flex-col items-start justify-start gap-1 py-2">
+						<h1>Your jobs</h1>
+						{@render jobs_paginator()}
+					</div>
 				</Card.Title>
 			</Card.Root>
 			{#if jobsLength === 0}
@@ -115,37 +118,40 @@
 					</JobCard.Content>
 				</JobCard.Root>
 			{/each}
-			<Pagination.Root count={jobsLength} perPage={10} page={offset}>
-				{#snippet children({ pages, currentPage })}
-					<Pagination.Content>
-						<Pagination.Item>
-							<a href="/dashboard/jobs?page={currentPage < 1 ? 1 : currentPage}"
-								><Pagination.PrevButton /></a
-							>
-						</Pagination.Item>
-						{#each pages as page (page.key)}
-							{#if page.type === 'ellipsis'}
-								<Pagination.Item>
-									<Pagination.Ellipsis />
-								</Pagination.Item>
-							{:else}
-								<Pagination.Item>
-									<a href="/dashboard/jobs?page={page.value}">
-										<Pagination.Link {page} isActive={currentPage === page.value}>
-											{page.value}
-										</Pagination.Link></a
-									>
-								</Pagination.Item>
-							{/if}
-						{/each}
-						<Pagination.Item>
-							<a href="/dashboard/jobs?page={currentPage > page_count ? page_count : currentPage}"
-								><Pagination.NextButton /></a
-							>
-						</Pagination.Item>
-					</Pagination.Content>
-				{/snippet}
-			</Pagination.Root>
+			{@render jobs_paginator()}
+			{#snippet jobs_paginator()}
+				<Pagination.Root count={jobsLength} perPage={10} page={offset}>
+					{#snippet children({ pages, currentPage })}
+						<Pagination.Content>
+							<Pagination.Item>
+								<a href="/dashboard/jobs?page={currentPage < 1 ? 1 : currentPage}"
+									><Pagination.PrevButton /></a
+								>
+							</Pagination.Item>
+							{#each pages as page (page.key)}
+								{#if page.type === 'ellipsis'}
+									<Pagination.Item>
+										<Pagination.Ellipsis />
+									</Pagination.Item>
+								{:else}
+									<Pagination.Item>
+										<a href="/dashboard/jobs?page={page.value}">
+											<Pagination.Link {page} isActive={currentPage === page.value}>
+												{page.value}
+											</Pagination.Link></a
+										>
+									</Pagination.Item>
+								{/if}
+							{/each}
+							<Pagination.Item>
+								<a href="/dashboard/jobs?page={currentPage > page_count ? page_count : currentPage}"
+									><Pagination.NextButton /></a
+								>
+							</Pagination.Item>
+						</Pagination.Content>
+					{/snippet}
+				</Pagination.Root>
+			{/snippet}
 		</r-column>
 	</main>
 </page>

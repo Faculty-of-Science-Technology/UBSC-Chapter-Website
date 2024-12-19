@@ -28,7 +28,7 @@ export const load = async (event) => {
 	cookies.delete('message_description2', {
 		path: '/'
 	});
-	cookies.delete('authenticated', { path: '/' });
+	
 	const user = event.locals.user;
 	if (!user) {
 		throw redirect(301, '/auth/login');

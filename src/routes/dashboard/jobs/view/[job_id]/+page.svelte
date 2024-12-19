@@ -73,7 +73,11 @@
 								</div>
 							</div>
 							<div class="flex flex-col items-center justify-center gap-1">
-								<a class="w-full" data-sveltekit-reload href="/dashboard/jobs/view/{job.Jobs.Id}">
+								<a
+									class="w-full"
+									data-sveltekit-reload
+									href="/dashboard/jobs/apply?job_id={job.Jobs.Id}"
+								>
 									<Button class="w-full">View this job</Button></a
 								>
 								<div class="flex items-center justify-center gap-1">

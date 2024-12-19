@@ -70,6 +70,8 @@ export const load = async (event) => {
 	const query = new URLSearchParams(url.search);
 	const user = event.locals.user;
 	const job_id = query.get('job_id');
+	const application_id = query.get('application_id');
+
 	if (job_id) {
 		// Set the cookie
 		cookies.set('job_id', job_id, { path: '/' });
@@ -95,8 +97,14 @@ export const load = async (event) => {
 		const jobForm = await db
 			.select()
 			.from(JobApplications)
+			.leftJoin(Jobs, eq(JobApplications.JobsId, Jobs.Id))
 			.where(
-				and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, event.locals.user.Id))
+				and(
+					eq(JobApplications.JobsId, job_id),
+					application_id
+						? and(eq(JobApplications.Id, application_id), eq(Jobs.UserId, user.Id)) // Get the job application form whereby the user is the owner of the job
+						: eq(JobApplications.UserId, event.locals.user.Id) // Get the job application form owned by the user whereby the application_id is not set
+				)
 			); // Get the job application form owned by the user
 
 		if (!jobForm || jobForm.length === 0) {
@@ -111,7 +119,7 @@ export const load = async (event) => {
 		const questionResponse = await db
 			.select()
 			.from(JobQuestionResponses)
-			.where(eq(JobQuestionResponses.JobApplicationId, application_found.Id));
+			.where(eq(JobQuestionResponses.JobApplicationId, application_found.JobApplications.Id));
 
 		const question_response_array = questionResponse.map((question) => ({
 			question_id: question.QuestionsId ?? 0, // Ensure question_id is a number
@@ -120,13 +128,13 @@ export const load = async (event) => {
 
 		// Map the job to the form
 		const mapped_application = {
-			first_name: application_found.FirstName,
-			last_name: application_found.LastName,
-			phone: application_found.PhoneNumber,
-			email: application_found.EmailAddress,
+			first_name: application_found.JobApplications.FirstName,
+			last_name: application_found.JobApplications.LastName,
+			phone: application_found.JobApplications.PhoneNumber,
+			email: application_found.JobApplications.EmailAddress,
 			resume: null,
-			notice_period: application_found.NoticePeriod,
-			draft: application_found.Draft,
+			notice_period: application_found.JobApplications.NoticePeriod,
+			draft: application_found.JobApplications.Draft,
 			question_response_array: question_response_array
 		};
 
@@ -134,9 +142,15 @@ export const load = async (event) => {
 		// @ts-expect-error - We can't manually assign a file to a form field
 		const applicationForm = await superValidate(mapped_application, zod(JobApplicationSchema));
 		// Change the error message from the resume field to make it more applicable.
-		if (applicationForm.data.draft === true && application_found.Status === 'pending') {
+		if (
+			applicationForm.data.draft === true &&
+			application_found.JobApplications.Status === 'pending'
+		) {
 			applicationForm.errors.resume = ['For security reasons, you need to re-upload your resume.'];
-		} else if (applicationForm.data.draft === false && application_found.Status === 'pending') {
+		} else if (
+			applicationForm.data.draft === false &&
+			application_found.JobApplications.Status === 'pending'
+		) {
 			applicationForm.errors.resume = undefined;
 		}
 		return {
@@ -144,8 +158,8 @@ export const load = async (event) => {
 			job,
 			questions,
 			user,
-			applicationId: application_found.Id,
-			applicationStatus: application_found.Status
+			applicationId: application_found.JobApplications.Id,
+			applicationStatus: application_found.JobApplications.Status
 		};
 	}
 	throw redirect(301, '/dashboard/');
@@ -244,6 +258,16 @@ export const actions: Actions = {
 						Content: response.response
 					});
 				}
+			}
+
+			// Do we own the job application?
+			if (jobApplication && jobApplication.UserId !== user.Id) {
+				setError(
+					applicationForm,
+					'draft',
+					'You can only apply or update jobs you own. This job application belongs to someone else'
+				);
+				return { applicationForm };
 			}
 
 			// Update the job application if it's a draft
