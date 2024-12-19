@@ -3,7 +3,7 @@ export const NavLinks = {
 	profile: '-dashboard-profile',
 	submissions: '-dashboard-submissions',
 	new_listing: '-dashboard-jobs-new',
-	manage_listings: '-dashboard-jobs-manage',
+	manage_listings: '-dashboard-jobs',
 	manage_applicants: '-dashboard-jobs-applicants',
 	settings: '-dashboard-settings'
 };

@@ -31,7 +31,7 @@
 		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
 	>
 		<!-- Left Column -->
-		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky z-10 lg:w-fit">
+		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -75,15 +75,20 @@
 					<JobCard.Content class="flex flex-col gap-4">
 						<JobCard.Title class="flex flex-col gap-2">
 							<h2>{job.Jobs.Title}</h2>
-							<span class="tracking-wide"
-								><Badge
-									>{job.Draft === undefined
-										? 'Draft (Unsaved)'
-										: job.Draft === true
-											? 'Draft (Saved)'
-											: 'Live'}</Badge
-								></span
-							>
+							<div class="flex gap-2">
+								<span class="tracking-wide"
+									><Badge
+										>{job.Jobs.Draft === undefined
+											? 'Draft (Unsaved)'
+											: job.Jobs.Draft === true
+												? 'Draft (Saved)'
+												: 'Live'}</Badge
+									></span
+								>
+								{#if job.Jobs.Draft === true}
+									<span class="tracking-wide"><Badge>Hidden</Badge></span>
+								{/if}
+							</div>
 						</JobCard.Title>
 						<card-description class="flex flex-col gap-6">
 							<div class="flex flex-col gap-2">
