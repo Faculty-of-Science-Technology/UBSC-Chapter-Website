@@ -1,9 +1,14 @@
 <script lang="ts">
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
-	import { Button } from '$lib/components/vendor/ui/button';
+	import { Button, buttonVariants } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
+	import * as Dialog from '$lib/components/vendor/ui/dialog/';
+	import { Input } from '$lib/components/vendor/ui/input';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
+	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
+	import Textarea from '$lib/components/vendor/ui/textarea/textarea.svelte';
+	import { cn } from '$lib/components/vendor/utils.js';
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
@@ -183,12 +188,80 @@
 										><Button class="w-full" disabled>Frozen</Button></a
 									>
 								{:else}
-									<a
-										class="w-fit"
-										href="/dashboard/jobs/apply?job_id={application.Jobs
-											?.Id}&application_id={application.JobApplications.Id}"
-										><Button class="w-full">View submission</Button></a
-									>
+									<div class="flex gap-3">
+										<a
+											class="w-fit"
+											href="/dashboard/jobs/apply?job_id={application.Jobs
+												?.Id}&application_id={application.JobApplications.Id}"
+											><Button class="w-full">View submission</Button></a
+										>
+
+										<Dialog.Root>
+											<Dialog.Trigger class={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+												>Follow-up</Dialog.Trigger
+											>
+											<Dialog.Content class="sm:max-w-[425px]">
+												<Dialog.Header>
+													<Dialog.Title>Send a message</Dialog.Title>
+													<Dialog.Description>
+														Send a follow-up message to the applicant's email. They can reply
+														directly to your email, allowing you to communicate seamlessly with
+														them.
+													</Dialog.Description>
+												</Dialog.Header>
+												<div class="flex flex-col gap-6 py-4">
+													<div class="flex flex-col items-start justify-start gap-2">
+														<Label for="name" class="text-right">Your name</Label>
+														<Input
+															id="name"
+															placeholder="This is what will be shown in the 'to:' section of the email"
+														/>
+													</div>
+													<div class="flex flex-col items-start justify-start gap-2">
+														<Label for="message" class="text-right">Message</Label>
+														<Textarea
+															id="message"
+															placeholder="This is what will be shown in the body of the email"
+														/>
+													</div>
+												</div>
+												<Dialog.Footer class="justify-start text-left">
+													<Button type="submit">Accept & Follow-up</Button>
+												</Dialog.Footer>
+											</Dialog.Content>
+										</Dialog.Root>
+
+										<Dialog.Root>
+											<Dialog.Trigger
+												class={cn(buttonVariants({ variant: 'destructive' }), 'w-fit')}
+												>Reject</Dialog.Trigger
+											>
+											<Dialog.Content class="sm:max-w-[425px]">
+												<Dialog.Header>
+													<Dialog.Title
+														>Delete '{application.Jobs?.Title}' from '{application.Users
+															?.FirstName +
+															' ' +
+															application.Users?.LastName}'</Dialog.Title
+													>
+													<Dialog.Description>
+														You won't be able to retrieve it again. Are you sure you want to delete it?
+													</Dialog.Description>
+												</Dialog.Header>
+												<div class="flex flex-col gap-6 py-4">
+													<div class="flex flex-col items-start justify-start gap-2">
+														<Label for="reason" class="text-right">Reason for rejection (optional)</Label>
+														<Textarea
+															id="reason"
+															placeholder="This is what will be shown in the body of the email"
+														/>
+													</div>	
+												<Dialog.Footer class="justify-start text-left">
+													<Button type="submit" class="bg-destructive">Reject & Delete</Button>
+												</Dialog.Footer>
+											</Dialog.Content>
+										</Dialog.Root>
+									</div>
 								{/if}
 							</card-description>
 						</JobCard.Content>
