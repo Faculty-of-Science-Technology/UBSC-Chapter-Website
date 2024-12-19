@@ -64,7 +64,7 @@
 		</l-column> -->
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<Card.Root class="sticky top-20 w-[305px] lg:w-full">
+			<Card.Root class="sticky z-10 top-20 w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
 					<div class="flex flex-col items-start justify-start gap-1 py-2">
 						<h1>{!jobApplications ? 'Select a job to view submission data' : 'Submission data'}</h1>
@@ -117,9 +117,15 @@
 									</div>
 								</div>
 								<div class="flex gap-3">
-									<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}" data-sveltekit-reload>
-										<Button class="w-fit">View submission data</Button></a
-									>
+									{#if job.Jobs.Draft === undefined}
+										<Button class="w-fit" disabled>Undraft to view submissions</Button>
+									{:else if job.Jobs.Draft === true}
+										<Button class="w-fit" disabled>Undraft to view submissions</Button>
+									{:else}
+										<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}" data-sveltekit-reload>
+											<Button class="w-fit">View submission data</Button></a
+										>
+									{/if}
 								</div>
 							</card-description>
 						</JobCard.Content>

@@ -32,7 +32,7 @@
 		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
 	>
 		<!-- Left Column -->
-		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
+		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky z-10 lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -56,7 +56,7 @@
 		</l-column>
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<Card.Root class="sticky top-20 w-[305px] lg:w-full">
+			<Card.Root class="sticky top-20 z-10 w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
 					<div class="flex flex-col items-start justify-start gap-1 py-2">
 						<h1>Your submissions</h1>

@@ -24,21 +24,24 @@ export const load = async (event) => {
 	if (!job_id) {
 		// If we don't have a job_id, get all the jobs the user owns instead
 		// Get total number of jobs owned by the user
-		const dataLength = await db
-			.select({ count: count() })
-			.from(Jobs)
-			.where(eq(Jobs.UserId, user.Id))
-			.then((res) => res[0].count);
-
 		// Get all jobs and populate
 		const jobs = await db
-			.select()
+			.select({
+				Jobs,
+				Users,
+				JobTypes,
+				totalApplications: count(JobApplications.Id)
+			})
 			.from(Jobs)
 			.leftJoin(Users, eq(Jobs.UserId, Users.Id))
 			.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
+			.innerJoin(JobApplications, eq(Jobs.Id, JobApplications.JobsId)) // Inner join to get only jobs with applications
 			.where(eq(Jobs.UserId, user.Id)) // Only get jobs owned by the current user
+			.groupBy(Jobs.Id, Users.Id, JobTypes.Id)
 			.offset(offset) // Move forward by the offset
 			.limit(10); // Stop after 10 jobs
+
+		const dataLength = jobs.length;
 
 		return { user, dataLength, jobApplications: undefined, jobs, job: undefined, offset: page };
 	}
