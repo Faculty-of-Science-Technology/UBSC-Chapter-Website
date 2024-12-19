@@ -17,7 +17,7 @@
 	const jobs = data.jobs;
 	const jobsLength = data.jobsLength;
 	// Get the amount of pages from the jobs length
-	const pages = Math.ceil(jobsLength / 10);
+	const page_count = Math.ceil(jobsLength / 10);
 	const offset = data.offset;
 
 	const jobApplications = data.jobApplications;
@@ -196,7 +196,7 @@
 							{/if}
 						{/each}
 						<Pagination.Item>
-							<a href="/dashboard?page={currentPage > 10 ? 10 : currentPage}"
+							<a href="/dashboard?page={currentPage > page_count ? page_count : currentPage}"
 								><Pagination.NextButton /></a
 							>
 						</Pagination.Item>
