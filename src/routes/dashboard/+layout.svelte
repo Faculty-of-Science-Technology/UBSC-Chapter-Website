@@ -51,13 +51,13 @@
 					title="Manage profile"
 					onclick={() => goto('/dashboard/profile')}
 					active={active_link === 1}
-				/>
+				/>-->
 				<NavShard.Link
 					a11yLink="/dashboard/submissions"
 					title="Manage submissions"
 					onclick={() => goto('/dashboard/submissions')}
 					active={active_link === 2}
-				/> -->
+				/>
 			</svelte:fragment>
 		</NavShard.Root>
 		<NavShard.Root title="Job Posting">
@@ -71,12 +71,12 @@
 					onclick={() => goto('/dashboard/jobs/new')}
 					active={active_link === 3}
 				/>
-				<!-- <NavShard.Link
+				<NavShard.Link
 					a11yLink="/dashboard/jobs"
 					title="Manage job listings"
 					onclick={() => goto('/dashboard/jobs')}
 					active={active_link === 4}
-				/> -->
+				/>
 			</svelte:fragment>
 		</NavShard.Root>
 		<!-- <NavShard.Root title="Applicants & Settings">

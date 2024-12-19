@@ -98,13 +98,20 @@
 								<p>{@render posted_relative_time(application)}</p>
 							</div>
 
-							{#if application.JobApplications.Draft === undefined}
+							{#if application.JobApplications.Draft === undefined && !application.Jobs?.Draft}
 								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
 									><Button class="w-full">Continue application</Button></a
 								>
-							{:else if application.JobApplications.Draft === true}
+							{:else if application.JobApplications.Draft === true && !application.Jobs?.Draft}
 								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
 									><Button class="w-full">Continue application</Button></a
+								>
+							{:else if application.JobApplications.Draft === true && application.Jobs?.Draft}
+								<a
+									class="w-full cursor-not-allowed select-none"
+									href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+									title="This job is no longer available"
+									><Button class="w-full" disabled>Continue application</Button></a
 								>
 							{:else}
 								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
@@ -116,7 +123,9 @@
 				</JobCard.Root>
 			{/each}
 			{#if jobApplications.length > 0}
-				<Button class="w-full">View all applications</Button>
+				<a class="w-full" href="/dashboard/submissions">
+					<Button class="w-full">View all applications</Button></a
+				>
 			{/if}
 		</l-column>
 		<!-- Right Column -->
