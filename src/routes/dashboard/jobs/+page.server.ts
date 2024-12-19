@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { count, eq } from 'drizzle-orm';
 
 export const load = async (event) => {
 	const cookies = event.cookies;
@@ -32,9 +32,12 @@ export const load = async (event) => {
 	const user = event.locals.user;
 	if (!user) throw redirect(301, '/auth/login');
 
-    
-	// Get total number of jobs
-	const jobsLength = await db.$count(Jobs);
+	// Get total number of jobs owned by the user
+	const jobsLength = await db
+		.select({ count: count() })
+		.from(Jobs)
+		.where(eq(Jobs.UserId, user.Id))
+		.then((res) => res[0].count);
 
 	// Get all jobs and populate
 	const jobs = await db
