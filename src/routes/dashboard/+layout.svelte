@@ -2,7 +2,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import * as NavShard from '$lib/components/dashboard/shard';
 	import { NavLinkIndexes } from '$lib/types/Navigation';
-	import { Cog, Gauge } from 'lucide-svelte';
+	import { Cog, Gauge, UserSearch } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	const { children: please } = $props();
 	let active_link = $state(0);
@@ -79,7 +79,7 @@
 				/>
 			</svelte:fragment>
 		</NavShard.Root>
-		<!-- <NavShard.Root title="Applicants & Settings">
+		<NavShard.Root title="Applicants & Settings">
 			<svelte:fragment slot="icon">
 				<UserSearch size="20" />
 			</svelte:fragment>
@@ -90,14 +90,14 @@
 					onclick={() => goto('/dashboard/jobs/applicants')}
 					active={active_link === 5}
 				/>
-				<NavShard.Link
+				<!-- <NavShard.Link
 					a11yLink="/dashboard/settings"
 					title="Settings & Privacy"
 					onclick={() => goto('/dashboard/settings')}
 					active={active_link === 6}
-				/>
+				/> -->
 			</svelte:fragment>
-		</NavShard.Root> -->
+		</NavShard.Root>
 		<div></div>
 		<div></div>
 	</nav>

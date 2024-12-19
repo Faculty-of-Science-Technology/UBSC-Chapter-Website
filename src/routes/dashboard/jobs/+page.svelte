@@ -107,7 +107,7 @@
 								<a href="/dashboard/jobs/new?job_id={job.Jobs.Id}">
 									<Button class="w-fit">Modify this job</Button></a
 								>
-								<a href="/dashboard/jobs/new?job_id={job.Jobs.Id}">
+								<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}">
 									<Button class="w-fit">View applicants</Button></a
 								>
 							</div>
