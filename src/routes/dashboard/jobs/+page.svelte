@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
-	import { Button } from '$lib/components/vendor/ui/button';
+	import { Button, buttonVariants } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
+	import * as Dialog from '$lib/components/vendor/ui/dialog/';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
+	import { cn } from '$lib/components/vendor/utils.js';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3, DollarSign } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
@@ -14,6 +16,7 @@
 	const user = data.user;
 
 	const jobs = data.jobs;
+	const jobApplications = data.jobApplications;
 	const jobsLength = data.jobsLength;
 	// Get the amount of pages from the jobs length
 	const page_count = Math.ceil(jobsLength / 10);
@@ -70,7 +73,7 @@
 					</Card.Title>
 				</Card.Root>
 			{/if}
-			{#each jobs as job}
+			{#each jobs as job, index}
 				<JobCard.Root class="w-full">
 					<JobCard.Content class="flex flex-col gap-4">
 						<JobCard.Title class="flex flex-col gap-2">
@@ -118,6 +121,29 @@
 								<a href="/dashboard/jobs/applicants?job_id={job.Jobs.Id}">
 									<Button class="w-fit">View applicants</Button></a
 								>
+								<Dialog.Root>
+									<Dialog.Trigger class={cn(buttonVariants({ variant: 'destructive' }), 'w-fit')}
+										>Delete job</Dialog.Trigger
+									>
+									<Dialog.Content class="sm:max-w-[425px]">
+										<Dialog.Header>
+											<Dialog.Title
+												>Delete '{job.Jobs.Title}' and {jobApplications[job.Jobs.Id]?.length
+													? jobApplications[job.Jobs.Id]?.length + '+'
+													: 0} application(s)?</Dialog.Title
+											>
+											<Dialog.Description>
+												This is a highly destructive action. Are you sure you want to delete this
+												job and all its applications?
+											</Dialog.Description>
+										</Dialog.Header>
+										<div class="flex flex-col gap-6 py-4">
+											<Dialog.Footer class="justify-start text-left">
+												<Button type="submit" class="bg-destructive">Revoke & Delete</Button>
+											</Dialog.Footer>
+										</div></Dialog.Content
+									>
+								</Dialog.Root>
 							</div>
 						</card-description>
 					</JobCard.Content>

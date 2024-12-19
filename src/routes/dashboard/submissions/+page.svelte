@@ -1,10 +1,12 @@
 <script lang="ts">
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
-	import { Button } from '$lib/components/vendor/ui/button';
+	import { Button, buttonVariants } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
+	import * as Dialog from '$lib/components/vendor/ui/dialog/';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
+	import { cn } from '$lib/components/vendor/utils';
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
@@ -32,7 +34,7 @@
 		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
 	>
 		<!-- Left Column -->
-		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky z-10 lg:w-fit">
+		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -80,15 +82,21 @@
 					<JobCard.Content class="flex flex-col gap-4">
 						<JobCard.Title>
 							<h2>{application.Jobs?.Title}</h2>
-							<span class="tracking-wide"
-								><Badge
-									>{application.JobApplications.Draft === undefined
-										? 'Draft (Unsaved)'
-										: application.JobApplications.Draft === true
-											? 'Draft (Saved)'
-											: application.JobApplications.Status}</Badge
-								></span
-							>
+							<div class="flex gap-2">
+								<span class="tracking-wide"
+									><Badge
+										>{application.JobApplications.Draft === undefined
+											? 'Draft (Unsaved)'
+											: application.JobApplications.Draft === true
+												? 'Draft (Saved)'
+												: application.JobApplications.Status}</Badge
+									></span
+								>
+
+								{#if application.JobApplications.Draft === true && application.Jobs?.Draft}
+									<span class="tracking-wide"><Badge>Currently unavailable</Badge></span>
+								{/if}
+							</div>
 						</JobCard.Title>
 						<card-description class="flex flex-col gap-2">
 							<JobCard.Description
@@ -102,27 +110,50 @@
 								<Clock3 strokeWidth="2" size="16" />
 								<p>{@render posted_relative_time(application)}</p>
 							</div>
-
-							{#if application.JobApplications.Draft === undefined && !application.Jobs?.Draft}
-								<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
-									><Button class="w-full">Continue application</Button></a
-								>
-							{:else if application.JobApplications.Draft === true && !application.Jobs?.Draft}
-								<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
-									><Button class="w-full">Continue application</Button></a
-								>
-							{:else if application.JobApplications.Draft === true && application.Jobs?.Draft}
-								<a
-									class="w-fit cursor-not-allowed select-none"
-									href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
-									title="This job is no longer available"
-									><Button class="w-full" disabled>Continue application</Button></a
-								>
-							{:else}
-								<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
-									><Button class="w-full">View submission</Button></a
-								>
-							{/if}
+							<div class="flex gap-2">
+								{#if application.JobApplications.Draft === undefined && !application.Jobs?.Draft}
+									<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+										><Button class="w-full">Continue application</Button></a
+									>
+								{:else if application.JobApplications.Draft === true && !application.Jobs?.Draft}
+									<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+										><Button class="w-full">Continue application</Button></a
+									>
+								{:else if application.JobApplications.Draft === true && application.Jobs?.Draft}
+									<a
+										class="w-fit cursor-not-allowed select-none"
+										href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+										title="We don't know when this job will be available again. You can either wait or revoke your application."
+										><Button class="w-full" disabled>Continue application</Button></a
+									>
+								{:else}
+									<a class="w-fit" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+										><Button class="w-full">View submission</Button></a
+									>
+								{/if}
+								<Dialog.Root>
+									<Dialog.Trigger class={cn(buttonVariants({ variant: 'destructive' }), 'w-fit')}
+										>Revoke application</Dialog.Trigger
+									>
+									<Dialog.Content class="sm:max-w-[425px]">
+										<Dialog.Header>
+											<Dialog.Title
+												>Delete '{application.Jobs?.Title}' from '{application.Users?.FirstName +
+													' ' +
+													application.Users?.LastName}'</Dialog.Title
+											>
+											<Dialog.Description>
+												You can reapply after. Are you sure you want to delete it?
+											</Dialog.Description>
+										</Dialog.Header>
+										<div class="flex flex-col gap-6 py-4">
+											<Dialog.Footer class="justify-start text-left">
+												<Button type="submit" class="bg-destructive">Revoke & Delete</Button>
+											</Dialog.Footer>
+										</div></Dialog.Content
+									>
+								</Dialog.Root>
+							</div>
 						</card-description>
 					</JobCard.Content>
 				</JobCard.Root>

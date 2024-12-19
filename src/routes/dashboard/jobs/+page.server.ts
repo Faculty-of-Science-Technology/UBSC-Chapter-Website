@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
-import { Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
+import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect } from '@sveltejs/kit';
-import { count, eq } from 'drizzle-orm';
+import { count, eq, inArray } from 'drizzle-orm';
 
 export const load = async (event) => {
 	const cookies = event.cookies;
@@ -28,7 +28,7 @@ export const load = async (event) => {
 	cookies.delete('message_description2', {
 		path: '/'
 	});
-	
+	cookies.delete('authenticated', { path: '/' });
 	const user = event.locals.user;
 	if (!user) throw redirect(301, '/auth/login');
 
@@ -49,5 +49,26 @@ export const load = async (event) => {
 		.offset(offset) // Move forward by the offset
 		.limit(10); // Stop after 10 jobs
 
-	return { user, jobsLength, jobs, offset: page };
+	const jobApplications = await db
+		.select()
+		.from(JobApplications)
+		.where(
+			inArray(
+				JobApplications.JobsId,
+				jobs.map((job) => job.Jobs.Id)
+			)
+		)
+		.orderBy(JobApplications.JobsId)
+		.limit(100) // Adjust the limit as needed
+		.then((apps) => {
+			const grouped: Record<number, typeof apps> = {};
+			apps.forEach((app) => {
+				if (!grouped[app.JobsId!]) {
+					grouped[app.JobsId!] = [];
+				}
+				grouped[app.JobsId!].push(app);
+			});
+			return grouped;
+		});
+	return { user, jobsLength, jobs, jobApplications, offset: page };
 };
