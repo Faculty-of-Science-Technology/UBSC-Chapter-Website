@@ -8,7 +8,7 @@
 </script>
 
 <nav
-	class="flex w-full items-center gap-4 self-stretch border border-b-slate-300 bg-slate-50 px-8 py-2"
+	class="flex sticky top-0 z-10 w-full items-center gap-4 self-stretch border border-b-slate-300 bg-slate-50 px-8 py-2"
 >
 	<a href="/"><Logo /></a>
 	<div class="flex-grow"></div>

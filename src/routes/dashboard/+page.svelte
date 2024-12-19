@@ -3,7 +3,9 @@
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
+	import * as Pagination from '$lib/components/vendor/ui/pagination';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
+	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
@@ -11,7 +13,14 @@
 	const { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
+
 	const jobs = data.jobs;
+	const jobsLength = data.jobsLength;
+	// Get the amount of pages from the jobs length
+	const pages = Math.ceil(jobsLength / 10);
+	const offset = data.offset;
+
+	const jobApplications = data.jobApplications;
 
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
@@ -21,9 +30,11 @@
 		<h1 class="text-5xl font-extralight lg:text-6xl">My Dashboard</h1>
 		<p class="text-lg lg:text-2xl">Your profile at a glance</p>
 	</section>
-	<main class="text-inter flex flex-wrap items-start gap-8 self-stretch">
+	<main
+		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
+	>
 		<!-- Left Column -->
-		<l-column class="flex w-fit flex-col items-start gap-6">
+		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -46,37 +57,82 @@
 			</UserCard.Root>
 			<Card.Root class="w-full">
 				<Card.Title class="items-center justify-center py-2 text-center text-2xl">
-					<h1>Submitted Applications</h1>
+					<h1>Most Recent Application</h1>
 				</Card.Title>
 			</Card.Root>
-			<JobCard.Root class="w-[305px] lg:w-[320px]">
-				<JobCard.Content class="flex flex-col gap-4">
-					<JobCard.Title>
-						<h2>Remote Senior Backend Software Engineer</h2>
-						<span class="tracking-wide"><Badge>Draft</Badge></span>
-					</JobCard.Title>
-					<card-description class="flex flex-col gap-2">
-						<JobCard.Description>HireLATAM</JobCard.Description>
-						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<Briefcase strokeWidth="2" size="16" />
-							<p>Belize (In-Person)</p>
-						</div>
-						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<Clock3 strokeWidth="2" size="16" />
-							<p>5m ago</p>
-						</div>
-						<Button>Continue application</Button>
-					</card-description>
-				</JobCard.Content>
-			</JobCard.Root>
+			{#if jobApplications.length === 0}
+				<Card.Root class="w-full">
+					<Card.Title class="items-center justify-center py-2 text-center text-2xl">
+						<h1>You haven't applied to any jobs yet.</h1>
+					</Card.Title>
+					<Card.Description class="text-center">
+						<p>Start applying to jobs to see them here.</p>
+					</Card.Description>
+				</Card.Root>
+			{/if}
+			{#each jobApplications as application}
+				<JobCard.Root class="w-[305px] lg:w-[320px]">
+					<JobCard.Content class="flex flex-col gap-4">
+						<JobCard.Title>
+							<h2>{application.Jobs?.Title}</h2>
+							<span class="tracking-wide"
+								><Badge
+									>{application.JobApplications.Draft === undefined
+										? 'Draft (Unsaved)'
+										: application.JobApplications.Draft === true
+											? 'Draft (Saved)'
+											: application.JobApplications.Status}</Badge
+								></span
+							>
+						</JobCard.Title>
+						<card-description class="flex flex-col gap-2">
+							<JobCard.Description
+								>{@render nameof__job_creator(application.Users)}</JobCard.Description
+							>
+							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
+								<Briefcase strokeWidth="2" size="16" />
+								<p>{application.JobTypes?.Name}</p>
+							</div>
+							<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
+								<Clock3 strokeWidth="2" size="16" />
+								<p>{@render posted_relative_time(application)}</p>
+							</div>
+
+							{#if application.JobApplications.Draft === undefined}
+								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+									><Button class="w-full">Continue application</Button></a
+								>
+							{:else if application.JobApplications.Draft === true}
+								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+									><Button class="w-full">Continue application</Button></a
+								>
+							{:else}
+								<a class="w-full" href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}"
+									><Button class="w-full">View submission</Button></a
+								>
+							{/if}
+						</card-description>
+					</JobCard.Content>
+				</JobCard.Root>
+			{/each}
+			{#if jobApplications.length > 0}
+				<Button class="w-full">View all applications</Button>
+			{/if}
 		</l-column>
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<Card.Root class="w-[305px] lg:w-full">
+			<Card.Root class="sticky top-20 w-[305px] lg:w-full">
 				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
 					<h1>Explore Available Jobs</h1>
 				</Card.Title>
 			</Card.Root>
+			{#if jobs.length === 0}
+				<Card.Root class="w-full">
+					<Card.Title class="items-center justify-center py-2 text-center text-2xl">
+						<h1>There's nothing more left to see here. Sorry!</h1>
+					</Card.Title>
+				</Card.Root>
+			{/if}
 			{#each jobs as job}
 				<JobCard.Root class="w-full">
 					<JobCard.Content class="flex flex-col gap-4">
@@ -107,6 +163,37 @@
 					</JobCard.Content>
 				</JobCard.Root>
 			{/each}
+			<Pagination.Root count={jobsLength} perPage={10} page={offset}>
+				{#snippet children({ pages, currentPage })}
+					<Pagination.Content>
+						<Pagination.Item>
+							<a href="/dashboard?page={currentPage < 1 ? 1 : currentPage}"
+								><Pagination.PrevButton /></a
+							>
+						</Pagination.Item>
+						{#each pages as page (page.key)}
+							{#if page.type === 'ellipsis'}
+								<Pagination.Item>
+									<Pagination.Ellipsis />
+								</Pagination.Item>
+							{:else}
+								<Pagination.Item>
+									<a href="/dashboard?page={page.value}">
+										<Pagination.Link {page} isActive={currentPage === page.value}>
+											{page.value}
+										</Pagination.Link></a
+									>
+								</Pagination.Item>
+							{/if}
+						{/each}
+						<Pagination.Item>
+							<a href="/dashboard?page={currentPage > 10 ? 10 : currentPage}"
+								><Pagination.NextButton /></a
+							>
+						</Pagination.Item>
+					</Pagination.Content>
+				{/snippet}
+			</Pagination.Root>
 		</r-column>
 	</main>
 </page>

@@ -83,7 +83,7 @@ export const load = async (event) => {
 			.limit(1)
 			.then((res) => res[0]); // Turn the array into an object
 		if (!job) throw redirect(301, '/dashboard/'); // Redirect if the job doesn't exist
-		if(job.Jobs.Draft) throw redirect(301, '/dashboard/'); // Redirect if the job is a draft
+		if (job.Jobs.Draft) throw redirect(301, '/dashboard/'); // Redirect if the job is a draft
 
 		// Lookup the questions
 		const questions = await db
@@ -134,7 +134,11 @@ export const load = async (event) => {
 		// @ts-expect-error - We can't manually assign a file to a form field
 		const applicationForm = await superValidate(mapped_application, zod(JobApplicationSchema));
 		// Change the error message from the resume field to make it more applicable.
-		applicationForm.errors.resume = ['For security reasons, you need to re-upload your resume.'];
+		if (applicationForm.data.draft === true && application_found.Status === 'pending') {
+			applicationForm.errors.resume = ['For security reasons, you need to re-upload your resume.'];
+		} else if (applicationForm.data.draft === false && application_found.Status === 'pending') {
+			applicationForm.errors.resume = undefined;
+		}
 		return {
 			applicationForm,
 			job,
@@ -213,7 +217,7 @@ export const actions: Actions = {
 				// https://medium.com/@wahidsaeed1/encoded-decoding-data-url-with-buffer-api-nodejs-41a28f435a1e
 				const resume_data_uri: string = applicationForm.data.resume
 					? `data:${mimetype};base64,` + Buffer.from(arrayBuff).toString('base64')
-					: ''; // Maybe one day UB pays for blob storage :/ 
+					: ''; // Maybe one day UB pays for blob storage :/
 
 				// Save the application
 				const jobApplicationId = await db
