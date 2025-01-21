@@ -46,7 +46,7 @@
 </script>
 
 <page class="flex h-svh">
-	<DashMenu.Root class="h-full">
+	<DashMenu.Root class="h-full rounded-none border-b-0 border-l-0 border-r border-t-0 bg-slate-50">
 		<DashMenu.Content>
 			<DashMenu.Heading
 				class="text-archivo text-lg font-extralight lg:text-4xl"

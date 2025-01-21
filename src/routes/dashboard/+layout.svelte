@@ -46,12 +46,12 @@
 					active={active_link === 0}
 					onclick={() => goto('/dashboard/')}
 				/>
-				<!-- <NavShard.Link
+				<NavShard.Link
 					a11yLink="/dashboard/profile"
 					title="Manage profile"
 					onclick={() => goto('/dashboard/profile')}
 					active={active_link === 1}
-				/>-->
+				/>
 				<NavShard.Link
 					a11yLink="/dashboard/submissions"
 					title="Manage submissions"
