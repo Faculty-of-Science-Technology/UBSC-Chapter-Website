@@ -90,12 +90,12 @@
 					onclick={() => goto('/dashboard/jobs/applicants')}
 					active={active_link === 5}
 				/>
-				<!-- <NavShard.Link
+				<NavShard.Link
 					a11yLink="/dashboard/settings"
 					title="Settings & Privacy"
 					onclick={() => goto('/dashboard/settings')}
 					active={active_link === 6}
-				/> -->
+				/>
 			</svelte:fragment>
 		</NavShard.Root>
 		<div></div>
