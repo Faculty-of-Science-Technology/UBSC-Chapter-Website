@@ -29,11 +29,11 @@
 			</UserCard.Title>
 			<card-description class="flex flex-col gap-2">
 				<UserCard.Description>{user.Bio}</UserCard.Description>
-				<div class="flex flex-row items-center gap-2 text-xs text-slate-400 mb-4">
+				<div class="mb-4 flex flex-row items-center gap-2 text-xs text-slate-400">
 					<Calendar strokeWidth="2" size="16" />
 					<p>Joined {new Date(user.CreatedAt).toLocaleDateString()}</p>
 				</div>
-                <Button class="lg:w-fit">Edit Profile</Button>
+				<Button class="lg:w-fit">Edit Profile</Button>
 			</card-description>
 		</UserCard.Content>
 	</UserCard.Root>
