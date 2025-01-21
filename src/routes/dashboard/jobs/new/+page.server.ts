@@ -31,12 +31,17 @@ const jobSchema = z.object({
 const questionSchema = z.object({
 	question_content: z
 		.string({ required_error: "You can't create an empty question" })
+		.trim()
 		.min(1, { message: 'Your question is too short' })
 		.max(255, { message: 'Your question is too long' }),
 	question_type: z.enum(['true-false', 'short-answer'], {
 		required_error: 'You must choose a question type'
 	})
 	// draft: z.boolean() // Generated on submit by the server
+});
+
+const removeQuestionSchema = z.object({
+	question_id: z.number({ required_error: 'Something went wrong, try again' })
 });
 
 export const load = async (event) => {
@@ -224,5 +229,39 @@ export const actions: Actions = {
 			setError(questionForm, 'question_type', 'Something went wrong, try again');
 			return { questionForm };
 		}
+	},
+	removeQuestion: async (event) => {
+		const cookies = event.cookies;
+		const session = cookies.get('session');
+		if (!session) throw redirect(301, '/auth/login');
+
+		try {
+			Jwt.verify(session, JWT_SECRET);
+		} catch {
+			throw redirect(301, '/auth/login');
+		}
+
+		const job_id = cookies.get('job_id') ?? null;
+		if (!job_id) throw redirect(301, '/dashboard/jobs/new');
+
+		const formData = await event.request.formData();
+		const questionForm = await superValidate(formData, zod(removeQuestionSchema));
+		if (!questionForm.valid) return { questionForm };
+
+		const user = event.locals.user;
+		if (!user) throw redirect(301, '/auth/login');
+
+		const question = await db
+			.select()
+			.from(Questions)
+			.where(eq(Questions.Id, questionForm.data.question_id));
+		if (question.length === 0 || question[0].JobsId !== job_id) {
+			console.log('Question not found');
+			throw redirect(301, '/dashboard/jobs/new?job_id=' + job_id);
+		}
+		await db.delete(Questions).where(eq(Questions.Id, questionForm.data.question_id));
+		const questions = await db.select().from(Questions).where(eq(Questions.JobsId, job_id));
+		message(questionForm, 'Your question has been removed');
+		return { questionForm, questions };
 	}
 };

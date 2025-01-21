@@ -20,6 +20,7 @@
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
 	import type { ActionData, PageData } from './$types';
 	let drafting = $state(false);
+	let removalQuestionID: HTMLInputElement;
 	const props = $props();
 	const page_data: JobsData = {
 		...props,
@@ -29,7 +30,7 @@
 		data: Record<string, any>;
 	};
 	interface IQuestion {
-		id: number;
+		Id: number;
 		Content: string;
 		Type: boolean;
 		Draft: boolean;
@@ -244,6 +245,12 @@
 												</p>
 											</li>
 										{/if}
+										<input
+											type="hidden"
+											name="question_id"
+											bind:this={removalQuestionID}
+											form="QuestionForm"
+										/>
 										{#each questions as question, index}
 											<li>
 												<div class="gap-0.25 flex flex-col items-start">
@@ -255,6 +262,13 @@
 														{question.Type === false ? 'Short Answer Question' : 'Yes/No Question'}
 													</p>
 												</div>
+												<Button
+													type="submit"
+													onclick={() => (removalQuestionID.value = question.Id.toString())}
+													formaction="?/removeQuestion"
+													class="mb-3 mt-2 w-fit bg-destructive hover:bg-destructive hover:opacity-80"
+													>Remove question</Button
+												>
 											</li>
 										{/each}
 									</ul>
@@ -264,11 +278,11 @@
 										<div>
 											<p class="text-lg font-semibold">Create a new question (optional)</p>
 										</div>
+										<!-- {...$questionConstraints.question_content} -->
 										<Textarea
 											form="QuestionForm"
 											name="question_content"
 											bind:value={$questionForm.question_content}
-											{...$questionConstraints.question_content}
 											placeholder="Type the question content here."
 										/>
 										<p class="text-sm text-red-600">{$questionErrors.question_content}</p>
@@ -291,7 +305,7 @@
 										</p>
 										<Button type="submit">Save</Button>
 									</div>
-									<Button class="w-fit">New Question</Button>
+									<!-- <Button class="w-fit">New Question</Button> -->
 								</form>
 							</section>
 						</article>

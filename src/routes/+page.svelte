@@ -6,6 +6,30 @@
 </script>
 
 <page class="m-3 flex flex-col gap-24 lg:m-20">
+	<article
+		class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg p-8 text-left"
+	>
+		<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
+			We understand. Hiring people is a tricky task.
+		</h1>
+		<p class="text-xl lg:w-[720px]">
+			Finding the right talent can be a challenge&mdash;and that's just a fact of life. But that's
+			where we come in.
+		</p>
+	</article>
+	<call-to-action
+		class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
+	>
+		<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">What we do to fix this?</h1>
+		<p class="text-xl lg:w-[720px]">
+			Our platform is designed to help employers connect with the perfect candidates quickly and
+			effortlessly. With just one glance, you'll discover the skilled professionals you need to
+			bring your vision to life. Register as a host below.
+		</p>
+		<a href="/auth/register">
+			<Button class="w-fit">Register as a Host</Button>
+		</a>
+	</call-to-action>
 	<hero class="flex flex-col items-center justify-center">
 		<options-container
 			class="space-between flex-start flex w-full flex-col gap-4 text-5xl font-extralight lg:flex-row lg:text-5xl"
@@ -40,35 +64,9 @@
 				Not <span class="italic">JUST</span> your typical hiring platform.
 			</h1>
 			<p class="text-xl lg:w-[720px]">
-				We connect you with locals nearby. People willing to work. 99.9% of the time available. Does
-				this sound good to you? <b>Continue reading</b> along.
+				We connect you with people in tech from all around Belize quickly and effortlessly. Join our
+				community and select from our growing selection of candidates today!
 			</p>
-		</call-to-action>
-		<article
-			class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg p-8 text-left"
-		>
-			<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
-				We understand. Hiring people is a tricky task.
-			</h1>
-			<p class="text-xl lg:w-[720px]">
-				Finding the right talent can be a challenge&mdash;and that's just a fact of life. But that's
-				where we come in.
-			</p>
-		</article>
-		<call-to-action
-			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
-		>
-			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">
-				What we do to fix this?
-			</h1>
-			<p class="text-xl lg:w-[720px]">
-				Our platform is designed to help employers connect with the perfect candidates quickly and
-				effortlessly. With just one glance, you'll discover the skilled professionals you need to
-				bring your vision to life. Register as a host below.
-			</p>
-			<a href="/auth/register">
-				<Button class="w-fit">Register as a Host</Button>
-			</a>
 		</call-to-action>
 	</page-content>
 </page>
