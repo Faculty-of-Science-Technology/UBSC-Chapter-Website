@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { afterNavigate, goto } from '$app/navigation';
 	import * as NavShard from '$lib/components/dashboard/shard';
-	import { NavLinkIndexes } from '$lib/types/Navigation';
+	import { NavLink } from '$lib/types/Navigation';
 	import { Cog, Gauge, UserSearch } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	const { children: please } = $props();
@@ -10,12 +10,9 @@
 	onMount(() => {
 		// Get the current URL and replace the slashes with dashes
 		const url = window.location.pathname.replace(/\//g, '-');
+
 		// Set active_link based on the current url
-		if (url in NavLinkIndexes) {
-			active_link = NavLinkIndexes[url];
-		} else {
-			active_link = 0; // Default value if URL not found
-		}
+		active_link = NavLink(url);
 	});
 
 	afterNavigate(() => {
@@ -23,11 +20,7 @@
 		const url = window.location.pathname.replace(/\//g, '-');
 
 		// Set active_link based on the current url
-		if (url in NavLinkIndexes) {
-			active_link = NavLinkIndexes[url];
-		} else {
-			active_link = 0; // Default value if URL not found
-		}
+		active_link = NavLink(url);
 	});
 </script>
 
