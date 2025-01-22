@@ -29,7 +29,6 @@
 
 		// Set active_link based on the current url
 		active_link = NavLink(url, { repository: _Settings_NavLinkIndexes });
-		console.log(active_link);
 	});
 	onMount(() => {
 		async function handleKeydown(e: KeyboardEvent) {
@@ -70,41 +69,73 @@
 				title="Settings & Privacy"
 			/>
 			<DashMenu.Items>
-				<MenuItem noborder title="Your Profile" class={active_link === 0 ? 'bg-accent' : ''}>
-					<svelte:fragment slot="start-icon">
-						<UserIcon class="size-5" />
-					</svelte:fragment>
-
-					⌘P</MenuItem
-				>
-				<MenuItem noborder title="Notifications" class={active_link === 1 ? 'bg-accent' : ''}>
-					<svelte:fragment slot="start-icon">
-						<MessageSquareMoreIcon class="size-5" />
-					</svelte:fragment>
-					⌘M</MenuItem
-				>
+				<a href="/dashboard/settings" aria-label="Your Profile">
+					<MenuItem
+						noborder
+						cursor="pointer"
+						title="Your Profile"
+						class={active_link === 0 ? 'bg-accent' : ''}
+					>
+						<svelte:fragment slot="start-icon">
+							<UserIcon class="size-5" />
+						</svelte:fragment>
+						⌘P
+					</MenuItem>
+				</a>
+				<a href="/dashboard/settings/notifications" aria-label="Notifications">
+					<MenuItem
+						noborder
+						cursor="pointer"
+						title="Notifications"
+						class={active_link === 1 ? 'bg-accent' : ''}
+					>
+						<svelte:fragment slot="start-icon">
+							<MessageSquareMoreIcon class="size-5" />
+						</svelte:fragment>
+						⌘M
+					</MenuItem>
+				</a>
 				<Separator />
 				<DashMenu.Heading class="text-md" title="Administrative Tasks" />
-				<MenuItem noborder title="Manage Agenda" class={active_link === 2 ? 'bg-accent' : ''}>
-					<svelte:fragment slot="start-icon">
-						<LucideCalendarCog class="size-5" />
-					</svelte:fragment>
-
-					⌘A</MenuItem
-				>
-				<MenuItem noborder title="Manage Users" class={active_link === 3 ? 'bg-accent' : ''}>
-					<svelte:fragment slot="start-icon">
-						<Users class="size-5" />
-					</svelte:fragment>
-					⌘U</MenuItem
-				>
-				<MenuItem noborder title="Manage Groups" class={active_link === 4 ? 'bg-accent' : ''}>
-					<svelte:fragment slot="start-icon">
-						<GroupIcon class="size-5" />
-					</svelte:fragment>
-
-					⌘G</MenuItem
-				>
+				<a href="/dashboard/settings/setup-agenda" aria-label="Manage Agenda">
+					<MenuItem
+						noborder
+						cursor="pointer"
+						title="Manage Agenda"
+						class={active_link === 2 ? 'bg-accent' : ''}
+					>
+						<svelte:fragment slot="start-icon">
+							<LucideCalendarCog class="size-5" />
+						</svelte:fragment>
+						⌘A
+					</MenuItem>
+				</a>
+				<a href="/dashboard/settings/manage-users" aria-label="Manage Users">
+					<MenuItem
+						noborder
+						cursor="pointer"
+						title="Manage Users"
+						class={active_link === 3 ? 'bg-accent' : ''}
+					>
+						<svelte:fragment slot="start-icon">
+							<Users class="size-5" />
+						</svelte:fragment>
+						⌘U
+					</MenuItem>
+				</a>
+				<a href="/dashboard/settings/manage-groups" aria-label="Manage Groups">
+					<MenuItem
+						noborder
+						cursor="pointer"
+						title="Manage Groups"
+						class={active_link === 4 ? 'bg-accent' : ''}
+					>
+						<svelte:fragment slot="start-icon">
+							<GroupIcon class="size-5" />
+						</svelte:fragment>
+						⌘G
+					</MenuItem>
+				</a>
 			</DashMenu.Items>
 		</DashMenu.Content>
 	</DashMenu.Root>

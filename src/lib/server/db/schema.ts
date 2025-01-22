@@ -21,6 +21,7 @@ export const Users = pgTable('Users', {
 		.unique()
 		.primaryKey(),
 	AccountType: accountTypeEnum('account_type').notNull(),
+	Administrator: boolean('administrator').notNull().default(false),
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),
 	Email: varchar('email', { length: 64 }).unique().notNull(),

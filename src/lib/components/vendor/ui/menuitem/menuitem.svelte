@@ -4,6 +4,7 @@
 	import { cn } from '$lib/components/vendor/utils.js';
 	let {
 		class: className = '' as string,
+		cursor = '' as string,
 		title = '' as string,
 		noborder = false as boolean,
 		onclick = (() => {}) as (event: MouseEvent | KeyboardEvent) => void
@@ -20,7 +21,9 @@
 	aria-expanded="false"
 	class={cn(
 		'flex w-full cursor-pointer items-center rounded-sm border-slate-100 px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-foreground data-[highlighted]:bg-accent data-[state=open]:bg-accent',
-		className + (noborder ? '' : ' border')
+		className,
+		noborder ? '' : 'border',
+		cursor.trim() === '' ? cursor: `cursor-${cursor}`
 	)}
 >
 	<div class="flex items-center space-x-2">
