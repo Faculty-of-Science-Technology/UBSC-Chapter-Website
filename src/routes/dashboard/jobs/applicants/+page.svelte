@@ -142,7 +142,7 @@
 					<JobCard.Root class="w-full">
 						<JobCard.Content class="flex flex-col gap-4">
 							<JobCard.Title>
-								<h2>{application.Jobs?.Title}</h2>
+								<h2>{@render nameof__job_creator(application.Users)}</h2>
 								<span class="tracking-wide"
 									><Badge
 										>{application.JobApplications.Draft === undefined
@@ -155,7 +155,7 @@
 							</JobCard.Title>
 							<card-description class="flex flex-col gap-2">
 								<JobCard.Description
-									>{@render nameof__job_creator(application.Users)}</JobCard.Description
+									>{application.Jobs?.Title}</JobCard.Description
 								>
 								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 									<Briefcase strokeWidth="2" size="16" />

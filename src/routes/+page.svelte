@@ -8,7 +8,7 @@
 	let active_tab = $state(0);
 </script>
 
-<page class="m-3 flex flex-col gap-24 lg:m-20">
+<page class="m-3 flex flex-col gap-24 lg:mx-20 lg:mt-9">
 	<TabList.Root class="space-x-8 items-stretch">
 		<TabList.Tab title="Home" onclick={() => (active_tab = 0)} active={active_tab === 0} />
 		<TabList.Tab title="Interns" onclick={() => (active_tab = 1)} active={active_tab === 1} />
