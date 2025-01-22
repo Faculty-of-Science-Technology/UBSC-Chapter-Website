@@ -1,11 +1,21 @@
 <script lang="ts">
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
+	import * as TabList from '$lib/components/vendor/ui/tablist/index';
 	import { CheckSquare, Mail, Rocket } from 'lucide-svelte';
 	// import * as m from '$lib/paraglide/messages.js';
+
+	let active_tab = $state(0);
 </script>
 
 <page class="m-3 flex flex-col gap-24 lg:m-20">
+	<TabList.Root class="space-x-8 items-stretch">
+		<TabList.Tab title="Home" onclick={() => (active_tab = 0)} active={active_tab === 0} />
+		<TabList.Tab title="Interns" onclick={() => (active_tab = 1)} active={active_tab === 1} />
+		<TabList.Tab title="Presentation Agenda" onclick={() => (active_tab = 2)} active={active_tab === 2} />
+		<TabList.Tab title="Host Organizations" onclick={() => (active_tab = 3)} active={active_tab === 3} />
+		<TabList.Tab title="About" onclick={() => (active_tab = 4)} active={active_tab === 4} />
+	</TabList.Root>
 	<article
 		class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg p-8 text-left"
 	>
