@@ -6,6 +6,7 @@ import {
 	pgEnum,
 	pgTable,
 	real,
+	serial,
 	text,
 	timestamp,
 	uuid,
@@ -25,7 +26,11 @@ export const Users = pgTable('Users', {
 	FirstName: varchar('first_name', { length: 255 }).notNull(),
 	LastName: varchar('last_name', { length: 255 }).notNull(),
 	Email: varchar('email', { length: 64 }).unique().notNull(),
+	Phone: varchar('phone', { length: 15 }),
+	ProfilePicture: text('profile_picture'), // URL to Profile Picture
+	CoverPhoto: text('cover_photo'), // URL to Cover Photo
 	Password: text('password').notNull(),
+	Username: varchar('username', { length: 16 }).unique().notNull(),
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
 	Bio: varchar('bio', { length: 255 }),
 	Hireable: boolean('hireable').notNull().default(false),
@@ -101,6 +106,25 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull()
+});
+
+export const UserSkills = pgTable('UserSkills', {
+    Id: serial('id').primaryKey(),
+    UserId: uuid('user_id').references(() => Users.Id),
+    Name: varchar('name', { length: 64 }).notNull(),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+	.default(sql`CURRENT_TIMESTAMP`)
+	.notNull()
+});
+
+export const UserSocialLinks = pgTable('UserSocialLinks', {
+    Id: serial('id').primaryKey(),
+    UserId: uuid('user_id').references(() => Users.Id),
+    Platform: varchar('platform', { length: 32 }).notNull(), // 'LinkedIn', 'GitHub', 'Twitter', etc.
+    Url: varchar('url', { length: 255 }).notNull(),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+	.default(sql`CURRENT_TIMESTAMP`)
+	.notNull()
 });
 
 // Database relations

@@ -5,7 +5,7 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
-	import { nameof__job_creator } from '$lib/snippets/names/index';
+	import { getUserFullName, nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
@@ -36,7 +36,12 @@
 		<!-- Left Column -->
 		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
-				<UserCard.ProfileBanner accent="bg-red-200" />
+				<UserCard.ProfileBanner
+					accent="bg-red-200"
+					image={user.ProfilePicture}
+					username={user.Username}
+					name={getUserFullName(user)}
+				/>
 				<UserCard.Content class="flex flex-col gap-4">
 					<UserCard.Title>
 						<h1>{user.FirstName + ' ' + user.LastName}</h1>
@@ -62,7 +67,7 @@
 			</Card.Root>
 			{#if jobApplications.length === 0}
 				<Card.Root class="w-full py-8">
-					<Card.Title class="items-center justify-center py-2 text-center text-md">
+					<Card.Title class="text-md items-center justify-center py-2 text-center">
 						<h1>You haven't applied to any jobs yet.</h1>
 					</Card.Title>
 					<Card.Description class="text-center text-xs">

@@ -6,15 +6,20 @@ declare global {
 		interface Locals {
 			user?: {
 				Id: string;
-				AccountType: string;
+				AccountType: 'host' | 'student' | 'owner';
+				Administrator: boolean;
 				FirstName: string;
 				LastName: string;
 				Email: string;
+				Phone: string;
+				ProfilePicture: string;
+				CoverPhoto: string;
+				Username: string;
 				Password: string;
 				ActivationCode: string | null;
 				Bio: string;
-				CreatedAt: Date;
 				Hireable: boolean;
+				CreatedAt: Date;
 			};
 		}
 		// interface PageData {}
@@ -23,4 +28,5 @@ declare global {
 	}
 }
 
-export {};
+export { };
+

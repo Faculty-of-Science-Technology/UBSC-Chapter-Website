@@ -5,11 +5,10 @@
 	import * as Dialog from '$lib/components/vendor/ui/dialog/';
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
-	import * as UserCard from '$lib/components/vendor/ui/user-card';
 	import { cn } from '$lib/components/vendor/utils';
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
-	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
+	import { Briefcase, Clock3 } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
 
 	const { data: props } = $props();
@@ -34,7 +33,7 @@
 		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
 	>
 		<!-- Left Column -->
-		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
+		<!-- <l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -55,7 +54,7 @@
 					</card-description>
 				</UserCard.Content>
 			</UserCard.Root>
-		</l-column>
+		</l-column> -->
 		<!-- Right Column -->
 		<r-column class="flex flex-1 flex-col items-start gap-6">
 			<Card.Root class="sticky top-20 z-10 w-[305px] lg:w-full">
