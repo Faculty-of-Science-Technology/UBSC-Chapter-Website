@@ -1,32 +1,44 @@
 <script lang="ts">
+	import { Homepage } from '$lib/assemblies/index';
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
 	import { CheckSquare, Mail, Rocket } from 'lucide-svelte';
-	// import * as m from '$lib/paraglide/messages.js';
+// import * as m from '$lib/paraglide/messages.js';
+    import type { PageData } from './$types';
+    
+    const { data } = $props<{ data: PageData }>();
 
 	let active_tab = $state(0);
 </script>
 
 <page class="m-3 flex flex-col gap-24 lg:mx-20 lg:mt-9">
-	<TabList.Root class="space-x-8 items-stretch">
+	<TabList.Root class="items-stretch space-x-8">
 		<TabList.Tab title="Home" onclick={() => (active_tab = 0)} active={active_tab === 0} />
 		<TabList.Tab title="Interns" onclick={() => (active_tab = 1)} active={active_tab === 1} />
-		<TabList.Tab title="Presentation Agenda" onclick={() => (active_tab = 2)} active={active_tab === 2} />
-		<TabList.Tab title="Host Organizations" onclick={() => (active_tab = 3)} active={active_tab === 3} />
+		<TabList.Tab
+			title="Presentation Agenda"
+			onclick={() => (active_tab = 2)}
+			active={active_tab === 2}
+		/>
+		<TabList.Tab
+			title="Host Organizations"
+			onclick={() => (active_tab = 3)}
+			active={active_tab === 3}
+		/>
 		<TabList.Tab title="About" onclick={() => (active_tab = 4)} active={active_tab === 4} />
 	</TabList.Root>
-	<article
-		class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg p-8 text-left"
-	>
-		<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
-			We understand. Hiring people is a tricky task.
-		</h1>
-		<p class="text-xl lg:w-[720px]">
-			Finding the right talent can be a challenge&mdash;and that's just a fact of life. But that's
-			where we come in.
-		</p>
-	</article>
+	{#if active_tab === 0}
+		<Homepage.Home />
+	{:else if active_tab === 1}
+		<Homepage.Interns avatar_data={data.avatar_data} />
+	{:else if active_tab === 2}
+		<Homepage.PresentationAgenda />
+	{:else if active_tab === 3}
+		<Homepage.HostOrganizations />
+	{:else if active_tab === 4}
+		<Homepage.About />
+	{/if}
 	<call-to-action
 		class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
 	>
