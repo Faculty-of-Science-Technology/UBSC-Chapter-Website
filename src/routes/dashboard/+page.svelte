@@ -37,7 +37,6 @@
 		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner
-					accent="bg-red-200"
 					image={user.ProfilePicture}
 					username={user.Username}
 					name={getUserFullName(user)}

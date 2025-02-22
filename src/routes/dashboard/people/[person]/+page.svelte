@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { PUBLIC_UI_DEFAULT_COVER_IMAGE } from '$env/static/public';
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
+	import { getUserFullName } from '$lib/snippets/names/index.js';
 	import {
 		Calendar,
 		Code,
@@ -14,7 +16,6 @@
 		Twitter
 	} from 'lucide-svelte';
 	import { type PageData } from './$types.js';
-	import { onMount } from 'svelte';
 
 	// let person = {
 	// 	FirstName: 'Alexandro',
@@ -50,8 +51,10 @@
 		<div class="h-[200px] w-full bg-gradient-to-r from-slate-600 to-slate-800 lg:h-[350px]">
 			<!-- Optional: Add cover photo here -->
 			<img
-				alt="Cover Photo"
-				src={person.CoverPhoto}
+				alt="CoverPhoto"
+				src={(person.CoverPhoto === null || person.CoverPhoto?.trim() === '')
+					? PUBLIC_UI_DEFAULT_COVER_IMAGE
+					: person.CoverPhoto}
 				class="w-full"
 				style="block-size: 350px; object-fit: cover; object-position: top;"
 			/>
@@ -64,7 +67,11 @@
 				<div
 					class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-white lg:h-48 lg:w-48"
 				>
-					<UserCard.ProfileBanner accent="bg-red-200" />
+					<UserCard.ProfileBanner
+						image={person.ProfilePicture as string}
+						name={getUserFullName(person)}
+						username={person.Username}
+					/>
 				</div>
 
 				<!-- Name and Title -->
@@ -78,7 +85,7 @@
 							</span>
 						{/if}
 					</h1>
-					<p class="text-lg text-slate-600">{person.Bio}</p>
+					<p class="text-lg text-slate-600">{person.Bio ?? "Hey there! I'm using talentpool!"}</p>
 				</div>
 			</div>
 		</div>
@@ -142,7 +149,7 @@
 						</a>
 					{/if}
 					{#if Object.keys(person.Socials).length === 0}
-						<p class="text-slate">No social profiles found</p>
+						<p class="text-slate">No social profiles found.</p>
 					{/if}
 				</Card.Description>
 			</Card.Root>
@@ -154,7 +161,7 @@
 			<Card.Root>
 				<Card.Title class="p-4 text-xl font-semibold">About</Card.Title>
 				<Card.Description class="p-4">
-					<p class="text-slate-600">{person.Bio}</p>
+					<p class="text-slate-600">{person.Bio ?? 'Nothing here to see.'}</p>
 				</Card.Description>
 			</Card.Root>
 
@@ -167,9 +174,9 @@
 							{@const Icon = skillIcons[skill] || Code}
 							<Icon class="mr-2 h-4 w-4 text-slate-600" />
 						{/snippet}
-                        {#if person.Skills.length === 0}
-                            <p class="text-slate">No skills shared.</p>
-                        {/if}
+						{#if person.Skills.length === 0}
+							<p class="text-slate">No skills shared.</p>
+						{/if}
 
 						{#each person.Skills as skill}
 							<div class="flex items-center rounded-full bg-slate-100 px-4 py-2">
