@@ -209,13 +209,25 @@
 							<JobCard.Title>
 								<h2>{@render nameof__job_creator(application.Users)}</h2>
 								<span class="tracking-wide"
-									><Badge
-										>{application.JobApplications.Draft === undefined
-											? 'Draft (Unsaved)'
-											: application.JobApplications.Draft === true
-												? 'Draft (Saved)'
-												: application.JobApplications.Status}</Badge
-									></span
+									>{#if application.JobApplications.Status === 'rejected'}
+										<Badge
+											class="bg-destructive
+										">{application.JobApplications.Status}</Badge
+										>
+									{:else if application.JobApplications.Status === 'approved'}
+										<Badge
+											class="bg-success
+										">{application.JobApplications.Status}</Badge
+										>
+									{:else}
+										<Badge
+											>{application.JobApplications.Draft === undefined
+												? 'Draft (Unsaved)'
+												: application.JobApplications.Draft === true
+													? 'Draft (Saved)'
+													: application.JobApplications.Status}</Badge
+										>
+									{/if}</span
 								>
 							</JobCard.Title>
 							<card-description class="flex flex-col gap-2">

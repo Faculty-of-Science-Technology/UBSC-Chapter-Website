@@ -41,6 +41,8 @@ body {
 		--accent-foreground: 222.2 47.4% 11.2%;
 		--destructive: 0 72.2% 50.6%;
 		--destructive-foreground: 210 40% 98%;
+		--success: 142 76% 36%;
+		--success-foreground: 210 40% 98%;
 		--ring: 222.2 84% 4.9%;
 		--radius: 0.5rem;
 		--sidebar-background: 0 0% 98%;
@@ -72,6 +74,8 @@ body {
 		--accent-foreground: 210 40% 98%;
 		--destructive: 0 62.8% 30.6%;
 		--destructive-foreground: 210 40% 98%;
+		--success: 142 76% 36%;
+		--success-foreground: 210 40% 98%;
 		--ring: 212.7 26.8% 83.9%;
 		--sidebar-background: 240 5.9% 10%;
 		--sidebar-foreground: 240 4.8% 95.9%;

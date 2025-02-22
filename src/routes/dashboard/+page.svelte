@@ -34,7 +34,7 @@
 		class="text-inter relative flex h-fit flex-col flex-wrap items-start gap-8 self-stretch lg:flex-row"
 	>
 		<!-- Left Column -->
-		<l-column class="top-20 flex flex-col items-start gap-6 lg:sticky z-10 lg:w-fit">
+		<l-column class="top-20 z-10 flex flex-col items-start gap-6 lg:sticky lg:w-fit">
 			<UserCard.Root class="mb-6 w-[305px] lg:w-[320px]">
 				<UserCard.ProfileBanner accent="bg-red-200" />
 				<UserCard.Content class="flex flex-col gap-4">
@@ -75,15 +75,27 @@
 					<JobCard.Content class="flex flex-col gap-4">
 						<JobCard.Title>
 							<h2>{application.Jobs?.Title}</h2>
-							<span class="tracking-wide"
-								><Badge
-									>{application.JobApplications.Draft === undefined
-										? 'Draft (Unsaved)'
-										: application.JobApplications.Draft === true
-											? 'Draft (Saved)'
-											: application.JobApplications.Status}</Badge
-								></span
-							>
+							<span class="tracking-wide">
+								{#if application.JobApplications.Status === 'rejected'}
+									<Badge
+										class="bg-destructive
+										">{application.JobApplications.Status}</Badge
+									>
+								{:else if application.JobApplications.Status === 'approved'}
+									<Badge
+										class="bg-success
+										">{application.JobApplications.Status}</Badge
+									>
+								{:else}
+									<Badge
+										>{application.JobApplications.Draft === undefined
+											? 'Draft (Unsaved)'
+											: application.JobApplications.Draft === true
+												? 'Draft (Saved)'
+												: application.JobApplications.Status}</Badge
+									>
+								{/if}
+							</span>
 						</JobCard.Title>
 						<card-description class="flex flex-col gap-2">
 							<JobCard.Description

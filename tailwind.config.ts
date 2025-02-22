@@ -1,6 +1,6 @@
-import { fontFamily } from 'tailwindcss/defaultTheme';
 import type { Config } from 'tailwindcss';
 import tailwindcssAnimate from 'tailwindcss-animate';
+import { fontFamily } from 'tailwindcss/defaultTheme';
 
 const config: Config = {
 	darkMode: ['class'],
@@ -32,6 +32,10 @@ const config: Config = {
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive) / <alpha-value>)',
 					foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)'
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success) / <alpha-value>)',
+					foreground: 'hsl(var(--success-foreground) / <alpha-value>)'
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted) / <alpha-value>)',

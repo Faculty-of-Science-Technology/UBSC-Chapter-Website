@@ -84,13 +84,25 @@
 							<h2>{application.Jobs?.Title}</h2>
 							<div class="flex gap-2">
 								<span class="tracking-wide"
-									><Badge
-										>{application.JobApplications.Draft === undefined
-											? 'Draft (Unsaved)'
-											: application.JobApplications.Draft === true
-												? 'Draft (Saved)'
-												: application.JobApplications.Status}</Badge
-									></span
+									>{#if application.JobApplications.Status === 'rejected'}
+										<Badge
+											class="bg-destructive
+										">{application.JobApplications.Status}</Badge
+										>
+									{:else if application.JobApplications.Status === 'approved'}
+										<Badge
+											class="bg-success
+										">{application.JobApplications.Status}</Badge
+										>
+									{:else}
+										<Badge
+											>{application.JobApplications.Draft === undefined
+												? 'Draft (Unsaved)'
+												: application.JobApplications.Draft === true
+													? 'Draft (Saved)'
+													: application.JobApplications.Status}</Badge
+										>
+									{/if}</span
 								>
 
 								{#if application.JobApplications.Draft === true && application.Jobs?.Draft}
