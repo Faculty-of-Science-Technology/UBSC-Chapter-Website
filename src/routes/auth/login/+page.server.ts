@@ -95,7 +95,7 @@ export const actions = {
 				Jwt.sign({ email: form.email }, JWT_SECRET, {
 					expiresIn: '72h' // 3 days
 				}),
-				{ path: '/' }
+				{ path: '/', expires: new Date(Date.now() + 72 * 60 * 60 * 1000), sameSite: 'strict' }
 			);
 
 			throw redirect(303, '/dashboard');

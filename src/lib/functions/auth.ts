@@ -21,7 +21,7 @@ export const checkAuth = async (event: ServerLoadEvent) => {
 		if (jwt.exp && jwt.exp - Date.now() / 1000 < 86400) {
 			// Refresh the JWT
 			const newJwt = Jwt.sign({ email: jwt.email }, JWT_SECRET, { expiresIn: '72h' });
-			cookies.set('session', newJwt, { path: '/', expires: new Date(Date.now() + 72 * 60 * 60 * 1000) });
+			cookies.set('session', newJwt, { path: '/', expires: new Date(Date.now() + 72 * 60 * 60 * 1000), sameSite: 'strict' });
 			return true;
 		}
 		return true;
