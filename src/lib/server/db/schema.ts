@@ -27,6 +27,7 @@ export const Users = pgTable('Users', {
 	LastName: varchar('last_name', { length: 255 }).notNull(),
 	Email: varchar('email', { length: 64 }).unique().notNull(),
 	Phone: varchar('phone', { length: 15 }),
+	Location: varchar('location', { length: 255 }),
 	ProfilePicture: text('profile_picture'), // URL to Profile Picture
 	CoverPhoto: text('cover_photo'), // URL to Cover Photo
 	Password: text('password').notNull(),

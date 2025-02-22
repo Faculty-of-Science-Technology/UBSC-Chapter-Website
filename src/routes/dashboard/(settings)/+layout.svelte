@@ -139,7 +139,15 @@
 			</DashMenu.Items>
 		</DashMenu.Content>
 	</DashMenu.Root>
-	<main class="flex-1 bg-gray-100 p-8">
+	<main class="flex-1 overflow-auto bg-gray-100 p-8">
 		{@render children?.()}
 	</main>
 </page>
+
+<style>
+	/* Make <main/>'s scrollbar so small it's invisible */
+	main {
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
+	}
+</style>
