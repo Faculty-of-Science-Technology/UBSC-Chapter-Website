@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
@@ -7,14 +8,27 @@
 	import { cn } from '$lib/components/vendor/utils';
 	import { onMount } from 'svelte';
 	import { superForm } from 'sveltekit-superforms/client';
+	import type { PageData } from './$types';
 	// import { type RegisterForm } from './+page';
 	let JSOnly: HTMLSpanElement;
-	let data = $props();
+	let data: PageData = $props();
+	const page_query = $page.url.search;
+	// Parse the query string
+	const query = new URLSearchParams(page_query);
+	// Get the 'account_type' query string value
+	const forced_account_type = query.get('force_choice');
+	// Set the account type to the query string value
 	let accountTimeout: ReturnType<typeof setTimeout>;
 	let accountType = $state('');
 	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data, {
 		taintedMessage: 'You have unsaved changes. Are you sure you want to leave?'
 	});
+
+	// We run these things on the server and not on the client (OnMount) for a very good reason
+	if (forced_account_type) {
+		console.log(forced_account_type);
+		$form.account_type = forced_account_type === 'host' ? 'host' : 'student';
+	}
 	accountType = $form.account_type;
 
 	onMount(() => {
@@ -23,6 +37,7 @@
 </script>
 
 <!-- <SuperDebug bind:data={$form} /> -->
+<!-- svelte-ignore component_name_lowercase -->
 <page
 	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
 >

@@ -36,7 +36,7 @@
 			effortlessly. With just one glance, you'll discover the skilled professionals you need to
 			bring your vision to life. Register as a host below.
 		</p>
-		<a href="/auth/register">
+		<a href="/auth/register?force_choice=host">
 			<Button class="w-fit">Register as a Host</Button>
 		</a>
 	</call-to-action>
@@ -60,7 +60,7 @@
 				<CheckSquare size="84" strokeWidth="1" />
 				<h2>Acquire <span class="font-medium underline">Talent</span></h2>
 				<p class="text-inter text-xl font-medium">Because, why look anywhere else?</p>
-				<a href="/auth/register">
+				<a href="/auth/register?force_choice=host">
 					<Button class="w-fit">Register as a Host</Button>
 				</a>
 			</acquire-talent>
