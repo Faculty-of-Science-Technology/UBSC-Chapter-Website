@@ -21,6 +21,7 @@
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.9.0",
 		"@sveltejs/vite-plugin-svelte": "^5.0.0",
+		"@types/nodemailer": "^6.4.17",
 		"@types/sanitize-html": "^2.13.0",
 		"autoprefixer": "^10.4.20",
 		"bits-ui": "^1.0.0-next.78",
@@ -58,6 +59,7 @@
 		"dotenv": "^16.4.7",
 		"drizzle-orm": "^0.38.1",
 		"jsonwebtoken": "^9.0.2",
+		"nodemailer": "^6.10.0",
 		"sanitize-html": "^2.13.1",
 		"uuid": "^11.0.3"
 	}

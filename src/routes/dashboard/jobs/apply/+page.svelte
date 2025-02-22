@@ -39,7 +39,7 @@
 		}));
 	}
 
-	const { form, constraints, enhance, message, errors } = superForm(data.applicationForm, {
+	const { form, constraints, enhance, errors } = superForm(data.applicationForm, {
 		resetForm: false,
 		invalidateAll: false,
 		dataType: 'json'

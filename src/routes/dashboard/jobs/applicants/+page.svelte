@@ -12,6 +12,8 @@
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
+	import SuperDebug from 'sveltekit-superforms';
+	import { superForm } from 'sveltekit-superforms/client';
 	import { type PageData } from './$types.js';
 
 	const { data: props } = $props();
@@ -24,6 +26,57 @@
 	const job = data.job; // typeof (optional)
 	const jobs = data.jobs; // typeof (optional)
 
+	let current_applicant: string = $state(''); // typeof (optional)
+	const {
+		form: responseForm,
+		constraints: responseConstraints,
+		enhance: responseEnhance,
+		errors: responseErrors,
+		message: responseMessage
+	} = superForm(data.messageForm, {
+		resetForm: false,
+		invalidateAll: false,
+		// onUpdated(event) {
+		// 	console.log(event);
+		// },
+		// onSubmit(input) {
+		// 	console.log(input);
+		// },
+		onResult(result_) {
+			const result = result_.result;
+			console.log(result);
+			// F***ing hack since the result is not being outputted
+			try {
+				$responseErrors = result.data?.messageForm.errors;
+			} catch (e) {
+				console.log(e);
+			}
+			try {
+				$responseMessage = result.data?.form.message;
+			} catch {
+				// Ignored
+			}
+		}
+		//dataType: 'json'
+	});
+
+	const {
+		form: declineForm,
+		constraints: declineConstraints,
+		enhance: declineEnhance,
+		errors: declineErrors,
+		message: declineMessage
+	} = superForm(data.declineForm, {
+		resetForm: false,
+		invalidateAll: false,
+		onResult(result) {
+			console.log(result);
+			// F***ing hack since the result is not being outputted
+			$responseErrors = result.result.data.declineForm.errors;
+		}
+		//		dataType: 'json'
+	});
+
 	const offset = data.offset;
 
 	// Get the amount of pages from the jobs length
@@ -32,6 +85,8 @@
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
+<SuperDebug data={$responseForm} />
+<SuperDebug data={$declineForm} />
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
 		<h1 class="text-5xl font-extralight lg:text-6xl">
@@ -154,9 +209,7 @@
 								>
 							</JobCard.Title>
 							<card-description class="flex flex-col gap-2">
-								<JobCard.Description
-									>{application.Jobs?.Title}</JobCard.Description
-								>
+								<JobCard.Description>{application.Jobs?.Title}</JobCard.Description>
 								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 									<Briefcase strokeWidth="2" size="16" />
 									<p>{application.JobTypes?.Name}</p>
@@ -197,37 +250,62 @@
 										>
 
 										<Dialog.Root>
-											<Dialog.Trigger class={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+											<Dialog.Trigger
+												onclick={() => {
+													console.log(application);
+													current_applicant = application.JobApplications.Id as string;
+												}}
+												class={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
 												>Follow-up</Dialog.Trigger
 											>
 											<Dialog.Content class="sm:max-w-[425px]">
-												<Dialog.Header>
-													<Dialog.Title>Send a message</Dialog.Title>
-													<Dialog.Description>
-														Send a follow-up message to the applicant's email. They can reply
-														directly to your email, allowing you to communicate seamlessly with
-														them.
-													</Dialog.Description>
-												</Dialog.Header>
-												<div class="flex flex-col gap-6 py-4">
-													<div class="flex flex-col items-start justify-start gap-2">
-														<Label for="name" class="text-right">Your name</Label>
-														<Input
-															id="name"
-															placeholder="This is what will be shown in the 'to:' section of the email"
-														/>
+												<form
+													id="responseForm"
+													method="POST"
+													action="?/sendResponse"
+													use:responseEnhance
+												>
+													<Dialog.Header>
+														<Dialog.Title>Send a message</Dialog.Title>
+														<Dialog.Description>
+															Send a follow-up message to the applicant's email. They can reply
+															directly to your email, allowing you to communicate seamlessly with
+															them.
+														</Dialog.Description>
+													</Dialog.Header>
+													<div class="flex flex-col gap-6 py-4">
+														<div class="flex flex-col items-start justify-start gap-2">
+															<Label for="name" class="text-right">Your name</Label>
+															<Input
+																id="name"
+																name="response_name"
+																bind:value={$responseForm.response_name}
+																placeholder="This is what will be shown in the 'to:' section of the email"
+															/>
+															<p class="text-sm text-red-600">{$responseErrors.response_name}</p>
+														</div>
+														<div class="flex flex-col items-start justify-start gap-2">
+															<Label for="message" class="text-right">Message</Label>
+															<Textarea
+																id="message"
+																name="response_message"
+																bind:value={$responseForm.response_message as string}
+																placeholder="This is what will be shown in the body of the email"
+															/>
+															<p class="text-sm text-red-600">{$responseErrors.response_message}</p>
+														</div>
 													</div>
-													<div class="flex flex-col items-start justify-start gap-2">
-														<Label for="message" class="text-right">Message</Label>
-														<Textarea
-															id="message"
-															placeholder="This is what will be shown in the body of the email"
-														/>
-													</div>
-												</div>
-												<Dialog.Footer class="justify-start text-left">
-													<Button type="submit">Accept & Follow-up</Button>
-												</Dialog.Footer>
+													<Dialog.Footer class="block space-x-0 space-y-1 text-left sm:space-x-0">
+														<input type="hidden" name="application_id" value={current_applicant} />
+														<p class="text-sm text-red-600">{$responseErrors.application_id}</p>
+														{#if $responseMessage != undefined}
+															<p class="text-sm text-emerald-600">
+																{'✓' + ' ' + $responseMessage}
+															</p>
+														{/if}
+														<Button type="submit">Accept & Follow-up</Button>
+													</Dialog.Footer>
+												</form>
 											</Dialog.Content>
 										</Dialog.Root>
 
@@ -237,28 +315,36 @@
 												>Reject</Dialog.Trigger
 											>
 											<Dialog.Content class="sm:max-w-[425px]">
-												<Dialog.Header>
-													<Dialog.Title
-														>Delete '{application.Jobs?.Title}' from '{application.Users
-															?.FirstName +
-															' ' +
-															application.Users?.LastName}'</Dialog.Title
-													>
-													<Dialog.Description>
-														You won't be able to retrieve it again. Are you sure you want to delete it?
-													</Dialog.Description>
-												</Dialog.Header>
-												<div class="flex flex-col gap-6 py-4">
-													<div class="flex flex-col items-start justify-start gap-2">
-														<Label for="reason" class="text-right">Reason for rejection (optional)</Label>
-														<Textarea
-															id="reason"
-															placeholder="This is what will be shown in the body of the email"
-														/>
-													</div>	
-												<Dialog.Footer class="justify-start text-left">
-													<Button type="submit" class="bg-destructive">Reject & Delete</Button>
-												</Dialog.Footer>
+												<form id="declineForm" method="POST" action="?/decline" use:declineEnhance>
+													<Dialog.Header>
+														<Dialog.Title
+															>Delete '{application.Jobs?.Title}' from '{application.Users
+																?.FirstName +
+																' ' +
+																application.Users?.LastName}'</Dialog.Title
+														>
+														<Dialog.Description>
+															You won't be able to retrieve it again. Are you sure you want to
+															delete it?
+														</Dialog.Description>
+													</Dialog.Header>
+													<div class="flex flex-col gap-6 py-4">
+														<div class="flex flex-col items-start justify-start gap-2">
+															<Label for="reason" class="text-right"
+																>Reason for rejection (optional)</Label
+															>
+															<Textarea
+																id="reason"
+																name="decline_reason"
+																bind:value={$declineForm.decline_reason as string}
+																placeholder="This is what will be shown in the body of the email"
+															/>
+														</div>
+														<Dialog.Footer class="justify-start text-left">
+															<Button type="submit" class="bg-destructive">Reject & Delete</Button>
+														</Dialog.Footer>
+													</div>
+												</form>
 											</Dialog.Content>
 										</Dialog.Root>
 									</div>
