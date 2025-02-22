@@ -110,7 +110,7 @@ export const actions: Actions = {
 				from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 				to: super_form.data.email,
 				subject: `Activate your account on ${PLATFORM_NAME}`,
-				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 			});
 
 			cookies.set(

@@ -61,11 +61,11 @@
 				</Card.Title>
 			</Card.Root>
 			{#if jobApplications.length === 0}
-				<Card.Root class="w-full">
-					<Card.Title class="items-center justify-center py-2 text-center text-2xl">
+				<Card.Root class="w-full py-8">
+					<Card.Title class="items-center justify-center py-2 text-center text-md">
 						<h1>You haven't applied to any jobs yet.</h1>
 					</Card.Title>
-					<Card.Description class="text-center">
+					<Card.Description class="text-center text-xs">
 						<p>Start applying to jobs to see them here.</p>
 					</Card.Description>
 				</Card.Root>

@@ -8,7 +8,11 @@ import {
 	MAIL_USERNAME,
 	PLATFORM_NAME,
 	PLATFORM_URL,
-	PLATFORM_URL_DEVELOPMENT
+	PLATFORM_URL_DEVELOPMENT,
+	SESSION_HTTP_ONLY,
+	SESSION_MAX_AGE,
+	SESSION_SAMESITE,
+	SESSION_SECURE
 } from '$env/static/private';
 import { getUser } from '$lib/functions/users';
 import { db } from '$lib/server/db/index.js';
@@ -21,6 +25,11 @@ import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+
+interface EmailOptions {
+	email: string;
+	activation_code: string;
+}
 
 const loginSchema = z.object({
 	email: z
@@ -95,7 +104,13 @@ export const actions = {
 				Jwt.sign({ email: form.email }, JWT_SECRET, {
 					expiresIn: '72h' // 3 days
 				}),
-				{ path: '/', expires: new Date(Date.now() + 72 * 60 * 60 * 1000), sameSite: 'strict' }
+				{
+					path: '/',
+					expires: new Date(Date.now() + parseInt(SESSION_MAX_AGE) * 60 * 60 * 1000),
+					secure: JSON.parse(SESSION_SECURE),
+					httpOnly: JSON.parse(SESSION_HTTP_ONLY),
+					sameSite: SESSION_SAMESITE as boolean | 'lax' | 'strict' | 'none' | undefined
+				}
 			);
 
 			throw redirect(303, '/dashboard');
@@ -111,12 +126,18 @@ export const actions = {
 			// @ts-expect-error - We are deleting the password field from the form
 			// Again, we don't to pass the password back to the client
 			delete super_form.data.password;
+			if (IS_DEVELOPMENT) {
+				console.log(error);
+			}
 			return fail(400, { super_form });
 		}
 	}
 };
 
-function sendNewActivationEmail(email, activation_code) {
+function sendNewActivationEmail(
+	email: EmailOptions['email'],
+	activation_code: EmailOptions['activation_code']
+): void {
 	// Fire up nodemailer
 	const transporter = nodemailer.createTransport({
 		host: 'smtp.gmail.com',

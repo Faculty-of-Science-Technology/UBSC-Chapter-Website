@@ -1,3 +1,13 @@
+import {
+	IS_DEVELOPMENT,
+	MAIL_DISPLAYNAME,
+	MAIL_PASSWORD,
+	MAIL_SIGNATURE,
+	MAIL_USERNAME,
+	PLATFORM_NAME,
+	PLATFORM_URL,
+	PLATFORM_URL_DEVELOPMENT
+} from '$env/static/private';
 import { db } from '$lib/server/db';
 import {
 	JobApplications,
@@ -9,6 +19,7 @@ import {
 } from '$lib/server/db/schema';
 import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
+import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -177,7 +188,7 @@ export const actions: Actions = {
 
 		// Check if the user is authenticated
 		const user = event.locals.user;
-		if (!user || !job_id) throw redirect(301, '/auth/login');
+		if (user === undefined || job_id === undefined) throw redirect(301, '/auth/login');
 		const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 		try {
 			JobApplicationSchema.parse(applicationForm.data);
@@ -217,7 +228,7 @@ export const actions: Actions = {
 					return { applicationForm };
 				}
 
-				console.log('SUBMIT:', applicationForm.data.question_response_array);
+				// console.log('SUBMIT:', applicationForm.data.question_response_array);
 				const return_success = await createApplication({
 					first_name: applicationForm.data.first_name,
 					last_name: applicationForm.data.last_name,
@@ -253,7 +264,7 @@ export const actions: Actions = {
 			// Update the job application if it's a draft
 			if (jobApplication?.Draft) {
 				// Show a message if the application is a draft
-				console.log('DRAFT_SUBMIT: ');
+				// console.log('DRAFT_SUBMIT: ');
 				const returned_success = await updateJobApplication({
 					first_name: applicationForm.data.first_name,
 					last_name: applicationForm.data.last_name,
@@ -280,13 +291,13 @@ export const actions: Actions = {
 				throw redirect(303, '/backend/message');
 			}
 
-			setSubmitMessages(cookies, job.Title as unknown as string);
+			setSubmitMessages(cookies, job.Title as unknown as string, job);
 			throw redirect(303, '/backend/message');
 		} catch (e) {
 			if (isRedirect(e)) {
 				throw e;
 			}
-			console.log(e);
+			// console.log(e);
 			const applicationForm = await superValidate(formData, zod(JobApplicationSchema));
 			applicationForm.data.draft = true;
 			setError(
@@ -340,7 +351,7 @@ const setDraftMessages = (cookies: Cookies, jobTitle: string): void => {
 	cookies.set('authenticated', 'true', { path: '/' });
 };
 
-const setSubmitMessages = (cookies: Cookies, jobTitle: string): void => {
+const setSubmitMessages = (cookies: Cookies, jobTitle: string, job: typeof Jobs): void => {
 	// Redirect to the backend message page
 	cookies.set('message_title', 'Application Submitted', { path: '/' });
 	cookies.set('message_title2', jobTitle, { path: '/' });
@@ -351,6 +362,52 @@ const setSubmitMessages = (cookies: Cookies, jobTitle: string): void => {
 		{ path: '/' }
 	);
 	cookies.set('authenticated', 'true', { path: '/' });
+
+	// Find the employer's email
+	db.select()
+		.from(Users)
+		.where(eq(Users.Id, job.UserId))
+		.limit(1)
+		.then((res) => {
+			if (res.length === 0) return;
+			const employer = res[0];
+			sendNotificationEmail(employer, job);
+		});
+};
+
+const sendNotificationEmail = async (
+	employer: {
+		Id: string;
+		CreatedAt: string;
+		AccountType: 'host' | 'student' | 'owner';
+		Administrator: boolean;
+		FirstName: string;
+		LastName: string;
+		Email: string;
+		Password: string;
+		ActivationCode: string | null;
+		Bio: string | null;
+		Hireable: boolean;
+	},
+	job: typeof Jobs
+): Promise<void> => {
+	// Fire up nodemailer
+	const transporter = nodemailer.createTransport({
+		host: 'smtp.gmail.com',
+		port: 465,
+		secure: true,
+		auth: {
+			user: MAIL_USERNAME,
+			pass: MAIL_PASSWORD
+		}
+	});
+
+	transporter.sendMail({
+		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+		to: employer.Email,
+		subject: `Someone has applied for your '${job.Title}' job on ${PLATFORM_NAME}`,
+		text: `Hey,\n\nSomeone has applied for your job posting '${job.Title}' on ${PLATFORM_NAME}. You can view the application in the dashboard here:\n\n${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/applicants?job_id=${job.Id}.\n\nAll the best,\n${MAIL_SIGNATURE}`
+	});
 };
 
 const getResumeDataUri = async (mimetype: string, resume: File): Promise<string | undefined> => {
@@ -390,7 +447,7 @@ const updateJobApplication = async ({
 		return false;
 	}
 
-	console.log('ENTRY_TO:UPDATE:', question_response_array);
+	// console.log('ENTRY_TO:UPDATE:', question_response_array);
 	await db
 		.update(JobApplications)
 		.set({
@@ -407,7 +464,7 @@ const updateJobApplication = async ({
 
 	// Update the question responses
 	for (const response of question_response_array) {
-		console.log('CREATE_OR_UPDATE_QUESTION_RESPONSE: ', JSON.stringify(response));
+		// console.log('CREATE_OR_UPDATE_QUESTION_RESPONSE: ', JSON.stringify(response));
 		// Search for the question response
 		const questionResponse = await db
 			.select()
@@ -493,7 +550,7 @@ const createApplication = async ({
 
 	// Save the question responses
 	for (const response of question_response_array) {
-		console.log('CREATE_QUESTION_RESPONSE: ', JSON.stringify(response));
+		// console.log('CREATE_QUESTION_RESPONSE: ', JSON.stringify(response));
 		await db.insert(JobQuestionResponses).values({
 			JobApplicationId: jobApplicationId[0].Id,
 			QuestionsId: response.question_id,
