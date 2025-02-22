@@ -20,8 +20,8 @@ export const checkAuth = async (event: ServerLoadEvent) => {
 		// Is this less than 24 hours away from expiring?
 		if (jwt.exp && jwt.exp - Date.now() / 1000 < 86400) {
 			// Refresh the JWT
-			const newJwt = Jwt.sign({ email: jwt['email'] }, JWT_SECRET, { expiresIn: '72h' });
-			cookies.set('session', newJwt, { path: '/' });
+			const newJwt = Jwt.sign({ email: jwt.email }, JWT_SECRET, { expiresIn: '72h' });
+			cookies.set('session', newJwt, { path: '/', expires: new Date(Date.now() + 72 * 60 * 60 * 1000) });
 			return true;
 		}
 		return true;

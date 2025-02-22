@@ -1,4 +1,15 @@
-import { ACT_JWT_SECRET, JWT_SECRET } from '$env/static/private';
+import {
+	ACT_JWT_SECRET,
+	IS_DEVELOPMENT,
+	JWT_SECRET,
+	MAIL_DISPLAYNAME,
+	MAIL_PASSWORD,
+	MAIL_SIGNATURE,
+	MAIL_USERNAME,
+	PLATFORM_NAME,
+	PLATFORM_URL,
+	PLATFORM_URL_DEVELOPMENT
+} from '$env/static/private';
 import { getUser } from '$lib/functions/users';
 import { db } from '$lib/server/db/index.js';
 import { Users } from '$lib/server/db/schema.js';
@@ -6,6 +17,7 @@ import { fail, isActionFailure, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -55,14 +67,21 @@ export const actions = {
 				return setError(super_form, 'password', 'Incorrect username or password');
 			}
 			if (findUser.ActivationCode !== null) {
+				// Generate a new activation code
+				const ActivationCode = Jwt.sign({ email: form.email }, ACT_JWT_SECRET, {
+					expiresIn: '1h'
+				});
+
+				// Update the user's activation code
 				await db
 					.update(Users)
 					.set({
-						ActivationCode: Jwt.sign({ email: form.email }, ACT_JWT_SECRET, {
-							expiresIn: '1h'
-						})
+						ActivationCode
 					})
 					.where(eq(Users.Email, super_form.data.email));
+
+				// Send a new activation email
+				sendNewActivationEmail(super_form.data.email, ActivationCode);
 				return setError(
 					super_form,
 					'email',
@@ -96,3 +115,23 @@ export const actions = {
 		}
 	}
 };
+
+function sendNewActivationEmail(email, activation_code) {
+	// Fire up nodemailer
+	const transporter = nodemailer.createTransport({
+		host: 'smtp.gmail.com',
+		port: 465,
+		secure: true,
+		auth: {
+			user: MAIL_USERNAME,
+			pass: MAIL_PASSWORD
+		}
+	});
+
+	transporter.sendMail({
+		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+		to: email,
+		subject: `Activate your account on ${PLATFORM_NAME}`,
+		text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+	});
+}

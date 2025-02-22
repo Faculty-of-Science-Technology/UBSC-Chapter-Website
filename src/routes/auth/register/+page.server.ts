@@ -1,10 +1,21 @@
-import { ACT_JWT_SECRET } from '$env/static/private';
+import {
+	ACT_JWT_SECRET,
+	IS_DEVELOPMENT,
+	MAIL_DISPLAYNAME,
+	MAIL_PASSWORD,
+	MAIL_SIGNATURE,
+	MAIL_USERNAME,
+	PLATFORM_NAME,
+	PLATFORM_URL,
+	PLATFORM_URL_DEVELOPMENT
+} from '$env/static/private';
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import Jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -83,9 +94,28 @@ export const actions: Actions = {
 					path: '/'
 				}
 			);
+
+			// Fire up nodemailer
+			const transporter = nodemailer.createTransport({
+				host: 'smtp.gmail.com',
+				port: 465,
+				secure: true,
+				auth: {
+					user: MAIL_USERNAME,
+					pass: MAIL_PASSWORD
+				}
+			});
+
+			transporter.sendMail({
+				from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+				to: super_form.data.email,
+				subject: `Activate your account on ${PLATFORM_NAME}`,
+				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+			});
+
 			cookies.set(
 				'message_description2',
-				`Try signing in on the login page to request another one. Note that links expire within 1 hour. ...You are in debug mode. Your code is: ${activation_code}`,
+				`Try signing in on the login page to request another one. Note that links expire within 1 hour.`,
 				{
 					path: '/'
 				}
