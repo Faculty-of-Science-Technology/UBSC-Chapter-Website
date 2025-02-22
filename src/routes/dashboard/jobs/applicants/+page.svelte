@@ -44,7 +44,7 @@
 		// },
 		onResult(result_) {
 			const result = result_.result;
-			console.log(result);
+			// console.log(result);
 			// F***ing hack since the result is not being outputted
 			try {
 				$responseErrors = result.data?.messageForm.errors;
@@ -69,10 +69,20 @@
 	} = superForm(data.declineForm, {
 		resetForm: false,
 		invalidateAll: false,
-		onResult(result) {
-			console.log(result);
+		onResult(result_) {
+			const result = result_.result;
+			// console.log(result);
 			// F***ing hack since the result is not being outputted
-			$responseErrors = result.result.data.declineForm.errors;
+			try {
+				$responseErrors = result.data?.declineForm.errors;
+			} catch (e) {
+				console.log(e);
+			}
+			try {
+				$responseMessage = result.data?.form.message;
+			} catch {
+				// Ignored
+			}
 		}
 		//		dataType: 'json'
 	});
@@ -312,7 +322,10 @@
 										<Dialog.Root>
 											<Dialog.Trigger
 												class={cn(buttonVariants({ variant: 'destructive' }), 'w-fit')}
-												>Reject</Dialog.Trigger
+												onclick={() => {
+													console.log(application);
+													current_applicant = application.JobApplications.Id as string;
+												}}>Reject</Dialog.Trigger
 											>
 											<Dialog.Content class="sm:max-w-[425px]">
 												<form id="declineForm" method="POST" action="?/decline" use:declineEnhance>
@@ -340,8 +353,27 @@
 																placeholder="This is what will be shown in the body of the email"
 															/>
 														</div>
-														<Dialog.Footer class="justify-start text-left">
-															<Button type="submit" class="bg-destructive">Reject & Delete</Button>
+														<Dialog.Footer class="block space-x-0 space-y-1 text-left sm:space-x-0">
+															<input
+																type="hidden"
+																name="application_id"
+																value={current_applicant}
+															/>
+															<p class="text-sm text-red-600">{$responseErrors.application_id}</p>
+															{#if $responseMessage != undefined}
+																<p class="text-sm text-emerald-600">
+																	{'✓' + ' ' + $responseMessage}
+																</p>
+															{/if}
+															<Button
+																type="submit"
+																class="bg-destructive"
+																onclick={() => {
+																	setTimeout(() => {
+																		window.location.href = '/dashboard/jobs/applicants';
+																	}, 3000);
+																}}>Reject & Delete</Button
+															>
 														</Dialog.Footer>
 													</div>
 												</form>

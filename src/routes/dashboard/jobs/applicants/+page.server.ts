@@ -1,4 +1,4 @@
-import { MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/private';
+import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect, type Actions } from '@sveltejs/kit';
@@ -193,7 +193,7 @@ export const actions: Actions = {
 		});
 
 		transporter.sendMail({
-			from: MAIL_USERNAME,
+			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 			to: applicant.Email,
 			subject:
 				'[Follow-Up]:' +
@@ -264,13 +264,29 @@ export const actions: Actions = {
 			setError(declineForm, 'Job not found');
 			return { declineForm };
 		}
+		// Find the application for this job
+		const application = await db
+			.select()
+			.from(JobApplications)
+			.where(and(eq(JobApplications.JobsId, job_id), eq(JobApplications.UserId, user.Id)))
+			.then((res) => res[0]);
+
+		if (!application?.UserId) {
+			setError(declineForm, 'application_id', 'Application not found');
+			return { declineForm };
+		}
 
 		// Find the applicant we're trying to contact
 		const applicant = await db
 			.select()
 			.from(Users)
-			.where(eq(Users.Id, declineForm.data.application_id))
+			.where(eq(Users.Id, application.UserId))
 			.then((res) => res[0]);
+
+		if (!applicant) {
+			setError(declineForm, 'application_id', 'Applicant not found');
+			return { declineForm };
+		}
 
 		// Spin up nodemailer
 		const transporter = nodemailer.createTransport({
@@ -284,16 +300,19 @@ export const actions: Actions = {
 		});
 
 		transporter.sendMail({
-			from: MAIL_USERNAME,
+			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 			to: applicant.Email,
-			subject: 'Application declined',
-			text: declineForm.data.decline_reason
+			subject: '[Notice]:' + ' ' + 'Application rejected for position' + ' ' + job.Title,
+			text: `We're sorry, but your application for the job position has been rejected for the position ${job.Title} because:\n\n${declineForm.data.decline_reason}`
 		});
 
 		// Set the job application status to DECLINED
-		await db.update(JobApplications).set({ Status: 'declined' }).where(eq(Jobs.Id, job_id));
+		await db
+			.update(JobApplications)
+			.set({ Status: 'rejected' })
+			.where(eq(JobApplications.Id, application.Id));
 
-		return setMessage(declineForm, 'Response sent successfully');
+		return setMessage(declineForm, 'Job application declined');
 	}
 };
 
