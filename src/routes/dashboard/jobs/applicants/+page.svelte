@@ -7,18 +7,20 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
+	import { Progress } from '$lib/components/vendor/ui/progress';
 	import Textarea from '$lib/components/vendor/ui/textarea/textarea.svelte';
 	import { cn } from '$lib/components/vendor/utils.js';
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
-	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { type PageData } from './$types.js';
 
 	const { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
+	let progress_value = $state(0);
+	let target_hit = $state(false);
 
 	const dataLength = data.dataLength;
 
@@ -56,6 +58,18 @@
 			} catch {
 				// Ignored
 			}
+
+			// If the response is successful, update the progressbar and reload the page
+			if (result.status === 200) {
+				setTimeout(() => {
+					progress_value = 100;
+				}, 250);
+				progress_value = 100;
+				target_hit = true;
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
+			}
 		}
 		//dataType: 'json'
 	});
@@ -74,12 +88,12 @@
 			// console.log(result);
 			// F***ing hack since the result is not being outputted
 			try {
-				$responseErrors = result.data?.declineForm.errors;
+				$declineErrors = result.data?.declineForm.errors;
 			} catch (e) {
 				console.log(e);
 			}
 			try {
-				$responseMessage = result.data?.form.message;
+				$declineMessage = result.data?.form.message;
 			} catch {
 				// Ignored
 			}
@@ -95,8 +109,8 @@
 	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
-<SuperDebug data={$responseForm} />
-<SuperDebug data={$declineForm} />
+<!-- <SuperDebug data={$responseForm} /> -->
+<!-- <SuperDebug data={$declineForm} /> -->
 <page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
 	<section class="header text-archivo flex flex-col space-y-1">
 		<h1 class="text-5xl font-extralight lg:text-6xl">
@@ -321,11 +335,19 @@
 														<input type="hidden" name="application_id" value={current_applicant} />
 														<p class="text-sm text-red-600">{$responseErrors.application_id}</p>
 														{#if $responseMessage != undefined}
-															<p class="text-sm text-emerald-600">
-																{'✓' + ' ' + $responseMessage}
-															</p>
+															<Progress value={progress_value} max={100} class="w-full" />
+															{#if target_hit}
+																<p class="text-sm text-emerald-600">
+																	{'✓' + ' ' + $responseMessage}
+																</p>
+															{/if}
 														{/if}
-														<Button type="submit">Accept & Follow-up</Button>
+														<Button
+															type="submit"
+															onclick={() => {
+																progress_value = 30;
+															}}>Accept & Follow-up</Button
+														>
 													</Dialog.Footer>
 												</form>
 											</Dialog.Content>
@@ -371,17 +393,26 @@
 																name="application_id"
 																value={current_applicant}
 															/>
-															<p class="text-sm text-red-600">{$responseErrors.application_id}</p>
-															{#if $responseMessage != undefined}
-																<p class="text-sm text-emerald-600">
-																	{'✓' + ' ' + $responseMessage}
-																</p>
+															<p class="text-sm text-red-600">{$declineErrors.application_id}</p>
+															{#if $declineMessage != undefined}
+																<Progress value={progress_value} max={100} class="w-full" />
+																{#if target_hit}
+																	<p class="text-sm text-emerald-600">
+																		{'✓' + ' ' + $declineMessage}
+																	</p>
+																{/if}
 															{/if}
 															<Button
-																type="submit"
 																class="bg-destructive"
+																type="submit"
 																onclick={() => {
+																	progress_value = 30;
 																	setTimeout(() => {
+																		progress_value = +40;
+																	}, 1000);
+																	setTimeout(() => {
+																		progress_value = 100;
+																		target_hit = true;
 																		window.location.href = '/dashboard/jobs/applicants';
 																	}, 3000);
 																}}>Reject & Delete</Button
