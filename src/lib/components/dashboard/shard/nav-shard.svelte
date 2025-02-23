@@ -12,7 +12,7 @@
 		<p>{shard_title}</p>
 	</augmented-text>
 
-	<nav-frame class="flex items-center justify-between self-stretch">
+	<nav-frame class="flex items-end justify-between self-stretch">
 		<slot name="shards" />
 	</nav-frame>
 </nav-shard>
