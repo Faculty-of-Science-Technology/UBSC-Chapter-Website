@@ -57,6 +57,7 @@ export const load = async (event) => {
 			...person,
 			Skills: skills.map((skill) => skill.Name),
 			Socials: socials
-		}
+		},
+		isOwner: user.Id === personId
 	};
 };

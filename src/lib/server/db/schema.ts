@@ -1,6 +1,7 @@
 import { relations, sql } from 'drizzle-orm';
 import {
 	boolean,
+	customType,
 	date,
 	integer,
 	pgEnum,
@@ -15,6 +16,37 @@ import {
 
 export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner']);
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
+// Apparently, the bytea type is not supported by drizzle-orm, so we have to create a custom type for it
+// https://stackoverflow.com/a/76499742/10976415
+// Fast implementation
+const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
+	dataType() {
+		return 'bytea';
+	},
+	toDriver(val: Buffer) {
+		return val;
+	},
+	fromDriver(val: unknown) {
+		return (val as Buffer);
+	}
+});
+// Slow-implementation
+// export const bytea = customType<{ data: string; notNull: false; default: false }>({
+// 	dataType() {
+// 		return 'bytea';
+// 	},
+// 	toDriver(val) {
+// 		let newVal = val;
+// 		if (val.startsWith('0x')) {
+// 			newVal = val.slice(2);
+// 		}
+
+// 		return Buffer.from(newVal, 'hex');
+// 	},
+// 	fromDriver(val: unknown) {
+// 		return (val as Buffer).toString('hex');
+// 	}
+// });
 
 export const Users = pgTable('Users', {
 	Id: uuid('id')
@@ -110,22 +142,31 @@ export const JobQuestionResponses = pgTable('JobQuestionResponses', {
 });
 
 export const UserSkills = pgTable('UserSkills', {
-    Id: serial('id').primaryKey(),
-    UserId: uuid('user_id').references(() => Users.Id),
-    Name: varchar('name', { length: 64 }).notNull(),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-	.default(sql`CURRENT_TIMESTAMP`)
-	.notNull()
+	Id: serial('id').primaryKey(),
+	UserId: uuid('user_id').references(() => Users.Id),
+	Name: varchar('name', { length: 64 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const UserSocialLinks = pgTable('UserSocialLinks', {
-    Id: serial('id').primaryKey(),
-    UserId: uuid('user_id').references(() => Users.Id),
-    Platform: varchar('platform', { length: 32 }).notNull(), // 'LinkedIn', 'GitHub', 'Twitter', etc.
-    Url: varchar('url', { length: 255 }).notNull(),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-	.default(sql`CURRENT_TIMESTAMP`)
-	.notNull()
+	Id: serial('id').primaryKey(),
+	UserId: uuid('user_id').references(() => Users.Id),
+	Platform: varchar('platform', { length: 32 }).notNull(), // 'LinkedIn', 'GitHub', 'Twitter', etc.
+	Url: varchar('url', { length: 255 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
+});
+
+export const MediaPool = pgTable('MediaPool', {
+	Id: text('id').primaryKey().unique().notNull(),
+	File: bytea('file').notNull(),
+	MimeType: varchar('mime_type', { length: 64 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 // Database relations

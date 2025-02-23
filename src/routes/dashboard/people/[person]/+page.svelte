@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { PUBLIC_UI_DEFAULT_COVER_IMAGE } from '$env/static/public';
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
+	import Button from '$lib/components/vendor/ui/button/button.svelte';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
 	import { getUserFullName } from '$lib/snippets/names/index.js';
 	import {
 		Calendar,
+		Camera,
 		Code,
 		Database,
 		Github,
@@ -43,13 +45,54 @@
 		Svelte: Terminal,
 		'Node.js': Database
 	};
+
+	let coverPhotoInput: HTMLInputElement;
+	let profilePhotoInput: HTMLInputElement;
+
+	async function handleCoverPhotoChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (!input.files?.length) return;
+
+		const formData = new FormData();
+		formData.append('coverPhoto', input.files[0]);
+
+		const response = await fetch(`/api/users/${person.Id}/cover-photo`, {
+			method: 'POST',
+			body: formData
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			person.CoverPhoto = data.url;
+		}
+	}
+
+	async function handleProfilePhotoChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (!input.files?.length) return;
+
+		const formData = new FormData();
+		formData.append('profilePhoto', input.files[0]);
+
+		const response = await fetch(`/api/users/${person.Id}/profile-photo`, {
+			method: 'POST',
+			body: formData
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			person.ProfilePicture = data.url;
+		}
+	}
 </script>
 
 <page class="min-h-screen bg-gray-50">
 	<!-- Header Section with Cover -->
 	<header class="relative">
 		<!-- Cover Image -->
-		<div class="h-[200px] w-full bg-gradient-to-r from-slate-600 to-slate-800 lg:h-[350px]">
+		<div
+			class="relative h-[200px] w-full bg-gradient-to-r from-slate-600 to-slate-800 lg:h-[350px]"
+		>
 			<!-- Optional: Add cover photo here -->
 			<img
 				alt="CoverPhoto"
@@ -59,6 +102,24 @@
 				class="w-full"
 				style="block-size: 350px; object-fit: cover; object-position: top;"
 			/>
+			{#if data.isOwner}
+				<input
+					type="file"
+					accept="image/*"
+					class="hidden"
+					bind:this={coverPhotoInput}
+					onchange={handleCoverPhotoChange}
+				/>
+				<Button
+					variant="secondary"
+					size="sm"
+					class="absolute bottom-4 right-4"
+					onclick={() => coverPhotoInput.click()}
+				>
+					<Camera class="mr-2 h-4 w-4" />
+					Change Cover
+				</Button>
+			{/if}
 		</div>
 
 		<!-- Profile Header -->
@@ -66,14 +127,34 @@
 			<div class="relative -mt-16 flex flex-col gap-4 lg:-mt-24 lg:flex-row lg:items-end lg:gap-8">
 				<!-- Profile Image -->
 				<div
-					class="h-32 w-32 overflow-hidden rounded-full border-4 border-white bg-white lg:h-48 lg:w-48"
+					class="relative h-32 w-32 overflow-visible rounded-full border-4 border-white bg-white lg:h-48 lg:w-48"
 				>
-					<UserCard.ProfileBanner
-						image={person.ProfilePicture as string}
-						name={getUserFullName(person)}
-						username={person.Username}
-						hireable={person.Hireable}
-					/>
+					<div class="h-full w-full rounded-full overflow-hidden">
+						<UserCard.ProfileBanner
+							class=""
+							image={person.ProfilePicture as string}
+							name={getUserFullName(person)}
+							username={person.Username}
+							hireable={person.Hireable}
+						/>
+					</div>
+					{#if data.isOwner}
+						<input
+							type="file"
+							accept="image/*"
+							class="hidden"
+							bind:this={profilePhotoInput}
+							onchange={handleProfilePhotoChange}
+						/>
+						<Button
+							variant="secondary"
+							size="sm"
+							class="absolute bottom-2 right-2"
+							onclick={() => profilePhotoInput.click()}
+						>
+							<Camera class="h-4 w-4" />
+						</Button>
+					{/if}
 				</div>
 
 				<!-- Name and Title -->
