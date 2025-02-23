@@ -169,6 +169,51 @@ export const MediaPool = pgTable('MediaPool', {
 		.notNull()
 });
 
+export const Agenda = pgTable('Agenda', {
+    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
+    Title: varchar('title', { length: 255 }).notNull(),
+    Subtitle: varchar('subtitle', { length: 255 }),
+    Body: text('body').notNull(),
+    StartTime: timestamp('start_time', { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
+    EndTime: timestamp('end_time', { withTimezone: true }).notNull(),
+    UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+});
+
+export const AgendaEvents = pgTable('AgendaEvents', {
+    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
+    AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'cascade' }),
+    Title: varchar('title', { length: 255 }).notNull(),
+    Subtitle: varchar('subtitle', { length: 255 }),
+    Body: text('body').notNull(),
+    SpeakerName: varchar('speaker_name', { length: 255 }),
+    StartTime: timestamp('start_time', { withTimezone: true }).notNull(),
+    EndTime: timestamp('end_time', { withTimezone: true }).notNull(),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+});
+
+export const Groups = pgTable('Groups', {
+    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
+    Title: varchar('title', { length: 255 }).notNull(),
+    AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'cascade' }),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+});
+
+export const GroupMembers = pgTable('GroupMembers', {
+    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
+    GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'cascade' }),
+    UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
+    CreatedAt: timestamp('__created_at__', { withTimezone: true })
+        .default(sql`CURRENT_TIMESTAMP`)
+        .notNull()
+});
+
 // Database relations
 export const UsersRelations = relations(Users, ({ many }) => ({
 	jobs: many(Jobs),
@@ -221,4 +266,39 @@ export const JobQuestionResponsesRelations = relations(JobQuestionResponses, ({ 
 		fields: [JobQuestionResponses.JobApplicationId],
 		references: [JobApplications.Id]
 	})
+}));
+
+export const AgendaRelations = relations(Agenda, ({ one, many }) => ({
+    creator: one(Users, {
+        fields: [Agenda.UserId],
+        references: [Users.Id]
+    }),
+    groups: many(Groups),
+    events: many(AgendaEvents)
+}));
+
+export const AgendaEventsRelations = relations(AgendaEvents, ({ one }) => ({
+    agenda: one(Agenda, {
+        fields: [AgendaEvents.AgendaId],
+        references: [Agenda.Id]
+    })
+}));
+
+export const GroupsRelations = relations(Groups, ({ one, many }) => ({
+    agenda: one(Agenda, {
+        fields: [Groups.AgendaId],
+        references: [Agenda.Id]
+    }),
+    members: many(GroupMembers)
+}));
+
+export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
+    group: one(Groups, {
+        fields: [GroupMembers.GroupId],
+        references: [Groups.Id]
+    }),
+    user: one(Users, {
+        fields: [GroupMembers.UserId],
+        references: [Users.Id]
+    })
 }));
