@@ -9,6 +9,7 @@
 		Code,
 		Database,
 		Github,
+		Globe,
 		Linkedin,
 		Mail,
 		Phone,
@@ -80,7 +81,6 @@
 					<h1 class="flex gap-2 text-2xl font-bold lg:text-4xl">
 						{person.FirstName}
 						{person.LastName}
-						{person.Hireable}
 						<span class="tracking-wide">
 							{#if person.Hireable}
 								<span class="flex h-full w-fit items-start">
@@ -150,6 +150,16 @@
 						>
 							<Twitter class="h-5 w-5 text-blue-400" />
 							<span>Twitter Profile</span>
+						</a>
+					{/if}
+					{#if person.Socials['Personal Website']}
+						<a
+							href={person.Socials['Personal Website']}
+							target="_blank"
+							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-100"
+						>
+							<Globe class="h-5 w-5" />
+							<span>Personal Website</span>
 						</a>
 					{/if}
 					{#if Object.keys(person.Socials).length === 0}
