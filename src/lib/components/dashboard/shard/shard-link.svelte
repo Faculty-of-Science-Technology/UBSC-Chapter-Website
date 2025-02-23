@@ -13,7 +13,7 @@
 <a href={a11yLink ? a11yLink : '#'}>
 	<button
 		class={cn(
-			'mx-0.5 flex flex-col items-start justify-center rounded-t-lg px-10 py-2 text-center hover:border-b-2 hover:border-slate-400',
+			'mx-0.5 flex flex-col items-start justify-center rounded-t-lg px-10 py-2 text-center border-b-2 border-transparent hover:border-slate-400',
 			active ? 'border-b-2 border-slate-900' : ''
 		)}
 		{...rest}
