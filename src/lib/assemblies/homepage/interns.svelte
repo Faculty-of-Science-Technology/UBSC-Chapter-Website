@@ -1,15 +1,13 @@
 <script lang="ts">
+	import type { AvatarData } from '$lib/assemblies';
 	import * as Avatar from '$lib/components/vendor/ui/avatar';
+	import { Badge } from '$lib/components/vendor/ui/badge';
 	import * as HoverCard from '$lib/components/vendor/ui/hover-card';
 	import * as Tabs from '$lib/components/vendor/ui/tabs/index';
+	import { cn } from '$lib/components/vendor/utils';
 	import { Link } from 'lucide-svelte';
 	type PropsData = {
-		avatar_data: {
-			id: string;
-			image_url: string;
-			name: string;
-			bio: string;
-		}[];
+		avatar_data: AvatarData[];
 	};
 	const { avatar_data }: PropsData = $props();
 </script>
@@ -37,21 +35,32 @@
 				{#each avatar_data as avatar}
 					<HoverCard.Root>
 						<HoverCard.Trigger>
-							<Avatar.Root class="size-20">
-								<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
-								<Avatar.Fallback>
-									{avatar.name?.[0] || '?'}
-								</Avatar.Fallback>
-							</Avatar.Root>
+							<a href="/dashboard/people/{avatar.id}"
+								><Avatar.Root
+									class={cn('size-20', avatar.hireable ? 'border-4 border-success' : '')}
+								>
+									<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
+									<Avatar.Fallback>
+										{avatar.name?.[0] || '?'}
+									</Avatar.Fallback>
+								</Avatar.Root></a
+							>
 						</HoverCard.Trigger>
 						<HoverCard.Content class="max-w-72">
 							<div class="flex justify-between space-x-4">
-								<Avatar.Root>
+								<Avatar.Root class={cn(avatar.hireable ? 'border-2 border-success' : '')}>
 									<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
 									<Avatar.Fallback>{avatar.name?.[0] || '?'}</Avatar.Fallback>
 								</Avatar.Root>
 								<div class="space-y-1">
 									<h4 class="text-sm font-semibold">{avatar.name}</h4>
+									<span class="tracking-wide">
+										{#if avatar.hireable}
+											<span class="flex h-fit w-fit items-start">
+												<Badge class="bg-success">Hireable</Badge>
+											</span>
+										{/if}
+									</span>
 									<p class="text-sm">{avatar.bio}</p>
 									<div class="flex items-center pt-2 text-sm">
 										<a

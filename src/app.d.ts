@@ -12,6 +12,7 @@ declare global {
 				LastName: string;
 				Email: string;
 				Phone: string;
+				Location: string;
 				ProfilePicture: string;
 				CoverPhoto: string;
 				Username: string;

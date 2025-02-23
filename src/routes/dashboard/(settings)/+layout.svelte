@@ -40,7 +40,7 @@
 				e.preventDefault();
 				await goto('/dashboard/settings/notifications');
 			}
-			if (e.key === 'a' && (e.metaKey || e.ctrlKey)) {
+			if (e.key === 'f' && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				await goto('/dashboard/settings/setup-agenda');
 			}
@@ -107,7 +107,7 @@
 						<svelte:fragment slot="start-icon">
 							<LucideCalendarCog class="size-5" />
 						</svelte:fragment>
-						⌘A
+						⌘F
 					</MenuItem>
 				</a>
 				<a href="/dashboard/settings/manage-users" aria-label="Manage Users">

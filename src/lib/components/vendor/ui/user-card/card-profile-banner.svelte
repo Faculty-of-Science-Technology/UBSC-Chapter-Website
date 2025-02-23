@@ -15,6 +15,7 @@
 		image,
 		name,
 		username,
+		hireable,
 		children,
 		...restProps
 	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
@@ -22,6 +23,7 @@
 		image?: string;
 		name?: string;
 		username?: string;
+		hireable?: boolean;
 	} = $props();
 
 	let accent_color = $state('');
@@ -62,7 +64,10 @@
 		style={`inline-size: 100%; block-size: 107px; background-color: ${accent_color}`}
 	></div>
 	<avatar-wrapper class="flex w-full items-center pr-12">
-		<Avatar.Root class="mx-4 size-28" style="margin-block-start: -3rem">
+		<Avatar.Root
+			class={cn(hireable ? 'border-8 border-success' : '', 'mx-4 size-28')}
+			style="margin-block-start: -3rem"
+		>
 			<Avatar.Image src={image} alt={'@' + username} />
 			<Avatar.Fallback>
 				{#if name}

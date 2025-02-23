@@ -1,12 +1,12 @@
 <script lang="ts">
+	import { cn } from '$lib/components/vendor/utils.js';
 	import { Select as SelectPrimitive, type WithoutChild } from 'bits-ui';
 	import Check from 'lucide-svelte/icons/check';
-	import { cn } from '$lib/components/vendor/utils.js';
 
 	let {
 		ref = $bindable(null),
 		class: className,
-		value,
+		value = $bindable(''),
 		label,
 		children: childrenProp,
 		...restProps

@@ -61,6 +61,7 @@
 		"jsonwebtoken": "^9.0.2",
 		"nodemailer": "^6.10.0",
 		"sanitize-html": "^2.13.1",
-		"uuid": "^11.0.3"
+		"uuid": "^11.0.3",
+		"validator": "^13.12.0"
 	}
 }

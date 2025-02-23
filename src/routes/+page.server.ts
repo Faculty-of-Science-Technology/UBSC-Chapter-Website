@@ -1,10 +1,6 @@
+import type { AvatarData } from '$lib/assemblies';
 import { db } from '$lib/server/db';
 import type { PageServerLoad } from './$types';
-
-interface AvatarData {
-	image_url: string;
-	name: string;
-}
 
 export const load: PageServerLoad = async () => {
 	// Get all users who are interns (modify the query based on your database schema)
@@ -15,6 +11,7 @@ export const load: PageServerLoad = async () => {
 			FirstName: true,
 			LastName: true,
 			Bio: true,
+			Hireable: true,
 			ProfilePicture: true
 		},
 		limit: 50 // Limit to 50 interns for the grid
@@ -24,7 +21,8 @@ export const load: PageServerLoad = async () => {
 		id: user.Id,
 		image_url: user.ProfilePicture ?? '',
 		name: `${user.FirstName} ${user.LastName}`,
-		bio: user.Bio
+		bio: user.Bio,
+		hireable: user.Hireable
 	}));
 
 	return {

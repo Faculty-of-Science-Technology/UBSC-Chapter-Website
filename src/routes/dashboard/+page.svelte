@@ -46,7 +46,7 @@
 						<h1>{user.FirstName + ' ' + user.LastName}</h1>
 						<span class="tracking-wide">
 							{#if user.Hireable}
-								<Badge>Hireable</Badge>
+								<Badge class="bg-success">Hireable</Badge>
 							{/if}
 						</span>
 					</UserCard.Title>

@@ -52,7 +52,7 @@
 			<!-- Optional: Add cover photo here -->
 			<img
 				alt="CoverPhoto"
-				src={(person.CoverPhoto === null || person.CoverPhoto?.trim() === '')
+				src={person.CoverPhoto === null || person.CoverPhoto?.trim() === ''
 					? PUBLIC_UI_DEFAULT_COVER_IMAGE
 					: person.CoverPhoto}
 				class="w-full"
@@ -71,6 +71,7 @@
 						image={person.ProfilePicture as string}
 						name={getUserFullName(person)}
 						username={person.Username}
+						hireable={person.Hireable}
 					/>
 				</div>
 
@@ -79,11 +80,14 @@
 					<h1 class="flex gap-2 text-2xl font-bold lg:text-4xl">
 						{person.FirstName}
 						{person.LastName}
-						{#if person.Hireable}
-							<span class="flex h-full w-fit items-start">
-								<Badge class="ml-2">Hireable</Badge>
-							</span>
-						{/if}
+						{person.Hireable}
+						<span class="tracking-wide">
+							{#if person.Hireable}
+								<span class="flex h-full w-fit items-start">
+									<Badge class="ml-2 bg-success">Hireable</Badge>
+								</span>
+							{/if}
+						</span>
 					</h1>
 					<p class="text-lg text-slate-600">{person.Bio ?? "Hey there! I'm using talentpool!"}</p>
 				</div>
