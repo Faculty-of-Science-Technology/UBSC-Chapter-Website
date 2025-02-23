@@ -1,9 +1,9 @@
-import { IS_DEVELOPMENT } from '$env/static/private';
+import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { UserSkills, UserSocialLinks, Users } from '$lib/server/db/schema';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
-import { setError, superValidate } from 'sveltekit-superforms';
+import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import validator from 'validator';
 import { z } from 'zod';
@@ -40,14 +40,18 @@ const profileSchema = z.object({
 		.max(255, { message: 'Your location is too long. Try something else' })
 		.optional(),
 	hireable: z.boolean({ required_error: 'You must show whether you are hireable' }),
-	skills: z.array(z.string()),
-	socials: z.array(socialLinkSchema)
+	skills: z
+		.array(z.string())
+		.max(15, { message: 'You are too skillful. You can only add up to 15 skills' }),
+	socials: z
+		.array(socialLinkSchema)
+		.max(4, { message: 'Social links are currently capped to 4 links' })
 });
 
 export const load = async ({ locals }) => {
 	if (!locals.user || locals.user == undefined) {
 		// Throw a 401 error if the user is not logged in
-		throw error(401, { message: 'You must be logged in to view this page.' });
+		throw redirect(301, '/auth/login');
 	}
 	const form = await superValidate(zod(profileSchema));
 
@@ -90,10 +94,13 @@ export const actions = {
 		}
 		const form = await superValidate(request, zod(profileSchema));
 
-		if (IS_DEVELOPMENT) {
+		if (IS_DEVELOPMENT && DEBUG) {
+			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
 		}
 		if (!form.valid) {
+			setError(form, 'You have some errors in your form. Please fix them and try again.');
 			return fail(400, { form, user: locals.user });
 		}
 		try {
@@ -136,6 +143,7 @@ export const actions = {
 				);
 			}
 
+			setMessage(form, 'Profile updated successfully');
 			return { form, user: locals.user };
 		} catch (e) {
 			if (IS_DEVELOPMENT) console.log(e);

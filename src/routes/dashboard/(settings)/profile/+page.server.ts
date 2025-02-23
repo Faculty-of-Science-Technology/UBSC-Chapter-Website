@@ -1,10 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+// If we have it already, then why bother creating it again
+import { actions, load } from '../settings/+page.server';
 
-export const load = async (event) => {
-	const user = event.locals.user;
-	if (!user) {
-		throw redirect(301, '/auth/login');
-	}
-
-	return { user };
-};
+export { actions, load };

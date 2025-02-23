@@ -52,13 +52,13 @@
 
 	function addSkill() {
 		if (skillInput && !skills.includes(skillInput)) {
-			$form.skills = [...$form.skills, skillInput];
+			$form.skills = [...$form.skills, skillInput.trim()];
 			skillInput = '';
 		}
 	}
 
 	function removeSkill(skill: string) {
-		$form.skills = skills.filter((s) => s !== skill);
+		$form.skills = $form.skills.filter((s) => s !== skill);
 	}
 
 	// Social links interface
@@ -131,7 +131,7 @@
 						<Label for="username">Username</Label>
 						<p class="text-sm text-destructive">{$errors.username}</p>
 						<Input
-							{...constraints.username}
+							{...$constraints.username}
 							placeholder="@alexdev404"
 							name="username"
 							bind:value={$form.username}
@@ -146,7 +146,7 @@
 						<Label for="username">Phone</Label>
 						<p class="text-sm text-destructive">{$errors.phone}</p>
 						<Input
-							{...constraints.phone}
+							{...$constraints.phone}
 							placeholder="501 601-0123"
 							type="tel"
 							name="phone"
@@ -234,13 +234,14 @@
 							<Textarea
 								name="bio"
 								bind:value={$form.bio}
-								{...constraints.bio}
+								{...$constraints.bio}
 								placeholder="Hey there, welcome to my profile. Feel free to get in touch or leave a message!"
 							/>
 						</div>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="location">Location</Label>
+						<p class="text-sm text-muted-foreground">Where are you currently based?</p>
 						<Command.Root class="w-full rounded-lg border">
 							<Command.Input
 								class="w-full"
@@ -331,7 +332,6 @@
 								{/if}
 							{/if}
 						</Command.Root>
-						<p class="text-sm text-muted-foreground">Where are you currently based?</p>
 					</div>
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -347,6 +347,7 @@
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label>Skills</Label>
+						<p class="text-sm text-muted-foreground">Add skills that showcase your expertise</p>
 						<div class="flex flex-wrap gap-2">
 							{#each $form.skills as skill}
 								<Badge variant="secondary" class="gap-1">
@@ -360,7 +361,7 @@
 						<div class="flex gap-2">
 							<Input
 								type="text"
-								placeholder="Add a skill (e.g. JavaScript)"
+								placeholder="Add a skill and press Enter"
 								bind:value={skillInput}
 								onkeydown={(e) => e.key === 'Enter' && (e.preventDefault(), addSkill())}
 							/>
@@ -368,7 +369,14 @@
 								<Plus class="h-4 w-4" />
 							</Button>
 						</div>
-						<p class="text-sm text-muted-foreground">Add skills that showcase your expertise</p>
+						<p class="text-sm text-muted-foreground">Examples: JavaScript, Team Building</p>
+						<p class="text-sm text-destructive">
+							{typeof $errors.skills === 'object' ? Object.values($errors.skills).join(', ') : $errors.skills}
+						</p>
+						{#if $form.skills.length >= 12}
+							<p class="text-sm text-destructive">You can add up to {15 - $form.skills.length} more skill(s).</p>
+						{/if}
+						
 					</div>
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -402,8 +410,12 @@
 						</p>
 					</div>
 
-					<div>
+					<div class="flex flex-col space-y-1">
 						<Button type="submit">Update profile</Button>
+						<p class="text-sm text-destructive">
+							{$errors._errors}
+						</p>
+						<p class="text-sm text-success">{$message}</p>
 					</div>
 				</div>
 			</div>
