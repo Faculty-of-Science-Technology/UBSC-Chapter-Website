@@ -38,7 +38,7 @@
 	const { data: props } = $props();
 	const data: PageData = props;
 
-	const person: PageData['person'] = data.person;
+	let person: PageData['person'] = $state(data.person);
 
 	const skillIcons = {
 		JavaScript: Code,
@@ -46,8 +46,8 @@
 		'Node.js': Database
 	};
 
-	let coverPhotoInput: HTMLInputElement;
-	let profilePhotoInput: HTMLInputElement;
+	let coverPhotoInput = $state<HTMLInputElement | undefined>(undefined);
+	let profilePhotoInput = $state<HTMLInputElement | undefined>(undefined);
 
 	async function handleCoverPhotoChange(event: Event) {
 		const input = event.target as HTMLInputElement;
