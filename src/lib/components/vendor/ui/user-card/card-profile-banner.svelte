@@ -68,7 +68,7 @@
 			class={cn(hireable ? 'border-8 border-success' : '', 'mx-4 size-28')}
 			style="margin-block-start: -3rem"
 		>
-			<Avatar.Image src={image} alt={'@' + username} />
+			<Avatar.Image class="object-cover" src={image} alt={'@' + username} />
 			<Avatar.Fallback>
 				{#if name}
 					{getInitials(name)}
