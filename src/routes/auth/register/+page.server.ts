@@ -12,15 +12,15 @@ import {
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
-import { fail, isRedirect, redirect, type ServerLoad } from '@sveltejs/kit';
+import { generateId } from '$lib/utility/ids';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import Jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import type { Actions } from './$types';
-import { generateId } from '$lib/utility/ids';
+import type { Actions, PageServerLoad } from './$types';
 
 const registerSchema = z
 	.object({
@@ -56,7 +56,7 @@ const registerSchema = z
 		}
 	});
 
-export const load: ServerLoad = async ({ request }) => {
+export const load: PageServerLoad = async ({ request }) => {
 	return await superValidate(request, zod(registerSchema));
 };
 

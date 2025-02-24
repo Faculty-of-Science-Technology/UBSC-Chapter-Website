@@ -7,6 +7,7 @@ import Jwt from 'jsonwebtoken';
 import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+import type { PageServerLoad } from './$types';
 
 const jobSchema = z.object({
 	title: z
@@ -44,7 +45,7 @@ const removeQuestionSchema = z.object({
 	question_id: z.number({ required_error: 'Something went wrong, try again' })
 });
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) {
 		return redirect(301, '/auth/login');
 	}

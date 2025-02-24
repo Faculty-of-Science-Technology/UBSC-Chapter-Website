@@ -1,9 +1,10 @@
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
-import { redirect, type ServerLoad } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import { eq, or } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	const cookies = event.cookies;
 	const url = event.url;
 	const query = url.searchParams;

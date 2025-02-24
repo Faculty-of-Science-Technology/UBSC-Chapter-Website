@@ -1,11 +1,12 @@
 import { ACT_JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db/index.js';
 import { Users } from '$lib/server/db/schema.js';
-import { isRedirect, redirect, type ServerLoad } from '@sveltejs/kit';
+import { isRedirect, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
+import type { PageServerLoad } from './$types';
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	// Get page query parameters
 	const { cookies, url } = event;
 	const query = new URLSearchParams(url.search);

@@ -17,7 +17,7 @@ import {
 import { getUser } from '$lib/functions/users';
 import { db } from '$lib/server/db/index.js';
 import { Users } from '$lib/server/db/schema.js';
-import { fail, isActionFailure, isRedirect, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { fail, isActionFailure, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
@@ -25,6 +25,7 @@ import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+import type { PageServerLoad } from './$types';
 
 interface EmailOptions {
 	email: string;
@@ -42,7 +43,7 @@ const loginSchema = z.object({
 		.trim()
 });
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	const request = event.request;
 	const cookies = event.cookies;
 	const session = cookies.get('session');

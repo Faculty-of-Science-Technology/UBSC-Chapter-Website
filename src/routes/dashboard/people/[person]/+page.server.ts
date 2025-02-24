@@ -1,10 +1,11 @@
 import { IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Users, UserSkills, UserSocialLinks } from '$lib/server/db/schema';
-import { error, redirect, type ServerLoad } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	// Check if user is authenticated
 	const user = event.locals.user;
 	if (!user) {

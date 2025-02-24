@@ -1,12 +1,13 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Agenda, AgendaEvents } from '$lib/server/db/schema';
-import { error, fail, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { error, fail, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import validator from 'validator';
 import { z } from 'zod';
+import type { PageServerLoad } from './$types';
 
 const agendaSchema__remove = z.object({
 	agendaId: z.string().uuid()
@@ -41,7 +42,7 @@ const eventSchema = z.object({
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" })
 });
 
-export const load: ServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		throw error(401, 'Unauthorized');
 	}

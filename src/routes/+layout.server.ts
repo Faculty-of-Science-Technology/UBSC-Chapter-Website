@@ -1,7 +1,7 @@
 import { checkAuth } from '$lib/functions/auth';
-import type { ServerLoad } from '@sveltejs/kit';
+import type { LayoutServerLoad } from './$types';
 
-export const load: ServerLoad = async (event) => {
+export const load: LayoutServerLoad = async (event) => {
 	const authenticated = await checkAuth(event);
 	return {
 		authenticated: authenticated

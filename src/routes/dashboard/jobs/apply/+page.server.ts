@@ -17,12 +17,13 @@ import {
 	Questions,
 	Users
 } from '$lib/server/db/schema';
-import { isRedirect, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+import type { PageServerLoad } from './$types';
 
 const JobApplicationSchema = z.object({
 	first_name: z
@@ -72,7 +73,7 @@ const JobApplicationSchema = z.object({
 	)
 });
 
-export const load: ServerLoad = async (event) => {
+export const load: PageServerLoad = async (event) => {
 	if (!event.locals.user) throw redirect(301, '/auth/login');
 
 	// Get page query parameters
