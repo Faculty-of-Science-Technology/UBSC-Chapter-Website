@@ -21,6 +21,7 @@ import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
+import { randomColor } from '$lib/utility/color';
 import type { Actions, PageServerLoad } from './$types';
 
 const registerSchema = z
@@ -86,7 +87,8 @@ export const actions: Actions = {
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
 				Username: 'user-' + generateId(8),
-				ProfilePicture: DEFAULT_PROFILE_PICTURE + super_form.data.full_name,
+				ProfilePicture:
+					DEFAULT_PROFILE_PICTURE + super_form.data.full_name + '&background=' + randomColor(),
 				ActivationCode: activation_code
 			});
 			cookies.set('message_title', 'Check Your Inbox', { path: '/' });
