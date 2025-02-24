@@ -1,5 +1,6 @@
 import {
 	ACT_JWT_SECRET,
+	DEFAULT_PROFILE_PICTURE,
 	IS_DEVELOPMENT,
 	MAIL_DISPLAYNAME,
 	MAIL_PASSWORD,
@@ -85,6 +86,7 @@ export const actions: Actions = {
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
 				Username: 'user-' + generateId(8),
+				ProfilePicture: DEFAULT_PROFILE_PICTURE + super_form.data.full_name,
 				ActivationCode: activation_code
 			});
 			cookies.set('message_title', 'Check Your Inbox', { path: '/' });
