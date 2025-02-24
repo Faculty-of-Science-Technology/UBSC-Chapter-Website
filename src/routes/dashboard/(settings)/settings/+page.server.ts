@@ -1,7 +1,7 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { UserSkills, UserSocialLinks, Users } from '$lib/server/db/schema';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -48,7 +48,7 @@ const profileSchema = z.object({
 		.max(4, { message: 'Social links are currently capped to 4 links' })
 });
 
-export const load = async ({ locals }) => {
+export const load: ServerLoad = async ({ locals }) => {
 	if (!locals.user || locals.user == undefined) {
 		// Throw a 401 error if the user is not logged in
 		throw redirect(301, '/auth/login');
@@ -87,7 +87,7 @@ export const load = async ({ locals }) => {
 	return { form, user: locals.user };
 };
 
-export const actions = {
+export const actions: Actions = {
 	default: async ({ request, locals }) => {
 		if (!locals.user || locals.user == undefined) {
 			throw error(401, { message: 'You must be logged in to view this page.' });

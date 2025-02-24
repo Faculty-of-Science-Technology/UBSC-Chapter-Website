@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db/index.js';
 import { JobApplications } from '$lib/server/db/schema.js';
-import { error, isHttpError } from '@sveltejs/kit';
+import { error, isHttpError, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
-export const GET = async (event) => {
+export const GET: ServerLoad = async (event) => {
 	// Get page query parameters
 	const url = event.url;
 	const query = new URLSearchParams(url.search);

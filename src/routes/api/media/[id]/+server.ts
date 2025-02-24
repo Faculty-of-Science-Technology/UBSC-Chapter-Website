@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db';
 import { MediaPool } from '$lib/server/db/schema';
-import { error } from '@sveltejs/kit';
+import { error, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
-export async function GET({ params }) {
+export const GET: ServerLoad = async ({params}) => {
     if(params.id === undefined) {
         throw error(400, 'Bad Request');
     }

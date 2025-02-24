@@ -79,9 +79,9 @@
 				$message = result.data.form.message;
 				console.log(result);
 				agendas = [
-					// @ts-ignore - TS doesn't know that the data is valid
+					// @ts-expect-error - TS doesn't know that the data is valid
 					...agendas,
-					// @ts-ignore - TS doesn't know that the data is valid
+					// @ts-expect-error - doesn't know that the data is valid
 					{
 						// One really strange monkey patch
 						Id: 'unused',

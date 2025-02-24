@@ -1,7 +1,7 @@
 import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
-import { redirect, type Actions } from '@sveltejs/kit';
+import { redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { and, count, eq } from 'drizzle-orm';
 import nodemailer from 'nodemailer';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
@@ -32,7 +32,7 @@ const DeclinedReason = z.object({
 	decline_reason: z.string().default('No reason provided.')
 });
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	const url = event.url;
 	const query = url.searchParams;
 	// Try to coerce the page query parameter to a number

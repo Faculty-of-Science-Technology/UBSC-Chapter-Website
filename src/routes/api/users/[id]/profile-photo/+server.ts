@@ -1,10 +1,10 @@
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
 import { uploadImage } from '$lib/server/upload'; // You'll need to implement this
-import { error, json } from '@sveltejs/kit';
+import { error, json, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
-export async function POST({ params, request, locals }) {
+export const POST: ServerLoad = async ({ params, request, locals }) => {
 	if (!locals.user) {
 		throw error(401, 'Unauthorized');
 	}
@@ -25,4 +25,4 @@ export async function POST({ params, request, locals }) {
 	await db.update(Users).set({ ProfilePicture: url }).where(eq(Users.Id, params.id));
 
 	return json({ url });
-}
+};

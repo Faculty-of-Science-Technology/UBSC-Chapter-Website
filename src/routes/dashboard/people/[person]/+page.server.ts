@@ -1,10 +1,10 @@
 import { IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Users, UserSkills, UserSocialLinks } from '$lib/server/db/schema';
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	// Check if user is authenticated
 	const user = event.locals.user;
 	if (!user) {
@@ -12,6 +12,13 @@ export const load = async (event) => {
 	}
 	// Get the person ID from the URL
 	const personId = event.params.person;
+
+	if (personId === undefined) {
+		throw error(404, {
+			message: 'Person not found'
+		});
+	}
+
 	// Fetch the person's data
 	const person = await db
 		.select()
@@ -20,7 +27,7 @@ export const load = async (event) => {
 		.limit(1)
 		.then((res) => res[0])
 		.catch((e) => {
-            if(IS_DEVELOPMENT) console.log(e);
+			if (IS_DEVELOPMENT) console.log(e);
 			throw error(404, {
 				message: 'Person not found'
 			});

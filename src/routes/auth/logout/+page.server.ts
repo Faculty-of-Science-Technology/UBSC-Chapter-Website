@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 
-export const load = (event) => {
+export const load: ServerLoad = (event) => {
 	// Clear all cookies
 	const cookies = event.cookies;
 

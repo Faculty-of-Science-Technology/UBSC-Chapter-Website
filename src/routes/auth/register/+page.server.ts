@@ -12,7 +12,7 @@ import {
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
-import { fail, isRedirect, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect, type ServerLoad } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import Jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
@@ -20,6 +20,7 @@ import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
 import type { Actions } from './$types';
+import { generateId } from '$lib/utility/ids';
 
 const registerSchema = z
 	.object({
@@ -55,7 +56,7 @@ const registerSchema = z
 		}
 	});
 
-export const load = async ({ request }) => {
+export const load: ServerLoad = async ({ request }) => {
 	return await superValidate(request, zod(registerSchema));
 };
 
@@ -83,6 +84,7 @@ export const actions: Actions = {
 				LastName: super_form.data.full_name.split(' ')[1].trim(),
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
+				Username: 'user-' + generateId(8),
 				ActivationCode: activation_code
 			});
 			cookies.set('message_title', 'Check Your Inbox', { path: '/' });

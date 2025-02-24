@@ -27,3 +27,4 @@ src/lib/paraglide
 
 .vercel
 dbml-error.log
+.env*.local

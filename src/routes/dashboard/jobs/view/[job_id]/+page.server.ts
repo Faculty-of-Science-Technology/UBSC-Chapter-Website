@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db';
 import { Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 import { eq, or } from 'drizzle-orm';
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	const { url } = event;
 
 	const resourceId = url.pathname.split('/').pop();

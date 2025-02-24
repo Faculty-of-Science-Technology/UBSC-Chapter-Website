@@ -1,9 +1,9 @@
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 import { count, eq, inArray } from 'drizzle-orm';
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	const cookies = event.cookies;
 	const url = event.url;
 	const query = url.searchParams;
@@ -61,7 +61,7 @@ export const load = async (event) => {
 		.orderBy(JobApplications.JobsId)
 		.limit(100) // Adjust the limit as needed
 		.then((apps) => {
-			const grouped: Record<number, typeof apps> = {};
+			const grouped = {};
 			apps.forEach((app) => {
 				if (!grouped[app.JobsId!]) {
 					grouped[app.JobsId!] = [];

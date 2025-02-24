@@ -1,7 +1,7 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Agenda, AgendaEvents } from '$lib/server/db/schema';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -41,7 +41,7 @@ const eventSchema = z.object({
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" })
 });
 
-export const load = async ({ locals }) => {
+export const load: ServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		throw error(401, 'Unauthorized');
 	}
@@ -58,7 +58,7 @@ export const load = async ({ locals }) => {
 	return { form, removeAgendaForm, agendas, user: locals.user, debug: DEBUG && IS_DEVELOPMENT };
 };
 
-export const actions = {
+export const actions: Actions = {
 	addAgenda: async ({ request, locals }) => {
 		if (!locals.user) {
 			throw error(401, 'Unauthorized');

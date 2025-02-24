@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoad } from '@sveltejs/kit';
 
-export const load = ({ cookies }) => {
+export const load: ServerLoad = ({ cookies }) => {
 	const message_title = cookies.get('message_title');
 	const message_title2 = cookies.get('message_title2');
 	const message_description = cookies.get('message_description');

@@ -17,7 +17,7 @@ import {
 import { getUser } from '$lib/functions/users';
 import { db } from '$lib/server/db/index.js';
 import { Users } from '$lib/server/db/schema.js';
-import { fail, isActionFailure, isRedirect, redirect } from '@sveltejs/kit';
+import { fail, isActionFailure, isRedirect, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
@@ -42,7 +42,7 @@ const loginSchema = z.object({
 		.trim()
 });
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	const request = event.request;
 	const cookies = event.cookies;
 	const session = cookies.get('session');
@@ -53,7 +53,7 @@ export const load = async (event) => {
 	return await superValidate(request, zod(loginSchema));
 };
 
-export const actions = {
+export const actions: Actions = {
 	login: async (event) => {
 		const formData = await event.request.formData();
 		const form = Object.fromEntries(await formData);

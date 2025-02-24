@@ -1,7 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Jobs, Questions } from '$lib/server/db/schema';
-import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
+import { isRedirect, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { message, setError, superValidate } from 'sveltekit-superforms';
@@ -44,7 +44,7 @@ const removeQuestionSchema = z.object({
 	question_id: z.number({ required_error: 'Something went wrong, try again' })
 });
 
-export const load = async (event) => {
+export const load: ServerLoad = async (event) => {
 	if (!event.locals.user) {
 		return redirect(301, '/auth/login');
 	}
