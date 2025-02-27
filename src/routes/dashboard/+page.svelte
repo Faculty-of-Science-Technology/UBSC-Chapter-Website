@@ -54,7 +54,7 @@
 						<UserCard.Description>{user.Bio}</UserCard.Description>
 						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 							<Calendar strokeWidth="2" size="16" />
-							<p>Joined {new Date(user.CreatedAt).toLocaleDateString()}</p>
+							<p>Joined {user.CreatedAt.toLocaleDateString()}</p>
 						</div>
 					</card-description>
 				</UserCard.Content>
