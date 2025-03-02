@@ -6,9 +6,9 @@ WORKDIR /usr/src/neon
 
 # Install dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential libtool libreadline-dev zlib1g-dev flex bison libseccomp-dev \
-    libssl-dev clang pkg-config libpq-dev cmake postgresql-client protobuf-compiler \
-    libprotobuf-dev libcurl4-openssl-dev openssl python3-poetry lsof libicu-dev \
+    bison build-essential clang cmake flex libcurl4-openssl-dev libicu-dev \
+    libpq-dev libprotobuf-dev libreadline-dev libseccomp-dev libssl-dev libtool \
+    lsof openssl pkg-config postgresql-client protobuf-compiler python3-poetry zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Rust
@@ -22,8 +22,9 @@ RUN git clone --recursive https://github.com/neondatabase/neon.git .
 RUN BUILD_TYPE=release make -j$(nproc) -s
 
 # Remove all directories in the release folder except for the files
-RUN cd /usr/src/neon/target/release && \
-    find . -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+WORKDIR /usr/src/neon/target/release
+RUN find . -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+WORKDIR /usr/src/neon
 
 # Final stage
 FROM rust:bookworm
@@ -34,15 +35,9 @@ WORKDIR /usr/src/neon
 # Copy the built binaries from the builder stage
 COPY --from=builder /usr/src/neon/target/release /usr/src/neon
 COPY --from=builder /usr/src/neon/pg_install /usr/src/neon/pg_install
-
-# Expose ports
-EXPOSE 50051 64000 5454 55432 55434
-
-# Create Postgres User
-RUN useradd -m -s /bin/bash postgres
-
-# Change ownership of the directory to the non-root user
-RUN chown -R postgres:postgres /usr/src/neon
+# Create Postgres User and set ownership
+RUN useradd -m -s /bin/bash postgres && \
+    chown -R postgres:postgres /usr/src/neon
 
 # Switch to the non-root user
 USER postgres
@@ -54,8 +49,16 @@ RUN ./neon_local init && \
     ./neon_local endpoint create main && \
     ./neon_local stop
 
+# Set the stopsignal
+STOPSIGNAL SIGINT
+
+# Expose ports
+EXPOSE 50051 64000 5454 55432 55434 1235
+
+# Start Neon and create initial tenant and compute node
 # Start Neon and create initial tenant and compute node
 CMD ["/bin/bash", "-c", "\
+    pkill -f postgres || true && \
     ./neon_local start && \
     ./neon_local endpoint start main && \
     tail -f /dev/null"]
