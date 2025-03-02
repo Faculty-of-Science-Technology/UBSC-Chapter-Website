@@ -1,0 +1,29 @@
+# Build Neon and Cloudbeaver
+services:
+  neon:
+    build:
+      dockerfile: Dockerfile.neon
+    container_name: neon
+    ports:
+      - "50051:50051"
+      - "64000:64000"
+      - "5454:5454"
+      - "55432:55432"
+      - "55434:55434"
+  web-admin:
+    image: dbeaver/cloudbeaver:latest
+    container_name: neon-cloudbeaver
+    ports:
+      - "8978:8978"
+    depends_on:
+      - neon
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: talentpool
+    ports:
+      - "3000:3000"
+    depends_on:
+      - neon
+      - web-admin
