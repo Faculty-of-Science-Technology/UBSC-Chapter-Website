@@ -24,8 +24,12 @@ const agendaSchema = z.object({
 		.string()
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" }),
 	endTime: z
-		.string()
+	.string()
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" })
+});
+
+const eventSchema__remove = z.object({
+	eventId: z.string().uuid()
 });
 
 const eventSchema = z.object({
@@ -47,7 +51,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw error(401, 'Unauthorized');
 	}
 	const form = await superValidate(zod(agendaSchema));
+	const addEventForm = await superValidate(zod(eventSchema));
 	const removeAgendaForm = await superValidate(zod(agendaSchema__remove));
+	const removeEventForm = await superValidate(zod(eventSchema__remove));
 	const agendas = await db.query.Agenda.findMany({
 		with: {
 			events: true,
@@ -56,7 +62,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
 	});
 
-	return { form, removeAgendaForm, agendas, user: locals.user, debug: DEBUG && IS_DEVELOPMENT };
+	return { form, addEventForm, removeAgendaForm, removeEventForm, agendas, user: locals.user, debug: DEBUG && IS_DEVELOPMENT };
 };
 
 export const actions: Actions = {
@@ -105,7 +111,11 @@ export const actions: Actions = {
 			setError(form, 'You have some errors in your form. Please fix them and try again.');
 			return fail(400, { form });
 		}
-
+		if (IS_DEVELOPMENT && DEBUG) {
+			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+			console.log('To disable this, set DEBUG to false in your .env file');
+			console.log('form', form);
+		}
 		// Verify agenda ownership
 		const agenda = await db.query.Agenda.findFirst({
 			where: (agenda, { eq }) => eq(agenda.Id, form.data.agendaId)
@@ -115,9 +125,19 @@ export const actions: Actions = {
 			throw error(403, 'Forbidden');
 		}
 
-		await db.insert(AgendaEvents).values(form.data);
+		const phonyEvent = {
+			Title: form.data.title,
+			Subtitle: form.data.subtitle,
+			Body: form.data.body,
+			SpeakerName: form.data.speakerName,
+			StartTime: new Date(form.data.startTime),
+			EndTime: new Date(form.data.endTime),
+			AgendaId: form.data.agendaId
+		};
 
-		return { form };
+		await db.insert(AgendaEvents).values(phonyEvent);
+
+		return { addEventForm: form, phonyEvent };
 	},
 
 	deleteAgenda: async ({ request, locals }) => {
@@ -140,5 +160,27 @@ export const actions: Actions = {
 
 		setMessage(form, 'Agenda deleted successfully');
 		return { removeAgendaForm: form };
+	},
+
+	deleteEvent: async ({ request, locals }) => {
+		if (!locals.user) {
+			throw error(401, 'Unauthorized');
+		}
+		const form = await superValidate(request, zod(eventSchema__remove));
+		if (IS_DEVELOPMENT && DEBUG) {
+			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+			console.log('To disable this, set DEBUG to false in your .env file');
+			console.log('form', form);
+		}
+
+		if (!form.valid) {
+			setError(form, 'Invalid form data');
+			return fail(400, { form });
+		}
+
+		await db.delete(AgendaEvents).where(eq(AgendaEvents.Id, form.data.eventId));
+
+		setMessage(form, 'Event deleted successfully');
+		return { removeEventForm: form };
 	}
 };

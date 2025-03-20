@@ -3,6 +3,7 @@
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import { ScrollArea } from '$lib/components/vendor/ui/scroll-area/index.js';
 	import * as Sheet from '$lib/components/vendor/ui/sheet';
 	import * as Table from '$lib/components/vendor/ui/table';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
@@ -17,6 +18,47 @@
 	let agendas = $state(data.agendas);
 	let currentErrors = $state({});
 
+	// Remove Event Form
+	const {
+		form: removeEventForm,
+		errors: removeEventErrors,
+		message: removeEventMessage,
+		enhance: removeEventEnhance
+	} = superForm(data.removeEventForm, {
+		dataType: 'json',
+		taintedMessage: null,
+		resetForm: false,
+		invalidateAll: false,
+		onSubmit: () => {
+			if (!confirm('Are you sure you want to delete this event?')) {
+				throw new Error('User cancelled the operation');
+			}
+		},
+		onResult: ({ result }) => {
+			if (result.type === 'failure') {
+				if (result.data === undefined) {
+					$removeEventErrors._errors = ['Something went wrong. Please try again later.'];
+					return;
+				}
+				// Update the errors state directly from the result
+				$removeEventErrors = result.data.removeEventForm.errors;
+			}
+			if (result.type === 'success') {
+				$removeEventErrors = {};
+				if (result.data === undefined) {
+					$removeEventMessage = 'Your data was removed but something went wrong.';
+					return;
+				}
+				$removeEventMessage = result.data.removeEventForm.message;
+				if(selectedAgenda == null) return;
+				selectedAgenda.events = selectedAgenda.events.filter(
+					(event) => event.Id !== result.data!.removeEventForm.data.eventId
+				);
+			}
+		}
+	});
+
+	// Remove Agenda Form
 	const {
 		form: removeAgendaForm,
 		errors: removeAgendaErrors,
@@ -55,6 +97,7 @@
 		}
 	});
 
+	// Add Agenda Form
 	const { form, errors, message, enhance } = superForm(data.form, {
 		dataType: 'json',
 		taintedMessage: null,
@@ -93,6 +136,43 @@
 						CreatedAt: new Date(),
 						UserId: user.Id
 					}
+				];
+			}
+		},
+		onUpdate: ({ form }) => {
+			// Keep errors in sync with form updates
+			currentErrors = form.errors;
+		}
+	});
+
+	// Add Event Form
+	const { form: addEventForm, errors: addEventFormErrors, message: addEventFormMessage, enhance: addEventFormEnhance } = superForm(data.addEventForm, {
+		dataType: 'json',
+		taintedMessage: null,
+		resetForm: false,
+		invalidateAll: false,
+		onResult: ({ result }) => {
+			if (result.type === 'failure') {
+				if (result.data == undefined) {
+					$addEventFormErrors._errors = ['Something went wrong. Please try again later.'];
+					return;
+				}
+				// Update the errors state directly from the result
+				$addEventFormErrors = result.data.form.errors;
+			}
+			if (result.type === 'success') {
+				$addEventFormErrors = {};
+				if (result.data === undefined) {
+					$addEventFormMessage = 'Your data was added but something went wrong.';
+					return;
+				}
+
+				console.log(result);
+				$addEventFormMessage = result.data.addEventForm.message;
+				if (selectedAgenda == null) return;
+				selectedAgenda.events = [
+					...selectedAgenda.events,
+					result.data.phonyEvent
 				];
 			}
 		},
@@ -249,6 +329,7 @@ Message: {$message}
 							size="sm"
 							onclick={() => {
 								selectedAgenda = agenda;
+								$addEventForm.agendaId = selectedAgenda.Id;
 								showEventSheet = true;
 							}}
 						>
@@ -295,29 +376,34 @@ Message: {$message}
 				Add or edit events for {selectedAgenda?.Title}
 			</Sheet.Description>
 		</Sheet.Header>
-		<div class="py-4">
-			<form method="POST" action="?/addEvent" class="grid gap-4">
+		<ScrollArea class="py-4 h-full w-full">
+			<form method="POST" action="?/addEvent" class="grid gap-4" use:addEventFormEnhance>
+				<input type="hidden" name="agendaId" bind:value={$addEventForm.agendaId} />
 				<input type="hidden" name="agendaId" value={selectedAgenda?.Id} />
 				<div class="grid gap-2">
 					<Label>Event Title</Label>
-					<Input name="title" placeholder="Keynote Speech" />
+					<Input name="title" placeholder="Keynote Speech" bind:value={$addEventForm.title} />
 				</div>
 				<div class="grid gap-2">
 					<Label>Speaker Name</Label>
-					<Input name="speakerName" placeholder="John Doe" />
+					<Input name="speakerName" placeholder="John Doe" bind:value={$addEventForm.speakerName}/>
+				</div>
+				<div class="grid gap-2">
+					<Label>Subtitle</Label>
+					<Input name="subtitle" placeholder="Event subtitle..." bind:value={$addEventForm.subtitle}/>
 				</div>
 				<div class="grid gap-2">
 					<Label>Description</Label>
-					<Textarea name="body" placeholder="Event details..." />
+					<Textarea name="body" placeholder="Event details..." bind:value={$addEventForm.body}/>
 				</div>
 				<div class="grid grid-cols-2 gap-4">
 					<div class="grid gap-2">
 						<Label>Start Time</Label>
-						<Input name="startTime" type="datetime-local" />
+						<Input name="startTime" type="datetime-local" bind:value={$addEventForm.startTime} />
 					</div>
 					<div class="grid gap-2">
 						<Label>End Time</Label>
-						<Input name="endTime" type="datetime-local" />
+						<Input name="endTime" type="datetime-local" bind:value={$addEventForm.endTime}/>
 					</div>
 				</div>
 				<Button type="submit">Add Event</Button>
@@ -333,9 +419,18 @@ Message: {$message}
 									<h4 class="font-medium">{event.Title}</h4>
 									<p class="text-sm text-muted-foreground">{event.SpeakerName}</p>
 								</div>
-								<Button variant="ghost" size="icon">
-									<Trash2 class="h-4 w-4" />
-								</Button>
+							
+								<form action="?/deleteEvent" method="POST" use:removeEventEnhance>
+									<input type="hidden" name="eventId" bind:value={$removeEventForm.agendaId} />
+									<Button
+										variant="ghost"
+										size="icon"
+										type="submit"
+										onclick={() => ($removeEventForm.eventId = event.Id)}
+									>
+										<Trash2 class="h-4 w-4" />
+									</Button>
+								</form>
 							</div>
 							<div class="mt-2 text-sm">
 								<p>{event.Body}</p>
@@ -354,6 +449,6 @@ Message: {$message}
 					<p class="text-muted-foreground">No events added yet.</p>
 				{/if}
 			</div>
-		</div>
+		</ScrollArea>
 	</Sheet.Content>
 </Sheet.Root>
