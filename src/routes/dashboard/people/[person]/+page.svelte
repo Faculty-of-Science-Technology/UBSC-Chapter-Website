@@ -170,7 +170,7 @@
 							{/if}
 						</span>
 					</h1>
-					<p class="text-lg text-slate-600">{person.Bio ?? "Hey there! I'm using talentpool!"}</p>
+					<p class="text-lg text-slate-600">{person.Bio ?? "Hey there! I'm using IT Careers!"}</p>
 				</div>
 			</div>
 		</div>

@@ -29,7 +29,7 @@
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
 					<Card.Title class="text-center font-normal">
-						<p class="text-2xl">Continue to <b>talentpool</b></p>
+						<p class="text-2xl">Continue to <b>IT Careers</b></p>
 						<p>Access the portal by using your UB Account</p>
 					</Card.Title>
 					<Logo />

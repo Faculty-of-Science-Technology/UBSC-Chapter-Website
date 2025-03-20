@@ -256,7 +256,7 @@
 					</card-description>
 					<p class="mb-3 text-sm">
 						By clicking "Submit," you acknowledge that the responsibility for all subsequent actions
-						rests solely with the employer. TalentPool nor The University of Belize is liable for
+						rests solely with the employer. IT Careers nor The University of Belize is liable for
 						any issues, disputes, or shortcomings that may arise.
 					</p>
 					<p class="text-sm text-red-600">{$errors.draft}</p>

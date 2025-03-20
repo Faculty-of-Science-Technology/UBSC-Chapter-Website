@@ -103,7 +103,7 @@
 		<about-us class="flex flex-col items-start gap-2 lg:w-5/12">
 			<Logo />
 			<p>
-				talentpool connects you with people in tech from all around Belize quickly and effortlessly.
+				IT Careers connects you with people in tech from all around Belize quickly and effortlessly.
 				Join our community and select from our growing selection of candidates today :)
 			</p>
 		</about-us>

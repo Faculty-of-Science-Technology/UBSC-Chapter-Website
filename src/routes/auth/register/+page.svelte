@@ -51,7 +51,7 @@
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
 					<Card.Title class="text-center font-normal">
-						<p class="text-2xl">Join <b>talentpool</b></p>
+						<p class="text-2xl">Join <b>IT Careers</b></p>
 						<p>Tell us who you are.</p>
 					</Card.Title>
 					<Logo />
