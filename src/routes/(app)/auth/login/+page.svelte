@@ -103,9 +103,9 @@
 					</button> -->
 				</form>
 				<!-- <p class="text-sm font-normal">
-					By signing in, you agree to abide by the <underline class="underline"
-						>UB Student Conduct Policy</underline
-					>.
+					By signing in, you agree to abide by the <a href="https://www.ub.edu.bz/wp-content/uploads/2024/09/Student-Handbook-APPROVED-May-2024.pdf"><underline class="underline"
+							>UB Student Code of Conduct Policy</underline
+						>.</a>
 				</p> -->
 			</card-content>
 		</Card.Root>

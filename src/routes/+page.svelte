@@ -3,7 +3,7 @@
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
-	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket } from 'lucide-svelte';
+	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
 	import type { PageData } from './$types';
 
 	const { data } = $props<{ data: PageData }>();
@@ -199,73 +199,39 @@
 									<h3 class="mb-2 text-2xl font-bold text-violet-800">Register</h3>
 									<p class="mb-6 text-gray-600">Sign up to attend the intern's presentation.</p>
 
-									<form class="flex flex-col gap-4">
-										<div class="flex flex-col gap-4 sm:flex-row">
-											<div class="flex-1">
-												<label class="mb-1 block text-sm font-medium">First Name</label>
-												<input
-													type="text"
-													class="w-full rounded-md border p-2"
-													placeholder="First name"
-													required
-												/>
-											</div>
-											<div class="flex-1">
-												<label class="mb-1 block text-sm font-medium">Last Name</label>
-												<input
-													type="text"
-													class="w-full rounded-md border p-2"
-													placeholder="Last name"
-													required
-												/>
-											</div>
-										</div>
-
+									<form
+										class="flex flex-col gap-4"
+										action="/auth/register?/register&force_choice=host"
+										method="POST"
+									>
 										<div>
-											<label class="mb-1 block text-sm font-medium">Organization</label>
+											<label for="full_name" class="mb-1 block text-sm font-medium"
+												>Organization</label
+											>
 											<input
 												type="text"
-												class="w-full rounded-md border p-2"
+												class="w-full rounded-md border bg-transparent p-2"
+												name="full_name"
 												placeholder="Organization"
 												required
 											/>
 										</div>
-
 										<div>
-											<p class="mb-2 font-medium">Attending Date:</p>
-											<div class="flex flex-wrap gap-4">
-												<label class="flex items-center gap-2">
-													<input type="radio" name="attending-date" value="2 May 2024" required />
-													<span>May 2nd, 2025</span>
-												</label>
-												<label class="flex items-center gap-2">
-													<input type="radio" name="attending-date" value="3 May 2024" required />
-													<span>May 3rd, 2025</span>
-												</label>
-												<label class="flex items-center gap-2">
-													<input type="radio" name="attending-date" value="Both" required />
-													<span>Both</span>
-												</label>
-											</div>
-										</div>
-
-										<div>
-											<p class="mb-2 font-medium">Attending:</p>
-											<div class="flex gap-4">
-												<label class="flex items-center gap-2">
-													<input type="radio" name="attending_type" value="Online" required />
-													<span>Online</span>
-												</label>
-												<label class="flex items-center gap-2">
-													<input type="radio" name="attending_type" value="In Person" required />
-													<span>In Person</span>
-												</label>
-											</div>
+											<label for="email" class="mb-1 block text-sm font-medium">Email Address</label
+											>
+											<input
+												type="email"
+												class="w-full rounded-md border bg-transparent p-2"
+												name="email"
+												placeholder="Email Address"
+												required
+											/>
 										</div>
 
 										<Button
 											type="submit"
-											class="mt-4 w-full bg-amber-500 text-white hover:bg-amber-600">Submit</Button
+											class="mt-4 w-full bg-amber-500 text-white hover:bg-amber-600"
+											>Set a password on the next page</Button
 										>
 									</form>
 								</div>
@@ -286,22 +252,7 @@
 
 							<div class="mb-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center">
 								<div class="flex h-14 w-14 items-center justify-center rounded-full bg-violet-100">
-									<svg
-										class="h-8 w-8 text-violet-600"
-										viewBox="0 0 24 24"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M15.2 11.08C15.2 13.3534 13.3634 15.19 11.09 15.19C8.8166 15.19 6.98 13.3534 6.98 11.08C6.98 8.8066 8.8166 6.97 11.09 6.97C13.3634 6.97 15.2 8.8066 15.2 11.08Z"
-											fill="currentColor"
-										/>
-										<path
-											d="M21.8 10.2C21.8 16.32 13.32 20.7 9.41 16.79C5.5 12.88 9.89 4.4 16 4.4C19.35 4.4 21.8 6.85 21.8 10.2Z"
-											stroke="currentColor"
-											stroke-width="2"
-										/>
-									</svg>
+									<Video size={32} class="text-violet-600" />
 								</div>
 								<div>
 									<p class="font-medium">Zoom Meeting Link:</p>
@@ -330,9 +281,11 @@
 						<div class="flex justify-center lg:w-5/12">
 							<div class="h-60 w-60 rounded-xl border-4 border-amber-300 bg-white p-4 shadow-lg">
 								<!-- Placeholder for QR code -->
-								<div class="flex h-full w-full items-center justify-center bg-violet-50">
-									<p class="text-center text-sm text-gray-500">QR Code for Zoom meeting</p>
-								</div>
+								<img
+									class="flex h-full w-full items-center justify-center bg-violet-50"
+									alt="QR Code for Zoom Meeting"
+									src="/static/featured/zoom_meeting.svg"
+								/>
 							</div>
 						</div>
 					</div>
@@ -341,7 +294,7 @@
 				<!-- Options -->
 				<section class="bg-gradient-to-r from-amber-50 to-violet-50 py-16">
 					<div class="container mx-auto px-4">
-						<h2 class="mb-12 text-center text-3xl font-bold">What we do to fix this?</h2>
+						<h2 class="mb-12 text-center text-4xl font-semibold">Where to begin?</h2>
 						<div class="flex flex-col gap-8 md:flex-row">
 							<div
 								class="flex-1 rounded-lg border border-violet-200 bg-white p-6 shadow-md transition-all hover:shadow-lg"
