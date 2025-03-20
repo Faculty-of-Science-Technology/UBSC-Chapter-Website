@@ -198,7 +198,7 @@
 					{#snippet children({ pages, currentPage })}
 						<Pagination.Content>
 							<Pagination.Item>
-								<a href="/dashboard?page={currentPage < 1 ? 1 : currentPage}"
+								<a href="/dashboard?page={currentPage < 1 ? 1 : currentPage}" data-sveltekit-reload
 									><Pagination.PrevButton /></a
 								>
 							</Pagination.Item>
@@ -209,7 +209,7 @@
 									</Pagination.Item>
 								{:else}
 									<Pagination.Item>
-										<a href="/dashboard?page={page.value}">
+										<a href="/dashboard?page={page.value}" data-sveltekit-reload>
 											<Pagination.Link {page} isActive={currentPage === page.value}>
 												{page.value}
 											</Pagination.Link></a
@@ -218,8 +218,9 @@
 								{/if}
 							{/each}
 							<Pagination.Item>
-								<a href="/dashboard?page={currentPage > page_count ? page_count : currentPage}"
-									><Pagination.NextButton /></a
+								<a
+									href="/dashboard?page={currentPage > page_count ? page_count : currentPage}"
+									data-sveltekit-reload><Pagination.NextButton /></a
 								>
 							</Pagination.Item>
 						</Pagination.Content>
