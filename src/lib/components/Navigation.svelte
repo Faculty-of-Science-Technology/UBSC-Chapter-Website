@@ -15,7 +15,7 @@
 	<!-- <a href="/login" class="text-violet-400 hover:text-violet-500">Login</a> -->
 	{#if authenticated}
 		<a href="/dashboard"><Button>Dashboard</Button></a>
-		<a href="/auth/logout"><Button>Logout</Button></a>
+		<a href="/auth/logout" data-sveltekit-reload><Button>Logout</Button></a>
 	{:else}
 		<a href="/auth/login"><Button>Login</Button></a>
 		<a href="/auth/register"><Button>Register</Button></a>

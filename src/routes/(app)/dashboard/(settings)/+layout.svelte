@@ -5,6 +5,7 @@
 	import { Separator } from '$lib/components/vendor/ui/separator/index.js';
 	import { NavLink, _Settings_NavLinkIndexes } from '$lib/types/Navigation';
 	import {
+		InfoIcon,
 		LucideCalendarCog,
 		MessageSquareMoreIcon,
 		UserIcon,
@@ -47,10 +48,10 @@
 				e.preventDefault();
 				await goto('/dashboard/settings/manage-users');
 			}
-			// if (e.key === 'g' && (e.metaKey || e.ctrlKey)) {
-			// 	e.preventDefault();
-			// 	await goto('/dashboard/settings/manage-groups');
-			// }
+			if (e.key === 'g' && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				await goto('/dashboard/settings/about-system');
+			}
 		}
 
 		document.addEventListener('keydown', handleKeydown);
@@ -122,19 +123,19 @@
 						⌘U
 					</MenuItem>
 				</a>
-				<!-- <a href="/dashboard/settings/manage-groups" aria-label="Manage Groups">
+				<a href="/dashboard/settings/about-system" aria-label="About App">
 					<MenuItem
 						noborder
 						cursor="pointer"
-						title="Manage Groups"
+						title="About App"
 						class={active_link === 4 ? 'bg-accent' : ''}
 					>
 						<svelte:fragment slot="start-icon">
-							<GroupIcon class="size-5" />
+							<InfoIcon class="size-5" />
 						</svelte:fragment>
 						⌘G
 					</MenuItem>
-				</a> -->
+				</a>
 			</DashMenu.Items>
 		</DashMenu.Content>
 	</DashMenu.Root>

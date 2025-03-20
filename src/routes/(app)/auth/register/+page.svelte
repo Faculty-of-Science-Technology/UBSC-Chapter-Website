@@ -113,8 +113,8 @@
 							id="full-name"
 							name="full_name"
 							placeholder={accountType === 'student'
-								? 'Type in your full name'
-								: 'Type in an account name'}
+								? 'e.g. Immanuel Garcia'
+								: 'e.g. Social Security Board'}
 							pattern="[A-Za-z\s]+"
 							bind:value={$form.full_name}
 							{...$constraints.full_name}
@@ -135,8 +135,8 @@
 							name="email"
 							id="email"
 							placeholder={accountType === 'student'
-								? 'Type in your Student ID'
-								: 'Type in your email address'}
+								? 'e.g. 2022156465'
+								: 'e.g. jdoe@socialsecurity.org.bz'}
 							bind:value={$form.email}
 							{...$constraints.email}
 							required={false}
