@@ -50,7 +50,7 @@
 					return;
 				}
 				$removeEventMessage = result.data.removeEventForm.message;
-				if(selectedAgenda == null) return;
+				if (selectedAgenda == null) return;
 				selectedAgenda.events = selectedAgenda.events.filter(
 					(event) => event.Id !== result.data!.removeEventForm.data.eventId
 				);
@@ -146,7 +146,12 @@
 	});
 
 	// Add Event Form
-	const { form: addEventForm, errors: addEventFormErrors, message: addEventFormMessage, enhance: addEventFormEnhance } = superForm(data.addEventForm, {
+	const {
+		form: addEventForm,
+		errors: addEventFormErrors,
+		message: addEventFormMessage,
+		enhance: addEventFormEnhance
+	} = superForm(data.addEventForm, {
 		dataType: 'json',
 		taintedMessage: null,
 		resetForm: false,
@@ -170,10 +175,7 @@
 				console.log(result);
 				$addEventFormMessage = result.data.addEventForm.message;
 				if (selectedAgenda == null) return;
-				selectedAgenda.events = [
-					...selectedAgenda.events,
-					result.data.phonyEvent
-				];
+				selectedAgenda.events = [...selectedAgenda.events, result.data.phonyEvent];
 			}
 		},
 		onUpdate: ({ form }) => {
@@ -214,7 +216,9 @@ Message: {$message}
 				</Button>
 			</Dialog.Trigger>
 			<Dialog.Content class="sm:max-w-[600px]">
-				<SuperDebug data={form} />
+				{#if data.debug}
+					<SuperDebug data={form} />
+				{/if}
 				<Dialog.Header>
 					<Dialog.Title>Create New Agenda</Dialog.Title>
 					<Dialog.Description>
@@ -376,7 +380,7 @@ Message: {$message}
 				Add or edit events for {selectedAgenda?.Title}
 			</Sheet.Description>
 		</Sheet.Header>
-		<ScrollArea class="py-4 h-full w-full">
+		<ScrollArea class="h-full w-full py-4">
 			<form method="POST" action="?/addEvent" class="grid gap-4" use:addEventFormEnhance>
 				<input type="hidden" name="agendaId" bind:value={$addEventForm.agendaId} />
 				<input type="hidden" name="agendaId" value={selectedAgenda?.Id} />
@@ -386,15 +390,19 @@ Message: {$message}
 				</div>
 				<div class="grid gap-2">
 					<Label>Speaker Name</Label>
-					<Input name="speakerName" placeholder="John Doe" bind:value={$addEventForm.speakerName}/>
+					<Input name="speakerName" placeholder="John Doe" bind:value={$addEventForm.speakerName} />
 				</div>
 				<div class="grid gap-2">
 					<Label>Subtitle</Label>
-					<Input name="subtitle" placeholder="Event subtitle..." bind:value={$addEventForm.subtitle}/>
+					<Input
+						name="subtitle"
+						placeholder="Event subtitle..."
+						bind:value={$addEventForm.subtitle}
+					/>
 				</div>
 				<div class="grid gap-2">
 					<Label>Description</Label>
-					<Textarea name="body" placeholder="Event details..." bind:value={$addEventForm.body}/>
+					<Textarea name="body" placeholder="Event details..." bind:value={$addEventForm.body} />
 				</div>
 				<div class="grid grid-cols-2 gap-4">
 					<div class="grid gap-2">
@@ -403,7 +411,7 @@ Message: {$message}
 					</div>
 					<div class="grid gap-2">
 						<Label>End Time</Label>
-						<Input name="endTime" type="datetime-local" bind:value={$addEventForm.endTime}/>
+						<Input name="endTime" type="datetime-local" bind:value={$addEventForm.endTime} />
 					</div>
 				</div>
 				<Button type="submit">Add Event</Button>
@@ -419,7 +427,7 @@ Message: {$message}
 									<h4 class="font-medium">{event.Title}</h4>
 									<p class="text-sm text-muted-foreground">{event.SpeakerName}</p>
 								</div>
-							
+
 								<form action="?/deleteEvent" method="POST" use:removeEventEnhance>
 									<input type="hidden" name="eventId" bind:value={$removeEventForm.agendaId} />
 									<Button

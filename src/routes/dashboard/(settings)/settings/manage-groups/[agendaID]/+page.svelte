@@ -17,7 +17,9 @@
 	let showMembersSheet = false;
 </script>
 
-<SuperDebug data={form} />
+{#if data.debug}
+	<SuperDebug data={form} />
+{/if}
 <div class="container mx-auto py-10">
 	<div class="mb-8 flex items-center justify-between">
 		<section class="header text-archivo flex flex-col space-y-1 pb-8">
