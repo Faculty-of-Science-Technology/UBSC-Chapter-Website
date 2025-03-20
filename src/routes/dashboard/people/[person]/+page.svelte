@@ -91,7 +91,7 @@
 	<header class="relative">
 		<!-- Cover Image -->
 		<div
-			class="relative h-[200px] w-full bg-gradient-to-r from-slate-600 to-slate-800 lg:h-[350px]"
+			class="relative h-[200px] w-full bg-gradient-to-r from-amber-600 to-amber-800 lg:h-[350px]"
 		>
 			<!-- Optional: Add cover photo here -->
 			<img
@@ -185,15 +185,15 @@
 				<Card.Title class="p-4 text-xl font-semibold">Contact Information</Card.Title>
 				<Card.Description class="space-y-4 p-4">
 					<div class="flex items-center gap-3">
-						<Mail class="h-5 w-5 text-slate-500" />
+						<Mail class="h-5 w-5 text-violet-500" />
 						<span>{person.Email ?? 'Not shared'}</span>
 					</div>
 					<div class="flex items-center gap-3">
-						<Phone class="h-5 w-5 text-slate-500" />
+						<Phone class="h-5 w-5 text-violet-500" />
 						<span>{person.Phone ?? 'Not shared'}</span>
 					</div>
 					<div class="flex items-center gap-3">
-						<Calendar class="h-5 w-5 text-slate-500" />
+						<Calendar class="h-5 w-5 text-violet-500" />
 						<span>Joined {new Date(person.CreatedAt).toLocaleDateString()}</span>
 					</div>
 				</Card.Description>
@@ -207,7 +207,7 @@
 						<a
 							href={person.Socials.LinkedIn}
 							target="_blank"
-							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-100"
+							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-violet-100"
 						>
 							<Linkedin class="h-5 w-5 text-blue-600" />
 							<span>LinkedIn Profile</span>
@@ -217,7 +217,7 @@
 						<a
 							href={person.Socials.GitHub}
 							target="_blank"
-							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-100"
+							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-violet-100"
 						>
 							<Github class="h-5 w-5 text-slate-800" />
 							<span>GitHub Profile</span>
@@ -227,7 +227,7 @@
 						<a
 							href={person.Socials.Twitter}
 							target="_blank"
-							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-100"
+							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-violet-100"
 						>
 							<Twitter class="h-5 w-5 text-blue-400" />
 							<span>Twitter Profile</span>
@@ -237,14 +237,14 @@
 						<a
 							href={person.Socials['Personal Website']}
 							target="_blank"
-							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-slate-100"
+							class="flex items-center gap-3 rounded-lg p-2 transition-colors hover:bg-violet-100"
 						>
 							<Globe class="h-5 w-5" />
 							<span>Personal Website</span>
 						</a>
 					{/if}
 					{#if Object.keys(person.Socials).length === 0}
-						<p class="text-slate">No social profiles found.</p>
+						<p class="text-violet">No social profiles found.</p>
 					{/if}
 				</Card.Description>
 			</Card.Root>
@@ -267,14 +267,14 @@
 					<div class="flex flex-wrap gap-2">
 						{#snippet icons(skill)}
 							{@const Icon = skillIcons[skill] || Code}
-							<Icon class="mr-2 h-4 w-4 text-slate-600" />
+							<Icon class="mr-2 h-4 w-4 text-amber-600" />
 						{/snippet}
 						{#if person.Skills.length === 0}
 							<p class="text-slate">No skills shared.</p>
 						{/if}
 
 						{#each person.Skills as skill}
-							<div class="flex items-center rounded-full bg-slate-100 px-4 py-2">
+							<div class="flex items-center rounded-full bg-amber-100 px-4 py-2">
 								{@render icons(skill)}
 								<span>{skill}</span>
 							</div>

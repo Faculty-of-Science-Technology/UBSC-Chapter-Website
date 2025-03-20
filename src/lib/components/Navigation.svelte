@@ -8,11 +8,11 @@
 </script>
 
 <nav
-	class="flex sticky top-0 z-10 w-full items-center gap-4 self-stretch border border-b-slate-300 bg-slate-50 px-8 py-2"
+	class="flex sticky top-0 z-10 w-full items-center gap-4 self-stretch border border-b-violet-300 bg-violet-50 px-8 py-2"
 >
 	<a href="/"><Logo /></a>
 	<div class="flex-grow"></div>
-	<!-- <a href="/login" class="text-slate-400 hover:text-slate-500">Login</a> -->
+	<!-- <a href="/login" class="text-violet-400 hover:text-violet-500">Login</a> -->
 	{#if authenticated}
 		<a href="/dashboard"><Button>Dashboard</Button></a>
 		<a href="/auth/logout"><Button>Logout</Button></a>

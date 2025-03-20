@@ -25,7 +25,7 @@
 </script>
 
 <top-navigation
-	class="flex items-center justify-between self-stretch border-b border-slate-200 bg-slate-50"
+	class="flex items-center justify-between self-stretch border-b border-violet-200 bg-violet-50"
 >
 	<nav class="flex flex-1 justify-between">
 		<NavShard.Root title="Dashboard">

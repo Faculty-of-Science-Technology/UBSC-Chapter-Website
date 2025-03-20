@@ -17,14 +17,14 @@
 
 <!-- <SuperDebug data={$form}/> -->
 <page
-	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
+	class="my-8 flex w-full items-center justify-center self-stretch bg-violet-100 lg:m-0 lg:h-[90vh]"
 >
 	<r-column
 		class="hidden h-full flex-[2] flex-col items-center justify-end gap-2 self-stretch lg:flex"
 	>
 		<div class="flex flex-col items-start justify-center self-stretch px-20 py-20"><Logo /></div>
 	</r-column>
-	<l-column class="flex h-full flex-col items-center justify-center bg-slate-50 lg:flex-1 lg:gap-8">
+	<l-column class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8">
 		<Card.Root class="w-[305px] py-4 lg:w-[375px]">
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
@@ -65,7 +65,7 @@
 					</div>
 					<Button type="submit" class="w-full">Sign in</Button>
 					<!-- <button
-						class="flex w-full flex-col items-center justify-center self-stretch rounded-lg border border-slate-300 py-2 hover:bg-slate-100"
+						class="flex w-full flex-col items-center justify-center self-stretch rounded-lg border border-violet-300 py-2 hover:bg-violet-100"
 					>
 						<div class="flex flex-row items-center gap-2">
 							<svg

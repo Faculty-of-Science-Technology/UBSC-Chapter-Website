@@ -39,14 +39,14 @@
 <!-- <SuperDebug bind:data={$form} /> -->
 <!-- svelte-ignore component_name_lowercase -->
 <page
-	class="my-8 flex w-full items-center justify-center self-stretch bg-slate-100 lg:m-0 lg:h-[90vh]"
+	class="my-8 flex w-full items-center justify-center self-stretch bg-violet-100 lg:m-0 lg:h-[90vh]"
 >
 	<r-column
 		class="hidden h-full flex-[2] flex-col items-center justify-end gap-2 self-stretch lg:flex"
 	>
 		<div class="flex flex-col items-start justify-center self-stretch px-20 py-20"><Logo /></div>
 	</r-column>
-	<l-column class="flex h-full flex-col items-center justify-center bg-slate-50 lg:flex-1 lg:gap-8">
+	<l-column class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8">
 		<Card.Root class="w-[305px] py-4 lg:w-[375px]">
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
@@ -71,7 +71,7 @@
 									class={cn(
 										'flex-1',
 										accountType === 'student'
-											? 'border border-slate-900 bg-transparent text-slate-900 hover:bg-transparent'
+											? 'border border-violet-900 bg-transparent text-violet-900 hover:bg-transparent'
 											: ''
 									)}>I am a student</Button
 								>
@@ -79,7 +79,7 @@
 									onclick={() => (accountType = 'host')}
 									class={cn(
 										accountType === 'host'
-											? 'border border-slate-900 bg-transparent text-slate-900 hover:bg-transparent'
+											? 'border border-violet-900 bg-transparent text-violet-900 hover:bg-transparent'
 											: ''
 									)}>I am a host</Button
 								>

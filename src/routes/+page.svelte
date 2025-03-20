@@ -43,7 +43,7 @@
 		<Homepage.Archives />
 	{/if}
 	<call-to-action
-		class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
+		class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-violet-300 p-8 text-center"
 	>
 		<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">What we do to fix this?</h1>
 		<p class="text-xl lg:w-[720px]">
@@ -60,7 +60,7 @@
 			class="space-between flex-start flex w-full flex-col gap-4 text-5xl font-extralight lg:flex-row lg:text-5xl"
 		>
 			<kickstart-career
-				class="flex flex-1 flex-col items-start gap-4 self-stretch rounded-lg border border-slate-300 p-4 lg:border-0"
+				class="flex flex-1 flex-col items-start gap-4 self-stretch rounded-lg border border-violet-300 p-4 lg:border-0"
 			>
 				<Rocket size="84" strokeWidth="1" />
 				<h2>Kickstart Your <span class="font-medium underline">Career</span></h2>
@@ -70,7 +70,7 @@
 				</a>
 			</kickstart-career>
 			<acquire-talent
-				class="flex flex-1 flex-col items-start gap-4 self-stretch border border-slate-300 p-4 lg:border-0"
+				class="flex flex-1 flex-col items-start gap-4 self-stretch border border-violet-300 p-4 lg:border-0"
 			>
 				<CheckSquare size="84" strokeWidth="1" />
 				<h2>Acquire <span class="font-medium underline">Talent</span></h2>
@@ -83,7 +83,7 @@
 	</hero>
 	<page-content class="flex flex-col items-start gap-12">
 		<call-to-action
-			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-slate-300 p-8 text-center"
+			class="flex w-full flex-col items-center justify-center gap-4 self-stretch rounded-lg border border-violet-300 p-8 text-center"
 		>
 			<h1 class="w-full text-5xl font-semibold lg:w-[775px] lg:text-6xl">
 				Not <span class="italic">JUST</span> your typical hiring platform.
@@ -97,7 +97,7 @@
 </page>
 
 <footer
-	class="flex w-full flex-col items-start justify-start gap-20 self-stretch border-t border-slate-300 bg-slate-50 px-16 py-8 lg:flex-row lg:items-center lg:justify-center"
+	class="flex w-full flex-col items-start justify-start gap-20 self-stretch border-t border-violet-300 bg-violet-50 px-16 py-8 lg:flex-row lg:items-center lg:justify-center"
 >
 	<frame-1 class="flex flex-[2] flex-col items-start gap-4">
 		<about-us class="flex flex-col items-start gap-2 lg:w-5/12">
