@@ -342,7 +342,7 @@ Message: {$message}
 							size="sm"
 							onclick={() => {
 								// Navigate to groups page
-								window.location.href = `/dashboard/manage-groups/${agenda.Id}`;
+								window.location.href = `/dashboard/settings/manage-groups/${agenda.Id}`;
 							}}
 						>
 							<Users class="mr-2 h-4 w-4" />
