@@ -407,7 +407,7 @@ const sendNotificationEmail = async (
 		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 		to: employer.Email,
 		subject: `Someone has applied for your '${job.Title}' job on ${PLATFORM_NAME}`,
-		text: `Hey,\n\nSomeone has applied for your job posting '${job.Title}' on ${PLATFORM_NAME}. You can view the application in the dashboard here:\n\n${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/applicants?job_id=${job.Id}.\n\nAll the best,\n${MAIL_SIGNATURE}`
+		text: `Hey,\n\nSomeone has applied for your job posting '${job.Title}' on ${PLATFORM_NAME}. You can view the application in the dashboard here:\n\n${Boolean(IS_DEVELOPMENT) ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/applicants?job_id=${job.Id}.\n\nAll the best,\n${MAIL_SIGNATURE}`
 	});
 };
 

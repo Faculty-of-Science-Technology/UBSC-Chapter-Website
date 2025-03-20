@@ -95,7 +95,7 @@ export const actions: Actions = {
 		}
 		const form = await superValidate(request, zod(profileSchema));
 
-		if (IS_DEVELOPMENT && DEBUG) {
+		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
@@ -147,7 +147,7 @@ export const actions: Actions = {
 			setMessage(form, 'Profile updated successfully');
 			return { form, user: locals.user };
 		} catch (e) {
-			if (IS_DEVELOPMENT) console.log(e);
+			if (Boolean(IS_DEVELOPMENT)) console.log(e);
 			setError(form, 'Failed to update profile');
 			return { form, user: locals.user };
 		}

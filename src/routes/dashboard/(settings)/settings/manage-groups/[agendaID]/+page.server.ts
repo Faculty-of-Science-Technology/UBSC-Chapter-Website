@@ -57,7 +57,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
         availableUsers, 
         form, 
         memberForm,
-        debug: DEBUG && IS_DEVELOPMENT 
+        debug: Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))
     };
 };
 
@@ -69,7 +69,7 @@ export const actions: Actions = {
 
         const form = await superValidate(request, zod(groupSchema));
 
-        if (IS_DEVELOPMENT && DEBUG) {
+        if (JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT)) {
             console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
             console.log('form', form);
         }

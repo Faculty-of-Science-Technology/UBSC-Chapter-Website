@@ -13,6 +13,7 @@ import {
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
+import { randomColor } from '$lib/utility/color';
 import { generateId } from '$lib/utility/ids';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
@@ -21,7 +22,6 @@ import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import { randomColor } from '$lib/utility/color';
 import type { Actions, PageServerLoad } from './$types';
 
 const registerSchema = z
@@ -116,7 +116,7 @@ export const actions: Actions = {
 				from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 				to: super_form.data.email,
 				subject: `Activate your account on ${PLATFORM_NAME}`,
-				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${IS_DEVELOPMENT ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${Boolean(IS_DEVELOPMENT) ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 			});
 
 			cookies.set(
