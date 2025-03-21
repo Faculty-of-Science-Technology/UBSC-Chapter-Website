@@ -35,7 +35,7 @@
 				{/if}
 				{#if avatar_data.length > 0}
 					<p class="text-sm text-muted-foreground">
-						These organizations are currently hiring interns.
+						These are all organizations &mdash; hiring and non-hiring.
 					</p>
 				{/if}
 			</div>

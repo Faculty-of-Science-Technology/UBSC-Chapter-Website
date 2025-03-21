@@ -157,9 +157,7 @@
 							<div class="mt-3 block opacity-75">
 								<PartnerOrgs {org_avatar_data}>
 									<a href="#host-organizations" onclick={() => (active_tab = 3)}>
-										<Button class="mt-6 w-fit bg-violet-600 text-white hover:bg-violet-700"
-											>See more partner organizations</Button
-										>
+										<p class="mt-4 text-violet-800 opacity-60 text-sm">See more partner organizations</p>
 									</a>
 								</PartnerOrgs>
 							</div>
@@ -171,7 +169,9 @@
 									alt="Featured Intern"
 									class="h-auto w-full rounded-lg object-cover"
 								/>
-								<div class="mt-2 text-left italic text-gray-400">Photo: Zyon Morter &mdash; Past Intern</div>
+								<div class="mt-2 text-left italic text-gray-400">
+									Photo: Zyon Morter &mdash; Past Intern
+								</div>
 							</div>
 						</div>
 					</div>
