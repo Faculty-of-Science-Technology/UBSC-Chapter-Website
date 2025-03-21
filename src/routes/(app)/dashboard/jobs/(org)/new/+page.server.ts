@@ -1,7 +1,7 @@
 import { JWT_SECRET } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Jobs, Questions } from '$lib/server/db/schema';
-import { isRedirect, redirect, type Actions, type ServerLoad } from '@sveltejs/kit';
+import { error, isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { message, setError, superValidate } from 'sveltekit-superforms';
@@ -90,6 +90,15 @@ export const load: PageServerLoad = async (event) => {
 
 export const actions: Actions = {
 	createJob: async (event) => {
+		const user = event.locals.user;
+
+		if (user !== null && user !== undefined) {
+			if (user.AccountType !== 'org' && user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login');
+		}
 		const formData = await event.request.formData();
 		const { cookies } = event;
 		const session = cookies.get('session');
@@ -108,7 +117,6 @@ export const actions: Actions = {
 		try {
 			jobSchema.parse(form);
 			const jobForm = await superValidate(formData, zod(jobSchema));
-			const user = event.locals.user;
 			const job_id = cookies.get('job_id') ?? null;
 			if (!user) throw redirect(301, '/auth/login');
 
@@ -214,6 +222,12 @@ export const actions: Actions = {
 			const user = event.locals.user;
 			if (!user) throw redirect(301, '/auth/login');
 
+			// Do we own the job?
+			const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
+			if (job.length === 0 || job[0].UserId !== user.Id) {
+				throw redirect(301, '/dashboard/');
+			}
+
 			await db.insert(Questions).values({
 				Content: questionForm.data.question_content,
 				Type: questionForm.data.question_type === 'true-false',
@@ -232,6 +246,16 @@ export const actions: Actions = {
 		}
 	},
 	removeQuestion: async (event) => {
+		const user = event.locals.user;
+
+		if (user !== null && user !== undefined) {
+			if (user.AccountType !== 'org' && user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login');
+		}
+
 		const cookies = event.cookies;
 		const session = cookies.get('session');
 		if (!session) throw redirect(301, '/auth/login');
@@ -249,8 +273,14 @@ export const actions: Actions = {
 		const questionForm = await superValidate(formData, zod(removeQuestionSchema));
 		if (!questionForm.valid) return { questionForm };
 
-		const user = event.locals.user;
+		// Check if the user is authenticated
 		if (!user) throw redirect(301, '/auth/login');
+
+		// Do we own the job?
+		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
+		if (job.length === 0 || job[0].UserId !== user.Id) {
+			throw redirect(301, '/dashboard/');
+		}
 
 		const question = await db
 			.select()
