@@ -115,7 +115,7 @@
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
 					<h3 class="text-sm font-medium">Version</h3>
-					<p class="text-muted-foreground">1.0.0</p>
+					<p class="text-muted-foreground">Preview 2</p>
 				</div>
 				<div>
 					<h3 class="text-sm font-medium">Last Updated</h3>
