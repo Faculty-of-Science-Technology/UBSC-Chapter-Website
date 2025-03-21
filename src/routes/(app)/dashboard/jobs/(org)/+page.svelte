@@ -138,6 +138,7 @@
 										</Dialog.Header>
 										<div class="flex flex-col gap-6 py-4">
 											<Dialog.Footer class="justify-start text-left">
+												<!--- @todo Implement deleting jobs -->
 												<Button type="submit" class="bg-destructive">Revoke & Delete</Button>
 											</Dialog.Footer>
 										</div></Dialog.Content

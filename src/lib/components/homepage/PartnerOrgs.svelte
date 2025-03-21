@@ -1,10 +1,9 @@
 <script lang="ts">
 	import type { AvatarData } from '$lib/assemblies';
 
-	import { Badge, Building2, ExternalLink } from 'lucide-svelte';
+	import { Building2 } from 'lucide-svelte';
 
 	import * as Avatar from '$lib/components/vendor/ui/avatar';
-	import * as HoverCard from '$lib/components/vendor/ui/hover-card';
 	import { cn } from '$lib/components/vendor/utils';
 	import type { Snippet } from 'svelte';
 
@@ -19,26 +18,28 @@
 	<h2 class="text-gray-750 mb-6 mt-12 text-center text-2xl font-medium lg:text-left">
 		Our Partner Organizations
 	</h2>
-	<div class="mt-2 flex flex-row justify-start gap-4">
+	<div class="mt-2 flex flex-row justify-center lg:justify-start gap-4">
 		{#each org_avatar_data.slice(0, 6) as organization}
-			<HoverCard.Root>
+        <!--- @audit DISABLED [FRAMEWORK_BUG]: https://github.com/sveltejs/svelte/issues/15337 -->
+			<!-- <HoverCard.Root>
 				<HoverCard.Trigger>
 					<a href="/dashboard/organizations/{organization.id}"
-						><Avatar.Root
-							class={cn(
-								'size-16 rounded-md',
-								organization.hireable ? 'border-4 border-primary' : ''
-							)}
-						>
-							<Avatar.Image
-								class="object-contain"
-								src={organization.image_url}
-								alt={organization.name || 'Organization logo'}
-							/>
-							<Avatar.Fallback class="bg-muted">
-								<Building2 size={32} />
-							</Avatar.Fallback>
-						</Avatar.Root></a
+						> -->
+
+			<Avatar.Root
+				class={cn('size-16 rounded-md', organization.hireable ? 'border-4 border-primary' : '')}
+			>
+				<Avatar.Image
+					class="object-contain"
+					src={organization.image_url}
+					alt={organization.name || 'Organization logo'}
+				/>
+				<Avatar.Fallback class="bg-muted">
+					<Building2 size={32} />
+				</Avatar.Fallback>
+			</Avatar.Root>
+
+			<!-- </a
 					>
 				</HoverCard.Trigger>
 				<HoverCard.Content class="max-w-80">
@@ -73,7 +74,7 @@
 						</div>
 					</div>
 				</HoverCard.Content>
-			</HoverCard.Root>
+			</HoverCard.Root> -->
 		{/each}
 	</div>
 	{@render children?.()}
