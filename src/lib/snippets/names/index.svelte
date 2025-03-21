@@ -36,7 +36,7 @@
 	{#snippet nameof__person(person: IJobCreator)}
 	<p
 		class="cursor-pointer underline hover:no-underline"
-		onclick={() => goto(`/dashboard/person/${person?.Id}`)}
+		onclick={() => goto(`/dashboard/people/${person?.Id}`)}
 	>
 		{person?.FirstName}{' '}{person?.LastName}
 	</p>
