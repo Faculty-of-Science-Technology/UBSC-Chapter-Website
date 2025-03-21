@@ -1,24 +1,11 @@
 <script lang="ts">
 	import { Homepage, type AvatarData } from '$lib/assemblies/index';
 	import Logo from '$lib/components/Logo.svelte';
-	import * as Avatar from '$lib/components/vendor/ui/avatar';
 	import { Button } from '$lib/components/vendor/ui/button';
-	import * as HoverCard from '$lib/components/vendor/ui/hover-card';
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
-	import {
-		Badge,
-		Building2,
-		Calendar,
-		CheckSquare,
-		ExternalLink,
-		Mail,
-		MapPin,
-		Phone,
-		Rocket,
-		Video
-	} from 'lucide-svelte';
+	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
 
-	import { cn } from '$lib/components/vendor/utils';
+	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
 	import type { PageData } from './$types';
 
 	const { data } = $props<{ data: PageData }>();
@@ -168,80 +155,13 @@
 							</div>
 							<!-- Partner orgs -->
 							<div class="mt-3 block opacity-75">
-								{#if org_avatar_data.length > 0}
-									<h2
-										class="text-gray-750 mb-6 mt-12 text-center text-2xl font-medium lg:text-left"
-									>
-										Our Partner Organizations
-									</h2>
-									<div class="mt-2 flex flex-row justify-start gap-4">
-										{#each org_avatar_data.slice(0, 6) as organization}
-											<HoverCard.Root>
-												<HoverCard.Trigger>
-													<a href="/dashboard/organizations/{organization.id}"
-														><Avatar.Root
-															class={cn(
-																'size-16 rounded-md',
-																organization.hireable ? 'border-4 border-primary' : ''
-															)}
-														>
-															<Avatar.Image
-																class="object-contain"
-																src={organization.image_url}
-																alt={organization.name || 'Organization logo'}
-															/>
-															<Avatar.Fallback class="bg-muted">
-																<Building2 size={32} />
-															</Avatar.Fallback>
-														</Avatar.Root></a
-													>
-												</HoverCard.Trigger>
-												<HoverCard.Content class="max-w-80">
-													<div class="flex justify-between space-x-4">
-														<Avatar.Root
-															class={cn(
-																'rounded-md',
-																organization.hireable ? 'border-2 border-primary' : ''
-															)}
-														>
-															<Avatar.Image
-																class="object-contain"
-																src={organization.image_url}
-																alt={organization.name || 'Organization logo'}
-															/>
-															<Avatar.Fallback class="bg-muted"><Building2 /></Avatar.Fallback>
-														</Avatar.Root>
-														<div class="space-y-1">
-															<h4 class="text-sm font-semibold">{organization.name}</h4>
-															<span class="tracking-wide">
-																{#if organization.hireable}
-																	<span class="flex h-fit w-fit items-start">
-																		<Badge class="bg-primary">Active Hiring</Badge>
-																	</span>
-																{/if}
-															</span>
-															<p class="text-sm">{organization.bio}</p>
-															<div class="flex items-center pt-2 text-sm">
-																<a
-																	href="/dashboard/organizations/{organization.id}"
-																	class="flex gap-2 underline hover:no-underline"
-																	><ExternalLink size="16" /> View Organization</a
-																>
-															</div>
-														</div>
-													</div>
-												</HoverCard.Content>
-											</HoverCard.Root>
-										{/each}
-									</div>
+								<PartnerOrgs {org_avatar_data}>
 									<a href="#host-organizations" onclick={() => (active_tab = 3)}>
 										<Button class="mt-6 w-fit bg-violet-600 text-white hover:bg-violet-700"
 											>See more partner organizations</Button
 										>
 									</a>
-								{:else}
-									<p class="text-sm text-gray-600">No partner organizations available.</p>
-								{/if}
+								</PartnerOrgs>
 							</div>
 						</div>
 						<div class="lg:w-5/12">
