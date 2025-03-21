@@ -5,22 +5,25 @@
 			<h1 class="mb-6 text-center text-4xl font-bold text-gray-900 lg:text-left lg:text-5xl">
 				ABOUT THE INTERNSHIP PROGRAM
 			</h1>
-            <div class="space-y-4">
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    Our internship program is a crucial part of our IT degree requirements. Students in their final semester of both Associates (AINT) and Bachelor (BINT) programs participate in this hands-on experience.
-                </p>
-                
-                <h2 class="text-2xl font-semibold text-gray-800 mt-4">Real-World Experience</h2>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    The program spans 9-12 weeks and places students in established firms where they gain practical work experience that complements their academic studies.
-                </p>
-                
-                <h2 class="text-2xl font-semibold text-gray-800 mt-4">Professional Development</h2>
-                <p class="text-lg text-gray-700 leading-relaxed">
-                    Interns function as employees of their host organizations, working on IT projects and technological initiatives that provide valuable industry exposure before graduation.
-                </p>
-            </div>
-		
+			<div class="space-y-4">
+				<p class="text-lg leading-relaxed text-gray-700">
+					Our internship program is a crucial part of our IT degree requirements. Students in their
+					final semester of both Associates (AINT) and Bachelor (BINT) programs participate in this
+					hands-on experience.
+				</p>
+
+				<h2 class="mt-4 text-2xl font-semibold text-gray-800">Real-World Experience</h2>
+				<p class="text-lg leading-relaxed text-gray-700">
+					The program spans 9-12 weeks and places students in established firms where they gain
+					practical work experience that complements their academic studies.
+				</p>
+
+				<h2 class="mt-4 text-2xl font-semibold text-gray-800">Professional Development</h2>
+				<p class="text-lg leading-relaxed text-gray-700">
+					Interns function as employees of their host organizations, working on IT projects and
+					technological initiatives that provide valuable industry exposure before graduation.
+				</p>
+			</div>
 		</div>
 		<div class="lg:w-5/12">
 			<div class="overflow-hidden rounded-lg">
@@ -29,6 +32,10 @@
 					alt="Featured Intern"
 					class="h-auto w-full rounded-lg object-cover shadow-md"
 				/>
+				<div class="mt-2 text-left italic text-gray-400">
+					Photo: <a class="font-medium underline" href="https://www.linkedin.com/in/amilcar-vasquez-600033238/">Amilcar Vasquez</a
+					> &mdash; Past Intern
+				</div>
 			</div>
 		</div>
 	</div>

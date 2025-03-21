@@ -169,8 +169,9 @@
 								<img
 									src="/static/featured/Zyon_Morter.jpg"
 									alt="Featured Intern"
-									class="h-auto w-full rounded-lg object-cover shadow-md"
+									class="h-auto w-full rounded-lg object-cover"
 								/>
+								<div class="mt-2 text-left italic text-gray-400">Photo: Zyon Morter &mdash; Past Intern</div>
 							</div>
 						</div>
 					</div>
