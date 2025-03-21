@@ -122,9 +122,19 @@
 					<p class="text-sm text-muted-foreground">
 						Edit things like your profile image or cover photo
 					</p>
-					<a href="/dashboard/people/{user.Id}">
-						<Button>View my profile</Button>
-					</a>
+					{#if user.AccountType === 'student'}
+						<a href="/dashboard/people/{user.Id}">
+							<Button>View my profile</Button>
+						</a>
+					{:else if user.AccountType === 'org'}
+						<a href="/dashboard/organizations/{user.Id}">
+							<Button>View my organization</Button>
+						</a>
+					{:else}
+						<a href="/dashboard/people/{user.Id}">
+							<Button>View my profile</Button>
+						</a>
+					{/if}
 				</div>
 				<div class="grid w-full max-w-sm items-center gap-8">
 					<div class="grid w-full max-w-sm items-center gap-1.5">
@@ -137,8 +147,15 @@
 							bind:value={$form.username}
 						/>
 						<p class="text-sm text-muted-foreground">
-							This is your public display name. It can be your real name or a pseudonym. You can
-							only change this once every 30 days.
+							{#if user.AccountType === 'student'}
+								{`This is your public display name. It can be your real name or a pseudonym. You can only
+							change this once every 30 days.`}
+							{:else if user.AccountType === 'org'}
+								{'This is your public display name.'}
+							{:else}
+								{`This is your public display name. It can be your real name or a pseudonym. You can only
+							change this once every 30 days.`}
+							{/if}
 						</p>
 					</div>
 
@@ -335,19 +352,57 @@
 					</div>
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">
-						<Label>Employment Status</Label>
+						<Label>
+							{#if user.AccountType === 'student'}
+								{'Employment status'}
+							{:else if user.AccountType === 'org'}
+								{'Hiring status'}
+							{:else}
+								{'Employment status'}
+							{/if}
+						</Label>
 						<div class="flex items-center space-x-2">
 							<Switch id="hireable" name="hireable" bind:checked={$form.hireable} />
-							<Label for="hireable">Available for hire</Label>
+							<Label for="hireable">
+								{#if user.AccountType === 'student'}
+									{'Available for hire'}
+								{:else if user.AccountType === 'org'}
+									{'Actively hiring'}
+								{:else}
+									{'Available for hire'}
+								{/if}
+							</Label>
 						</div>
 						<p class="text-sm text-muted-foreground">
-							Let employers know you're open to opportunities
+							{#if user.AccountType === 'student'}
+								{"Let employers know you're open to opportunities"}
+							{:else if user.AccountType === 'org'}
+								{"Let applicants know you're currently looking for new team members"}
+							{:else}
+								{"Let employers know you're open to opportunities"}
+							{/if}
 						</p>
 					</div>
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">
-						<Label>Skills</Label>
-						<p class="text-sm text-muted-foreground">Add skills that showcase your expertise</p>
+						<Label>
+							{#if user.AccountType === 'student'}
+								{'Skills'}
+							{:else if user.AccountType === 'org'}
+								{'Popular skills'}
+							{:else}
+								{'Skills'}
+							{/if}
+						</Label>
+						<p class="text-sm text-muted-foreground">
+							{#if user.AccountType === 'student'}
+								{'Add skills that showcase your expertise'}
+							{:else if user.AccountType === 'org'}
+								{'Add skills to give applicants an idea of what you are looking for'}
+							{:else}
+								{'Add skills that showcase your expertise'}
+							{/if}
+						</p>
 						<div class="flex flex-wrap gap-2">
 							{#each $form.skills as skill}
 								<Badge variant="secondary" class="gap-1">
@@ -409,7 +464,13 @@
 							{/each}
 						</div>
 						<p class="text-sm text-muted-foreground">
-							Add links to your profiles so employers can learn more about your work
+							{#if user.AccountType === 'student'}
+								{'Add links to your profiles so employers can learn more about your work'}
+							{:else if user.AccountType === 'org'}
+								{'Add links to your profiles so applicants can learn more about your work'}
+							{:else}
+								{'Add links to your profiles so employers can learn more about your work'}
+							{/if}
 						</p>
 					</div>
 

@@ -6,6 +6,7 @@
 	import * as Pagination from '$lib/components/vendor/ui/pagination';
 	import * as UserCard from '$lib/components/vendor/ui/user-card';
 	import { getUserFullName, nameof__job_creator } from '$lib/snippets/names/index';
+	import { type IJobCreator } from '$lib/snippets/names/index.svelte';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 	import { Briefcase, Calendar, Clock3 } from 'lucide-svelte';
 	import { type PageData } from './$types.js';
@@ -173,7 +174,7 @@
 						<card-description class="flex flex-col gap-6">
 							<div class="flex flex-col gap-2">
 								<JobCard.Description
-									>{job.Users?.FirstName + ' ' + job.Users?.LastName}</JobCard.Description
+									>{@render nameof__job_creator(job.Users as unknown as IJobCreator)}</JobCard.Description
 								>
 								<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 									<Briefcase strokeWidth="2" size="16" />
