@@ -68,11 +68,11 @@
 				</div>
 				<div class="ml-4 flex flex-row gap-2">
 					{#if data.authenticated}
-						<a href="/auth/logout" data-sveltekit-reload>
-							<Button class="bg-violet-500 text-white hover:bg-violet-600">Logout</Button>
-						</a>
 						<a href="/dashboard">
 							<Button class="bg-amber-500 text-white hover:bg-amber-600">Dash</Button>
+						</a>
+						<a href="/auth/logout" data-sveltekit-reload>
+							<Button class="bg-violet-500 text-white hover:bg-violet-600">Logout</Button>
 						</a>
 					{:else}
 						<a href="/auth/login"
@@ -158,7 +158,9 @@
 							<div class="mt-3 block opacity-75">
 								<PartnerOrgs {org_avatar_data}>
 									<a href="#host-organizations" onclick={() => (active_tab = 3)}>
-										<p class="mt-4 text-violet-800 opacity-60 text-sm">See more partner organizations</p>
+										<p class="mt-4 text-sm text-violet-800 opacity-60">
+											See more partner organizations
+										</p>
 									</a>
 								</PartnerOrgs>
 							</div>

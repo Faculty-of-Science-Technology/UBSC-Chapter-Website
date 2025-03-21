@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_SUPPORT_EMAIL } from '$env/static/public';
+	import { PUBLIC_PLATFORM_VERSION, PUBLIC_SUPPORT_EMAIL } from '$env/static/public';
 	import { Badge } from '$lib/components/vendor/ui/badge/index.js';
 	import { Button } from '$lib/components/vendor/ui/button/index.js';
 	import * as Card from '$lib/components/vendor/ui/card/index.js';
@@ -115,7 +115,7 @@
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div>
 					<h3 class="text-sm font-medium">Version</h3>
-					<p class="text-muted-foreground">Preview 2</p>
+					<p class="text-muted-foreground">{PUBLIC_PLATFORM_VERSION}</p>
 				</div>
 				<div>
 					<h3 class="text-sm font-medium">Last Updated</h3>
