@@ -79,7 +79,7 @@
 					<NavShard.Link
 						a11yLink="/dashboard/profile"
 						title="Manage organization"
-						onclick={() => goto('/dashboard/organization')}
+						onclick={() => goto('/dashboard/profile')}
 						active={active_link === 1}
 					/>
 					<NavShard.Link
