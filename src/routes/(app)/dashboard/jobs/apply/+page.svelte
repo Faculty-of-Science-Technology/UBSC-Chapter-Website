@@ -17,6 +17,7 @@
 	let { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
+	const reviewing = data.reviewing;
 
 	const job_obj = data.job;
 	const job = job_obj.Jobs;
@@ -178,9 +179,13 @@
 										target="_blank"
 										aria-label="Review your past resume uploaded"
 									>
-										{application_form.data.draft && application_status === 'pending'
-											? 'Review your past resume uploaded'
-											: ''}</a
+										{#if reviewing === false}
+											{application_form.data.draft && application_status === 'pending'
+												? 'Review your past resume uploaded'
+												: ''}
+										{:else}
+											View the uploaded resume
+										{/if}</a
 									>
 									<p class="text-sm text-red-600">{$errors.resume}</p>
 								</div>

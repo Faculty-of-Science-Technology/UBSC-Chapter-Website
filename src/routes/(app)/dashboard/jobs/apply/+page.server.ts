@@ -127,7 +127,7 @@ export const load: PageServerLoad = async (event) => {
 			// Return an empty application form
 			const applicationForm = await superValidate(zod(JobApplicationSchema));
 			applicationForm.data.draft = true;
-			return { applicationForm, job, questions, user };
+			return { applicationForm, job, questions, user, reviewing: false };
 		}
 		const application_found = jobForm[0];
 
@@ -174,6 +174,7 @@ export const load: PageServerLoad = async (event) => {
 			job,
 			questions,
 			user,
+			reviewing: true,
 			applicationId: application_found.JobApplications.Id,
 			applicationStatus: application_found.JobApplications.Status
 		};
