@@ -10,6 +10,7 @@
 
 	const { data } = $props<{ data: PageData }>();
 	const org_avatar_data: AvatarData[] = data.org_avatar_data;
+	const agenda_data = data.agendas;
 
 	let active_tab = $state(0);
 </script>
@@ -345,7 +346,7 @@
 			{:else if active_tab === 1}
 				<Homepage.Interns avatar_data={data.avatar_data} />
 			{:else if active_tab === 2}
-				<Homepage.PresentationAgenda />
+				<Homepage.PresentationAgenda {agenda_data} />
 			{:else if active_tab === 3}
 				<Homepage.HostOrganizations avatar_data={org_avatar_data} />
 			{:else if active_tab === 4}
