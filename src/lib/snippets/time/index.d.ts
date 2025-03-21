@@ -13,7 +13,7 @@ export interface IJobPopulated {
 	Users: {
 		CreatedAt: string;
 		Id: string;
-		AccountType: 'host' | 'student' | 'owner';
+		AccountType: 'org' | 'student' | 'owner';
 		FirstName: string;
 		LastName: string;
 		Email: string;

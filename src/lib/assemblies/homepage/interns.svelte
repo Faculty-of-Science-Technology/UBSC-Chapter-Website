@@ -26,12 +26,23 @@
 	<Tabs.Root value="everyone" class="w-full">
 		<Tabs.List class="grid w-full grid-cols-3 gap-4">
 			<Tabs.Trigger value="everyone">Everyone</Tabs.Trigger>
-			<Tabs.Trigger value="bachelors">Bachelors</Tabs.Trigger>
-			<Tabs.Trigger value="associates">Associates</Tabs.Trigger>
+			<!-- <Tabs.Trigger value="bachelors">Bachelors</Tabs.Trigger>
+			<Tabs.Trigger value="associates">Associates</Tabs.Trigger> -->
 		</Tabs.List>
 		<Tabs.Content value="everyone">
-			<!-- Grid starts here -->
+			<div class="mt-4 p-8 text-center text-muted-foreground">
+				{#if avatar_data.length === 0}
+					<p class="text-sm text-muted-foreground">No users found.</p>
+				{/if}
+				{#if avatar_data.length > 0}
+					<p class="text-sm text-muted-foreground">
+						{avatar_data.length}
+						{avatar_data.length === 1 ? 'user' : 'users'} found.
+					</p>
+				{/if}
+			</div>
 			<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-12">
+				<!-- Grid starts here -->
 				{#each avatar_data as avatar}
 					<HoverCard.Root>
 						<HoverCard.Trigger>

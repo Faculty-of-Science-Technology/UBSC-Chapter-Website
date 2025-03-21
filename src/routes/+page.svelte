@@ -333,7 +333,7 @@
 			{:else if active_tab === 2}
 				<Homepage.PresentationAgenda />
 			{:else if active_tab === 3}
-				<Homepage.HostOrganizations />
+				<Homepage.HostOrganizations avatar_data={data.org_avatar_data}/>
 			{:else if active_tab === 4}
 				<Homepage.About />
 			{:else if active_tab === 5}

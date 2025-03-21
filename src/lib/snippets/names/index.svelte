@@ -2,7 +2,7 @@
 	export { nameof__job_creator, nameof__person };
 	export interface IJobCreator {
 		Id: string;
-		AccountType: 'host' | 'student' | 'owner';
+		AccountType: 'org' | 'student' | 'owner';
 		Administrator: boolean;
 		FirstName: string;
 		LastName: string;

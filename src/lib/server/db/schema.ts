@@ -14,7 +14,7 @@ import {
 	varchar
 } from 'drizzle-orm/pg-core';
 
-export const accountTypeEnum = pgEnum('account_type', ['host', 'student', 'owner']);
+export const accountTypeEnum = pgEnum('account_type', ['org', 'student', 'owner']);
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 // Apparently, the bytea type is not supported by drizzle-orm, so we have to create a custom type for it
 // https://stackoverflow.com/a/76499742/10976415

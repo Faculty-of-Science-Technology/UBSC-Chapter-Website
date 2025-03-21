@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_UI_DEFAULT_COVER_IMAGE } from '$env/static/public';
+	import { PUBLIC_PLATFORM_NAME, PUBLIC_UI_DEFAULT_COVER_IMAGE } from '$env/static/public';
 	import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
 	import Button from '$lib/components/vendor/ui/button/button.svelte';
 	import * as Card from '$lib/components/vendor/ui/card';
@@ -170,7 +170,7 @@
 							{/if}
 						</span>
 					</h1>
-					<p class="text-lg text-slate-600">{person.Bio ?? "Hey there! I'm using IT Careers!"}</p>
+					<p class="text-lg text-slate-600">{person.Bio ?? `Hey there! I'm using ${PUBLIC_PLATFORM_NAME}!`}</p>
 				</div>
 			</div>
 		</div>

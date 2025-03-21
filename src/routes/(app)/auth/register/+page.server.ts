@@ -81,7 +81,7 @@ export const actions: Actions = {
 			// Insert the user if the email doesn't exist
 			const activation_code = Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' });
 			await db.insert(Users).values({
-				AccountType: super_form.data.account_type,
+				AccountType: super_form.data.account_type === 'student' ? 'student' : 'org',
 				FirstName: super_form.data.full_name.split(' ')[0].trim(),
 				LastName: super_form.data.full_name.split(' ')[1].trim(),
 				Email: super_form.data.email,

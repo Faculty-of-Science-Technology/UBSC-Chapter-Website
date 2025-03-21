@@ -6,7 +6,7 @@ declare global {
 		interface Locals {
 			user?: {
 				Id: string;
-				AccountType: 'host' | 'student' | 'owner';
+				AccountType: 'org' | 'student' | 'owner';
 				Administrator: boolean;
 				FirstName: string;
 				LastName: string;

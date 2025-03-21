@@ -153,8 +153,8 @@
 							bind:value={$form.phone}
 						/>
 						<p class="text-sm text-muted-foreground">
-							This is your public display name. It can be your real name or a pseudonym. You can
-							only change this once every 30 days.
+							This is your public phone number. You do not need to provide it, but it is recommended
+							that you do.
 						</p>
 					</div>
 
@@ -371,12 +371,15 @@
 						</div>
 						<p class="text-sm text-muted-foreground">Examples: JavaScript, Team Building</p>
 						<p class="text-sm text-destructive">
-							{typeof $errors.skills === 'object' ? Object.values($errors.skills).join(', ') : $errors.skills}
+							{typeof $errors.skills === 'object'
+								? Object.values($errors.skills).join(', ')
+								: $errors.skills}
 						</p>
 						{#if $form.skills.length >= 12}
-							<p class="text-sm text-destructive">You can add up to {15 - $form.skills.length} more skill(s).</p>
+							<p class="text-sm text-destructive">
+								You can add up to {15 - $form.skills.length} more skill(s).
+							</p>
 						{/if}
-						
 					</div>
 
 					<div class="grid w-full max-w-sm items-center gap-1.5">

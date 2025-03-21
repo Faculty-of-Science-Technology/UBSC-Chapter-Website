@@ -253,7 +253,7 @@ Message: {$message}
 							id="subtitle"
 							name="talentpool__event_subtitle"
 							bind:value={$form.subtitle}
-							placeholder="Join us as we host Awesome Event!"
+							placeholder="Join us as we host 'Awesome Event'!"
 						/>
 					</div>
 					<div class="grid gap-2">

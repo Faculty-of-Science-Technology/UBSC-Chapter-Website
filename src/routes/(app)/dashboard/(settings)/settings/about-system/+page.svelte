@@ -36,7 +36,7 @@
 			<div class="flex items-start gap-3">
 				<Badge variant="outline" class="mt-0.5">1</Badge>
 				<div>
-					<h3 class="font-medium">Intern Directory</h3>
+					<h3 class="font-medium">Intern Gallery</h3>
 					<p class="text-muted-foreground">
 						Comprehensive listing of all registered interns with filtering capabilities
 					</p>
@@ -45,6 +45,25 @@
 			<div class="flex items-start gap-3">
 				<Badge variant="outline" class="mt-0.5">2</Badge>
 				<div>
+					<h3 class="font-medium">Org Gallery</h3>
+					<p class="text-muted-foreground">
+						Comprehensive listing of all registered organizations with filtering capabilities
+					</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-3">
+				<Badge variant="outline" class="mt-0.5">3</Badge>
+				<div>
+					<h3 class="font-medium">Job Posting & Management</h3>
+					<p class="text-muted-foreground">
+						Post and manage job listings for interns, including application tracking and status
+						updates
+					</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-3">
+				<Badge variant="outline" class="mt-0.5">4</Badge>
+				<div>
 					<h3 class="font-medium">Group Management</h3>
 					<p class="text-muted-foreground">
 						Create and organize interns into logical groups for better management
@@ -52,7 +71,7 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-3">
-				<Badge variant="outline" class="mt-0.5">3</Badge>
+				<Badge variant="outline" class="mt-0.5">5</Badge>
 				<div>
 					<h3 class="font-medium">Agenda Management</h3>
 					<p class="text-muted-foreground">
@@ -61,11 +80,20 @@
 				</div>
 			</div>
 			<div class="flex items-start gap-3">
-				<Badge variant="outline" class="mt-0.5">4</Badge>
+				<Badge variant="outline" class="mt-0.5">6</Badge>
 				<div>
 					<h3 class="font-medium">Follow-Up</h3>
 					<p class="text-muted-foreground">
 						Follow up with interns and their applications to ensure a smooth experience
+					</p>
+				</div>
+			</div>
+			<div class="flex items-start gap-3">
+				<Badge variant="outline" class="mt-0.5">7</Badge>
+				<div>
+					<h3 class="font-medium">Profile Customization</h3>
+					<p class="text-muted-foreground">
+						Customize things such as your skills, contact information, and more
 					</p>
 				</div>
 			</div>
@@ -101,9 +129,15 @@
 					<h3 class="text-sm font-medium">Author(s)</h3>
 					<ul>
 						<li>
-							<a href="https://github.com/AlexDev404" target="_blank" class="text-primary underline">AlexDev404</a>
+							<a href="https://github.com/AlexDev404" target="_blank" class="text-primary underline"
+								>AlexDev404</a
+							>
 						</li>
-						<li><a href="https://github.com/Lee26Ed" target="_blank" class="text-primary underline">Lee26Ed</a></li>
+						<li>
+							<a href="https://github.com/Lee26Ed" target="_blank" class="text-primary underline"
+								>Lee26Ed</a
+							>
+						</li>
 					</ul>
 				</div>
 			</div>
