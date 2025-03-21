@@ -424,7 +424,7 @@
 			<!-- Copyright -->
 			<div class="mt-12 border-t border-white/20 pt-6 text-center">
 				<p>
-					© {new Date().getFullYear()}
+					&copy; {new Date().getFullYear()}
 					{PUBLIC_PLATFORM_NAME} Platform {PUBLIC_PLATFORM_SPONSOR_NAME} | All rights reserved
 				</p>
 			</div>
