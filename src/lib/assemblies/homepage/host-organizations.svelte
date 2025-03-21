@@ -47,11 +47,12 @@
 							<a href="/dashboard/organizations/{organization.id}"
 								><Avatar.Root
 									class={cn(
-										'size-24 rounded-md',
+										'size-34 rounded-md',
 										organization.hireable ? 'border-4 border-primary' : ''
 									)}
 								>
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>
@@ -67,6 +68,7 @@
 									class={cn('rounded-md', organization.hireable ? 'border-2 border-primary' : '')}
 								>
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>
@@ -114,8 +116,9 @@
 					<HoverCard.Root>
 						<HoverCard.Trigger>
 							<a href="/dashboard/organizations/{organization.id}"
-								><Avatar.Root class="size-24 rounded-md border-4 border-primary">
+								><Avatar.Root class="size-34 rounded-md border-4 border-primary">
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>
@@ -130,6 +133,7 @@
 							<div class="flex justify-between space-x-4">
 								<Avatar.Root class="rounded-md border-2 border-primary">
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>
@@ -175,8 +179,9 @@
 					<HoverCard.Root>
 						<HoverCard.Trigger>
 							<a href="/dashboard/organizations/{organization.id}"
-								><Avatar.Root class="size-24 rounded-md">
+								><Avatar.Root class="size-34 rounded-md">
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>
@@ -190,6 +195,7 @@
 							<div class="flex justify-between space-x-4">
 								<Avatar.Root class="rounded-md">
 									<Avatar.Image
+										class="object-contain"
 										src={organization.image_url}
 										alt={organization.name || 'Organization logo'}
 									/>

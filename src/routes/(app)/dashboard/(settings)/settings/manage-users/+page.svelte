@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as Avatar from '$lib/components/vendor/ui/avatar/index.js';
-	import * as Card from '$lib/components/vendor/ui/card/index.js';
+	import * as Avatar from '$lib/components/vendor/ui/avatar';
+	import * as Card from '$lib/components/vendor/ui/card';
 </script>
 
 <section>
