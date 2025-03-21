@@ -54,7 +54,7 @@
 					active={active_link === 0}
 					onclick={() => goto('/dashboard/')}
 				/>
-				{#if user.AccountType === 'student'}
+				{#if user.AccountType === 'student' || user.AccountType === 'owner'}
 					<NavShard.Link
 						a11yLink="/dashboard/profile"
 						title="Manage profile"
