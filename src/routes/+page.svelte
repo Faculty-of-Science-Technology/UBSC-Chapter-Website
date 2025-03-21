@@ -5,6 +5,7 @@
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
 	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
 
+	import { PUBLIC_PLATFORM_NAME, PUBLIC_PLATFORM_SPONSOR_NAME } from '$env/static/public';
 	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
 	import type { PageData } from './$types';
 
@@ -422,7 +423,10 @@
 
 			<!-- Copyright -->
 			<div class="mt-12 border-t border-white/20 pt-6 text-center">
-				<p>© 2024 Talent Pool Platform | All rights reserved</p>
+				<p>
+					© {new Date().getFullYear()}
+					{PUBLIC_PLATFORM_NAME} Platform {PUBLIC_PLATFORM_SPONSOR_NAME} | All rights reserved
+				</p>
 			</div>
 		</div>
 	</footer>
