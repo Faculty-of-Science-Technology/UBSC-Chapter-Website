@@ -1,6 +1,7 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { UserSkills, UserSocialLinks, Users } from '$lib/server/db/schema';
+import { uploadFile } from '$lib/server/upload';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
@@ -36,6 +37,10 @@ const profileSchema = z.object({
 		})
 		.optional(),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
+	resume: z
+		.instanceof(File, { message: 'Your resume is required' })
+		.refine((f) => f.size < 5_000_000, 'Max 5 MB upload size.')
+		.optional(),
 	location: z
 		.string()
 		.max(255, { message: 'Your location is too long. Try something else' })
@@ -105,6 +110,12 @@ export const actions: Actions = {
 			return fail(400, { form, user: locals.user });
 		}
 		try {
+			// Upload the resume
+			//const formData = await request.formData();
+			const raw_resume: File = form.data.resume as File;
+			const resume_url: string = await uploadFile(raw_resume, "application/pdf")
+			console.log(resume_url)
+
 			// Update user profile
 			await db
 				.update(Users)
@@ -113,6 +124,7 @@ export const actions: Actions = {
 					Email: form.data.email,
 					Phone: form.data.phone,
 					Bio: form.data.bio,
+					ResumeUrl: resume_url,
 					Location: form.data.location,
 					Hireable: form.data.hireable
 				})
@@ -147,7 +159,7 @@ export const actions: Actions = {
 			setMessage(form, 'Profile updated successfully');
 			return { form, user: locals.user };
 		} catch (e) {
-			if (Boolean(IS_DEVELOPMENT)) console.log(e);
+			if (IS_DEVELOPMENT) console.log(e);
 			setError(form, 'Failed to update profile');
 			return { form, user: locals.user };
 		}

@@ -16,6 +16,7 @@ declare global {
 				ProfilePicture: string | null;
 				CoverPhoto: string | null;
 				Username: string;
+				ResumeUrl: string | null;
 				Password: string;
 				ActivationCode: string | null;
 				Bio: string | null;

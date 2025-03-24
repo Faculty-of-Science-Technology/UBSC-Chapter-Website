@@ -129,7 +129,7 @@
 				<div
 					class="relative h-32 w-32 overflow-visible rounded-full border-4 border-white bg-white lg:h-48 lg:w-48"
 				>
-					<div class="h-full w-full rounded-full overflow-hidden">
+					<div class="h-full w-full overflow-hidden rounded-full">
 						<UserCard.ProfileBanner
 							class=""
 							image={person.ProfilePicture as string}
@@ -170,7 +170,9 @@
 							{/if}
 						</span>
 					</h1>
-					<p class="text-lg text-slate-600">{person.Bio ?? `Hey there! I'm using ${PUBLIC_PLATFORM_NAME}!`}</p>
+					<p class="text-lg text-slate-600">
+						{person.Bio ?? `Hey there! I'm using ${PUBLIC_PLATFORM_NAME}!`}
+					</p>
 				</div>
 			</div>
 		</div>
@@ -179,6 +181,42 @@
 	<!-- Main Content -->
 	<main class="mx-auto flex max-w-6xl flex-col space-y-8 px-4 py-8">
 		<!-- Left Column -->
+		<!-- After the Skills Section Card -->
+		{#if person.ResumeUrl}
+			<Card.Root>
+				<Card.Title class="p-4 text-xl font-semibold">Resume</Card.Title>
+				<Card.Description class="p-4">
+					<div class="flex items-center gap-3">
+						<a
+							href={person.ResumeUrl}
+							target="_blank"
+							class="flex items-center gap-2 rounded-lg bg-violet-100 px-4 py-2 text-violet-700 transition-colors hover:bg-violet-200"
+						>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								class="lucide lucide-file-text"
+							>
+								<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+								<polyline points="14 2 14 8 20 8" />
+								<line x1="16" x2="8" y1="13" y2="13" />
+								<line x1="16" x2="8" y1="17" y2="17" />
+								<line x1="10" x2="8" y1="9" y2="9" />
+							</svg>
+							View Resume
+						</a>
+					</div>
+				</Card.Description>
+			</Card.Root>
+		{/if}
+
 		<div class="flex flex-col gap-6">
 			<!-- Contact Information -->
 			<Card.Root>
