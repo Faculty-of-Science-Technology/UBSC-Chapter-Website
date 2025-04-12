@@ -25,3 +25,24 @@ export async function uploadImage(file: File): Promise<string> {
 
 	return `/api/media/${fileId}`;
 }
+
+export async function uploadFile(file: File, mimetype_restriction: string): Promise<string> {
+	const buffer = await file.arrayBuffer();
+	const data = Buffer.from(buffer);
+	const mimeType = file.type;
+
+	if (!mimeType.startsWith(mimetype_restriction)) {
+		throw new Error(`Invalid file type. Only ${mimetype_restriction}* are allowed.`);
+	}
+
+	const id = generateId();
+	const fileId = `${id}.${mimeType.split('/')[1]}`;
+
+	const result = await saveToMediaPool(data, fileId, mimeType);
+
+	if (!result) {
+		throw error(500, 'Failed to save file');
+	}
+
+	return `/api/media/${fileId}`;
+}

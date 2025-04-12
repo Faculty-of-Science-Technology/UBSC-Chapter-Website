@@ -30,6 +30,9 @@
 	let skillInput = $state('');
 	let user = data.user;
 
+	// -- Resume upload reactivity
+	let resumeUploadIsDragOver: boolean = $state(false);
+
 	let backoff = 500;
 	let timeout: ReturnType<typeof setTimeout>;
 	let cityData: GeoJSON | null = $state(null);
@@ -115,7 +118,13 @@
 			<h1 class="text-5xl font-extralight lg:text-6xl">Your Profile</h1>
 			<p class="text-lg lg:text-2xl">Manage and setup your profile</p>
 		</section>
-		<form method="POST" class="space-y-8" id="profile-form" use:enhance>
+		<form
+			method="POST"
+			class="space-y-8"
+			id="profile-form"
+			enctype="multipart/form-data"
+			use:enhance
+		>
 			<div class="grid w-full max-w-sm items-center gap-8">
 				<div class="grid w-full max-w-sm items-center gap-1.5">
 					<Label>Appearance</Label>
@@ -255,6 +264,34 @@
 								placeholder="Hey there, welcome to my profile. Feel free to get in touch or leave a message!"
 							/>
 						</div>
+					</div>
+					<div class="grid w-full max-w-sm items-center gap-1.5">
+						<Label for="resume">Attach your resume (optional)</Label>
+						<Input
+							name="resume"
+							type="file"
+							oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
+							{...$constraints.resume}
+							class={resumeUploadIsDragOver ? 'bg-black' : ''}
+							ondragenter={() => (resumeUploadIsDragOver = true)}
+							ondragleave={() => (resumeUploadIsDragOver = false)}
+							ondrop={() => (resumeUploadIsDragOver = false)}
+						/>
+						<p class="text-sm text-muted-foreground">
+							Click to select a file or drop on top of the above button
+						</p>
+						{#if user.ResumeUrl && user.AccountType === 'student'}
+							<a
+								class="block text-sm text-slate-800 underline"
+								href={user.ResumeUrl}
+								{...$constraints.resume}
+								target="_blank"
+								aria-label="Review your past resume uploaded"
+							>
+								View the uploaded resume
+							</a>
+						{/if}
+						<p class="text-sm text-red-600">{$errors.resume}</p>
 					</div>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="location">Location</Label>

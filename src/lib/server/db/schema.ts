@@ -64,6 +64,7 @@ export const Users = pgTable('Users', {
 	CoverPhoto: text('cover_photo'), // URL to Cover Photo
 	Password: text('password').notNull(),
 	Username: varchar('username', { length: 16 }).unique().notNull(),
+	ResumeUrl: text('resume_url'), // MediaPool URL to Resume
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
 	Bio: varchar('bio', { length: 255 }),
 	Hireable: boolean('hireable').notNull().default(false),
