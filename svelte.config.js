@@ -1,9 +1,10 @@
 import adapter from '@sveltejs/adapter-node';
 import { default as adapter_vercel } from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import 'dotenv/config';
 
 // Determine which adapter to use based on DEVELOPMENT env variable
-const isDevelopment = process.env.DEVELOPMENT === 'true';
+const isDevelopment = process.env.IS_DEVELOPMENT === 'true';
 const selectedAdapter = isDevelopment ? adapter_vercel : adapter;
 
 /** @type {import('@sveltejs/kit').Config} */
