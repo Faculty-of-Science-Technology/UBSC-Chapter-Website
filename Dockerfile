@@ -37,6 +37,8 @@ RUN npm prune --omit=dev
 # Final stage for app image
 FROM base
 
+RUN mkdir -p /app/build
+
 # Copy built application
 COPY --from=build /app/build /app/build
 COPY --from=build /app/node_modules /app/node_modules
