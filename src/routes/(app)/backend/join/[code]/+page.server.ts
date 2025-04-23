@@ -26,8 +26,9 @@ export const actions: Actions = {
 			throw error(401, 'Unauthorized');
 		}
 
-		const form = await superValidate(request, zod(joinSchema));
-		form.data.code = params.code ?? '00000000-0000-0000-0000-000000000000';
+		const data = await request.formData();
+		data.set('code', params.code ?? '00000000-0000-0000-0000-000000000000');
+		const form = await superValidate(data, zod(joinSchema));
 
 		if (!form.valid || !params.code) {
 			setError(form, 'Invalid form data');
