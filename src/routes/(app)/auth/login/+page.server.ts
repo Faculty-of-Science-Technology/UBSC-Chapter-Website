@@ -127,7 +127,7 @@ export const actions: Actions = {
 			// @ts-expect-error - We are deleting the password field from the form
 			// Again, we don't to pass the password back to the client
 			delete super_form.data.password;
-			if (Boolean(IS_DEVELOPMENT)) {
+			if (IS_DEVELOPMENT === "true") {
 				console.log(error);
 			}
 			return fail(400, { super_form });
@@ -154,6 +154,6 @@ function sendNewActivationEmail(
 		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 		to: email,
 		subject: `Activate your account on ${PLATFORM_NAME}`,
-		text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${Boolean(IS_DEVELOPMENT) ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+		text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${(IS_DEVELOPMENT === "true") ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 	});
 }

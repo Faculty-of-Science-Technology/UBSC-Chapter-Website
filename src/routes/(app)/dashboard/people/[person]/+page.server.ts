@@ -28,7 +28,7 @@ export const load: PageServerLoad = async (event) => {
 		.limit(1)
 		.then((res) => res[0])
 		.catch((e) => {
-			if (Boolean(IS_DEVELOPMENT)) console.log(e);
+			if (IS_DEVELOPMENT === "true") console.log(e);
 			throw error(404, {
 				message: 'Person not found'
 			});
