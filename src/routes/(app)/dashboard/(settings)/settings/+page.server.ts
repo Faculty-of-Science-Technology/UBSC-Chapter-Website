@@ -104,7 +104,7 @@ export const actions: Actions = {
 		}
 		const form = await superValidate(request, zod(profileSchema));
 
-		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
+		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);

@@ -61,7 +61,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		},
 		where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
 	});
-	return { form, addEventForm, removeAgendaForm, removeEventForm, agendas, user: locals.user, debug: Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT)) };
+	return { form, addEventForm, removeAgendaForm, removeEventForm, agendas, user: locals.user, debug: Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) };
 };
 
 export const actions: Actions = {
@@ -70,7 +70,7 @@ export const actions: Actions = {
 			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(agendaSchema));
-		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
+		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
@@ -110,7 +110,7 @@ export const actions: Actions = {
 			setError(form, 'You have some errors in your form. Please fix them and try again.');
 			return fail(400, { form });
 		}
-		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
+		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
@@ -144,7 +144,7 @@ export const actions: Actions = {
 			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(agendaSchema__remove));
-		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
+		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
@@ -166,7 +166,7 @@ export const actions: Actions = {
 			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(eventSchema__remove));
-		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
+		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
 			console.log('To disable this, set DEBUG to false in your .env file');
 			console.log('form', form);
