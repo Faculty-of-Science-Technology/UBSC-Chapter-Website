@@ -20,7 +20,7 @@ const memberSchema = z.object({
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     if (!locals.user) {
-        throw error(401, 'Unauthorized');
+        throw error(401, '✗ Unauthorized');
     }
 
     // console.log(params);
@@ -63,7 +63,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 export const actions: Actions = {
     createGroup: async ({ request, locals }) => {
         if (!locals.user) {
-            throw error(401, 'Unauthorized');
+            throw error(401, '✗ Unauthorized');
         }
 
         const form = await superValidate(request, zod(groupSchema));
@@ -89,7 +89,7 @@ export const actions: Actions = {
 
     addMember: async ({ request, locals }) => {
         if (!locals.user) {
-            throw error(401, 'Unauthorized');
+            throw error(401, '✗ Unauthorized');
         }
 
         const form = await superValidate(request, zod(memberSchema));
@@ -110,7 +110,7 @@ export const actions: Actions = {
 
     removeMember: async ({ request, locals }) => {
         if (!locals.user) {
-            throw error(401, 'Unauthorized');
+            throw error(401, '✗ Unauthorized');
         }
 
         const form = await superValidate(request, zod(memberSchema));

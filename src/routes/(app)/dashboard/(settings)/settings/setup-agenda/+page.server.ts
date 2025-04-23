@@ -48,7 +48,7 @@ const eventSchema = z.object({
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		throw error(401, 'Unauthorized');
+		throw error(401, '✗ Unauthorized');
 	}
 	const form = await superValidate(zod(agendaSchema));
 	const addEventForm = await superValidate(zod(eventSchema));
@@ -67,7 +67,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	addAgenda: async ({ request, locals }) => {
 		if (!locals.user) {
-			throw error(401, 'Unauthorized');
+			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(agendaSchema));
 		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
@@ -102,7 +102,7 @@ export const actions: Actions = {
 
 	addEvent: async ({ request, locals }) => {
 		if (!locals.user) {
-			throw error(401, 'Unauthorized');
+			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(eventSchema));
 
@@ -141,7 +141,7 @@ export const actions: Actions = {
 
 	deleteAgenda: async ({ request, locals }) => {
 		if (!locals.user) {
-			throw error(401, 'Unauthorized');
+			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(agendaSchema__remove));
 		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {
@@ -163,7 +163,7 @@ export const actions: Actions = {
 
 	deleteEvent: async ({ request, locals }) => {
 		if (!locals.user) {
-			throw error(401, 'Unauthorized');
+			throw error(401, '✗ Unauthorized');
 		}
 		const form = await superValidate(request, zod(eventSchema__remove));
 		if (Boolean(JSON.parse(DEBUG) && JSON.parse(IS_DEVELOPMENT))) {

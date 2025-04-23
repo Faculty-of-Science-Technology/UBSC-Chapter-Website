@@ -9,5 +9,5 @@ export const load: LayoutServerLoad = async ({ locals, parent }) => {
 			authenticated
 		};
 	}
-	throw error(401, 'Unauthorized');
+	throw error(401, '✗ Unauthorized');
 };

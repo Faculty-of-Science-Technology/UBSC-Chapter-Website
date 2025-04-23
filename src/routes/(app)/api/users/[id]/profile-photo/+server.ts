@@ -6,7 +6,7 @@ import { eq } from 'drizzle-orm';
 
 export const POST: ServerLoad = async ({ params, request, locals }) => {
 	if (!locals.user) {
-		throw error(401, 'Unauthorized');
+		throw error(401, '✗ Unauthorized');
 	}
 
 	if (locals.user.Id !== params.id) {
