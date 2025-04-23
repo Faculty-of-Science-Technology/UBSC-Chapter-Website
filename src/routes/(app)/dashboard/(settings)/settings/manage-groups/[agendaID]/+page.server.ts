@@ -6,7 +6,7 @@ import { and, eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
-import type { PageServerLoad } from '../$types';
+import type { PageServerLoad } from './$types';
 
 const groupSchema = z.object({
     title: z.string().min(1, { message: 'Group name is required' }).max(255),
@@ -24,7 +24,6 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     }
 
     // console.log(params);
-    // @ts-expect-error Weird error
     const agendaId = params.agendaID;
     if (!agendaId) throw error(400, 'Agenda ID is required');
 
