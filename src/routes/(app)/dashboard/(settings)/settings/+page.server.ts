@@ -32,10 +32,10 @@ const profileSchema = z.object({
 		.string()
 		.min(10, { message: 'That phone number is too short. Try again.' })
 		.max(15, { message: 'That phone number is too long. Try again.' })
+		.optional()
 		.refine(validator.isMobilePhone, {
 			message: "That phone number doesn't look right. Try again."
-		})
-		.optional(),
+		}),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
 	resume: z
 		.instanceof(File, { message: 'Your resume is required' })
@@ -113,8 +113,8 @@ export const actions: Actions = {
 			// Upload the resume
 			//const formData = await request.formData();
 			const raw_resume: File = form.data.resume as File;
-			const resume_url: string = await uploadFile(raw_resume, "application/pdf")
-			console.log(resume_url)
+			const resume_url: string = await uploadFile(raw_resume, 'application/pdf');
+			console.log(resume_url);
 
 			// Update user profile
 			await db
