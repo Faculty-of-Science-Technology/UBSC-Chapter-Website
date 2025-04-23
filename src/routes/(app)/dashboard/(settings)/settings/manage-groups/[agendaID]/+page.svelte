@@ -6,7 +6,7 @@
 	import * as Select from '$lib/components/vendor/ui/select';
 	import * as Sheet from '$lib/components/vendor/ui/sheet';
 	import * as Table from '$lib/components/vendor/ui/table';
-	import { Plus, Trash2, UserPlus, Users } from 'lucide-svelte';
+	import { Link, Plus, Trash2, UserPlus, Users } from 'lucide-svelte';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
 	import type { PageData } from './$types';
 
@@ -80,6 +80,15 @@
 					</Table.Cell>
 					<Table.Cell class="text-right">
 						<div class="flex justify-end gap-2">
+							<Button
+								variant="ghost"
+								size="icon"
+								onclick={async () => {
+									await navigator.clipboard.writeText(window.location.origin + "/backend/join/" + group.Id);
+								}}
+							>
+								<Link class="h-4 w-4" />
+							</Button>
 							<Button
 								variant="ghost"
 								size="icon"
