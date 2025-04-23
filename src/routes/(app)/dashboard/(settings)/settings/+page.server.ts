@@ -30,11 +30,16 @@ const profileSchema = z.object({
 		.email({ message: "That email address doesn't look right. Try again." }),
 	phone: z
 		.string()
-		.refine(validator.isMobilePhone, {
-			message: "That phone number doesn't look right. Try again."
-		})
-		.optional(),
-
+		.optional()
+		.refine(
+			(p) => {
+				if (p === undefined || p.trim() === '') return true;
+				validator.isMobilePhone(p);
+			},
+			{
+				message: "That phone number doesn't look right. Try again."
+			}
+		),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
 	resume: z
 		.instanceof(File, { message: 'Your resume is required' })
