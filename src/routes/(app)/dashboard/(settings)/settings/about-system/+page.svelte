@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { PUBLIC_PLATFORM_VERSION, PUBLIC_SUPPORT_EMAIL } from '$env/static/public';
+	import { PUBLIC_PLATFORM_UPDATED_AT, PUBLIC_PLATFORM_VERSION, PUBLIC_SUPPORT_EMAIL } from '$env/static/public';
 	import { Badge } from '$lib/components/vendor/ui/badge/index.js';
 	import { Button } from '$lib/components/vendor/ui/button/index.js';
 	import * as Card from '$lib/components/vendor/ui/card/index.js';
@@ -119,7 +119,7 @@
 				</div>
 				<div>
 					<h3 class="text-sm font-medium">Last Updated</h3>
-					<p class="text-muted-foreground">March, 2025</p>
+					<p class="text-muted-foreground">{PUBLIC_PLATFORM_UPDATED_AT}</p>
 				</div>
 				<div>
 					<h3 class="text-sm font-medium">Support</h3>
