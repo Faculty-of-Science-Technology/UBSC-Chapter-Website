@@ -13,7 +13,7 @@ const joinSchema = z.object({
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		throw error(401, 'Unauthorized');
+		throw error(401, '✗ Unauthorized');
 	}
 
 	const form = await superValidate(zod(joinSchema));
@@ -23,7 +23,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 export const actions: Actions = {
 	join: async ({ request, locals, params }) => {
 		if (!locals.user) {
-			throw error(401, 'Unauthorized');
+			throw error(401, '✗ Unauthorized');
 		}
 
 		const data = await request.formData();
@@ -31,14 +31,14 @@ export const actions: Actions = {
 		const form = await superValidate(data, zod(joinSchema));
 
 		if (!form.valid || !params.code) {
-			setError(form, 'Invalid form data');
+			setError(form, '✗ Invalid form data');
 			return { form };
 		}
 
 		// See if the group actually exists
 		const group = await db.select().from(Groups).where(eq(Groups.Id, form.data.code)).execute();
 		if (group.length === 0) {
-			setError(form, 'Group not found');
+			setError(form, '✗ Group not found');
 			return { form };
 		}
 
@@ -49,7 +49,7 @@ export const actions: Actions = {
 			.where(and(eq(GroupMembers.GroupId, form.data.code), eq(GroupMembers.UserId, locals.user.Id)))
 			.execute();
 		if (existingMember.length > 0) {
-			setError(form, 'You are already a member of this group');
+			setError(form, '✗ You are already a member of this group');
 			return { form };
 		}
 
@@ -58,7 +58,7 @@ export const actions: Actions = {
 			UserId: locals.user.Id
 		});
 
-		setMessage(form, 'You were added successfully');
+		setMessage(form, '✓ You were added successfully');
 		return { form };
 	}
 };

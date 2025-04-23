@@ -4,9 +4,8 @@
 	import { superForm } from 'sveltekit-superforms';
 	import type { PageData } from './$types';
 
-    
 	export let data: PageData;
-    const { enhance, errors, message } = superForm(data.form);
+	const { enhance, errors, message } = superForm(data.form);
 </script>
 
 <page class="flex h-screen w-full flex-col items-center justify-center">
@@ -20,12 +19,15 @@
 			</Card.Header>
 			<Card.Content>
 				<form method="POST" action="?/join" use:enhance>
-                    <p class="text-sm text-red-500">{$errors.code}</p>
-					<p class="text-sm text-green-500">{$message}</p>
-                    <input type="hidden" name="code" value="00000000-0000-0000-0000-000000000000" />
+					<div class="mb-8">
+						<p class="text-sm text-red-500">{$errors.code}</p>
+						<p class="text-sm text-red-500">{$errors._errors}</p>
+						<p class="text-sm text-green-500">{$message}</p>
+					</div>
+					<input type="hidden" name="code" value="00000000-0000-0000-0000-000000000000" />
 					<div class="flex gap-2">
-                        <Button type="submit" class="w-full">Deploy</Button>
-						<Button variant="outline">Cancel</Button>
+						<Button type="submit" class="w-full">Join</Button>
+						<Button variant="outline" onclick={() => (window.location.href = '/')}>Cancel</Button>
 					</div>
 				</form>
 			</Card.Content>
