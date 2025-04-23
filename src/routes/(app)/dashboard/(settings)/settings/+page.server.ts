@@ -33,7 +33,7 @@ const profileSchema = z.object({
 		.min(10, { message: 'That phone number is too short. Try again.' })
 		.max(15, { message: 'That phone number is too long. Try again.' })
 		.optional()
-		.refine((p)=>validator.isMobilePhone(p ?? "000 0000000"), {
+		.refine((p)=>validator.isMobilePhone(p ?? "501 6666666"), {
 			message: "That phone number doesn't look right. Try again."
 		}),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
