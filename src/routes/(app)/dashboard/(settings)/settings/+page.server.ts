@@ -30,10 +30,10 @@ const profileSchema = z.object({
 		.email({ message: "That email address doesn't look right. Try again." }),
 	phone: z
 		.string()
-		.optional()
 		.refine(
 			(p) => {
 				if (p === undefined || p.trim() === '') return true;
+				console.log('phone', p);
 				validator.isMobilePhone(p);
 			},
 			{
@@ -78,9 +78,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	form.data = {
 		username: locals.user.Username,
 		email: locals.user.Email,
-		bio: locals.user.Bio || '',
-		phone: locals.user.Phone || '',
-		location: locals.user.Location || '',
+		bio: locals.user.Bio ?? '',
+		phone: locals.user.Phone ?? '',
+		location: locals.user.Location ?? '',
 		hireable: locals.user.Hireable,
 		skills: userSkills.map((skill) => skill.Name),
 		socials: userSocials.map((social) => ({

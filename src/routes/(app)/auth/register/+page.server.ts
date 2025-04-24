@@ -1,5 +1,6 @@
 import {
 	ACT_JWT_SECRET,
+	DEBUG,
 	DEFAULT_PROFILE_PICTURE,
 	IS_DEVELOPMENT,
 	MAIL_DISPLAYNAME,
@@ -72,6 +73,12 @@ export const actions: Actions = {
 			registerSchema.parse(form);
 			const super_form = await superValidate(formData, zod(registerSchema));
 
+			if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
+				console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+				console.log('To disable this, set DEBUG to false in your .env file');
+				console.log('form', form);
+			}
+
 			// Check if the email already exists
 			const user = await checkUser(Users.Email, super_form.data.email);
 			if (user.length > 0) {
@@ -116,7 +123,7 @@ export const actions: Actions = {
 				from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 				to: super_form.data.email,
 				subject: `Activate your account on ${PLATFORM_NAME}`,
-				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${(IS_DEVELOPMENT === "true") ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 			});
 
 			cookies.set(
@@ -135,6 +142,12 @@ export const actions: Actions = {
 			// Check if this is a Redirect
 			if (isRedirect(e)) {
 				throw e;
+			}
+
+			if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
+				console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+				console.log('To disable this, set DEBUG to false in your .env file');
+				console.log('error', e);
 			}
 
 			const super_form = await superValidate(form, zod(registerSchema));
