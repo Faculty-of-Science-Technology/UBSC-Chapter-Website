@@ -14,7 +14,13 @@ const socialLinkSchema = z.object({
 	platform: z.string({ required_error: 'You must define a platform' }).max(32),
 	url: z
 		.string({ required_error: 'Only text is allowed' })
-		.url({ message: "That doesn't look right. Check the URL and try again." })
+		.refine(
+			(e) => {
+				if (e === '') return true;
+				return validator.isURL(e);
+			},
+			{ message: "That doesn't look right. Check the URL and try again." }
+		)
 		.optional()
 });
 
@@ -29,17 +35,10 @@ const profileSchema = z.object({
 		})
 		.email({ message: "That email address doesn't look right. Try again." }),
 	phone: z
-		.string()
-		.refine(
-			(p) => {
-				if (p === undefined || p.trim() === '') return true;
-				console.log('phone', p);
-				validator.isMobilePhone(p);
-			},
-			{
-				message: "That phone number doesn't look right. Try again."
-			}
-		),
+		.string({
+			message: "That phone number doesn't look right. Try again."
+		})
+		.optional(),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
 	resume: z
 		.instanceof(File, { message: 'Your resume is required' })
@@ -56,6 +55,7 @@ const profileSchema = z.object({
 	socials: z
 		.array(socialLinkSchema)
 		.max(4, { message: 'Social links are currently capped to 4 links' })
+		.optional()
 });
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -90,7 +90,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 	};
 
 	// Add 4 empty social links if none exist
-	if (form.data.socials.length === 0) {
+	if (form.data.socials === undefined || form.data.socials.length === 0) {
 		form.data.socials = Array.from({ length: 4 }, () => ({ platform: '', url: '' }));
 	}
 
@@ -103,6 +103,13 @@ export const actions: Actions = {
 			throw error(401, { message: 'You must be logged in to view this page.' });
 		}
 		const form = await superValidate(request, zod(profileSchema));
+
+		if (form.data.phone !== undefined && form.data.phone.trim() !== '') {
+			if (validator.isMobilePhone(form.data.phone)) {
+				setError(form, 'phone', "That phone number doesn't look right. Try again.");
+				return fail(400, { form, user: locals.user });
+			}
+		}
 
 		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
@@ -148,6 +155,10 @@ export const actions: Actions = {
 
 			// Update social links
 			await db.delete(UserSocialLinks).where(eq(UserSocialLinks.UserId, locals.user.Id));
+
+			if (form.data.socials === undefined || form.data.socials.length === 0) {
+				form.data.socials = Array.from({ length: 4 }, () => ({ platform: '', url: '' }));
+			}
 
 			const validSocials = form.data.socials.filter((s) => s.url);
 			if (validSocials.length > 0) {

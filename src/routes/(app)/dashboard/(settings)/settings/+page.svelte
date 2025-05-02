@@ -498,6 +498,9 @@
 										class="flex-1"
 									/>
 								</div>
+								{#if $errors.socials}
+									<p class="text-sm text-red-600">{$errors.socials[index]!.url}</p>
+								{/if}
 							{/each}
 						</div>
 						<p class="text-sm text-muted-foreground">
