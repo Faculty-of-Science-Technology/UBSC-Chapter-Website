@@ -38,6 +38,7 @@ const profileSchema = z.object({
 		.string({
 			message: "That phone number doesn't look right. Try again."
 		})
+		.max(15)
 		.optional(),
 	bio: z.string().max(255, { message: 'Bios are cool, but yours is too long.' }).optional(),
 	resume: z
@@ -105,7 +106,12 @@ export const actions: Actions = {
 		const form = await superValidate(request, zod(profileSchema));
 
 		if (form.data.phone !== undefined && form.data.phone.trim() !== '') {
-			if (validator.isMobilePhone(form.data.phone)) {
+			if (JSON.parse(DEBUG)) {
+				console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+				console.log('To disable this, set DEBUG to false in your .env file');
+				console.log(form.data.phone);
+			}
+			if (!validator.isMobilePhone(form.data.phone)) {
 				setError(form, 'phone', "That phone number doesn't look right. Try again.");
 				return fail(400, { form, user: locals.user });
 			}
@@ -124,19 +130,27 @@ export const actions: Actions = {
 			// Upload the resume
 			//const formData = await request.formData();
 			const raw_resume: File = form.data.resume as File;
-			const resume_url: string = await uploadFile(raw_resume, 'application/pdf');
+			let resume_url: string | null = null;
+			if (raw_resume !== undefined) {
+				resume_url = await uploadFile(raw_resume, 'application/pdf');
+			}
 			console.log(resume_url);
 
 			// Update user profile
 			await db
 				.update(Users)
 				.set({
-					Username: form.data.username,
-					Email: form.data.email,
-					Phone: form.data.phone,
+					Username: form.data.username.trim(),
+					Email: form.data.email.trim(),
+					Phone:
+						form.data.phone !== undefined
+							? form.data.phone.trim() === ''
+								? null
+								: form.data.phone.trim()
+							: null,
 					Bio: form.data.bio,
 					ResumeUrl: resume_url,
-					Location: form.data.location,
+					Location: form.data.location !== undefined ? form.data.location.trim() : null,
 					Hireable: form.data.hireable
 				})
 				.where(eq(Users.Id, locals.user.Id));
