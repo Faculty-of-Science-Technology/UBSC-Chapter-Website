@@ -21,8 +21,8 @@
 		message: addmember_message
 	} = superForm(data.memberForm, {
 		id: 'memberForm',
-		onSubmit: () => {
-			if (selectedGroup !== null) {
+		onUpdate: (e) => {
+			if (e.result.type === 'success') {
 				// @ts-expect-error We're forcing a type here
 				selectedGroup.members.push({ user: selectedUser as unknown as (typeof data.groups)[0] });
 			}
