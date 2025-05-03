@@ -1,4 +1,3 @@
-
 <script lang="ts">
 	import { Toaster } from '$lib/components/vendor/ui/sonner';
 	import { i18n } from '$lib/i18n';

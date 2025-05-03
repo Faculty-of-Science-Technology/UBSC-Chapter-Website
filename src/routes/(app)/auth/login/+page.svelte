@@ -5,14 +5,10 @@
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
-	interface LoginData extends PageData {
-		form?: {
-			super_form: any;
-		};
-	}
-	let data: LoginData = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form?.super_form ?? data.data);
+	import type { PageProps } from './$types';
+
+	let { data }: PageProps = $props();
+	const { form, errors, constraints, enhance } = superForm(data.form);
 </script>
 
 <!-- <SuperDebug data={$form}/> -->
@@ -24,7 +20,9 @@
 	>
 		<div class="flex flex-col items-start justify-center self-stretch px-20 py-20"><Logo /></div>
 	</r-column>
-	<l-column class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8">
+	<l-column
+		class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8"
+	>
 		<Card.Root class="w-[305px] py-4 lg:w-[375px]">
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
@@ -36,7 +34,7 @@
 				</div>
 				<form
 					method="POST"
-					action="?/login"
+					action="?/login&next={data.next || ''}"
 					class="flex w-full flex-col items-center gap-4 text-left"
 					use:enhance
 				>

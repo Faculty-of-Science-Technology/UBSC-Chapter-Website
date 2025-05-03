@@ -3,18 +3,26 @@
 	import * as Dialog from '$lib/components/vendor/ui/dialog';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import { ScrollArea } from '$lib/components/vendor/ui/scroll-area/index.js';
 	import * as Select from '$lib/components/vendor/ui/select';
 	import * as Sheet from '$lib/components/vendor/ui/sheet';
 	import * as Table from '$lib/components/vendor/ui/table';
 	import { Link, Plus, Trash2, UserPlus, Users } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 	import SuperDebug, { superForm } from 'sveltekit-superforms';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	export let data: PageData;
+	let { data }: PageProps = $props();
 	const { form, enhance, errors } = superForm(data.form);
+	const {
+		form: addmember_form,
+		enhance: addmember_enhance,
+		errors: addmember_errors
+	} = superForm(data.memberForm);
 
-	let selectedGroup: (typeof data.groups)[0] | null = null;
-	let showMembersSheet = false;
+	let selectedGroup: (typeof data.groups)[0] | null = $state(null);
+	let selectedUser: string | undefined = $state(undefined);
+	let showMembersSheet = $state(false);
 </script>
 
 {#if data.debug}
@@ -84,7 +92,19 @@
 								variant="ghost"
 								size="icon"
 								onclick={async () => {
-									await navigator.clipboard.writeText(window.location.origin + "/backend/join/" + group.Id);
+									await navigator.clipboard.writeText(
+										window.location.origin + '/backend/join/' + group.Id
+									);
+									toast.success('Join link copied to clipboard', {
+										description:
+											'You can share this link with others to allow them to join the group.',
+										action: {
+											label: 'Close',
+											onClick: () => {
+												toast.dismiss();
+											}
+										}
+									});
 								}}
 							>
 								<Link class="h-4 w-4" />
@@ -120,15 +140,18 @@
 		</Sheet.Header>
 
 		<div class="py-4">
-			<form method="POST" action="?/addMember" class="mb-4 flex gap-2">
+			<form method="POST" action="?/addMember" class="mb-4 flex gap-2" use:addmember_enhance>
 				<input type="hidden" name="groupId" value={selectedGroup?.Id} />
-				<Select.Root name="userId">
-					<Select.Trigger class="w-full">
-						<Select.Item placeholder="Select a user" />
-					</Select.Trigger>
+				<Select.Root type="single" name="userId">
+					<Select.Trigger class="w-full"
+						>{selectedUser ? selectedUser : 'Select a user'}</Select.Trigger
+					>
 					<Select.Content>
 						{#each data.availableUsers as user}
-							<Select.Item value={user.Id}>
+							<Select.Item
+								value={user.Id}
+								onclick={() => (selectedUser = `${user.FirstName} ${user.LastName}`)}
+							>
 								{user.FirstName}
 								{user.LastName}
 							</Select.Item>
@@ -138,7 +161,7 @@
 				<Button type="submit">Add</Button>
 			</form>
 
-			<div class="space-y-4">
+			<ScrollArea class="space-y-4">
 				{#if selectedGroup?.members?.length}
 					{#each selectedGroup.members as member}
 						<div class="flex items-center justify-between">
@@ -158,7 +181,7 @@
 				{:else}
 					<p class="text-muted-foreground">No members in this group yet.</p>
 				{/if}
-			</div>
+			</ScrollArea>
 		</div>
 	</Sheet.Content>
 </Sheet.Root>

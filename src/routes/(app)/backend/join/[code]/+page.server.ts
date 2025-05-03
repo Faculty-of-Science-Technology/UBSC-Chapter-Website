@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { GroupMembers, Groups } from '$lib/server/db/schema';
-import { error, type Actions } from '@sveltejs/kit';
+import { error, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -11,9 +11,9 @@ const joinSchema = z.object({
 	code: z.string().uuid()
 });
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!locals.user) {
-		throw error(401, '✗ Unauthorized');
+		throw redirect(307, `/auth/login?next=/backend/join/${params.code}`);
 	}
 
 	const form = await superValidate(zod(joinSchema));

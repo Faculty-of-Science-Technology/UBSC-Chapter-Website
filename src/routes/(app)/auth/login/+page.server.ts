@@ -51,11 +51,13 @@ export const load: PageServerLoad = async (event) => {
 	if (session && authenticated) {
 		throw redirect(303, '/dashboard');
 	}
-	return await superValidate(request, zod(loginSchema));
+	const next = event.url.searchParams.get('next');
+	return { form: await superValidate(request, zod(loginSchema)), next: next || null };
 };
 
 export const actions: Actions = {
 	login: async (event) => {
+		const next = event.url.searchParams.get('next');
 		const formData = await event.request.formData();
 		const form = Object.fromEntries(await formData);
 		const cookies = event.cookies;
@@ -114,7 +116,11 @@ export const actions: Actions = {
 				}
 			);
 
-			throw redirect(303, '/dashboard');
+			if (next) {
+				throw redirect(303, next);
+			} else {
+				throw redirect(303, '/dashboard');
+			}
 		} catch (error) {
 			if (isActionFailure(error)) {
 				throw error;
@@ -127,7 +133,7 @@ export const actions: Actions = {
 			// @ts-expect-error - We are deleting the password field from the form
 			// Again, we don't to pass the password back to the client
 			delete super_form.data.password;
-			if (IS_DEVELOPMENT === "true") {
+			if (IS_DEVELOPMENT === 'true') {
 				console.log(error);
 			}
 			return fail(400, { super_form });
@@ -154,6 +160,6 @@ function sendNewActivationEmail(
 		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 		to: email,
 		subject: `Activate your account on ${PLATFORM_NAME}`,
-		text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${(IS_DEVELOPMENT === "true") ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+		text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account: ${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 	});
 }
