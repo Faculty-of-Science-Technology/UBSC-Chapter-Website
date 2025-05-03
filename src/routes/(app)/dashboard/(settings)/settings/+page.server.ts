@@ -1,4 +1,4 @@
-import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
+import { DEBUG, IS_DEVELOPMENT, PLATFORM_ALLOWED_SOCIALS } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { UserSkills, UserSocialLinks, Users } from '$lib/server/db/schema';
 import { uploadFile } from '$lib/server/upload';
@@ -75,6 +75,27 @@ export const load: PageServerLoad = async ({ locals }) => {
 		where: eq(UserSocialLinks.UserId, locals.user.Id)
 	});
 
+	let userSocials_POJO = userSocials.map((social) => ({
+		platform: social.Platform,
+		url: social.Url
+	}));
+
+	// Add blank social entries if less than 4
+	if (userSocials_POJO.length < 4) {
+		const blankEntriesToAdd = 4 - userSocials_POJO.length;
+		const allowedPlatforms: [string] = eval(PLATFORM_ALLOWED_SOCIALS); // Bad idea, but it's fine since it's static
+		const existingPlatforms = userSocials_POJO.map((social) => social.platform);
+		const nonExistingPlatforms = allowedPlatforms.filter(
+			(platform) => !existingPlatforms.includes(platform)
+		);
+		const missingEntries = nonExistingPlatforms
+			.slice(0, blankEntriesToAdd)
+			.map((platform) => ({ platform, url: '' }));
+		const blankEntries = userSocials_POJO.concat(missingEntries);
+
+		userSocials_POJO = [...userSocials_POJO, ...blankEntries];
+	}
+
 	// Pre-fill the form with existing data
 	form.data = {
 		username: locals.user.Username,
@@ -84,10 +105,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		location: locals.user.Location ?? '',
 		hireable: locals.user.Hireable,
 		skills: userSkills.map((skill) => skill.Name),
-		socials: userSocials.map((social) => ({
-			platform: social.Platform,
-			url: social.Url
-		}))
+		socials: userSocials_POJO
 	};
 
 	// Add 4 empty social links if none exist
@@ -113,7 +131,7 @@ export const actions: Actions = {
 			}
 			if (!validator.isMobilePhone(form.data.phone)) {
 				setError(form, 'phone', "That phone number doesn't look right. Try again.");
-				return fail(400, { form, user: locals.user });
+				form.valid = false;
 			}
 		}
 

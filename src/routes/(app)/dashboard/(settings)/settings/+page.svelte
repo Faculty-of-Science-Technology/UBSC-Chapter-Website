@@ -4,10 +4,9 @@
 	// import Badge from '$lib/components/vendor/ui/badge/badge.svelte';
 	import Button from '$lib/components/vendor/ui/button/button.svelte';
 	// import { Calendar } from 'lucide-svelte';
-	import { type PageData } from './$types.js';
+	import { type PageProps } from './$types';
 
-	const { data: props } = $props();
-	const data: PageData = props;
+	const { data }: PageProps = $props();
 
 	import CommandItem2 from '$lib/components/vendor/ui/command/command-item2.svelte';
 	import { Input } from '$lib/components/vendor/ui/input/index.js';
@@ -72,32 +71,32 @@
 		placeholder: string;
 	}
 
-	const socialPlatforms: SocialLink[] = [
-		{
+	const socialPlatforms: Record<string, SocialLink> = {
+		GitHub: {
 			platform: 'GitHub',
 			url: '',
 			icon: Github,
 			placeholder: 'https://github.com/yourusername'
 		},
-		{
+		LinkedIn: {
 			platform: 'LinkedIn',
 			url: '',
 			icon: Linkedin,
 			placeholder: 'https://linkedin.com/in/yourusername'
 		},
-		{
+		Twitter: {
 			platform: 'Twitter',
 			url: '',
 			icon: Twitter,
 			placeholder: 'https://twitter.com/yourusername'
 		},
-		{
+		'Personal Website': {
 			platform: 'Personal Website',
 			url: '',
 			icon: Globe,
 			placeholder: 'https://your-website.com'
 		}
-	];
+	};
 
 	// Initialize the form
 	const form_object = superForm(data.form, {
@@ -108,6 +107,7 @@
 	});
 
 	const { form, errors, message, constraints, enhance } = form_object;
+	console.log($form.socials);
 </script>
 
 <!-- <SuperDebug data={form} /> -->
@@ -477,29 +477,40 @@
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label>Social Links</Label>
 						<div class="flex flex-col gap-4">
-							{#each socialPlatforms as platform, index}
+							{#each Object.keys(socialPlatforms) as platform, index}
+								{#snippet platformIcon(platform: SocialLink)}
+									{#if platform !== undefined}
+										<platform.icon class="h-4 w-4" />
+									{:else}
+										<Globe class="h-4 w-4" />
+									{/if}
+								{/snippet}
+
 								<div class="flex items-center gap-2">
-									<platform.icon class="h-4 w-4" />
+									{@render platformIcon(socialPlatforms[platform])}
 									<input
 										type="hidden"
-										value={$form.socials[index].platform}
-										name="socials[{platform.platform}].platform"
+										value={$form.socials.find((s) => s.platform === platform)?.platform || platform}
+										name="socials[{socialPlatforms[platform].platform}].platform"
 									/>
+
 									<Input
 										type="url"
-										name="socials[{platform.platform}].url"
-										placeholder={platform.placeholder}
-										bind:value={$form.socials[index].url}
+										name="socials[{socialPlatforms[platform].platform}].url"
+										placeholder={socialPlatforms[platform].placeholder}
+										bind:value={$form.socials[
+											$form.socials.findIndex((s) => s.platform === platform)
+										].url}
 										oninput={(e) => {
-											if ($form.socials[index].url !== platform.platform) {
-												$form.socials[index].platform = platform.platform;
+											if ($form.socials[index].url !== socialPlatforms[platform].platform) {
+												$form.socials[index].platform = socialPlatforms[platform].platform;
 											}
 										}}
 										class="flex-1"
 									/>
 								</div>
-								{#if $errors.socials}
-									<p class="text-sm text-red-600">{$errors.socials[index]!.url}</p>
+								{#if $errors.socials && $errors.socials[index]}
+									<p class="text-sm text-red-600">{$errors.socials[index].url}</p>
 								{/if}
 							{/each}
 						</div>
