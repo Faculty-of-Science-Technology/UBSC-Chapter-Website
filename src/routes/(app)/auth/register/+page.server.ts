@@ -95,7 +95,7 @@ export const actions: Actions = {
 				Password: await argon2.hash(super_form.data.password),
 				Username: 'user-' + generateId(8),
 				ProfilePicture:
-					DEFAULT_PROFILE_PICTURE + super_form.data.full_name + '&background=' + randomColor(),
+					DEFAULT_PROFILE_PICTURE + super_form.data.full_name + '&background=' + randomColor(true),
 				ActivationCode: activation_code
 			});
 			cookies.set('message_title', 'Check Your Inbox', { path: '/' });
