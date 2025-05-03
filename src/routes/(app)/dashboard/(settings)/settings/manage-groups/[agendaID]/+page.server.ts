@@ -96,17 +96,29 @@ export const actions: Actions = {
 
 		const form = await superValidate(request, zod(memberSchema));
 
-		if (!form.valid) {
+		if (!form.valid || !agendaId) {
 			setError(form, 'Invalid form data');
 			return fail(400, { form });
 		}
 
+		// Check if the user is already a member of the group
+		const existingMember = await db
+			.select()
+			.from(GroupMembers)
+			.where(
+				and(eq(GroupMembers.GroupId, form.data.groupId), eq(GroupMembers.UserId, form.data.userId))
+			)
+			.execute();
+		if (existingMember.length > 0) {
+			setError(form, '✗ This person is already a member of this group');
+			return { form };
+		}
 		await db.insert(GroupMembers).values({
 			GroupId: form.data.groupId,
 			UserId: form.data.userId
 		});
 
-		setMessage(form, 'Member added successfully');
+		setMessage(form, '✓ Member added successfully');
 
 		const groups = await db.query.Groups.findMany({
 			with: {

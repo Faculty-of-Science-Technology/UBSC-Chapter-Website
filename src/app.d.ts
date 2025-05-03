@@ -21,7 +21,7 @@ declare global {
 				ActivationCode: string | null;
 				Bio: string | null;
 				Hireable: boolean;
-				CreatedAt: Date;
+				CreatedAt: Date | string;
 			};
 		}
 		// interface PageData {}

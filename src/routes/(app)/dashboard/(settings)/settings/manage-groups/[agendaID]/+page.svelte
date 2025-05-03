@@ -17,11 +17,20 @@
 	const {
 		form: addmember_form,
 		enhance: addmember_enhance,
-		errors: addmember_errors
-	} = superForm(data.memberForm);
+		errors: addmember_errors,
+		message: addmember_message
+	} = superForm(data.memberForm, {
+		id: 'addMemberForm',
+		onSubmit: () => {
+			if (selectedUser !== undefined) {
+				group_data.push(selectedUser as unknown as (typeof data.groups)[0]);
+			}
+		}
+	});
 
+	let group_data = $state(data.groups);
 	let selectedGroup: (typeof data.groups)[0] | null = $state(null);
-	let selectedUser: string | undefined = $state(undefined);
+	let selectedUser: App.Locals['user'] | undefined = $state(undefined);
 	let showMembersSheet = $state(false);
 </script>
 
@@ -70,7 +79,7 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			{#each data.groups as group}
+			{#each group_data as group}
 				<Table.Row>
 					<Table.Cell>{group.Title}</Table.Cell>
 					<Table.Cell>
@@ -144,14 +153,13 @@
 				<input type="hidden" name="groupId" value={selectedGroup?.Id} />
 				<Select.Root type="single" name="userId">
 					<Select.Trigger class="w-full"
-						>{selectedUser ? selectedUser : 'Select a user'}</Select.Trigger
+						>{selectedUser
+							? `${selectedUser.FirstName} ${selectedUser.LastName}`
+							: 'Select a user'}</Select.Trigger
 					>
 					<Select.Content>
 						{#each data.availableUsers as user}
-							<Select.Item
-								value={user.Id}
-								onclick={() => (selectedUser = `${user.FirstName} ${user.LastName}`)}
-							>
+							<Select.Item value={user.Id} onclick={() => (selectedUser = user)}>
 								{user.FirstName}
 								{user.LastName}
 							</Select.Item>
@@ -160,7 +168,12 @@
 				</Select.Root>
 				<Button type="submit">Add</Button>
 			</form>
-
+			<p class="text-sm text-red-500">{$addmember_errors._errors}</p>
+			<p class="text-sm text-green-500">{$addmember_message}</p>
+			<p class="text-sm text-muted-foreground">
+				Select a user to add them to the group. If the user is not listed, they may not have an
+				account.
+			</p>
 			<ScrollArea class="space-y-4">
 				{#if selectedGroup?.members?.length}
 					{#each selectedGroup.members as member}
