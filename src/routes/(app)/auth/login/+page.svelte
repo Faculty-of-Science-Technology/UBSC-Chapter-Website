@@ -8,7 +8,8 @@
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
-	const { form, errors, constraints, enhance } = superForm(data.form);
+	// No enhance needed here as this is a simple login form
+	const { form, errors, constraints } = superForm(data.form);
 </script>
 
 <!-- <SuperDebug data={$form}/> -->
@@ -36,7 +37,6 @@
 					method="POST"
 					action="?/login&next={data.next || ''}"
 					class="flex w-full flex-col items-center gap-4 text-left"
-					use:enhance
 				>
 					<div class="grid w-full max-w-sm items-center gap-1.5">
 						<Label for="email">Email address</Label>
