@@ -18,6 +18,7 @@
 		Terminal,
 		Twitter
 	} from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 	import { type PageData } from './$types.js';
 
 	// let person = {
@@ -64,6 +65,14 @@
 		if (response.ok) {
 			const data = await response.json();
 			person.CoverPhoto = data.url;
+			toast.success('Updated', {
+				description: 'Cover photo updated successfully.'
+			});
+		} else {
+			const data = await response.json();
+			toast.error('Failed to update cover photo.', {
+				description: data.message || 'An error occurred while updating the cover photo.'
+			});
 		}
 	}
 
@@ -82,6 +91,14 @@
 		if (response.ok) {
 			const data = await response.json();
 			person.ProfilePicture = data.url;
+			toast.success('Updated', {
+				description: 'Profile photo updated successfully.'
+			});
+		} else {
+			const data = await response.json();
+			toast.error('Failed to update profile photo.', {
+				description: data.message || 'An error occurred while updating the cover photo.'
+			});
 		}
 	}
 </script>
