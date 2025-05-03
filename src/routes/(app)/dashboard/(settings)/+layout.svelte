@@ -12,8 +12,9 @@
 		Users
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	let { children } = $props();
+	let { children, data } = $props();
 	let active_link = $state(0);
+	const user = data.user;
 
 	onMount(() => {
 		// Get the current URL and replace the slashes with dashes
@@ -95,34 +96,37 @@
 						⌘M
 					</MenuItem>
 				</a>
-				<Separator />
-				<DashMenu.Heading class="text-md" title="Administrative Tasks" />
-				<a href="/dashboard/settings/setup-agenda" aria-label="Manage Agenda">
-					<MenuItem
-						noborder
-						cursor="pointer"
-						title="Manage Agenda"
-						class={active_link === 2 ? 'bg-accent' : ''}
-					>
-						<svelte:fragment slot="start-icon">
-							<LucideCalendarCog class="size-5" />
-						</svelte:fragment>
-						⌘F
-					</MenuItem>
-				</a>
-				<a href="/dashboard/settings/manage-users" aria-label="Manage Users">
-					<MenuItem
-						noborder
-						cursor="pointer"
-						title="Manage Users"
-						class={active_link === 3 ? 'bg-accent' : ''}
-					>
-						<svelte:fragment slot="start-icon">
-							<Users class="size-5" />
-						</svelte:fragment>
-						⌘U
-					</MenuItem>
-				</a>
+				{#if user.AccountType === 'owner'}
+					<Separator />
+					<DashMenu.Heading class="text-md" title="Administrative Tasks" />
+					<a href="/dashboard/settings/setup-agenda" aria-label="Manage Agenda">
+						<MenuItem
+							noborder
+							cursor="pointer"
+							title="Manage Agenda"
+							class={active_link === 2 ? 'bg-accent' : ''}
+						>
+							<svelte:fragment slot="start-icon">
+								<LucideCalendarCog class="size-5" />
+							</svelte:fragment>
+							⌘F
+						</MenuItem>
+					</a>
+
+					<a href="/dashboard/settings/manage-users" aria-label="Manage Users">
+						<MenuItem
+							noborder
+							cursor="pointer"
+							title="Manage Users"
+							class={active_link === 3 ? 'bg-accent' : ''}
+						>
+							<svelte:fragment slot="start-icon">
+								<Users class="size-5" />
+							</svelte:fragment>
+							⌘U
+						</MenuItem>
+					</a>
+				{/if}
 				<a href="/dashboard/settings/about-system" aria-label="About App">
 					<MenuItem
 						noborder

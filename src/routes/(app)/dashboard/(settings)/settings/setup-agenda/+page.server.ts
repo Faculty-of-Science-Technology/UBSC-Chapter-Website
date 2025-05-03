@@ -1,7 +1,7 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Agenda, AgendaEvents } from '$lib/server/db/schema';
-import { error, fail, type Actions } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -24,7 +24,7 @@ const agendaSchema = z.object({
 		.string()
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" }),
 	endTime: z
-	.string()
+		.string()
 		.refine((str) => validator.isISO8601(str), { message: "That's not a valid date" })
 });
 
@@ -50,6 +50,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
 		throw error(401, '✗ Unauthorized');
 	}
+
+	if (locals.user !== null) {
+		if (locals.user.AccountType !== 'owner') {
+			throw error(403, 'Forbidden');
+		}
+	} else {
+		throw redirect(301, '/auth/login?next=/dashboard/settings/setup-agenda');
+	}
+
 	const form = await superValidate(zod(agendaSchema));
 	const addEventForm = await superValidate(zod(eventSchema));
 	const removeAgendaForm = await superValidate(zod(agendaSchema__remove));
@@ -61,7 +70,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 		},
 		where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
 	});
-	return { form, addEventForm, removeAgendaForm, removeEventForm, agendas, user: locals.user, debug: Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) };
+	return {
+		form,
+		addEventForm,
+		removeAgendaForm,
+		removeEventForm,
+		agendas,
+		user: locals.user,
+		debug: Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))
+	};
 };
 
 export const actions: Actions = {
@@ -69,6 +86,15 @@ export const actions: Actions = {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
 		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/setup-agenda');
+		}
+
 		const form = await superValidate(request, zod(agendaSchema));
 		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
@@ -104,6 +130,15 @@ export const actions: Actions = {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
 		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/setup-agenda');
+		}
+
 		const form = await superValidate(request, zod(eventSchema));
 
 		if (!form.valid) {
@@ -143,6 +178,15 @@ export const actions: Actions = {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
 		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/setup-agenda');
+		}
+
 		const form = await superValidate(request, zod(agendaSchema__remove));
 		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
@@ -165,6 +209,15 @@ export const actions: Actions = {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
 		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/setup-agenda');
+		}
+
 		const form = await superValidate(request, zod(eventSchema__remove));
 		if (Boolean(JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT))) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');

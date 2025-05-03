@@ -1,7 +1,7 @@
 import { DEBUG, IS_DEVELOPMENT } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { GroupMembers, Groups } from '$lib/server/db/schema';
-import { error, fail, type Actions } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { setError, setMessage, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -25,6 +25,14 @@ const memberSchema = z.object({
 export const load: PageServerLoad = async ({ locals, params }) => {
 	if (!locals.user) {
 		throw error(401, '✗ Unauthorized');
+	}
+
+	if (locals.user !== null) {
+		if (locals.user.AccountType !== 'owner') {
+			throw error(403, 'Forbidden');
+		}
+	} else {
+		throw redirect(301, '/auth/login?next=/dashboard/settings/manage-groups');
 	}
 
 	// console.log(params);
@@ -70,6 +78,14 @@ export const actions: Actions = {
 			throw error(401, '✗ Unauthorized');
 		}
 
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/manage-groups');
+		}
+
 		const form = await superValidate(request, zod(groupSchema));
 
 		if (JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) {
@@ -95,6 +111,15 @@ export const actions: Actions = {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
 		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/manage-groups');
+		}
+
 		const form = await superValidate(request, zod(removeGroupSchema));
 		if (JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) {
 			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
@@ -115,6 +140,14 @@ export const actions: Actions = {
 
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
+		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/manage-groups');
 		}
 
 		const form = await superValidate(request, zod(memberSchema));
@@ -149,6 +182,14 @@ export const actions: Actions = {
 	removeMember: async ({ request, locals }) => {
 		if (!locals.user) {
 			throw error(401, '✗ Unauthorized');
+		}
+
+		if (locals.user !== null) {
+			if (locals.user.AccountType !== 'owner') {
+				throw error(403, 'Forbidden');
+			}
+		} else {
+			throw redirect(301, '/auth/login?next=/dashboard/settings/manage-groups');
 		}
 
 		const form = await superValidate(request, zod(memberSchema));
