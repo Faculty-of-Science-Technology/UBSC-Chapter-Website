@@ -10,10 +10,9 @@
 	import { Calendar, Clock, Plus, Trash2, Users } from 'lucide-svelte';
 	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
-	import { type PageData } from './$types.js';
+	import { type PageProps } from './$types.js';
 
-	const { data: props } = $props();
-	const data: PageData = props;
+	const { data }: PageProps = $props();
 	const user = data.user;
 	let agendas = $state(data.agendas);
 	let currentErrors = $state({});
@@ -81,7 +80,11 @@
 					return;
 				}
 				// Update the errors state directly from the result
-				$removeAgendaErrors = result.data.removeAgendaForm.errors;
+				if (result.data.removeAgendaForm) {
+					$removeAgendaErrors = result.data.removeAgendaForm.errors;
+				} else {
+					$removeAgendaErrors = result.data.form.errors;
+				}
 			}
 			if (result.type === 'success') {
 				$removeAgendaErrors = {};
@@ -98,6 +101,7 @@
 	});
 
 	// Add Agenda Form
+	let create_form_success = $state(false);
 	const { form, errors, message, enhance } = superForm(data.form, {
 		dataType: 'json',
 		taintedMessage: null,
@@ -120,7 +124,7 @@
 				}
 
 				$message = result.data.form.message;
-				console.log(result);
+				create_form_success = !true;
 				agendas = [
 					// @ts-expect-error - TS doesn't know that the data is valid
 					...agendas,
@@ -208,7 +212,7 @@ Message: {$message}
 			<p>{$removeAgendaErrors.agendaId}</p>
 			<p>{$removeAgendaMessage}</p>
 		</section>
-		<Dialog.Root>
+		<Dialog.Root bind:open={create_form_success}>
 			<Dialog.Trigger>
 				<Button>
 					<Plus class="mr-2 h-4 w-4" />
@@ -330,6 +334,8 @@ Message: {$message}
 					<Table.Cell>
 						<Button
 							variant="outline"
+							title={agenda.Id === 'unused' ? 'Reload the page to edit or delete this agenda' : ''}
+							disabled={agenda.Id === 'unused'}
 							size="sm"
 							onclick={() => {
 								selectedAgenda = agenda;
@@ -343,6 +349,8 @@ Message: {$message}
 					<Table.Cell>
 						<Button
 							variant="outline"
+							title={agenda.Id === 'unused' ? 'Reload the page to edit or delete this agenda' : ''}
+							disabled={agenda.Id === 'unused'}
 							size="sm"
 							onclick={() => {
 								// Navigate to groups page
@@ -358,6 +366,10 @@ Message: {$message}
 							<input type="hidden" name="agendaId" bind:value={$removeAgendaForm.agendaId} />
 							<Button
 								variant="ghost"
+								disabled={agenda.Id === 'unused'}
+								title={agenda.Id === 'unused'
+									? 'Reload the page to edit or delete this agenda'
+									: ''}
 								size="icon"
 								type="submit"
 								onclick={() => ($removeAgendaForm.agendaId = agenda.Id)}

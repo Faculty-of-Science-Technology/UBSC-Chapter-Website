@@ -184,7 +184,7 @@
 				</Select.Root>
 				<Button type="submit">Add</Button>
 			</form>
-			<p class="text-sm text-red-500">{$addmember_errors}</p>
+			<p class="text-sm text-red-500">{$addmember_errors._errors}</p>
 			<p class="text-sm text-green-500">{$addmember_message}</p>
 			<p class="text-sm text-muted-foreground">
 				Select a user to add them to the group. If the user is not listed, they may not have an
