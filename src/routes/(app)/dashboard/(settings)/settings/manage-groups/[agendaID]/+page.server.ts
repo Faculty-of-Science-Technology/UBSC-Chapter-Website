@@ -110,8 +110,8 @@ export const actions: Actions = {
 			)
 			.execute();
 		if (existingMember.length > 0) {
-			setError(form, '✗ This person is already a member of this group');
-			return { form };
+			setError(form, '', '✗ This person is already a member of this group');
+			return fail(400, { memberForm: form });
 		}
 		await db.insert(GroupMembers).values({
 			GroupId: form.data.groupId,
@@ -120,18 +120,7 @@ export const actions: Actions = {
 
 		setMessage(form, '✓ Member added successfully');
 
-		const groups = await db.query.Groups.findMany({
-			with: {
-				members: {
-					with: {
-						user: true
-					}
-				}
-			},
-			where: (group, { eq }) => eq(group.AgendaId, agendaId)
-		});
-
-		return { memberForm: form, groups };
+		return { memberForm: form };
 	},
 
 	removeMember: async ({ request, locals }) => {

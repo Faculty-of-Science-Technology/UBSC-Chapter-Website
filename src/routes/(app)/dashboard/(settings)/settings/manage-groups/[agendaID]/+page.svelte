@@ -20,10 +20,11 @@
 		errors: addmember_errors,
 		message: addmember_message
 	} = superForm(data.memberForm, {
-		id: 'addMemberForm',
+		id: 'memberForm',
 		onSubmit: () => {
-			if (selectedUser !== undefined) {
-				group_data.push(selectedUser as unknown as (typeof data.groups)[0]);
+			if (selectedGroup !== null) {
+				// @ts-expect-error We're forcing a type here
+				selectedGroup.members.push({ user: selectedUser as unknown as (typeof data.groups)[0] });
 			}
 		}
 	});
@@ -159,9 +160,13 @@
 					>
 					<Select.Content>
 						{#each data.availableUsers as user}
-							<Select.Item value={user.Id} onclick={() => (selectedUser = user)}>
-								{user.FirstName}
-								{user.LastName}
+							<Select.Item value={user.Id} onclick={() => (selectedUser = user)} class="block">
+								<p>
+									{user.FirstName}
+									{' '}
+									{user.LastName}
+								</p>
+								<p class="text-sm text-muted-foreground">{user.Email}</p>
 							</Select.Item>
 						{/each}
 					</Select.Content>
