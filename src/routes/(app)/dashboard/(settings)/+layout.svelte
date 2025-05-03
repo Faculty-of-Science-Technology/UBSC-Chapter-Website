@@ -7,7 +7,6 @@
 	import {
 		InfoIcon,
 		LucideCalendarCog,
-		MessageSquareMoreIcon,
 		UserIcon,
 		Users
 	} from 'lucide-svelte';
@@ -83,7 +82,7 @@
 						⌘P
 					</MenuItem>
 				</a>
-				<a href="/dashboard/settings/notifications" aria-label="Notifications">
+				<!-- <a href="/dashboard/settings/notifications" aria-label="Notifications">
 					<MenuItem
 						noborder
 						cursor="pointer"
@@ -95,7 +94,7 @@
 						</svelte:fragment>
 						⌘M
 					</MenuItem>
-				</a>
+				</a> -->
 				{#if user.AccountType === 'owner'}
 					<Separator />
 					<DashMenu.Heading class="text-md" title="Administrative Tasks" />
