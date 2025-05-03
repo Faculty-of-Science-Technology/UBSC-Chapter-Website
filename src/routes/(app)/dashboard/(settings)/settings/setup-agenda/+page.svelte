@@ -225,13 +225,7 @@ Message: {$message}
 						Create a new agenda item. Fill in all the required details below.
 					</Dialog.Description>
 				</Dialog.Header>
-				<form
-					action="?/addAgenda"
-					id="agenda_form"
-					method="POST"
-					class="grid gap-4 py-4"
-					use:enhance
-				>
+				<form action="?/addAgenda" id="agenda_form" method="POST" class="grid gap-4 py-4">
 					<div class="grid gap-2">
 						<Label for="title">Title</Label>
 						<p class="text-sm text-destructive">

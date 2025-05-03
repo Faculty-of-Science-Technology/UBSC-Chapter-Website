@@ -13,6 +13,10 @@ const groupSchema = z.object({
 	agendaId: z.string().uuid()
 });
 
+const removeGroupSchema = z.object({
+	groupId: z.string().uuid()
+});
+
 const memberSchema = z.object({
 	groupId: z.string().uuid(),
 	userId: z.string().uuid()
@@ -84,6 +88,25 @@ export const actions: Actions = {
 		});
 
 		setMessage(form, 'Group created successfully');
+		return { form };
+	},
+
+	removeGroup: async ({ request, locals }) => {
+		if (!locals.user) {
+			throw error(401, '✗ Unauthorized');
+		}
+		const form = await superValidate(request, zod(removeGroupSchema));
+		if (JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) {
+			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+			console.log('form', form);
+		}
+		if (!form.valid) {
+			setError(form, 'Invalid form data');
+			return fail(400, { form });
+		}
+		await db.delete(Groups).where(eq(Groups.Id, form.data.groupId));
+		setMessage(form, 'Group removed successfully');
+
 		return { form };
 	},
 

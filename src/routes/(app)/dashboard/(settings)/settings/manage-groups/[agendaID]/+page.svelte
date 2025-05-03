@@ -58,7 +58,7 @@
 				<Dialog.Header>
 					<Dialog.Title>Create New Group</Dialog.Title>
 				</Dialog.Header>
-				<form method="POST" id="form" action="?/createGroup" class="grid gap-4 py-4" use:enhance>
+				<form method="POST" id="form" action="?/createGroup" class="grid gap-4 py-4">
 					<input type="hidden" name="agendaId" value={data.agenda.Id} />
 					<div class="grid gap-2">
 						<Label for="title">Group Name</Label>
@@ -131,9 +131,12 @@
 							>
 								<UserPlus class="h-4 w-4" />
 							</Button>
-							<Button variant="ghost" size="icon">
-								<Trash2 class="h-4 w-4" />
-							</Button>
+							<form method="POST" id="removeGroup" action="?/removeGroup">
+								<input type="hidden" name="groupId" value={group.Id} />
+								<Button variant="ghost" size="icon" type="submit">
+									<Trash2 class="h-4 w-4" />
+								</Button>
+							</form>
 						</div>
 					</Table.Cell>
 				</Table.Row>
@@ -152,7 +155,13 @@
 		</Sheet.Header>
 
 		<div class="py-4">
-			<form method="POST" id="memberForm" action="?/addMember" class="mb-4 flex gap-2" use:addmember_enhance>
+			<form
+				method="POST"
+				id="memberForm"
+				action="?/addMember"
+				class="mb-4 flex gap-2"
+				use:addmember_enhance
+			>
 				<input type="hidden" name="groupId" value={selectedGroup?.Id} />
 				<Select.Root type="single" name="userId">
 					<Select.Trigger class="w-full"
