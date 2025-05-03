@@ -91,7 +91,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		const missingEntries = nonExistingPlatforms
 			.slice(0, blankEntriesToAdd)
 			.map((platform) => ({ platform, url: '' }));
-		const blankEntries = userSocials_POJO.concat(missingEntries);
+		const blankEntries = missingEntries;
 
 		userSocials_POJO = [...userSocials_POJO, ...blankEntries];
 	}

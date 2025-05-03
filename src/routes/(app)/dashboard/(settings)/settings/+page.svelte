@@ -501,11 +501,6 @@
 										bind:value={$form.socials[
 											$form.socials.findIndex((s) => s.platform === platform)
 										].url}
-										oninput={(e) => {
-											if ($form.socials[index].url !== socialPlatforms[platform].platform) {
-												$form.socials[index].platform = socialPlatforms[platform].platform;
-											}
-										}}
 										class="flex-1"
 									/>
 								</div>
