@@ -307,13 +307,13 @@
 
 		<!-- Right Column -->
 		<div class="flex flex-col gap-6">
-			<!-- About Section -->
-			<Card.Root>
+			<!-- About Section (Disabled: Redundant) -->
+			<!-- <Card.Root>
 				<Card.Title class="p-4 text-xl font-semibold">About</Card.Title>
 				<Card.Description class="p-4">
 					<p class="text-slate-600">{person.Bio ?? 'Nothing here to see.'}</p>
 				</Card.Description>
-			</Card.Root>
+			</Card.Root> -->
 
 			<!-- Skills Section -->
 			<Card.Root>
