@@ -13,7 +13,9 @@
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();
-	const { form, enhance, errors } = superForm(data.form);
+	const { form, enhance, errors } = superForm(data.form, {
+		id: 'form'
+	});
 	const {
 		form: addmember_form,
 		enhance: addmember_enhance,
@@ -56,7 +58,7 @@
 				<Dialog.Header>
 					<Dialog.Title>Create New Group</Dialog.Title>
 				</Dialog.Header>
-				<form method="POST" action="?/createGroup" class="grid gap-4 py-4" use:enhance>
+				<form method="POST" id="form" action="?/createGroup" class="grid gap-4 py-4" use:enhance>
 					<input type="hidden" name="agendaId" value={data.agenda.Id} />
 					<div class="grid gap-2">
 						<Label for="title">Group Name</Label>
@@ -150,7 +152,7 @@
 		</Sheet.Header>
 
 		<div class="py-4">
-			<form method="POST" action="?/addMember" class="mb-4 flex gap-2" use:addmember_enhance>
+			<form method="POST" id="memberForm" action="?/addMember" class="mb-4 flex gap-2" use:addmember_enhance>
 				<input type="hidden" name="groupId" value={selectedGroup?.Id} />
 				<Select.Root type="single" name="userId">
 					<Select.Trigger class="w-full"
@@ -173,7 +175,7 @@
 				</Select.Root>
 				<Button type="submit">Add</Button>
 			</form>
-			<p class="text-sm text-red-500">{$addmember_errors._errors}</p>
+			<p class="text-sm text-red-500">{$addmember_errors}</p>
 			<p class="text-sm text-green-500">{$addmember_message}</p>
 			<p class="text-sm text-muted-foreground">
 				Select a user to add them to the group. If the user is not listed, they may not have an
@@ -187,7 +189,7 @@
 								<p class="font-medium">{member.user.FirstName} {member.user.LastName}</p>
 								<p class="text-sm text-muted-foreground">{member.user.Email}</p>
 							</div>
-							<form method="POST" action="?/removeMember">
+							<form method="POST" id="removeMember" action="?/removeMember">
 								<input type="hidden" name="groupId" value={selectedGroup.Id} />
 								<input type="hidden" name="userId" value={member.user.Id} />
 								<Button variant="ghost" size="icon" type="submit">
