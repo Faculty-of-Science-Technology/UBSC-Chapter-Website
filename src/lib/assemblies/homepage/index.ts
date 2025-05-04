@@ -13,4 +13,18 @@ export interface AvatarData {
 	hireable: boolean;
 }
 
+export interface GroupData {
+	Id: string;
+	CreatedAt: Date;
+	Title: string;
+	AgendaId: string | null;
+	members: {
+		Id: string;
+		CreatedAt: Date;
+		UserId: string | null;
+		GroupId: string | null;
+		user: App.Locals['user'] | null;
+	}[];
+}
+
 export { About, Archives, Home, HostOrganizations, Interns, PresentationAgenda };

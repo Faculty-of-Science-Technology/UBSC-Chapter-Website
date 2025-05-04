@@ -4,6 +4,15 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
 	// Get all users who are interns (modify the query based on your database schema)
+	const groups = await db.query.Groups.findMany({
+		with: {
+			members: {
+				with: {
+					user: true
+				}
+			}
+		}
+	});
 	const users = await db.query.Users.findMany({
 		where: (users, { eq }) => eq(users.AccountType, 'student'),
 		columns: {
@@ -60,17 +69,17 @@ export const load: PageServerLoad = async () => {
 	});
 
 	// Prepare agenda data for the frontend
-	const agendas = agenda_groups.map(group => ({
+	const agendas = agenda_groups.map((group) => ({
 		groupId: group.Id,
 		groupCreatedAt: group.CreatedAt,
 		groupName: group.Title,
 		agenda: group.agenda
 	}));
- 
 
 	return {
 		avatar_data,
 		org_avatar_data,
-		agendas
+		agendas,
+		groups
 	};
 };

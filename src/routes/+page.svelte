@@ -384,7 +384,7 @@
 					</div>
 				</section>
 			{:else if active_tab === 1}
-				<Homepage.Interns avatar_data={data.avatar_data} />
+				<Homepage.Interns avatar_data={data.avatar_data} group_data={data.groups}/>
 			{:else if active_tab === 2}
 				<Homepage.PresentationAgenda {agenda_data} />
 			{:else if active_tab === 3}

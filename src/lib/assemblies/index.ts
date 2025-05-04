@@ -1,5 +1,6 @@
 import {
 	type AvatarData,
+	type GroupData,
 	About,
 	Archives,
 	Home,
@@ -8,7 +9,7 @@ import {
 	PresentationAgenda
 } from './homepage';
 
-export type { AvatarData };
+export type { AvatarData, GroupData };
 export const Homepage = {
 	About,
 	Home,
