@@ -59,7 +59,11 @@
 									><Avatar.Root
 										class={cn('size-20', avatar.hireable ? 'border-4 border-success' : '')}
 									>
-										<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
+										<Avatar.Image
+											class="object-cover"
+											src={avatar.image_url}
+											alt={avatar.name || 'Profile picture'}
+										/>
 										<Avatar.Fallback>
 											{avatar.name?.[0] || '?'}
 										</Avatar.Fallback>
@@ -69,7 +73,11 @@
 							<HoverCard.Content class="max-w-72">
 								<div class="flex justify-between space-x-4">
 									<Avatar.Root class={cn(avatar.hireable ? 'border-2 border-success' : '')}>
-										<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
+										<Avatar.Image
+											class="object-cover"
+											src={avatar.image_url}
+											alt={avatar.name || 'Profile picture'}
+										/>
 										<Avatar.Fallback>{avatar.name?.[0] || '?'}</Avatar.Fallback>
 									</Avatar.Root>
 									<div class="space-y-1">
@@ -122,6 +130,7 @@
 											class={cn('size-20', avatar.user.Hireable ? 'border-4 border-success' : '')}
 										>
 											<Avatar.Image
+												class="object-cover"
 												src={avatar.user.ProfilePicture}
 												alt={avatar.user.FirstName + ' ' + avatar.user.LastName ||
 													'Profile picture'}
@@ -136,6 +145,7 @@
 									<div class="flex justify-between space-x-4">
 										<Avatar.Root class={cn(avatar.user.Hireable ? 'border-2 border-success' : '')}>
 											<Avatar.Image
+												class="object-cover"
 												src={avatar.user.ProfilePicture}
 												alt={avatar.user.FirstName + ' ' + avatar.user.LastName ||
 													'Profile picture'}
