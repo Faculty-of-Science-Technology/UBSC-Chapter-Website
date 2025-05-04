@@ -1,5 +1,6 @@
 import type { AvatarData } from '$lib/assemblies';
 import { db } from '$lib/server/db';
+import { and, eq, isNull } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {
@@ -14,21 +15,22 @@ export const load: PageServerLoad = async () => {
 		}
 	});
 	const users = await db.query.Users.findMany({
-		where: (users, { eq }) => eq(users.AccountType, 'student'),
+		where: (users) => and(eq(users.AccountType, 'student'), isNull(users.ActivationCode)),
 		columns: {
 			Id: true,
 			FirstName: true,
 			LastName: true,
 			Bio: true,
 			Hireable: true,
-			ProfilePicture: true
+			ProfilePicture: true,
+			ActivationCode: true
 		},
 		limit: 50 // Limit to 50 interns for the grid
 	});
 
 	// Get all users who are organizations (modify the query based on your database schema)
 	const orgs = await db.query.Users.findMany({
-		where: (users, { eq }) => eq(users.AccountType, 'org'),
+		where: (users, { eq }) => and(eq(users.AccountType, 'org')),
 		columns: {
 			Id: true,
 			FirstName: true,
@@ -37,7 +39,7 @@ export const load: PageServerLoad = async () => {
 			Hireable: true,
 			ProfilePicture: true
 		},
-		limit: 50 // Limit to 50 interns for the grid
+		limit: 50 // Limit to 50 orgs for the grid
 	});
 
 	// Get all users
@@ -46,7 +48,8 @@ export const load: PageServerLoad = async () => {
 		image_url: user.ProfilePicture ?? '',
 		name: `${user.FirstName} ${user.LastName}`,
 		bio: user.Bio,
-		hireable: user.Hireable
+		hireable: user.Hireable,
+		activation_code: user.ActivationCode
 	}));
 
 	// Get all organizations

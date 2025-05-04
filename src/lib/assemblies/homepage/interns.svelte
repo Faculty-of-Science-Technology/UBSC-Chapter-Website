@@ -51,46 +51,49 @@
 			<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-12">
 				<!-- Grid starts here -->
 				{#each avatar_data as avatar}
-					<HoverCard.Root>
-						<HoverCard.Trigger>
-							<a href="/dashboard/people/{avatar.id}"
-								><Avatar.Root
-									class={cn('size-20', avatar.hireable ? 'border-4 border-success' : '')}
+					<!--- Display only activated users -->
+					{#if avatar.activation_code === null}
+						<HoverCard.Root>
+							<HoverCard.Trigger>
+								<a href="/dashboard/people/{avatar.id}"
+									><Avatar.Root
+										class={cn('size-20', avatar.hireable ? 'border-4 border-success' : '')}
+									>
+										<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
+										<Avatar.Fallback>
+											{avatar.name?.[0] || '?'}
+										</Avatar.Fallback>
+									</Avatar.Root></a
 								>
-									<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
-									<Avatar.Fallback>
-										{avatar.name?.[0] || '?'}
-									</Avatar.Fallback>
-								</Avatar.Root></a
-							>
-						</HoverCard.Trigger>
-						<HoverCard.Content class="max-w-72">
-							<div class="flex justify-between space-x-4">
-								<Avatar.Root class={cn(avatar.hireable ? 'border-2 border-success' : '')}>
-									<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
-									<Avatar.Fallback>{avatar.name?.[0] || '?'}</Avatar.Fallback>
-								</Avatar.Root>
-								<div class="space-y-1">
-									<h4 class="text-sm font-semibold">{avatar.name}</h4>
-									<span class="tracking-wide">
-										{#if avatar.hireable}
-											<span class="flex h-fit w-fit items-start">
-												<Badge class="bg-success">Hireable</Badge>
-											</span>
-										{/if}
-									</span>
-									<p class="text-sm">{avatar.bio}</p>
-									<div class="flex items-center pt-2 text-sm">
-										<a
-											href="/dashboard/people/{avatar.id}"
-											class="flex gap-2 underline hover:no-underline"
-											><Link size="16" /> View Profile</a
-										>
+							</HoverCard.Trigger>
+							<HoverCard.Content class="max-w-72">
+								<div class="flex justify-between space-x-4">
+									<Avatar.Root class={cn(avatar.hireable ? 'border-2 border-success' : '')}>
+										<Avatar.Image src={avatar.image_url} alt={avatar.name || 'Profile picture'} />
+										<Avatar.Fallback>{avatar.name?.[0] || '?'}</Avatar.Fallback>
+									</Avatar.Root>
+									<div class="space-y-1">
+										<h4 class="text-sm font-semibold">{avatar.name}</h4>
+										<span class="tracking-wide">
+											{#if avatar.hireable}
+												<span class="flex h-fit w-fit items-start">
+													<Badge class="bg-success">Hireable</Badge>
+												</span>
+											{/if}
+										</span>
+										<p class="text-sm">{avatar.bio}</p>
+										<div class="flex items-center pt-2 text-sm">
+											<a
+												href="/dashboard/people/{avatar.id}"
+												class="flex gap-2 underline hover:no-underline"
+												><Link size="16" /> View Profile</a
+											>
+										</div>
 									</div>
 								</div>
-							</div>
-						</HoverCard.Content>
-					</HoverCard.Root>
+							</HoverCard.Content>
+						</HoverCard.Root>
+					{/if}
 				{/each}
 			</div>
 		</Tabs.Content>
@@ -111,7 +114,7 @@
 				<div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-12">
 					<!-- Grid starts here -->
 					{#each group.members as avatar}
-						{#if avatar.user !== undefined && avatar.user !== null}
+						{#if avatar.user !== undefined && avatar.user !== null && avatar.user.ActivationCode === null}
 							<HoverCard.Root>
 								<HoverCard.Trigger>
 									<a href="/dashboard/people/{avatar.user.Id}"

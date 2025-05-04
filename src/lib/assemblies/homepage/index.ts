@@ -11,6 +11,7 @@ export interface AvatarData {
 	name: string;
 	bio: string | null;
 	hireable: boolean;
+	activation_code?: string | null;
 }
 
 export interface GroupData {
