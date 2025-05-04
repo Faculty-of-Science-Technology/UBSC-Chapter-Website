@@ -432,12 +432,28 @@
 				<div class="lg:w-3/12">
 					<h3 class="mb-4 text-xl font-bold">Sitemap</h3>
 					<ul class="space-y-2">
-						<li><a href="/" class="hover:text-amber-300">Home</a></li>
-						<li><a href="/?tab=1" class="hover:text-amber-300">Interns</a></li>
-						<li><a href="/?tab=2" class="hover:text-amber-300">Presentation Agenda</a></li>
-						<li><a href="/?tab=3" class="hover:text-amber-300">Host Organizations</a></li>
-						<li><a href="/auth/login" class="hover:text-amber-300">Login</a></li>
-						<li><a href="/auth/register" class="hover:text-amber-300">Register</a></li>
+						<li><a href="/" class="hover:text-amber-300" data-sveltekit-reload>Home</a></li>
+						<li>
+							<a href="/?tab=1" class="hover:text-amber-300" data-sveltekit-reload>Interns</a>
+						</li>
+						<li>
+							<a href="/?tab=2" class="hover:text-amber-300" data-sveltekit-reload
+								>Presentation Agenda</a
+							>
+						</li>
+						<li>
+							<a href="/?tab=3" class="hover:text-amber-300" data-sveltekit-reload
+								>Host Organizations</a
+							>
+						</li>
+						<li>
+							<a href="/auth/login" class="hover:text-amber-300" data-sveltekit-reload>Login</a>
+						</li>
+						<li>
+							<a href="/auth/register" class="hover:text-amber-300" data-sveltekit-reload
+								>Register</a
+							>
+						</li>
 					</ul>
 				</div>
 
