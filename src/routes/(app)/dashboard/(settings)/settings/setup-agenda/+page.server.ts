@@ -68,7 +68,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			events: true,
 			groups: true
 		},
-		// where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
+		where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
 	});
 	return {
 		form,
