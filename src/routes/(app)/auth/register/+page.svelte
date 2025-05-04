@@ -26,7 +26,6 @@
 
 	// We run these things on the server and not on the client (OnMount) for a very good reason
 	if (forced_account_type) {
-		console.log(forced_account_type);
 		$form.account_type = forced_account_type === 'host' ? 'host' : 'student';
 	}
 	accountType = $form.account_type;

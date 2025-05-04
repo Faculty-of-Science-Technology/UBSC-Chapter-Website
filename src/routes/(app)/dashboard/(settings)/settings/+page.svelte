@@ -107,7 +107,6 @@
 	});
 
 	const { form, errors, message, constraints, enhance } = form_object;
-	console.log($form.socials);
 </script>
 
 <!-- <SuperDebug data={form} /> -->
@@ -307,7 +306,7 @@
 										clearTimeout(timeout);
 										timeout = setTimeout(async () => {
 											await queryLocations(target.value);
-											console.log(cityData);
+											// console.log(cityData);
 										}, backoff);
 									}
 								}}
@@ -322,7 +321,7 @@
 									clearTimeout(timeout);
 									timeout = setTimeout(async () => {
 										await queryLocations(target.value);
-										console.log(cityData);
+										// console.log(cityData);
 									}, backoff);
 								}}
 								placeholder="Type a location or search..."

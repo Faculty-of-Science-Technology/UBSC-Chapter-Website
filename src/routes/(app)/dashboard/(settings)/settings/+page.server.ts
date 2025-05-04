@@ -152,7 +152,6 @@ export const actions: Actions = {
 			if (raw_resume !== undefined) {
 				resume_url = await uploadFile(raw_resume, 'application/pdf');
 			}
-			console.log(resume_url);
 
 			// Update user profile
 			await db

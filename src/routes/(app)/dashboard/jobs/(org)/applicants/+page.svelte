@@ -288,7 +288,6 @@
 										<Dialog.Root>
 											<Dialog.Trigger
 												onclick={() => {
-													console.log(application);
 													current_applicant = application.JobApplications.Id as string;
 												}}
 												class={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
@@ -357,7 +356,6 @@
 											<Dialog.Trigger
 												class={cn(buttonVariants({ variant: 'destructive' }), 'w-fit')}
 												onclick={() => {
-													console.log(application);
 													current_applicant = application.JobApplications.Id as string;
 												}}>Reject</Dialog.Trigger
 											>

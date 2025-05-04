@@ -175,8 +175,6 @@
 					$addEventFormMessage = 'Your data was added but something went wrong.';
 					return;
 				}
-
-				console.log(result);
 				$addEventFormMessage = result.data.addEventForm.message;
 				if (selectedAgenda == null) return;
 				selectedAgenda.events = [...selectedAgenda.events, result.data.phonyEvent];
