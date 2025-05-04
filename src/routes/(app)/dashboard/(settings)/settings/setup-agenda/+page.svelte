@@ -389,7 +389,7 @@ Message: {$message}
 </div>
 
 <Sheet.Root bind:open={showEventSheet}>
-	<Sheet.Content side="right" class="w-[600px]">
+	<Sheet.Content side="right" class="w-[900px]">
 		<Sheet.Header>
 			<Sheet.Title>Manage Events</Sheet.Title>
 			<Sheet.Description>
@@ -430,6 +430,22 @@ Message: {$message}
 						<Input name="endTime" type="datetime-local" bind:value={$addEventForm.endTime} />
 					</div>
 				</div>
+				<div class="grid">
+					<div class="flex gap-2">
+						<Label>Same End Time</Label>
+						<Input
+							name="sameEndTime"
+							type="checkbox"
+							onchange={(e) => {
+								if (e.target!.checked) {
+									$addEventForm.endTime = $addEventForm.startTime;
+								} else {
+									$addEventForm.endTime = '';
+								}
+							}}
+						/>
+					</div>
+				</div>
 				<Button type="submit">Add Event</Button>
 			</form>
 
@@ -445,7 +461,7 @@ Message: {$message}
 								</div>
 
 								<form action="?/deleteEvent" method="POST" use:removeEventEnhance>
-									<input type="hidden" name="eventId" bind:value={$removeEventForm.agendaId} />
+									<input type="hidden" name="eventId" bind:value={$removeEventForm.eventId} />
 									<Button
 										variant="ghost"
 										size="icon"

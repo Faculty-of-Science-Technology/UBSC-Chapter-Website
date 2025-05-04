@@ -9,6 +9,10 @@ body {
 	font-style: normal;
 }
 
+input {
+	color-scheme: light;
+}
+
 .text-archivo {
 	font-family: 'Archivo', sans-serif;
 	font-optical-sizing: auto;
