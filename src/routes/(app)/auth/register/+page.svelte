@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { PUBLIC_PLATFORM_OWNING_DOMAIN } from '$env/static/public';
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
@@ -145,9 +146,9 @@
 									const event: Event = e;
 									if (!event) return;
 									if (accountType === 'student' && event.target.value.trim() === '') return;
-									if (accountType === 'student' && !event.target.value.includes('@ub.edu.bz')) {
+									if (accountType === 'student' && !event.target.value.includes(`@${PUBLIC_PLATFORM_OWNING_DOMAIN}}`)) {
 										event.target.value = (
-											event.target.value.replace(/@.*$/, '') + '@ub.edu.bz'
+											event.target.value.replace(/@.*$/, '') + `@${PUBLIC_PLATFORM_OWNING_DOMAIN}`
 										).trim();
 									}
 								}, 590);

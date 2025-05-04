@@ -11,6 +11,7 @@ import {
 	PLATFORM_URL,
 	PLATFORM_URL_DEVELOPMENT
 } from '$env/static/private';
+import { PUBLIC_PLATFORM_OWNING_DOMAIN } from '$env/static/public';
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
@@ -82,7 +83,24 @@ export const actions: Actions = {
 			// Check if the email already exists
 			const user = await checkUser(Users.Email, super_form.data.email);
 			if (user.length > 0) {
-				return setError(super_form, 'email', 'Email already exists');
+				setError(super_form, 'email', 'Email already exists');
+				return fail(400, {
+					super_form
+				});
+			}
+
+			if (
+				super_form.data.account_type === 'student' &&
+				!super_form.data.email.endsWith(`@${PUBLIC_PLATFORM_OWNING_DOMAIN}`)
+			) {
+				setError(
+					super_form,
+					'email',
+					`Email must be a student email (ending with @${PUBLIC_PLATFORM_OWNING_DOMAIN})`
+				);
+				return fail(400, {
+					super_form
+				});
 			}
 
 			// Insert the user if the email doesn't exist
