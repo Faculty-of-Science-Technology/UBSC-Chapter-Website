@@ -419,7 +419,7 @@ Message: {$message}
 		</Sheet.Header>
 		<ScrollArea class="h-full w-full py-4">
 			<form method="POST" action="?/addEvent" class="grid gap-4" use:addEventFormEnhance>
-				{#if edit_mode}
+				{#if edit_mode === true}
 					<input type="hidden" name="eventId" bind:value={$addEventForm.eventId} />
 				{/if}
 				<input type="hidden" name="agendaId" bind:value={$addEventForm.agendaId} />
@@ -502,7 +502,12 @@ Message: {$message}
 			</form>
 
 			<div class="mt-8">
-				<h3 class="mb-4 text-lg font-medium">Existing Events</h3>
+				<div class="mb-4 flex flex-col gap-2">
+					<h3 class="text-lg font-medium">Existing Events</h3>
+					<Sheet.Description>
+						Sorted by start time. Click the edit button to modify an event.
+					</Sheet.Description>
+				</div>
 				{#if selectedAgenda?.events?.length}
 					{#each selectedAgenda.events as event}
 						<div class="mb-4 rounded-lg border p-4">

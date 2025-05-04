@@ -65,7 +65,9 @@ export const load: PageServerLoad = async () => {
 		with: {
 			agenda: {
 				with: {
-					events: true
+					events: {
+						orderBy: (events, { asc }) => [asc(events.StartTime)]
+					}
 				}
 			}
 		}

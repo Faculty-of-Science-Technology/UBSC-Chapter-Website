@@ -66,7 +66,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	const removeEventForm = await superValidate(zod(eventSchema__remove));
 	const agendas = await db.query.Agenda.findMany({
 		with: {
-			events: true,
+			events: {
+				orderBy: (events, { asc }) => [asc(events.StartTime)]
+			},
 			groups: true
 		},
 		where: (agenda, { eq }) => eq(agenda.UserId, locals.user!.Id)
