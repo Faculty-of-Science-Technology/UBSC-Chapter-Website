@@ -76,7 +76,12 @@
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Calendar size={16} />
 							<span
-								>{group.agenda.StartTime.toLocaleDateString()} - {group.agenda.EndTime.toLocaleDateString()}</span
+								>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString('en-US', {
+									timeZone: 'UTC'
+								})} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
+									'en-US',
+									{ timeZone: 'UTC' }
+								)}</span
 							>
 						</div>
 
@@ -92,7 +97,13 @@
 										<div class="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
 											<Clock size={14} />
 											<span
-												>{event.StartTime.toLocaleTimeString()} - {event.EndTime.toLocaleTimeString()}</span
+												>{new Date(event.StartTime.toJSON().toString()).toLocaleTimeString(
+													'en-US',
+													{ timeZone: 'UTC' }
+												)} - {new Date(event.EndTime.toJSON().toString()).toLocaleTimeString(
+													'en-US',
+													{ timeZone: 'UTC' }
+												)}</span
 											>
 										</div>
 										{#if event.SpeakerName}
@@ -116,7 +127,12 @@
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Calendar size={16} />
 							<span
-								>{group.agenda.StartTime.toLocaleDateString()} - {group.agenda.EndTime.toLocaleDateString()}</span
+								>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString('en-US', {
+									timeZone: 'UTC'
+								})} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
+									'en-US',
+									{ timeZone: 'UTC' }
+								)}</span
 							>
 						</div>
 
@@ -132,7 +148,13 @@
 										<div class="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
 											<Clock size={14} />
 											<span
-												>{event.StartTime.toLocaleTimeString()} - {event.EndTime.toLocaleTimeString()}</span
+												>{new Date(event.StartTime.toJSON().toString()).toLocaleTimeString(
+													'en-US',
+													{ timeZone: 'UTC' }
+												)} - {new Date(event.EndTime.toJSON().toString()).toLocaleTimeString(
+													'en-US',
+													{ timeZone: 'UTC' }
+												)}</span
 											>
 										</div>
 										{#if event.SpeakerName}

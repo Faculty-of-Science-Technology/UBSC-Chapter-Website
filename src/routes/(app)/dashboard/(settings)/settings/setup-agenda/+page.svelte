@@ -320,12 +320,18 @@ Message: {$message}
 					<Table.Cell>
 						<div class="flex items-center">
 							<Calendar class="mr-2 h-4 w-4" />
-							<span>{new Date(agenda.StartTime).toLocaleDateString()}</span>
+							<span
+								>{new Date(agenda.StartTime.toJSON().toString()).toLocaleDateString('en-US', {
+									timeZone: 'UTC'
+								})}</span
+							>
 							<Clock class="mx-2 h-4 w-4" />
 							<span
-								>{new Date(agenda.StartTime).toLocaleTimeString()} - {new Date(
-									agenda.EndTime
-								).toLocaleTimeString()}</span
+								>{new Date(agenda.StartTime.toJSON().toString()).toLocaleTimeString('en-US', {
+									timeZone: 'UTC'
+								})} - {new Date(agenda.EndTime.toJSON().toString()).toLocaleTimeString('en-US', {
+									timeZone: 'UTC'
+								})}</span
 							>
 						</div>
 					</Table.Cell>
@@ -455,9 +461,11 @@ Message: {$message}
 								<div class="mt-2 flex items-center text-muted-foreground">
 									<Clock class="mr-2 h-4 w-4" />
 									<span
-										>{new Date(event.StartTime).toLocaleTimeString()} - {new Date(
-											event.EndTime
-										).toLocaleTimeString()}</span
+										>{new Date(event.StartTime.toJSON().toString()).toLocaleTimeString('en-US', {
+											timeZone: 'UTC'
+										})} - {new Date(event.EndTime.toJSON().toString()).toLocaleTimeString('en-US', {
+											timeZone: 'UTC'
+										})}</span
 									>
 								</div>
 							</div>
