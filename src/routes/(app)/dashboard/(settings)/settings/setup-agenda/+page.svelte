@@ -414,7 +414,7 @@ Message: {$message}
 		<Sheet.Header>
 			<Sheet.Title>Manage Events</Sheet.Title>
 			<Sheet.Description>
-				Add or edit events for {selectedAgenda?.Title}
+				Add or edit events for <b>{selectedAgenda?.Title}</b>
 			</Sheet.Description>
 		</Sheet.Header>
 		<ScrollArea class="h-full w-full py-4">
@@ -426,14 +426,23 @@ Message: {$message}
 				<input type="hidden" name="agendaId" value={selectedAgenda?.Id} />
 				<div class="grid gap-2">
 					<Label>Event Title</Label>
+					<p class="text-sm text-destructive">
+						{$addEventFormErrors.title}
+					</p>
 					<Input name="title" placeholder="Keynote Speech" bind:value={$addEventForm.title} />
 				</div>
 				<div class="grid gap-2">
 					<Label>Speaker Name</Label>
+					<p class="text-sm text-destructive">
+						{$addEventFormErrors.speakerName}
+					</p>
 					<Input name="speakerName" placeholder="John Doe" bind:value={$addEventForm.speakerName} />
 				</div>
 				<div class="grid gap-2">
 					<Label>Subtitle</Label>
+					<p class="text-sm text-destructive">
+						{$addEventFormErrors.subtitle}
+					</p>
 					<Input
 						name="subtitle"
 						placeholder="Event subtitle..."
@@ -442,22 +451,34 @@ Message: {$message}
 				</div>
 				<div class="grid gap-2">
 					<Label>Description</Label>
+					<p class="text-sm text-destructive">
+						{$addEventFormErrors.body}
+					</p>
 					<Textarea name="body" placeholder="Event details..." bind:value={$addEventForm.body} />
 				</div>
 				<div class="grid grid-cols-2 gap-4">
 					<div class="grid gap-2">
 						<Label>Start Time</Label>
+						<p class="text-sm text-destructive">
+							{$addEventFormErrors.startTime}
+						</p>
 						<Input name="startTime" type="datetime-local" bind:value={$addEventForm.startTime} />
 					</div>
 					<div class="grid gap-2">
 						<Label>End Time</Label>
+						<p class="text-sm text-destructive">
+							{$addEventFormErrors.endTime}
+						</p>
 						<Input name="endTime" type="datetime-local" bind:value={$addEventForm.endTime} />
 					</div>
 				</div>
 				<div class="grid">
-					<div class="flex gap-2">
-						<Label>Same End Time</Label>
+					<div class="flex w-fit items-center justify-center gap-2">
 						<Input
+							title={$addEventForm.startTime === ''
+								? 'Start time must be set to use this option'
+								: ''}
+							disabled={$addEventForm.startTime === ''}
 							name="sameEndTime"
 							type="checkbox"
 							onchange={(e) => {
@@ -468,6 +489,7 @@ Message: {$message}
 								}
 							}}
 						/>
+						<Label>Same End Time</Label>
 					</div>
 				</div>
 				<Button type="submit" class={edit_mode ? 'bg-blue-500 hover:bg-blue-600' : ''}>
@@ -528,7 +550,9 @@ Message: {$message}
 												$addEventForm.endTime = '';
 											}
 										}}
-										class={edit_mode ? 'bg-blue-500 text-background hover:bg-blue-600' : ''}
+										class={edit_mode && $addEventForm.eventId === event.Id
+											? 'bg-blue-500 text-background hover:bg-blue-600 hover:text-slate-50'
+											: ''}
 									>
 										<Pencil class="h-4 w-4" />
 									</Button>
