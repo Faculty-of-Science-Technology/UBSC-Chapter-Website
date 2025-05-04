@@ -49,13 +49,13 @@
 	class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg border border-muted p-8 text-left"
 >
 	<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
-		Explore What Our Interns Have Accomplished
+		Explore the UB IT Internship Presentation Agenda
 	</h1>
 	<p class="text-xl lg:w-[720px]">
-		Come explore the diverse experiences and contributions of our final-year IT interns — from both
-		the Associate and Bachelor programs — as they present insights from their recently completed
-		internships. This event showcases the skills, growth, and professional development of tomorrow's
-		tech leaders.
+		View the full lineup of presentations, complete with presenter names, internship summaries, and
+		scheduled times. Featuring students from both the Associate and Bachelor IT programs, these
+		sessions showcase a wide range of internship experiences — from hands-on technical work to
+		real-world industry exposure.
 	</p>
 
 	<Tabs.Root value="all" class="w-full">
