@@ -85,11 +85,16 @@
 									</span>
 									<p class="text-sm">{organization.bio}</p>
 									<div class="flex items-center pt-2 text-sm">
-										<a
+										<svelte:element
+											this="a"
 											href="/dashboard/organizations/{organization.id}"
 											class="flex gap-2 underline hover:no-underline"
-											><ExternalLink size="16" /> View Organization</a
+											role="link"
+											tabindex="0"
+											onclick={(e) => e.stopPropagation()}
 										>
+											<ExternalLink size="16" /> View Organization
+										</svelte:element>
 									</div>
 								</div>
 							</div>
@@ -148,11 +153,16 @@
 									</span>
 									<p class="text-sm">{organization.bio}</p>
 									<div class="flex items-center pt-2 text-sm">
-										<a
+										<svelte:element
+											this="a"
 											href="/dashboard/organizations/{organization.id}"
 											class="flex gap-2 underline hover:no-underline"
-											><ExternalLink size="16" /> View Organization</a
+											role="link"
+											tabindex="0"
+											onclick={(e) => e.stopPropagation()}
 										>
+											<ExternalLink size="16" /> View Organization
+										</svelte:element>
 									</div>
 								</div>
 							</div>
@@ -205,11 +215,16 @@
 									<h4 class="text-sm font-semibold">{organization.name}</h4>
 									<p class="text-sm">{organization.bio}</p>
 									<div class="flex items-center pt-2 text-sm">
-										<a
+										<svelte:element
+											this="a"
 											href="/dashboard/organizations/{organization.id}"
 											class="flex gap-2 underline hover:no-underline"
-											><ExternalLink size="16" /> View Organization</a
+											role="link"
+											tabindex="0"
+											onclick={(e) => e.stopPropagation()}
 										>
+											<ExternalLink size="16" /> View Organization
+										</svelte:element>
 									</div>
 								</div>
 							</div>

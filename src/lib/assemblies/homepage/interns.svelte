@@ -91,11 +91,16 @@
 										</span>
 										<p class="text-sm">{avatar.bio}</p>
 										<div class="flex items-center pt-2 text-sm">
-											<a
+											<svelte:element
+												this="a"
 												href="/dashboard/people/{avatar.id}"
 												class="flex gap-2 underline hover:no-underline"
-												><Link size="16" /> View Profile</a
+												role="link"
+												tabindex="0"
+												onclick={(e) => e.stopPropagation()}
 											>
+												<Link size="16" /> View Profile
+											</svelte:element>
 										</div>
 									</div>
 								</div>
@@ -168,11 +173,16 @@
 											</span>
 											<p class="text-sm">{avatar.user.Bio}</p>
 											<div class="flex items-center pt-2 text-sm">
-												<a
+												<svelte:element
+													this="a"
 													href="/dashboard/people/{avatar.user.Id}"
 													class="flex gap-2 underline hover:no-underline"
-													><Link size="16" /> View Profile</a
+													role="link"
+													tabindex="0"
+													onclick={(e) => e.stopPropagation()}
 												>
+													<Link size="16" /> View Profile
+												</svelte:element>
 											</div>
 										</div>
 									</div>
