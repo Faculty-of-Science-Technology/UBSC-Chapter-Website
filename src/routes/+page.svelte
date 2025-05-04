@@ -37,7 +37,7 @@
 						/>
 						<TabList.Tab
 							class="px-3 py-2 text-gray-700 hover:text-violet-700"
-							title="Interns"
+							title="IT Talent"
 							onclick={() => (active_tab = 1)}
 							active={active_tab === 1}
 						/>
@@ -105,7 +105,7 @@
 		<div class="mt-2 overflow-x-auto pb-2 lg:hidden">
 			<TabList.Root class="flex gap-2 px-4">
 				<TabList.Tab title="Home" onclick={() => (active_tab = 0)} active={active_tab === 0} />
-				<TabList.Tab title="Interns" onclick={() => (active_tab = 1)} active={active_tab === 1} />
+				<TabList.Tab title="IT Talent" onclick={() => (active_tab = 1)} active={active_tab === 1} />
 				<TabList.Tab
 					title="Presentation Agenda"
 					onclick={() => (active_tab = 2)}
@@ -131,18 +131,27 @@
 				<section class="container mx-auto px-4 py-12">
 					<div class="flex flex-col-reverse items-center gap-8 lg:flex-row lg:gap-12">
 						<div class="lg:w-7/12">
-							<h1
-								class="mb-6 text-center text-4xl font-bold text-gray-900 lg:text-left lg:text-5xl"
-							>
-								INTERNSHIP OVERVIEW
-							</h1>
+							<div class="mb-6 flex flex-col gap-3">
+								<h1 class="text-center text-4xl font-bold text-gray-900 lg:text-left lg:text-5xl">
+									Welcome to the University of Belize IT Talent Network
+								</h1>
+								<p class="text-slate-600">
+									Connecting UB&#39;s Brightest Minds with the Tech Industry
+								</p>
+							</div>
 							<p class="text-lg text-gray-700">
-								Our platform is designed to help employers connect with the perfect candidates
-								quickly and effortlessly. With just one glance, you'll discover the skilled
-								professionals you need to bring your vision to life. IT Careers connects you with
-								people in tech from all around Belize. Join our community and select from our
-								growing selection of candidates today!
+								Welcome to the University of Belize's exclusive online portal for IT talent. Whether
+								you're looking for bright interns or experienced alumni, this is your direct link to
+								a growing network of skilled professionals from the UB IT program.
 							</p>
+							<div class="mt-4 text-lg text-gray-700">
+								<span class="font-semibold">What You'll Find:</span>
+								<ul class="ml-5 mt-2 list-disc space-y-1">
+									<li>Profiles and resumes of current IT students and graduates</li>
+									<li>A curated community of tech professionals educated at UB</li>
+									<li>Quick, seamless connection with candidates ready to make an impact</li>
+								</ul>
+							</div>
 							<div class="mt-8 flex justify-center lg:justify-start">
 								<a href="/auth/register">
 									<Button class="bg-violet-600 text-white hover:bg-violet-700"
@@ -186,11 +195,12 @@
 					<div class="container mx-auto px-4">
 						<div class="flex flex-col items-center gap-12 lg:flex-row lg:items-start">
 							<div class="lg:w-7/12">
-								<h2 class="mb-6 text-4xl font-bold">DON'T MISS OUT</h2>
+								<h2 class="mb-6 text-4xl font-bold">EXPLORE WHAT OUR INTERNS HAVE ACCOMPLISHED</h2>
 								<p class="mb-8 text-xl">
-									Not <span class="italic">JUST</span> your typical hiring platform. We connect you with
-									people in tech from all around Belize quickly and effortlessly. Join our community
-									and select from our growing selection of candidates today!
+									Come explore the diverse experiences and contributions of our final-year IT
+									interns — from both the Associate and Bachelor programs — as they present insights
+									from their recently completed internships. This event showcases the skills,
+									growth, and professional development of tomorrow's tech leaders.
 								</p>
 
 								<div class="flex flex-col gap-6 sm:flex-row">
@@ -198,7 +208,7 @@
 										<p class="font-bold">Associates Presentation</p>
 										<a href="#" class="flex items-center gap-2 text-white hover:underline">
 											<Calendar size={20} />
-											<span>May 2nd, 2025</span>
+											<span>May 8nd, 2025</span>
 										</a>
 									</div>
 
@@ -206,7 +216,7 @@
 										<p class="font-bold">Bachelors Presentation</p>
 										<a href="#" class="flex items-center gap-2 text-white hover:underline">
 											<Calendar size={20} />
-											<span>May 3rd, 2025</span>
+											<span>May 9rd, 2025</span>
 										</a>
 									</div>
 								</div>
@@ -275,7 +285,7 @@
 								<div>
 									<p class="font-medium">Zoom Meeting Link:</p>
 									<a
-										href="https://us06web.zoom.us/j/86803449142"
+										href="https://us06web.zoom.us/j/86803449142?pwd=T7tDCvQpKZ7j76swtHkVHzDRTnxKYX.1"
 										class="text-violet-600 hover:underline"
 									>
 										Click here to join the meeting
@@ -312,20 +322,36 @@
 				<!-- Options -->
 				<section class="bg-gradient-to-r from-amber-50 to-violet-50 py-16">
 					<div class="container mx-auto px-4">
-						<h2 class="mb-12 text-center text-4xl font-semibold">Where to begin?</h2>
+						<h2 class="mb-12 text-center text-4xl font-semibold">Let's Get You Connected</h2>
+						<p class="mb-8 text-center text-xl">
+							Whether you're launching your career or building a team, start here.
+						</p>
 						<div class="flex flex-col gap-8 md:flex-row">
 							<div
 								class="flex-1 rounded-lg border border-violet-200 bg-white p-6 shadow-md transition-all hover:shadow-lg"
 							>
 								<Rocket size="64" class="mb-4 text-amber-500" strokeWidth="1" />
 								<h3 class="mb-2 text-2xl font-medium">
-									Kickstart Your <span class="font-bold underline">Career</span>
+									For <span class="font-bold underline">Students &amp; Alumni</span>
 								</h3>
-								<p class="mb-6 text-lg">Find your next job</p>
+								<p class="mb-4 text-lg">Launch Your Tech Career with Confidence</p>
+								<p class="mb-6">
+									Join UB's exclusive network of IT professionals. Whether you're preparing for your
+									first internship or seeking new opportunities, this platform puts your profile in
+									front of real employers.
+								</p>
+								<div class="mb-6">
+									<p class="font-medium">Why Join:</p>
+									<ul class="ml-5 mt-2 list-disc space-y-1">
+										<li>Build your professional profile and showcase your work</li>
+										<li>Be visible to top employers hiring tech talent</li>
+										<li>Access exclusive internship and job opportunities</li>
+									</ul>
+								</div>
 								<a href="/auth/register">
-									<Button class="w-fit bg-violet-600 text-white hover:bg-violet-700"
-										>Register as an Intern</Button
-									>
+									<Button class="w-fit bg-violet-600 text-white hover:bg-violet-700">
+										Create Your Profile
+									</Button>
 								</a>
 							</div>
 
@@ -334,13 +360,24 @@
 							>
 								<CheckSquare size="64" class="mb-4 text-violet-500" strokeWidth="1" />
 								<h3 class="mb-2 text-2xl font-medium">
-									Acquire <span class="font-bold underline">Talent</span>
+									For <span class="font-bold underline">Employers</span>
 								</h3>
-								<p class="mb-6 text-lg">Because, why look anywhere else?</p>
+								<p class="mb-4 text-lg">Connect with UB's Tech Talent</p>
+								<p class="mb-6">
+									Looking for skilled interns or graduates in IT? This is your direct link to the
+									University of Belize's top talent — trained in theory, practice, and innovation.
+								</p>
+								<div class="mb-6">
+									<p class="font-medium">What You Get:</p>
+									<ul class="ml-5 mt-2 list-disc space-y-1">
+										<li>Access to curated profiles of UB IT students and alumni</li>
+										<li>A streamlined path to recruit the right talent for your team</li>
+									</ul>
+								</div>
 								<a href="/auth/register?force_choice=host">
-									<Button class="w-fit bg-amber-500 text-white hover:bg-amber-600"
-										>Register as a Host</Button
-									>
+									<Button class="w-fit bg-amber-500 text-white hover:bg-amber-600">
+										Register as a host
+									</Button>
 								</a>
 							</div>
 						</div>
@@ -372,9 +409,9 @@
 						<Logo />
 					</div>
 					<p class="mb-4 text-lg">
-						IT Careers connects you with people in tech from all around Belize quickly and
-						effortlessly. Join our community and select from our growing selection of candidates
-						today :)
+						IT Careers connects employers with emerging and experienced tech talent from the
+						University of Belize — quickly, easily, and all in one place. Join our growing network
+						today.
 					</p>
 					<a href="/auth/login">
 						<Button

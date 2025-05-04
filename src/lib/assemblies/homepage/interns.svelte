@@ -16,11 +16,13 @@
 	class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg border border-muted p-8 text-left"
 >
 	<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
-		Meet Belize's Next Tech Leaders
+		Meet Belize's Emerging Tech Talent
 	</h1>
 	<p class="text-xl lg:w-[720px]">
-		Discover ambitious tech talent ready to transform your organization. Our interns bring fresh
-		perspectives, current skills, and endless potential to every project they touch.
+		Discover ambitious students and alumni from the University of Belize's IT program — ready to
+		contribute, innovate, and grow with your organization. From fresh perspectives to practical
+		experience, UB IT talent brings energy, insight, and a passion for technology to every
+		opportunity.
 	</p>
 
 	<Tabs.Root value="everyone" class="w-full">
