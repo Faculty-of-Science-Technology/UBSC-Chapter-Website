@@ -75,14 +75,28 @@
 						<h2 class="mb-4 text-2xl font-bold">{group.agenda.Title}</h2>
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Calendar size={16} />
-							<span
-								>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString('en-US', {
-									timeZone: 'UTC'
-								})} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
-									'en-US',
-									{ timeZone: 'UTC' }
-								)}</span
-							>
+							{#if group.agenda.StartTime.toJSON().toString() !== group.agenda.EndTime.toJSON().toString()}
+								<span
+									>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{
+											timeZone: 'UTC'
+										}
+									)} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{ timeZone: 'UTC' }
+									)}</span
+								>
+							{:else}
+								<span
+									>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{
+											timeZone: 'UTC'
+										}
+									)}</span
+								>
+							{/if}
 						</div>
 
 						<div class="mt-6 space-y-4">
@@ -126,14 +140,28 @@
 						<h2 class="mb-4 text-2xl font-bold">{group.agenda.Title}</h2>
 						<div class="flex items-center gap-2 text-muted-foreground">
 							<Calendar size={16} />
-							<span
-								>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString('en-US', {
-									timeZone: 'UTC'
-								})} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
-									'en-US',
-									{ timeZone: 'UTC' }
-								)}</span
-							>
+							{#if group.agenda.StartTime.toJSON().toString() !== group.agenda.EndTime.toJSON().toString()}
+								<span
+									>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{
+											timeZone: 'UTC'
+										}
+									)} - {new Date(group.agenda.EndTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{ timeZone: 'UTC' }
+									)}</span
+								>
+							{:else}
+								<span
+									>{new Date(group.agenda.StartTime.toJSON().toString()).toLocaleDateString(
+										'en-US',
+										{
+											timeZone: 'UTC'
+										}
+									)}</span
+								>
+							{/if}
 						</div>
 
 						<div class="mt-6 space-y-4">
