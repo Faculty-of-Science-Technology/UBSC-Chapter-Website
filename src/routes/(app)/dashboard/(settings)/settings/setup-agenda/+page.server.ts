@@ -33,6 +33,7 @@ const eventSchema__remove = z.object({
 });
 
 const eventSchema = z.object({
+	eventId: z.string().uuid().optional(),
 	agendaId: z.string().uuid(),
 	title: z.string().min(1).max(255),
 	subtitle: z.string().max(255).optional(),
@@ -169,7 +170,25 @@ export const actions: Actions = {
 			AgendaId: form.data.agendaId
 		};
 
-		await db.insert(AgendaEvents).values(phonyEvent);
+		if (form.data.eventId === undefined) {
+			await db.insert(AgendaEvents).values(phonyEvent);
+			setMessage(form, 'Event created successfully');
+		} else {
+			// Update existing event
+			await db
+				.update(AgendaEvents)
+				.set({
+					Title: form.data.title,
+					Subtitle: form.data.subtitle,
+					Body: form.data.body,
+					SpeakerName: form.data.speakerName,
+					StartTime: new Date(form.data.startTime),
+					EndTime: new Date(form.data.endTime),
+					AgendaId: form.data.agendaId
+				})
+				.where(eq(AgendaEvents.Id, form.data.eventId));
+			setMessage(form, 'Event updated successfully');
+		}
 
 		return { addEventForm: form, phonyEvent };
 	},

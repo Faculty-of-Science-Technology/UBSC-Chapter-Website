@@ -7,7 +7,7 @@
 	import * as Sheet from '$lib/components/vendor/ui/sheet';
 	import * as Table from '$lib/components/vendor/ui/table';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
-	import { Calendar, Clock, Plus, Trash2, Users } from 'lucide-svelte';
+	import { Calendar, Clock, Pencil, Plus, Trash2, Users } from 'lucide-svelte';
 	import SuperDebug from 'sveltekit-superforms';
 	import { superForm } from 'sveltekit-superforms/client';
 	import { type PageProps } from './$types.js';
@@ -15,6 +15,7 @@
 	const { data }: PageProps = $props();
 	const user = data.user;
 	let agendas = $state(data.agendas);
+	let edit_mode = $state(false);
 	let currentErrors = $state({});
 
 	// Remove Event Form
@@ -177,7 +178,27 @@
 				}
 				$addEventFormMessage = result.data.addEventForm.message;
 				if (selectedAgenda == null) return;
-				selectedAgenda.events = [...selectedAgenda.events, result.data.phonyEvent];
+				if (!edit_mode) {
+					selectedAgenda.events = [...selectedAgenda.events, result.data.phonyEvent];
+				} else {
+					// Find the index of the event being edited
+					const eventIndex = selectedAgenda.events.findIndex(
+						(event) => event.Id === result.data.addEventForm.data.eventId
+					);
+					if (eventIndex !== -1) {
+						// Update the event in place
+						selectedAgenda.events[eventIndex] = result.data.phonyEvent;
+					}
+					edit_mode = false;
+					// Reset form if exiting edit mode
+					$addEventForm.eventId = '';
+					$addEventForm.title = '';
+					$addEventForm.speakerName = '';
+					$addEventForm.subtitle = '';
+					$addEventForm.body = '';
+					$addEventForm.startTime = '';
+					$addEventForm.endTime = '';
+				}
 			}
 		},
 		onUpdate: ({ form }) => {
@@ -398,6 +419,9 @@ Message: {$message}
 		</Sheet.Header>
 		<ScrollArea class="h-full w-full py-4">
 			<form method="POST" action="?/addEvent" class="grid gap-4" use:addEventFormEnhance>
+				{#if edit_mode}
+					<input type="hidden" name="eventId" bind:value={$addEventForm.eventId} />
+				{/if}
 				<input type="hidden" name="agendaId" bind:value={$addEventForm.agendaId} />
 				<input type="hidden" name="agendaId" value={selectedAgenda?.Id} />
 				<div class="grid gap-2">
@@ -446,7 +470,13 @@ Message: {$message}
 						/>
 					</div>
 				</div>
-				<Button type="submit">Add Event</Button>
+				<Button type="submit" class={edit_mode ? 'bg-blue-500 hover:bg-blue-600' : ''}>
+					{#if edit_mode}
+						Edit Event
+					{:else}
+						Add Event
+					{/if}
+				</Button>
 			</form>
 
 			<div class="mt-8">
@@ -469,6 +499,38 @@ Message: {$message}
 										onclick={() => ($removeEventForm.eventId = event.Id)}
 									>
 										<Trash2 class="h-4 w-4" />
+									</Button>
+									<Button
+										variant="ghost"
+										size="icon"
+										onclick={() => {
+											edit_mode = !edit_mode;
+											if (edit_mode) {
+												$addEventForm.eventId = event.Id;
+												$addEventForm.title = event.Title;
+												$addEventForm.speakerName = event.SpeakerName ? event.SpeakerName : '';
+												$addEventForm.subtitle = event.Subtitle ? event.Subtitle : '';
+												$addEventForm.body = event.Body;
+												$addEventForm.startTime = new Date(event.StartTime.toJSON().toString())
+													.toISOString()
+													.slice(0, 16);
+												$addEventForm.endTime = new Date(event.EndTime.toJSON().toString())
+													.toISOString()
+													.slice(0, 16);
+											} else {
+												// Reset form if exiting edit mode
+												$addEventForm.eventId = '';
+												$addEventForm.title = '';
+												$addEventForm.speakerName = '';
+												$addEventForm.subtitle = '';
+												$addEventForm.body = '';
+												$addEventForm.startTime = '';
+												$addEventForm.endTime = '';
+											}
+										}}
+										class={edit_mode ? 'bg-blue-500 text-background hover:bg-blue-600' : ''}
+									>
+										<Pencil class="h-4 w-4" />
 									</Button>
 								</form>
 							</div>
