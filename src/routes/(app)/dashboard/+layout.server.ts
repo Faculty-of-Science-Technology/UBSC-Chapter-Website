@@ -11,10 +11,13 @@ export const load: LayoutServerLoad = async ({ locals, parent, request }) => {
 		};
 	}
 
-	if (!request.url.includes('/dashboard/people/')) {
+	if (
+		!request.url.includes('/dashboard/people/') &&
+		!request.url.includes('/dashboard/organizations/')
+	) {
 		throw error(401, '✗ Unauthorized');
 	}
-	
+
 	if (JSON.parse(PLATFORM_PRIVATE_ACCOUNT_MODE) === false) {
 		return {
 			user: {

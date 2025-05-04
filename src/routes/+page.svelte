@@ -5,6 +5,7 @@
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
 	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
 
+	import { page } from '$app/state';
 	import { PUBLIC_PLATFORM_NAME, PUBLIC_PLATFORM_SPONSOR_NAME } from '$env/static/public';
 	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
 	import type { PageData } from './$types';
@@ -13,7 +14,11 @@
 	const org_avatar_data: AvatarData[] = data.org_avatar_data;
 	const agenda_data = data.agendas;
 
-	let active_tab = $state(0);
+	const forced_tab = page.url.searchParams.get('tab')
+		? parseInt(page.url.searchParams.get('tab') ?? '0')
+		: null;
+
+	let active_tab = $state(forced_tab ?? 0);
 </script>
 
 <!-- Main layout with navbar styling similar to the reference -->
@@ -384,7 +389,7 @@
 					</div>
 				</section>
 			{:else if active_tab === 1}
-				<Homepage.Interns avatar_data={data.avatar_data} group_data={data.groups}/>
+				<Homepage.Interns avatar_data={data.avatar_data} group_data={data.groups} />
 			{:else if active_tab === 2}
 				<Homepage.PresentationAgenda {agenda_data} />
 			{:else if active_tab === 3}

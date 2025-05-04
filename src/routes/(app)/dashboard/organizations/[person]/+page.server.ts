@@ -1,4 +1,4 @@
-import { IS_DEVELOPMENT } from '$env/static/private';
+import { IS_DEVELOPMENT, PLATFORM_PRIVATE_ACCOUNT_MODE } from '$env/static/private';
 import { db } from '$lib/server/db';
 import { Users, UserSkills, UserSocialLinks } from '$lib/server/db/schema';
 import { error, redirect } from '@sveltejs/kit';
@@ -8,9 +8,11 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
 	// Check if user is authenticated
 	const user = event.locals.user;
-	if (!user) {
-		throw redirect(301, '/auth/login');
+	const person_param = event.params.person;
+	if (JSON.parse(PLATFORM_PRIVATE_ACCOUNT_MODE)) {
+		throw redirect(301, `/auth/login?next=/dashboard/organizations/${person_param}`);
 	}
+
 	// Get the person ID from the URL
 	const personId = event.params.person;
 
@@ -28,7 +30,7 @@ export const load: PageServerLoad = async (event) => {
 		.limit(1)
 		.then((res) => res[0])
 		.catch((e) => {
-			if (IS_DEVELOPMENT === "true") console.log(e);
+			if (IS_DEVELOPMENT === 'true') console.log(e);
 			throw error(404, {
 				message: 'Person not found'
 			});
@@ -66,6 +68,6 @@ export const load: PageServerLoad = async (event) => {
 			Skills: skills.map((skill) => skill.Name),
 			Socials: socials
 		},
-		isOwner: user.Id === personId
+		isOwner: user?.Id === personId
 	};
 };

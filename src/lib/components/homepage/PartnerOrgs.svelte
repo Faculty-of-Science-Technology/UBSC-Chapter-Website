@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { AvatarData } from '$lib/assemblies';
 
-	import { Badge, Building2, ExternalLink } from 'lucide-svelte';
+	import { Building2, ExternalLink } from 'lucide-svelte';
 
 	import * as Avatar from '$lib/components/vendor/ui/avatar';
+	import { Badge } from '$lib/components/vendor/ui/badge';
 	import * as HoverCard from '$lib/components/vendor/ui/hover-card/index.js';
 	import { cn } from '$lib/components/vendor/utils';
 	import type { Snippet } from 'svelte';
@@ -65,11 +66,18 @@
 							</span>
 							<p class="text-sm">{organization.bio}</p>
 							<div class="flex items-center pt-2 text-sm">
-								<a
-									href="/dashboard/organizations/{organization.id}"
-									class="flex gap-2 underline hover:no-underline"
-									><ExternalLink size="16" /> View Organization</a
-								>
+								<span class="flex gap-2">
+									<svelte:element
+										this="a"
+										href="/dashboard/organizations/{organization.id}"
+										class="flex gap-2 underline hover:no-underline"
+										role="link"
+										tabindex="0"
+										onclick={(e) => e.stopPropagation()}
+									>
+										<ExternalLink size="16" /> View Organization
+									</svelte:element>
+								</span>
 							</div>
 						</div>
 					</div>
