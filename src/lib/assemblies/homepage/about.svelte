@@ -14,8 +14,10 @@
 
 				<h2 class="mt-4 text-2xl font-semibold text-gray-800">Real-World Experience</h2>
 				<p class="text-lg leading-relaxed text-gray-700">
-					The program spans 9-12 weeks and places students in established firms where they gain
-					practical work experience that complements their academic studies.
+					The program lasts 10 weeks for Associate-level internships and 12 weeks for Bachelor-level
+					internships, providing students with valuable hands-on experience in established firms.
+					Through this placement, participants gain practical skills that complement their academic
+					studies, preparing them for future professional opportunities.
 				</p>
 
 				<h2 class="mt-4 text-2xl font-semibold text-gray-800">Professional Development</h2>
@@ -33,7 +35,9 @@
 					class="h-auto w-full rounded-lg object-cover shadow-md"
 				/>
 				<div class="mt-2 text-left italic text-gray-400">
-					Photo: <a class="font-medium underline" href="https://www.linkedin.com/in/amilcar-vasquez-600033238/">Amilcar Vasquez</a
+					Photo: <a
+						class="font-medium underline"
+						href="https://www.linkedin.com/in/amilcar-vasquez-600033238/">Amilcar Vasquez</a
 					> &mdash; Past Intern
 				</div>
 			</div>
