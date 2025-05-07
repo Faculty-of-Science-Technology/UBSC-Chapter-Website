@@ -516,7 +516,7 @@
 						</li>
 						<li class="flex items-start gap-2">
 							<Mail size={20} class="mt-1 flex-shrink-0 text-amber-300" />
-							<a href="mailto:2022156465@ub.edu.bz" class="hover:text-amber-300"
+							<a href="mailto:{PUBLIC_SUPPORT_EMAIL}" class="hover:text-amber-300"
 								>{PUBLIC_SUPPORT_EMAIL}</a
 							>
 						</li>
