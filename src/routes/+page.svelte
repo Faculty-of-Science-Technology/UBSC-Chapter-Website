@@ -6,7 +6,11 @@
 	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
 
 	import { page } from '$app/state';
-	import { PUBLIC_PLATFORM_NAME, PUBLIC_PLATFORM_SPONSOR_NAME } from '$env/static/public';
+	import {
+		PUBLIC_PLATFORM_NAME,
+		PUBLIC_PLATFORM_SPONSOR_NAME,
+		PUBLIC_SUPPORT_EMAIL
+	} from '$env/static/public';
 	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
 	import type { PageData } from './$types';
 
@@ -137,6 +141,47 @@
 					<div class="flex flex-col-reverse items-center gap-8 lg:flex-row lg:gap-12">
 						<div class="lg:w-7/12">
 							<div class="mb-6 flex flex-col gap-3">
+								<!--- hydrocode card --->
+
+								<div class="rounded-md border-2 border-yellow-400 bg-white px-4 pb-4">
+									<div class="mt-4 flex">
+										<!-- Avatar -->
+										<div class="flex-shrink-0">
+											<a
+												href="https://github.com/faculty-of-science-technology"
+												aria-label="UniversityOfBelize"
+											>
+												<img
+													class="h-11 w-11 rounded-full border-2 border-gray-200"
+													alt="University of Belize"
+													src="https://avatars.githubusercontent.com/u/168884004"
+												/>
+											</a>
+										</div>
+
+										<!-- Info Block -->
+										<div class="ml-4 flex-grow overflow-hidden">
+											<div class="flex items-center space-x-1">
+												<a
+													href="https://github.com/faculty-of-science-technology"
+													class="text-base font-semibold text-blue-600 hover:underline"
+												>
+													University of Belize
+												</a>
+												<a
+													href="https://github.com/faculty-of-science-technology"
+													class="text-sm text-gray-500 hover:underline"
+												>
+													@Faculty-of-Science-Technology
+												</a>
+											</div>
+											<p class="mt-1 text-sm leading-snug text-gray-600">
+												Education Empowers a Nation
+											</p>
+										</div>
+									</div>
+								</div>
+								<!-- End hydrocode card -->
 								<h1 class="text-center text-4xl font-bold text-gray-900 lg:text-left lg:text-5xl">
 									Welcome to the University of Belize IT Talent Network
 								</h1>
@@ -213,7 +258,7 @@
 										<p class="font-bold">Associates Presentation</p>
 										<a href="#" class="flex items-center gap-2 text-white hover:underline">
 											<Calendar size={20} />
-											<span>May 8nd, 2025</span>
+											<span>May 8, 2025</span>
 										</a>
 									</div>
 
@@ -221,7 +266,7 @@
 										<p class="font-bold">Bachelors Presentation</p>
 										<a href="#" class="flex items-center gap-2 text-white hover:underline">
 											<Calendar size={20} />
-											<span>May 9rd, 2025</span>
+											<span>May 9, 2025</span>
 										</a>
 									</div>
 								</div>
@@ -472,7 +517,7 @@
 						<li class="flex items-start gap-2">
 							<Mail size={20} class="mt-1 flex-shrink-0 text-amber-300" />
 							<a href="mailto:2022156465@ub.edu.bz" class="hover:text-amber-300"
-								>2022156465@ub.edu.bz</a
+								>{PUBLIC_SUPPORT_EMAIL}</a
 							>
 						</li>
 					</ul>
