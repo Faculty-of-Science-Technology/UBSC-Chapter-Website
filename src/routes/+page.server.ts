@@ -5,7 +5,7 @@ import { and, eq, isNull } from 'drizzle-orm';
 import nodemailer from 'nodemailer';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
-import { z } from "zod";
+import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
 
 const eventRegisterSchema = z.object({
@@ -13,7 +13,7 @@ const eventRegisterSchema = z.object({
 	name: z.string().min(1, { message: 'Your name is required' }).trim()
 });
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (request) => {
 	// Get all users who are interns (modify the query based on your database schema)
 	const groups = await db.query.Groups.findMany({
 		with: {
@@ -91,11 +91,14 @@ export const load: PageServerLoad = async () => {
 		agenda: group.agenda
 	}));
 
+	const form = await superValidate(request, zod(eventRegisterSchema));
+
 	return {
 		avatar_data,
 		org_avatar_data,
 		agendas,
-		groups
+		groups,
+		form
 	};
 };
 
@@ -103,12 +106,12 @@ export const actions: Actions = {
 	signUpForDefaultEvent: async () => {
 		// Validate form data using superValidate
 		const form = await superValidate(zod(eventRegisterSchema));
-		
+
 		// Return invalid form data if validation fails
 		if (!form.valid) {
 			return { form };
 		}
-		
+
 		// Fire up nodemailer
 		const transporter = nodemailer.createTransport({
 			host: 'smtp.gmail.com',
@@ -127,8 +130,8 @@ export const actions: Actions = {
 			subject: `Event Registration Confirmation - ${PLATFORM_NAME}`,
 			text: `Hey there ${form.data.name},\nThanks for your interest in the event. The presentations span from May 8 to May 9.`
 		});
-		
+
 		// Return success
 		return { success: true, form };
 	}
-}
+};
