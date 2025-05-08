@@ -31,12 +31,13 @@ const registerSchema = z
 		account_type: z.enum(['student', 'host'], { message: "Choose either 'student' or 'host'" }),
 		full_name: z
 			.string({ required_error: 'Full name is required' })
-			.regex(/^\S+\s\S+$/, {
+			.regex(/^\S+(\s+\S+)+$/, {
 				message: 'Full name must contain at least two words separated by a space'
 			})
 			.min(1, { message: 'Full name is too short' })
 			.max(255, { message: 'Full name must be less than 255 characters long' })
 			.trim(),
+		//org_name: z.string({ required_error: 'Organization name is required'})
 		email: z
 			.string({ required_error: 'Email is required' })
 			.email({ message: 'Invalid email address' })
@@ -108,7 +109,7 @@ export const actions: Actions = {
 			await db.insert(Users).values({
 				AccountType: super_form.data.account_type === 'student' ? 'student' : 'org',
 				FirstName: super_form.data.full_name.split(' ')[0].trim(),
-				LastName: super_form.data.full_name.split(' ')[1].trim(),
+				LastName: super_form.data.full_name.split(' ').slice(1).join(' ').trim(),
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
 				Username: 'user-' + generateId(8),

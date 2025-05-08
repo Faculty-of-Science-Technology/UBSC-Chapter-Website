@@ -46,7 +46,9 @@
 	>
 		<div class="flex flex-col items-start justify-center self-stretch px-20 py-20"><Logo /></div>
 	</r-column>
-	<l-column class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8">
+	<l-column
+		class="flex h-full flex-col items-center justify-center bg-violet-50 lg:flex-1 lg:gap-8"
+	>
 		<Card.Root class="w-[305px] py-4 lg:w-[375px]">
 			<card-content class="flex flex-col items-center space-y-10 p-4 text-center">
 				<div class="flex flex-col items-center justify-center gap-8">
@@ -115,9 +117,7 @@
 							placeholder={accountType === 'student'
 								? 'e.g. Immanuel Garcia'
 								: 'e.g. Social Security Board'}
-							pattern="[A-Za-z\s]+"
 							bind:value={$form.full_name}
-							{...$constraints.full_name}
 						/>
 						<p class="text-sm text-red-600">{$errors.full_name}</p>
 					</div>
@@ -146,7 +146,10 @@
 									const event: Event = e;
 									if (!event) return;
 									if (accountType === 'student' && event.target.value.trim() === '') return;
-									if (accountType === 'student' && !event.target.value.includes(`@${PUBLIC_PLATFORM_OWNING_DOMAIN}}`)) {
+									if (
+										accountType === 'student' &&
+										!event.target.value.includes(`@${PUBLIC_PLATFORM_OWNING_DOMAIN}}`)
+									) {
 										event.target.value = (
 											event.target.value.replace(/@.*$/, '') + `@${PUBLIC_PLATFORM_OWNING_DOMAIN}`
 										).trim();
@@ -197,9 +200,10 @@
 					<Button type="submit" class="w-full">Join the network</Button>
 
 					<p class="text-center text-sm font-normal">
-						By signing up, you agree to abide by the <a href="https://www.ub.edu.bz/wp-content/uploads/2024/09/Student-Handbook-APPROVED-May-2024.pdf"><underline class="underline"
-							>UB Student Code of Conduct Policy</underline
-						>.</a>
+						By signing up, you agree to abide by the <a
+							href="https://www.ub.edu.bz/wp-content/uploads/2024/09/Student-Handbook-APPROVED-May-2024.pdf"
+							><underline class="underline">UB Student Code of Conduct Policy</underline>.</a
+						>
 					</p>
 				</form>
 			</card-content>
