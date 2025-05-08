@@ -135,7 +135,10 @@ export const actions: Actions = {
 			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 			to: form.data.email,
 			subject: `Event Registration Confirmation - ${PLATFORM_NAME}`,
-			text: `Hey there ${form.data.name},\nThanks for your interest in the event. The presentations span from May 8 to May 9.`
+			text:
+				`Hey there ${form.data.name},\nThanks for your interest in the event. ` +
+				'Presentations span from May 8 to May 9.\n\nYou can join it here:\nhttps://us06web.zoom.us/j/' +
+				`86803449142?pwd=T7tDCvQpKZ7j76swtHkVHzDRTnxKYX.1\n\nAll the best,\n${PLATFORM_NAME}`
 		});
 
 		// Return success
