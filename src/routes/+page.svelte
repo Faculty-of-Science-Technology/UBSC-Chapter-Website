@@ -12,6 +12,8 @@
 		PUBLIC_SUPPORT_EMAIL
 	} from '$env/static/public';
 	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
+
+	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types';
 
 	const { data } = $props<{ data: PageData }>();
@@ -23,6 +25,8 @@
 		: null;
 
 	let active_tab = $state(forced_tab ?? 0);
+
+	const { form, constraints, message, enhance } = superForm(data.form);
 </script>
 
 <!-- Main layout with navbar styling similar to the reference -->
@@ -274,23 +278,27 @@
 
 							<div class="w-full lg:w-5/12">
 								<div class="rounded-lg bg-white p-6 text-gray-800 shadow-lg">
-									<h3 class="mb-2 text-2xl font-bold text-violet-800">Register</h3>
-									<p class="mb-6 text-gray-600">Sign up to attend the intern's presentation.</p>
+									<h3 class="mb-2 text-2xl font-bold text-violet-800">Register For The Event</h3>
+									<p class="mb-6 text-gray-600">
+										Not an organization? No problem. You can still sign up to attend the internship
+										presentation.
+									</p>
 
 									<form
 										class="flex flex-col gap-4"
-										action="/auth/register?/register&force_choice=host"
+										action="?/signUpForDefaultEvent"
 										method="POST"
+										use:enhance
 									>
 										<div>
-											<label for="full_name" class="mb-1 block text-sm font-medium"
-												>Organization</label
-											>
+											<label for="name" class="mb-1 block text-sm font-medium">Your name</label>
 											<input
 												type="text"
 												class="w-full rounded-md border bg-transparent p-2"
-												name="full_name"
-												placeholder="Organization"
+												name="name"
+												bind:value={$form.name}
+												{...$constraints.name}
+												placeholder="Your Name"
 												required
 											/>
 										</div>
@@ -301,15 +309,20 @@
 												type="email"
 												class="w-full rounded-md border bg-transparent p-2"
 												name="email"
+												bind:value={$form.email}
+												{...$constraints.email}
 												placeholder="Email Address"
 												required
 											/>
 										</div>
+										{#if $message}
+											<div class="mt-2 text-sm text-green-500">{$message}</div>
+										{/if}
 
 										<Button
 											type="submit"
 											class="mt-4 w-full bg-amber-500 text-white hover:bg-amber-600"
-											>Set a password on the next page</Button
+											>Register for the event</Button
 										>
 									</form>
 								</div>

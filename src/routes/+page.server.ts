@@ -1,7 +1,17 @@
+import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME, PLATFORM_NAME } from '$env/static/private';
 import type { AvatarData } from '$lib/assemblies';
 import { db } from '$lib/server/db';
 import { and, eq, isNull } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
+import nodemailer from 'nodemailer';
+import { zod } from 'sveltekit-superforms/adapters';
+import { superValidate } from 'sveltekit-superforms/server';
+import { z } from "zod";
+import type { Actions, PageServerLoad } from './$types';
+
+const eventRegisterSchema = z.object({
+	email: z.string().email({ message: 'Invalid email address' }).trim(),
+	name: z.string().min(1, { message: 'Your name is required' }).trim()
+});
 
 export const load: PageServerLoad = async () => {
 	// Get all users who are interns (modify the query based on your database schema)
@@ -88,3 +98,37 @@ export const load: PageServerLoad = async () => {
 		groups
 	};
 };
+
+export const actions: Actions = {
+	signUpForDefaultEvent: async () => {
+		// Validate form data using superValidate
+		const form = await superValidate(zod(eventRegisterSchema));
+		
+		// Return invalid form data if validation fails
+		if (!form.valid) {
+			return { form };
+		}
+		
+		// Fire up nodemailer
+		const transporter = nodemailer.createTransport({
+			host: 'smtp.gmail.com',
+			port: 465,
+			secure: true,
+			auth: {
+				user: MAIL_USERNAME,
+				pass: MAIL_PASSWORD
+			}
+		});
+
+		// Send confirmation email
+		await transporter.sendMail({
+			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+			to: form.data.email,
+			subject: `Event Registration Confirmation - ${PLATFORM_NAME}`,
+			text: `Hey there ${form.data.name},\nThanks for your interest in the event. The presentations span from May 8 to May 9.`
+		});
+		
+		// Return success
+		return { success: true, form };
+	}
+}
