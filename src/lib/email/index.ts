@@ -1,4 +1,5 @@
 import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/private';
+import { getUserEmails } from '$lib/server/db/users';
 import nodemailer from 'nodemailer';
 // Fire up nodemailer
 const transporter = nodemailer.createTransport({
@@ -23,6 +24,26 @@ export async function sendMail({ from, to, subject, body }: SendMailOptions) {
 	await transporter.sendMail({
 		from: from ?? `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 		to: to,
+		subject: subject,
+		text: body
+	});
+}
+
+export async function broadcastEmail({ subject, body }: { subject: string; body: string }) {
+	// Import required functions to get users from the database
+
+	// Get all users' email addresses
+	const EVERYONE = await getUserEmails();
+
+	// Ensure we have emails to send to
+	if (!EVERYONE || EVERYONE.length === 0) {
+		throw new Error('No email recipients found');
+	}
+
+	// Use the email service to send the email
+	return transporter.sendMail({
+		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+		to: EVERYONE,
 		subject: subject,
 		text: body
 	});
