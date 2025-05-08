@@ -108,8 +108,14 @@ export const actions: Actions = {
 			const activation_code = Jwt.sign({ email: form.email }, ACT_JWT_SECRET, { expiresIn: '1h' });
 			await db.insert(Users).values({
 				AccountType: super_form.data.account_type === 'student' ? 'student' : 'org',
-				FirstName: super_form.data.full_name.split(' ')[0].trim(),
-				LastName: super_form.data.full_name.split(' ').slice(1).join(' ').trim(),
+				FirstName:
+					super_form.data.account_type === 'student'
+						? super_form.data.full_name.split(' ')[0].trim()
+						: super_form.data.full_name,
+				LastName:
+					super_form.data.account_type === 'student'
+						? super_form.data.full_name.split(' ').slice(1).join(' ').trim()
+						: '',
 				Email: super_form.data.email,
 				Password: await argon2.hash(super_form.data.password),
 				Username: 'user-' + generateId(8),
