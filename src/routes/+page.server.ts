@@ -1,5 +1,6 @@
 import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME, PLATFORM_NAME } from '$env/static/private';
 import type { AvatarData } from '$lib/assemblies';
+import { sendMail } from '$lib/email';
 import { db } from '$lib/server/db';
 import { and, eq, isNull } from 'drizzle-orm';
 import nodemailer from 'nodemailer';
@@ -131,11 +132,11 @@ export const actions: Actions = {
 		});
 
 		// Send confirmation email
-		await transporter.sendMail({
+		await sendMail({
 			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 			to: form.data.email,
 			subject: `Event Registration Confirmation - ${PLATFORM_NAME}`,
-			text:
+			body:
 				`Hey there ${form.data.name},\nThanks for your interest in the event. ` +
 				'Presentations span from May 8 to May 9.\n\nYou can join it here:\nhttps://us06web.zoom.us/j/' +
 				`86803449142?pwd=T7tDCvQpKZ7j76swtHkVHzDRTnxKYX.1\n\nAll the best,\n${PLATFORM_NAME}`

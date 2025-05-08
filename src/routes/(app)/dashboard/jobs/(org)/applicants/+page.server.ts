@@ -1,4 +1,5 @@
 import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/private';
+import { sendMail } from '$lib/email';
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect, type Actions } from '@sveltejs/kit';
@@ -289,22 +290,11 @@ export const actions: Actions = {
 			return { declineForm };
 		}
 
-		// Spin up nodemailer
-		const transporter = nodemailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 465,
-			secure: true,
-			auth: {
-				user: MAIL_USERNAME,
-				pass: MAIL_PASSWORD
-			}
-		});
-
-		transporter.sendMail({
+		sendMail({
 			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 			to: applicant.Email,
 			subject: '[Notice]:' + ' ' + 'Application rejected for position' + ' ' + job.Title,
-			text: `We're sorry, but your application for the job position has been rejected for the position ${job.Title} because:\n\n${declineForm.data.decline_reason}`
+			body: `We're sorry, but your application for the job position has been rejected for the position ${job.Title} because:\n\n${declineForm.data.decline_reason}`
 		});
 
 		// Set the job application status to DECLINED

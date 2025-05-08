@@ -1,13 +1,13 @@
 import {
 	IS_DEVELOPMENT,
 	MAIL_DISPLAYNAME,
-	MAIL_PASSWORD,
 	MAIL_SIGNATURE,
 	MAIL_USERNAME,
 	PLATFORM_NAME,
 	PLATFORM_URL,
 	PLATFORM_URL_DEVELOPMENT
 } from '$env/static/private';
+import { sendMail } from '$lib/email';
 import { db } from '$lib/server/db';
 import {
 	JobApplications,
@@ -19,7 +19,6 @@ import {
 } from '$lib/server/db/schema';
 import { isRedirect, redirect, type Actions } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
-import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -393,22 +392,11 @@ const sendNotificationEmail = async (
 	},
 	job: typeof Jobs
 ): Promise<void> => {
-	// Fire up nodemailer
-	const transporter = nodemailer.createTransport({
-		host: 'smtp.gmail.com',
-		port: 465,
-		secure: true,
-		auth: {
-			user: MAIL_USERNAME,
-			pass: MAIL_PASSWORD
-		}
-	});
-
-	transporter.sendMail({
+	sendMail({
 		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 		to: employer.Email,
 		subject: `Someone has applied for your '${job.Title}' job on ${PLATFORM_NAME}`,
-		text: `Hey,\n\nSomeone has applied for your job posting '${job.Title}' on ${PLATFORM_NAME}. You can view the application in the dashboard here:\n\n${(IS_DEVELOPMENT === "true") ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/applicants?job_id=${job.Id}\n\nAll the best,\n${MAIL_SIGNATURE}`
+		body: `Hey,\n\nSomeone has applied for your job posting '${job.Title}' on ${PLATFORM_NAME}. You can view the application in the dashboard here:\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/applicants?job_id=${job.Id}\n\nAll the best,\n${MAIL_SIGNATURE}`
 	});
 };
 

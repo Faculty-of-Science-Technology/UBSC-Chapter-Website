@@ -4,7 +4,6 @@ import {
 	DEFAULT_PROFILE_PICTURE,
 	IS_DEVELOPMENT,
 	MAIL_DISPLAYNAME,
-	MAIL_PASSWORD,
 	MAIL_SIGNATURE,
 	MAIL_USERNAME,
 	PLATFORM_NAME,
@@ -12,6 +11,7 @@ import {
 	PLATFORM_URL_DEVELOPMENT
 } from '$env/static/private';
 import { PUBLIC_PLATFORM_OWNING_DOMAIN } from '$env/static/public';
+import { sendMail } from '$lib/email';
 import { checkUser } from '$lib/functions/users';
 import { db } from '$lib/server/db';
 import { Users } from '$lib/server/db/schema';
@@ -20,7 +20,6 @@ import { generateId } from '$lib/utility/ids';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import argon2 from 'argon2';
 import Jwt from 'jsonwebtoken';
-import nodemailer from 'nodemailer';
 import { setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { z } from 'zod';
@@ -133,22 +132,11 @@ export const actions: Actions = {
 				}
 			);
 
-			// Fire up nodemailer
-			const transporter = nodemailer.createTransport({
-				host: 'smtp.gmail.com',
-				port: 465,
-				secure: true,
-				auth: {
-					user: MAIL_USERNAME,
-					pass: MAIL_PASSWORD
-				}
-			});
-
-			transporter.sendMail({
+			sendMail({
 				from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
 				to: super_form.data.email,
 				subject: `Activate your account on ${PLATFORM_NAME}`,
-				text: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
+				body: `Hey,\nThanks for considering ${PLATFORM_NAME}.\nTo begin, click on the following link to activate your account:\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/auth/activate?activation_code=${activation_code}\n\nThanks,\n${MAIL_SIGNATURE}`
 			});
 
 			cookies.set(
