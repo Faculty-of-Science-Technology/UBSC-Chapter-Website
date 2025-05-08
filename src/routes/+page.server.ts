@@ -3,6 +3,7 @@ import type { AvatarData } from '$lib/assemblies';
 import { db } from '$lib/server/db';
 import { and, eq, isNull } from 'drizzle-orm';
 import nodemailer from 'nodemailer';
+import { fail, setError, setMessage } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -103,13 +104,19 @@ export const load: PageServerLoad = async (request) => {
 };
 
 export const actions: Actions = {
-	signUpForDefaultEvent: async () => {
+	signUpForDefaultEvent: async ({ request }) => {
 		// Validate form data using superValidate
-		const form = await superValidate(zod(eventRegisterSchema));
+		const form = await superValidate(request, zod(eventRegisterSchema));
+
+		if (form.data.name.trim() === '') {
+			setError(form, 'name', "That doesn't look right. Please enter a valid name.");
+			return fail(400, { form });
+		}
 
 		// Return invalid form data if validation fails
 		if (!form.valid) {
-			return { form };
+			setError(form, '', 'You have some errors in your form. Please fix them and try again.');
+			return fail(400, { form });
 		}
 
 		// Fire up nodemailer
@@ -132,6 +139,7 @@ export const actions: Actions = {
 		});
 
 		// Return success
+		setMessage(form, 'You have been successfully registered.');
 		return { success: true, form };
 	}
 };

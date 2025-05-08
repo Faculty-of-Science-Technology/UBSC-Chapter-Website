@@ -14,9 +14,9 @@
 	import PartnerOrgs from '$lib/components/homepage/PartnerOrgs.svelte';
 
 	import { superForm } from 'sveltekit-superforms/client';
-	import type { PageData } from './$types';
+	import type { PageProps } from './$types';
 
-	const { data } = $props<{ data: PageData }>();
+	const { data }: PageProps = $props();
 	const org_avatar_data: AvatarData[] = data.org_avatar_data;
 	const agenda_data = data.agendas;
 
@@ -26,7 +26,7 @@
 
 	let active_tab = $state(forced_tab ?? 0);
 
-	const { form, constraints, message, enhance } = superForm(data.form);
+	const { form, errors, constraints, message, enhance } = superForm(data.form);
 </script>
 
 <!-- Main layout with navbar styling similar to the reference -->
@@ -292,9 +292,11 @@
 									>
 										<div>
 											<label for="name" class="mb-1 block text-sm font-medium">Your name</label>
+											<p class="mt-2 text-sm text-red-500">{$errors.name}</p>
 											<input
 												type="text"
 												class="w-full rounded-md border bg-transparent p-2"
+												id="name"
 												name="name"
 												bind:value={$form.name}
 												{...$constraints.name}
@@ -305,9 +307,11 @@
 										<div>
 											<label for="email" class="mb-1 block text-sm font-medium">Email Address</label
 											>
+											<p class="mt-2 text-sm text-red-500">{$errors.email}</p>
 											<input
 												type="email"
 												class="w-full rounded-md border bg-transparent p-2"
+												id="email"
 												name="email"
 												bind:value={$form.email}
 												{...$constraints.email}
@@ -315,9 +319,9 @@
 												required
 											/>
 										</div>
-										{#if $message}
-											<div class="mt-2 text-sm text-green-500">{$message}</div>
-										{/if}
+
+										<p class="mt-2 text-sm text-green-500">{$message}</p>
+										<p class="mt-2 text-sm text-red-500">{$errors._errors}</p>
 
 										<Button
 											type="submit"
