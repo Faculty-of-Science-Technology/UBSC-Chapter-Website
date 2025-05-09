@@ -1,19 +1,40 @@
 <script lang="ts">
+	import * as Avatar from '$lib/components/vendor/ui/avatar';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
 	import { Input } from '$lib/components/vendor/ui/input';
-	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
+	import { Separator } from '$lib/components/vendor/ui/separator';
 	import { Switch } from '$lib/components/vendor/ui/switch';
+	import * as Tabs from '$lib/components/vendor/ui/tabs';
+	import { cn } from '$lib/components/vendor/utils';
 	import { nameof__job_creator } from '$lib/snippets/names/index';
 	import { posted_relative_time } from '$lib/snippets/time/index';
 
-	import { Briefcase, Clock3, DollarSign } from 'lucide-svelte';
+	import { type IJobCreator } from '$lib/snippets/names/index.svelte';
+	import {
+		ArrowLeft,
+		Briefcase,
+		CheckCircle2,
+		Clock3,
+		Coins,
+		FileQuestion,
+		FileText,
+		Loader2,
+		MapPin,
+		Save,
+		Send,
+		Upload,
+		User
+	} from 'lucide-svelte';
 	import { superForm } from 'sveltekit-superforms/client';
 	import type { PageData } from './$types.js';
-	let isDragOver = $state(false); // Dragging over the file input
+
+	let isDragOver = $state(false);
 	let emailSwitch: Switch;
+	let activeTab = $state('details');
+
 	let { data: props } = $props();
 	const data: PageData = props;
 	const user = data.user;
@@ -30,9 +51,11 @@
 	const application_id = data.applicationId;
 	const application_status = data.applicationStatus;
 
+	// Pre-populate form with user data
 	application_form.data.first_name = user.FirstName;
 	application_form.data.last_name = user.LastName;
 
+	// Initialize question responses if needed
 	if (application_form.data.question_response_array.length !== questions.length) {
 		application_form.data.question_response_array = questions.map((question) => ({
 			question_id: question.Id,
@@ -47,96 +70,180 @@
 	});
 
 	function toggleEmail(checked: boolean) {
-		$form.email = checked ? user.Email : $form.email; // non-destructive
+		$form.email = checked ? user.Email : $form.email;
 	}
 
-	// import * as m from '$lib/paraglide/messages.js';
+	// Format salary with commas
+	function formatSalary(amount: number): string {
+		return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+
+	// Function to create user initials for avatar
+	function getInitials(firstName: string, lastName: string): string {
+		return (firstName?.[0] || '') + (lastName?.[0] || '');
+	}
+
+	// Generate status badge style based on application status
+	function getStatusBadgeClass(status: string): string {
+		switch (status) {
+			case 'draft':
+				return 'bg-amber-100 text-amber-800 border-amber-200';
+			case 'pending':
+				return 'bg-blue-100 text-blue-800 border-blue-200';
+			case 'approved':
+				return 'bg-green-100 text-green-800 border-green-200';
+			case 'rejected':
+				return 'bg-red-100 text-red-800 border-red-200';
+			default:
+				return 'bg-gray-100 text-gray-800 border-gray-200';
+		}
+	}
+
+	// Format status for display
+	function formatStatus(status: string): string {
+		return status.charAt(0).toUpperCase() + status.slice(1);
+	}
+
+	// Status label and class
+	const statusClass = getStatusBadgeClass(application_status || 'draft');
+	const statusLabel = formatStatus(application_status || 'Draft');
 </script>
 
-<!-- <SuperDebug data={$form} /> -->
-<!-- svelte-ignore component_name_lowercase -->
-<page class="mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
-	<section class="header text-archivo flex flex-col space-y-1">
-		<h1 class="text-5xl font-extralight lg:text-6xl">Start Application</h1>
-		<p class="text-lg lg:text-2xl">Start your application to apply for this job</p>
-	</section>
-	<form
-		enctype="multipart/form-data"
-		class="text-inter flex flex-wrap items-start gap-8 self-stretch"
-		method="POST"
-		action="?/createApplication"
-		use:enhance
-	>
-		<!-- Right Column -->
-		<main class="flex flex-1 flex-col items-start gap-6">
-			<Card.Root class="w-[305px] pb-2 lg:w-full">
-				<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-					{job.Title}{' '}&mdash;{' '}{@render nameof__job_creator(job_creator)}
-				</Card.Title>
-				<card-description class="flex flex-col gap-2 px-6">
-					<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-						<DollarSign strokeWidth="2" size="16" />
-						<p>${job.MinRate}/hr &ndash; ${job.MaxRate}/hr</p>
-					</div>
-					<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-						<Briefcase strokeWidth="2" size="16" />
-						<p>{job_type?.Name}</p>
-					</div>
-					<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-						<Clock3 strokeWidth="2" size="16" />
-						{@render posted_relative_time(job_obj)}
-					</div>
-				</card-description>
-			</Card.Root>
+<div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+	<!-- Header section with breadcrumbs -->
+	<div class="mb-8 flex flex-col gap-2">
+		<div class="flex items-center gap-2 text-sm text-muted-foreground">
+			<a href="/dashboard" class="hover:underline">Dashboard</a>
+			<span>/</span>
+			<a href="/dashboard/jobs" class="hover:underline">Jobs</a>
+			<span>/</span>
+			<a href="/dashboard/jobs/view/{job.Id}" class="hover:underline">Job Details</a>
+			<span>/</span>
+			<span class="font-medium text-foreground">Apply</span>
+		</div>
 
-			<JobCard.Root class="w-full">
-				<JobCard.Content class="flex w-[305px] flex-col gap-4 lg:w-[550px]">
-					<card-description class="mb-2 flex flex-col gap-6">
-						<article>
-							<section class="flex flex-col gap-4 text-black">
-								<div class="flex flex-col gap-4">
-									<div>
-										<h4 class="text-xl font-semibold leading-7 tracking-tight">Personal Details</h4>
-										<p class="text-base font-normal leading-5">Taken from your profile.</p>
-										<ul class="list-inside list-disc">
-											<li>
-												First Name: <b>{user.FirstName}</b>
-											</li>
-											<p class="text-sm text-red-600">{$errors.first_name}</p>
-											<li>
-												Last Name: <b>{user.LastName}</b>
-											</li>
-											<p class="text-sm text-red-600">{$errors.last_name}</p>
-										</ul>
+		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<h1 class="text-3xl font-semibold tracking-tight">{job.Title}</h1>
+				<p class="text-muted-foreground">
+					{@render nameof__job_creator(job_creator as IJobCreator)}
+				</p>
+			</div>
+
+			{#if application_status}
+				<div class={cn('rounded-full border px-3 py-1 text-sm font-medium', statusClass)}>
+					{statusLabel}
+				</div>
+			{/if}
+		</div>
+	</div>
+
+	<div class="grid gap-8 lg:grid-cols-3">
+		<!-- Main content area - Application form -->
+		<div class="space-y-6 lg:col-span-2">
+			<form
+				enctype="multipart/form-data"
+				method="POST"
+				action="?/createApplication"
+				use:enhance
+				class="space-y-8"
+			>
+				<!-- Application tabs -->
+				<Card.Root>
+					<Tabs.Root value={activeTab} onValueChange={(v) => (activeTab = v)} class="w-full">
+						<Tabs.List class="border-b px-4">
+							<Tabs.Trigger value="details" class="flex gap-2 data-[state=active]:border-primary">
+								<User size={16} />
+								Personal Details
+							</Tabs.Trigger>
+							{#if questions.length > 0}
+								<Tabs.Trigger
+									value="questions"
+									class="flex gap-2 data-[state=active]:border-primary"
+								>
+									<FileQuestion size={16} />
+									Additional Questions {questions.length > 0 ? `(${questions.length})` : ''}
+								</Tabs.Trigger>
+							{/if}
+							<Tabs.Trigger value="review" class="flex gap-2 data-[state=active]:border-primary">
+								<CheckCircle2 size={16} />
+								Review & Submit
+							</Tabs.Trigger>
+						</Tabs.List>
+
+						<!-- Personal Details Tab -->
+						<Tabs.Content value="details" class="space-y-6 p-6">
+							<!-- Profile information -->
+							<div class="flex items-center gap-4 rounded-lg bg-muted/50 p-4">
+								<Avatar.Root class="h-16 w-16">
+									<Avatar.Image
+										src={user.ProfilePicture}
+										alt={user.FirstName + ' ' + user.LastName}
+									/>
+									<Avatar.Fallback>{getInitials(user.FirstName, user.LastName)}</Avatar.Fallback>
+								</Avatar.Root>
+
+								<div>
+									<h3 class="text-lg font-medium">{user.FirstName} {user.LastName}</h3>
+									<p class="text-muted-foreground">{user.Email}</p>
+									<div class="mt-2">
+										<a
+											href="/dashboard/settings"
+											class="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+										>
+											Edit profile information
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="14"
+												height="14"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+											>
+										</a>
 									</div>
-									<article>
-										<p>
-											Change this in <a href="/dashboard/settings" class="underline">settings</a>.
-										</p>
-									</article>
 								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label for="mphone-number">Mobile phone number*</Label>
+							</div>
+
+							<div class="space-y-4">
+								<!-- Contact info -->
+								<h3 class="text-lg font-medium">Contact Information</h3>
+
+								<!-- Phone Number -->
+								<div class="grid gap-2">
+									<Label for="mphone-number" class="text-sm font-medium">
+										Mobile phone number <span class="text-destructive">*</span>
+									</Label>
 									<Input
 										type="tel"
 										id="mphone-number"
-										placeholder="Type in your mobile phone number"
+										placeholder="Enter your mobile phone number"
 										bind:value={$form.phone}
 										{...$constraints.phone}
 										disabled={!$form.draft}
+										class="max-w-md"
 									/>
-									<p class="text-sm text-red-600">{$errors.phone}</p>
+									{#if $errors.phone}
+										<p class="text-sm text-destructive">{$errors.phone}</p>
+									{/if}
 								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label for="email">Email address*</Label>
+
+								<!-- Email Address -->
+								<div class="grid gap-2">
+									<Label for="email" class="text-sm font-medium">
+										Email address <span class="text-destructive">*</span>
+									</Label>
 									<Input
 										type="email"
 										id="email"
-										placeholder="Type in your email address"
+										placeholder="Enter your email address"
 										onblur={(e) => {
 											const event = e as FocusEvent;
-											// Yes this code works, but it's probably not the best way to do it
-											if (event.target.value !== user.Email) {
+											const target = event.target as HTMLInputElement;
+											if (target.value !== user.Email) {
 												emailSwitch.checked = false;
 											} else {
 												emailSwitch.checked = true;
@@ -145,142 +252,653 @@
 										bind:value={$form.email}
 										{...$constraints.email}
 										disabled={!$form.draft}
+										class="max-w-md"
 									/>
-									<div class="flex items-center space-x-2" aria-label="Toggle email">
+									<div class="mt-1 flex items-center gap-2">
 										<Switch
 											bind:this={emailSwitch}
 											onCheckedChange={toggleEmail}
 											id="email-alt"
 											disabled={!$form.draft}
 										/>
-										<Label for="email-alt">Use the one from my profile</Label>
+										<Label for="email-alt" class="cursor-pointer text-sm font-normal">
+											Use email from my profile
+										</Label>
 									</div>
-									<p class="text-sm text-red-600">{$errors.email}</p>
+									{#if $errors.email}
+										<p class="text-sm text-destructive">{$errors.email}</p>
+									{/if}
 								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label for="resume">Attach your resume*</Label>
-									<Input
-										id="resume"
-										type="file"
-										oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
-										{...$constraints.resume}
-										class={isDragOver ? 'bg-black' : ''}
-										ondragenter={() => (isDragOver = true)}
-										ondragleave={() => (isDragOver = false)}
-										ondrop={() => (isDragOver = false)}
-										disabled={!$form.draft}
-									/>
-									<p class="text-sm text-muted-foreground">
-										Click to select a file or drop on top of the above button
-									</p>
-									<a
-										class="block text-sm text-slate-800 underline"
-										href="/backend/resume?applicationID={application_id}"
-										target="_blank"
-										aria-label="Review your past resume uploaded"
+
+								<!-- Resume Upload -->
+								<div class="grid gap-2">
+									<Label for="resume" class="text-sm font-medium">
+										Resume <span class="text-destructive">*</span>
+									</Label>
+									<div
+										class={cn(
+											'flex flex-col items-center justify-center rounded-md border border-dashed p-8 transition-colors',
+											isDragOver ? 'border-primary bg-primary/5' : 'border-muted-foreground/25',
+											!$form.draft && 'pointer-events-none opacity-70'
+										)}
 									>
-										{#if reviewing === false}
-											{application_form.data.draft && application_status === 'pending'
-												? 'Review your past resume uploaded'
-												: ''}
-										{:else}
-											View the uploaded resume
-										{/if}</a
-									>
-									<p class="text-sm text-red-600">{$errors.resume}</p>
+										<input
+											id="resume"
+											type="file"
+											name="resume"
+											class="hidden"
+											oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
+											{...$constraints.resume}
+											ondragenter={() => (isDragOver = true)}
+											ondragleave={() => (isDragOver = false)}
+											ondrop={() => (isDragOver = false)}
+											disabled={!$form.draft}
+										/>
+
+										<div class="flex flex-col items-center gap-2">
+											<Upload class="h-8 w-8 text-muted-foreground" />
+											<div>
+												<p class="text-center font-medium">
+													Drag & drop your resume or click to browse
+												</p>
+												<p class="mt-1 text-center text-xs text-muted-foreground">
+													PDF, DOCX or TXT (Max 5MB)
+												</p>
+											</div>
+											<Button
+												type="button"
+												variant="outline"
+												size="sm"
+												class="mt-2"
+												onclick={() => document.getElementById('resume')?.click()}
+												disabled={!$form.draft}
+											>
+												Select file
+											</Button>
+										</div>
+									</div>
+
+									{#if reviewing === false && application_form.data.draft && application_status === 'pending'}
+										<div class="mt-2 flex items-center gap-2 text-sm">
+											<FileText class="h-4 w-4 text-muted-foreground" />
+											<a
+												href="/backend/resume?applicationID={application_id}"
+												target="_blank"
+												class="font-medium hover:text-primary hover:underline"
+											>
+												Review uploaded resume
+											</a>
+										</div>
+									{:else if reviewing}
+										<div class="mt-2 flex items-center gap-2 text-sm">
+											<FileText class="h-4 w-4 text-muted-foreground" />
+											<a
+												href="/backend/resume?applicationID={application_id}"
+												target="_blank"
+												class="font-medium hover:text-primary hover:underline"
+											>
+												View uploaded resume
+											</a>
+										</div>
+									{/if}
+
+									{#if $errors.resume}
+										<p class="text-sm text-destructive">{$errors.resume}</p>
+									{/if}
 								</div>
-								<div class="grid w-full max-w-sm items-center gap-1.5">
-									<Label>Please enter notice period in days. Example: 45*</Label>
+
+								<!-- Notice Period -->
+								<div class="grid gap-2">
+									<Label for="notice-period" class="text-sm font-medium">
+										Notice period (in days) <span class="text-destructive">*</span>
+									</Label>
 									<Input
 										type="number"
 										id="notice-period"
 										bind:value={$form.notice_period}
-										placeholder="Enter you notice period in days"
+										placeholder="Enter your notice period in days (e.g., 30)"
 										disabled={!$form.draft}
+										class="max-w-md"
 									/>
-									<p class="text-sm text-red-600">{$errors.notice_period}</p>
+									{#if $errors.notice_period}
+										<p class="text-sm text-destructive">{$errors.notice_period}</p>
+									{/if}
+								</div>
+							</div>
+
+							{#if questions.length > 0}
+								<div class="flex justify-end pt-4">
+									<Button
+										type="button"
+										variant="outline"
+										class="gap-2"
+										onclick={() => (activeTab = 'questions')}
+									>
+										Continue to Additional Questions
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="16"
+											height="16"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+										>
+									</Button>
+								</div>
+							{:else}
+								<div class="flex justify-end pt-4">
+									<Button
+										type="button"
+										variant="outline"
+										class="gap-2"
+										onclick={() => (activeTab = 'review')}
+									>
+										Review Application
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="16"
+											height="16"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+										>
+									</Button>
+								</div>
+							{/if}
+						</Tabs.Content>
+
+						<!-- Additional Questions Tab -->
+						{#if questions.length > 0}
+							<Tabs.Content value="questions" class="space-y-6 p-6">
+								<div class="mb-4">
+									<h3 class="text-lg font-medium">Additional Questions</h3>
+									<p class="text-muted-foreground">
+										Please answer the following questions from the employer
+									</p>
 								</div>
 
-								{#if questions.length > 0}
-									<div class="mb-6 mt-12">
-										<h4 class="text-xl font-semibold leading-7 tracking-tight">
-											Additional Questions
-										</h4>
-										<p class="text-base font-normal leading-5">
-											Additional questions specified by the employer.
-										</p>
-									</div>
+								<div class="space-y-8">
 									{#each questions as question, index}
-										{#if question.Type === true}
-											<short-question>
-												<div class="grid w-full max-w-sm items-center gap-1.5">
-													<Label>{question.Content}*</Label>
+										<div class="rounded-lg border p-4">
+											<div class="space-y-4">
+												{#if question.Type === true}
+													<!-- Short Answer Question -->
+													<Label class="text-base font-medium"
+														>{index + 1}. {question.Content}
+														<span class="text-destructive">*</span></Label
+													>
 													<Input
 														type="text"
 														name="question_response"
-														placeholder="Enter a valid answer"
+														placeholder="Enter your answer"
 														bind:value={$form.question_response_array[index].response}
 														{...$constraints.question_response_array}
 														disabled={!$form.draft}
 													/>
-												</div>
-												<p class="text-sm text-red-600">
-													<!-- {JSON.stringify($errors.question_response_array?.[index])} -->
-													{$errors.question_response_array?.[index]?.response}
-												</p>
-											</short-question>
-										{:else}
-											<bool-question>
-												<div class="grid w-full max-w-sm items-center gap-1.5">
-													<Label>{question.Content}*</Label>
+													{#if $errors.question_response_array?.[index]?.response}
+														<p class="text-sm text-destructive">
+															{$errors.question_response_array[index].response}
+														</p>
+													{/if}
+												{:else}
+													<!-- Yes/No Question -->
+													<Label class="text-base font-medium"
+														>{index + 1}. {question.Content}
+														<span class="text-destructive">*</span></Label
+													>
 													<RadioGroup.Root
 														name="question_response"
 														onValueChange={(value) =>
 															($form.question_response_array[index].response = value)}
 														bind:value={$form.question_response_array[index].response}
+														class="mt-2 space-y-2"
 													>
-														<div class="flex items-center space-x-2">
-															<RadioGroup.Item value="YES" id="yes" disabled={!$form.draft} />
-															<Label for="yes">Yes</Label>
+														<div class="flex items-center gap-2">
+															<RadioGroup.Item
+																value="YES"
+																id={`yes-${index}`}
+																disabled={!$form.draft}
+															/>
+															<Label for={`yes-${index}`} class="cursor-pointer font-normal"
+																>Yes</Label
+															>
 														</div>
-														<div class="flex items-center space-x-2">
-															<RadioGroup.Item value="NO" id="no" disabled={!$form.draft} />
-															<Label for="no">No</Label>
+														<div class="flex items-center gap-2">
+															<RadioGroup.Item
+																value="NO"
+																id={`no-${index}`}
+																disabled={!$form.draft}
+															/>
+															<Label for={`no-${index}`} class="cursor-pointer font-normal"
+																>No</Label
+															>
 														</div>
 													</RadioGroup.Root>
-													<p class="text-sm text-red-600">
-														{$errors.question_response_array?.[index]?.response}
+													{#if $errors.question_response_array?.[index]?.response}
+														<p class="text-sm text-destructive">
+															{$errors.question_response_array[index].response}
+														</p>
+													{/if}
+												{/if}
+											</div>
+										</div>
+									{/each}
+								</div>
+
+								<div class="flex justify-between pt-4">
+									<Button
+										type="button"
+										variant="ghost"
+										class="gap-2"
+										onclick={() => (activeTab = 'details')}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="16"
+											height="16"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"><path d="m15 18-6-6 6-6" /></svg
+										>
+										Back to Details
+									</Button>
+
+									<Button
+										type="button"
+										variant="outline"
+										class="gap-2"
+										onclick={() => (activeTab = 'review')}
+									>
+										Review Application
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="16"
+											height="16"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+										>
+									</Button>
+								</div>
+							</Tabs.Content>
+						{/if}
+
+						<!-- Review & Submit Tab -->
+						<Tabs.Content value="review" class="space-y-6 p-6">
+							<div>
+								<h3 class="text-lg font-medium">Review Your Application</h3>
+								<p class="text-muted-foreground">
+									Please review all the information before submitting your application
+								</p>
+							</div>
+
+							<!-- Personal Details Review -->
+							<div>
+								<h4
+									class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+								>
+									Personal Details
+								</h4>
+								<div class="space-y-4 rounded-lg border bg-muted/30 p-4">
+									<div class="grid gap-1">
+										<p class="text-sm text-muted-foreground">Full Name</p>
+										<p class="font-medium">{user.FirstName} {user.LastName}</p>
+									</div>
+
+									<Separator />
+
+									<div class="grid gap-1">
+										<p class="text-sm text-muted-foreground">Email Address</p>
+										<p class="font-medium">{$form.email}</p>
+									</div>
+
+									<Separator />
+
+									<div class="grid gap-1">
+										<p class="text-sm text-muted-foreground">Phone Number</p>
+										<p class="font-medium">{$form.phone || 'Not provided'}</p>
+									</div>
+
+									<Separator />
+
+									<div class="grid gap-1">
+										<p class="text-sm text-muted-foreground">Notice Period</p>
+										<p class="font-medium">{$form.notice_period} days</p>
+									</div>
+
+									<Separator />
+
+									<div class="grid gap-1">
+										<p class="text-sm text-muted-foreground">Resume</p>
+										{#if $form.resume}
+											<div class="flex items-center gap-2">
+												<FileText class="h-4 w-4" />
+												<p class="font-medium">Resume attached</p>
+											</div>
+										{:else}
+											<p class="font-medium text-amber-500">No resume attached</p>
+										{/if}
+									</div>
+
+									<div class="flex">
+										<Button
+											type="button"
+											variant="ghost"
+											size="sm"
+											class="gap-1"
+											onclick={() => (activeTab = 'details')}
+										>
+											Edit details
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												width="12"
+												height="12"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+											>
+										</Button>
+									</div>
+								</div>
+							</div>
+
+							<!-- Questions Review -->
+							{#if questions.length > 0}
+								<div>
+									<h4
+										class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground"
+									>
+										Additional Questions
+									</h4>
+									<div class="rounded-lg border bg-muted/30 p-4">
+										<div class="space-y-4">
+											{#each questions as question, index}
+												{#if index > 0}
+													<Separator />
+												{/if}
+												<div>
+													<p class="font-medium">{index + 1}. {question.Content}</p>
+													<p class="mt-2">
+														{$form.question_response_array[index].response || 'Not answered'}
 													</p>
 												</div>
-											</bool-question>
-										{/if}
-									{/each}
+											{/each}
+
+											<div class="flex">
+												<Button
+													type="button"
+													variant="ghost"
+													size="sm"
+													class="gap-1"
+													onclick={() => (activeTab = 'questions')}
+												>
+													Edit answers
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														width="12"
+														height="12"
+														viewBox="0 0 24 24"
+														fill="none"
+														stroke="currentColor"
+														stroke-width="2"
+														stroke-linecap="round"
+														stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+													>
+												</Button>
+											</div>
+										</div>
+									</div>
+								</div>
+							{/if}
+
+							<!-- Disclaimer and Submit buttons -->
+							<div class="mt-6 border-t pt-6">
+								<p class="mb-6 text-sm text-muted-foreground">
+									By clicking "Submit," you acknowledge that the responsibility for all subsequent
+									actions rests solely with the employer. IT Careers nor The University of Belize is
+									liable for any issues, disputes, or shortcomings that may arise.
+								</p>
+
+								{#if $errors.draft}
+									<p class="mb-4 text-sm text-destructive">{$errors.draft}</p>
 								{/if}
-							</section>
-						</article>
-					</card-description>
-					<p class="mb-3 text-sm">
-						By clicking "Submit," you acknowledge that the responsibility for all subsequent actions
-						rests solely with the employer. IT Careers nor The University of Belize is liable for
-						any issues, disputes, or shortcomings that may arise.
-					</p>
-					<p class="text-sm text-red-600">{$errors.draft}</p>
-					<div class="flex items-start gap-4">
-						<Button
-							class="w-fit"
-							type="submit"
-							onclick={() => ($form.draft = false)}
-							disabled={!application_form.data.draft}>Submit for review</Button
-						>
-						<Button
-							class="w-fit"
-							type="submit"
-							onclick={() => ($form.draft = true)}
-							disabled={!$form.draft}>Save Draft</Button
-						>
+
+								<div class="flex flex-wrap gap-3">
+									{#if $form.draft}
+										<Button
+											type="submit"
+											id="submit_button"
+											formaction="?/createApplication"
+											onclick={() => {
+												$form.draft = false;
+												document.getElementById('submit_button')!.click();
+											}}
+											class="gap-2"
+										>
+											<Send size={16} />
+											Submit Application
+										</Button>
+
+										<Button
+											type="submit"
+											formaction="?/createApplication"
+											onclick={() => ($form.draft = true)}
+											variant="outline"
+											class="gap-2"
+										>
+											<Save size={16} />
+											Save as Draft
+										</Button>
+									{:else}
+										<Button disabled>
+											<CheckCircle2 class="mr-2 h-4 w-4" />
+											Application Submitted
+										</Button>
+									{/if}
+
+									<Button
+										variant="ghost"
+										type="button"
+										onclick={() => history.back()}
+										class="gap-2"
+									>
+										<ArrowLeft size={16} />
+										Cancel
+									</Button>
+								</div>
+							</div>
+						</Tabs.Content>
+					</Tabs.Root>
+				</Card.Root>
+			</form>
+		</div>
+
+		<!-- Sidebar - Job details -->
+		<div class="space-y-6">
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Job Details</Card.Title>
+					<Card.Description>Information about the position</Card.Description>
+				</Card.Header>
+				<Card.Content class="space-y-6">
+					<!-- Job quick info -->
+					<a
+						href="/dashboard/jobs/view/{job.Id}"
+						class="block rounded-md border p-4 transition-colors hover:bg-accent/50"
+					>
+						<h3 class="line-clamp-1 text-lg font-medium">{job.Title}</h3>
+						<p class="text-sm text-muted-foreground">
+							{@render nameof__job_creator(job_creator as IJobCreator)}
+						</p>
+
+						<div class="mt-4 flex flex-col gap-3">
+							<div class="flex items-center gap-2">
+								<Coins size={16} class="text-muted-foreground" />
+								<span>${formatSalary(job.MinRate)} - ${formatSalary(job.MaxRate)}/hr</span>
+							</div>
+
+							<div class="flex items-center gap-2">
+								<Briefcase size={16} class="text-muted-foreground" />
+								<span>{job_type?.Name || 'Not specified'}</span>
+							</div>
+
+							<div class="flex items-center gap-2">
+								<Clock3 size={16} class="text-muted-foreground" />
+								<span>{@render posted_relative_time(job_obj)}</span>
+							</div>
+
+							<div class="flex items-center gap-2">
+								<MapPin size={16} class="text-muted-foreground" />
+								<span>{job_creator?.Location || 'Remote/Not specified'}</span>
+							</div>
+						</div>
+
+						<div class="mt-4">
+							<div class="flex items-center gap-1 text-sm text-primary">
+								View full job details
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="14"
+									height="14"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"><path d="m9 18 6-6-6-6" /></svg
+								>
+							</div>
+						</div>
+					</a>
+
+					<!-- Company info -->
+					<div>
+						<h4 class="mb-3 text-sm font-semibold">About the company</h4>
+						<div class="flex items-center gap-3">
+							<div class="flex-shrink-0">
+								{#if job_creator?.ProfilePicture}
+									<Avatar.Root class="h-10 w-10">
+										<Avatar.Image
+											src={job_creator.ProfilePicture}
+											alt={job_creator?.FirstName + ' ' + job_creator?.LastName}
+										/>
+										<Avatar.Fallback
+											>{getInitials(job_creator?.FirstName, job_creator?.LastName)}</Avatar.Fallback
+										>
+									</Avatar.Root>
+								{:else}
+									<div
+										class="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 font-semibold text-primary"
+									>
+										{getInitials(job_creator?.FirstName, job_creator?.LastName)}
+									</div>
+								{/if}
+							</div>
+
+							<div>
+								<p class="font-medium">{job_creator?.FirstName} {job_creator?.LastName}</p>
+								<a
+									href="/dashboard/organizations/{job_creator?.Id}"
+									class="text-sm text-primary hover:underline"
+								>
+									View profile
+								</a>
+							</div>
+						</div>
 					</div>
-				</JobCard.Content>
-			</JobCard.Root>
-		</main>
-	</form>
-</page>
+
+					<!-- Application status if already applied -->
+					{#if application_status && application_form.data.draft !== false}
+						<div class="rounded-md border bg-muted/50 p-4">
+							<h4 class="mb-2 text-sm font-semibold">Application Status</h4>
+							<div
+								class={cn(
+									'inline-flex w-fit items-center gap-2 rounded-md px-2 py-1 text-sm font-medium',
+									statusClass
+								)}
+							>
+								{#if application_status === 'pending' && application_form.data.draft !== true}
+									<Loader2 size={14} class="animate-spin" />
+								{:else if application_status === 'approved'}
+									<CheckCircle2 size={14} />
+								{:else}
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="14"
+										height="14"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+									>
+								{/if}
+								{statusLabel}
+							</div>
+
+							{#if application_status === 'pending' && application_form.data.draft !== true}
+								<p class="mt-2 text-sm text-muted-foreground">
+									Your application is being reviewed by the employer.
+								</p>
+							{:else if application_status === 'approved'}
+								<p class="mt-2 text-sm text-muted-foreground">
+									Congratulations! Your application has been approved.
+								</p>
+							{:else if application_status === 'rejected'}
+								<p class="mt-2 text-sm text-muted-foreground">
+									Unfortunately, your application was not selected at this time.
+								</p>
+							{:else if application_form.data.draft === true}
+								<p class="mt-2 text-sm text-muted-foreground">
+									Your application is saved as a draft. You can edit and submit it later.
+								</p>
+							{/if}
+						</div>
+					{/if}
+				</Card.Content>
+			</Card.Root>
+
+			<!-- Help Card -->
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Need Help?</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					<p class="mb-4 text-sm text-muted-foreground">
+						If you have any questions about this application, please contact our support team.
+					</p>
+					<Button variant="outline" class="w-full gap-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg
+						>
+						Contact Support
+					</Button>
+				</Card.Content>
+			</Card.Root>
+		</div>
+	</div>
+</div>
