@@ -169,7 +169,7 @@
 												id="broadcast_job"
 												form="JobForm"
 											/>
-											<p class="text-sm font-semibold">Notify all students when posting this job</p>
+											<p class="text-sm font-semibold">Notify everyone when posting this job</p>
 										</div>
 									</div>
 									<div class="grid w-full max-w-sm items-center gap-1.5">

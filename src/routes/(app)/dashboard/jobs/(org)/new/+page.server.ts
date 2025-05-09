@@ -183,7 +183,8 @@ export const actions: Actions = {
 			if (jobForm.data.broadcast_job === 'on') {
 				// Broadcast the job to all users
 				broadcastEmail({
-					subject: 'New job posted',
+					bcc: true,
+					subject: `${newJob[0].Title} job at ${user.FirstName + (user.LastName.trim() !== '' ? ' ' + user.LastName : '')} is available for applications`,
 					body:
 						`A new job has been posted: ${newJob[0].Title}\n\nYou can view it here:` +
 						`\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/view/${newJob[0].Id}` +

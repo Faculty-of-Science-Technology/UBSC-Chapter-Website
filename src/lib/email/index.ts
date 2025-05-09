@@ -17,6 +17,7 @@ interface SendMailOptions {
 	to: string;
 	subject: string;
 	body: string;
+	bcc: boolean | undefined;
 }
 
 export async function sendMail({ from, to, subject, body }: SendMailOptions) {
@@ -29,7 +30,15 @@ export async function sendMail({ from, to, subject, body }: SendMailOptions) {
 	});
 }
 
-export async function broadcastEmail({ subject, body }: { subject: string; body: string }) {
+export async function broadcastEmail({
+	subject,
+	body,
+	bcc
+}: {
+	subject: string;
+	body: string;
+	bcc?: boolean;
+}) {
 	// Import required functions to get users from the database
 
 	// Get all users' email addresses
@@ -43,7 +52,8 @@ export async function broadcastEmail({ subject, body }: { subject: string; body:
 	// Use the email service to send the email
 	return transporter.sendMail({
 		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
-		to: EVERYONE,
+		bcc: bcc ? EVERYONE : undefined,
+		to: bcc ? undefined : EVERYONE,
 		subject: subject,
 		text: body
 	});
