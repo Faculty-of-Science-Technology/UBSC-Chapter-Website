@@ -3,10 +3,12 @@
 - [ ] Add a way to edit questions
 - [ ] Add a way to reorder questions
 -->
+<!-- Overhauled Job Creation Page -->
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Select from '$lib/components/compatibility/select.svelte';
 	import RichTextEditor from '$lib/components/RichTextEditor.svelte';
+	import * as Accordion from '$lib/components/vendor/ui/accordion';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
@@ -14,14 +16,35 @@
 	import * as JobCard from '$lib/components/vendor/ui/job-card';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
-	import { Textarea } from '$lib/components/vendor/ui/textarea';
-
+	import { Separator } from '$lib/components/vendor/ui/separator';
 	import { Switch } from '$lib/components/vendor/ui/switch';
-	import { Briefcase, DollarSign } from 'lucide-svelte';
+	import * as Tabs from '$lib/components/vendor/ui/tabs';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import {
+		Briefcase,
+		Building,
+		Calendar,
+		CheckCircle2,
+		DollarSign,
+		FileCheck,
+		FileQuestion,
+		Globe,
+		Info,
+		MapPin,
+		Plus,
+		Save,
+		Tag,
+		Trash2
+	} from 'lucide-svelte';
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
 	import type { ActionData, PageProps } from './$types';
+
+	// State variables
 	let drafting = $state(false);
-	let removalQuestionID: HTMLInputElement;
+	let removalQuestionID: HTMLInputElement | undefined = $state();
+	let activeTab = $state('details');
+	let showPreview = $state(false);
+
 	const { data }: PageProps = $props();
 
 	interface IQuestion {
@@ -32,301 +55,670 @@
 		JobsId: string; // UUID
 	}
 
-	let questions: IQuestion[] = $state($page.data.questions);
-	let JobTitle: string = $state('Type a title to the left to begin');
+	// Job preview variables
+	let JobTitle: string = $state('Type a title to begin');
+	let questions: IQuestion[] = $state($page.data.questions || []);
 
-	const form_obj = superForm(
-		data.jobForm, //?? data.super_form ?? props.form?.super_form ?? data
-		{
-			resetForm: false,
-			invalidateAll: false
-		}
-	);
+	// Get forms
+	const form_obj = superForm(data.jobForm, {
+		resetForm: false,
+		invalidateAll: false,
+		taintedMessage: null
+	});
 	const { form, errors, constraints, enhance } = form_obj;
+
 	const {
 		form: questionForm,
 		errors: questionErrors,
 		message: questionMessage,
 		constraints: questionConstraints,
 		enhance: qEnhance
-	} = superForm(
-		data.questionForm, //?? data.super_form ?? props.form?.super_form ?? data
-		{
-			resetForm: true,
-			invalidateAll: true,
-			onUpdate: ({ form, result }) => {
-				const action = result.data as FormResult<ActionData>;
-				if (action.questions) questions = action.questions as unknown as IQuestion[];
-			}
+	} = superForm(data.questionForm, {
+		resetForm: true,
+		invalidateAll: true,
+		onUpdate: ({ form, result }) => {
+			const action = result.data as FormResult<ActionData>;
+			if (action.questions) questions = action.questions as unknown as IQuestion[];
 		}
+	});
+
+	// Format salary with commas
+	function formatSalary(amount: number): string {
+		return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+
+	// Helper function to get job type label
+	function getJobTypeLabel(jobType: number | undefined): string {
+		switch (jobType) {
+			case 1:
+				return 'Hybrid';
+			case 2:
+				return 'In-person';
+			case 3:
+				return 'Remote';
+			default:
+				return 'Type not selected';
+		}
+	}
+
+	// Helper function to get job type icon
+	function getJobTypeIcon(jobType: number | undefined): typeof Globe {
+		switch (jobType) {
+			case 1:
+				return Building;
+			case 2:
+				return MapPin;
+			case 3:
+				return Globe;
+			default:
+				return Globe;
+		}
+	}
+
+	// Check if form is valid for preview
+	let hasBasicDetails = $derived(
+		$form.title && $form.min_rate && $form.max_rate && $form.job_type && $form.description
 	);
-	// import * as m from '$lib/paraglide/messages.js';
 </script>
 
-<!-- <SuperDebug data={$form} /> -->
-<!-- svelte-ignore component_name_lowercase -->
+<!-- No JavaScript fallback -->
 <noscript>
-	<section class="header text-archivo mx-2 my-8 flex flex-col space-y-1 lg:mx-8">
-		<h1 class="text-5xl font-extralight lg:text-6xl">Sorry, This Feature is Disabled</h1>
-		<p class="text-lg lg:text-2xl">
-			You need JavaScript in order to do this. Enable it and try reloading.
+	<section class="header mx-2 my-8 flex flex-col space-y-1 lg:mx-8">
+		<h1 class="text-5xl font-extralight">Sorry, This Feature is Disabled</h1>
+		<p class="text-xl">
+			You need JavaScript in order to create a job listing. Please enable it and try reloading.
 		</p>
 	</section>
 </noscript>
-<!-- svelte-ignore component_name_lowercase -->
-<page class="jsonly mx-2 my-8 flex flex-col space-y-5 lg:mx-8">
-	<section class="header text-archivo flex flex-col space-y-1">
-		<h1 class="text-5xl font-extralight lg:text-6xl">New Job Listing</h1>
-		<p class="text-lg lg:text-2xl">Create a new job that interns can apply to</p>
-	</section>
-	<div class="text-inter flex flex-wrap items-start gap-8 self-stretch">
-		<!-- Left Column -->
-		<l-column class="flex w-fit flex-col items-start gap-6">
-			<JobCard.Root class="w-[305px] lg:w-[320px]">
-				<JobCard.Content class="flex flex-col gap-4">
-					<JobCard.Title>
-						<noscript>
-							<p>Type in a title to the left to begin</p>
-						</noscript>
-						<p class="jsonly">{JobTitle}</p>
-						<span class="tracking-wide"
-							><Badge
-								>{$form.draft === undefined
-									? 'Draft (Unsaved)'
-									: $form.draft === true
-										? 'Draft (Saved)'
-										: 'Live'}</Badge
-							></span
-						>
-					</JobCard.Title>
-					<card-description class="flex flex-col gap-2">
-						<JobCard.Description>HireLATAM</JobCard.Description>
-						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<DollarSign strokeWidth="2" size="16" />
-							<p>$24/hr &ndash; $40/hr</p>
-						</div>
-						<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
-							<Briefcase strokeWidth="2" size="16" />
-							<p>Belize (In-Person)</p>
-						</div>
-					</card-description>
-				</JobCard.Content>
-			</JobCard.Root>
-		</l-column>
-		<!-- Right Column -->
-		<r-column class="flex flex-1 flex-col items-start gap-6">
-			<!-- For debug: action="https://formtester.goodbytes.be/post.php" -->
-			<!-- <form id="QuestionForm" action="?/createQuestion" method="POST" use:enhance></form> -->
 
-			<div class="w-[305px] lg:w-full">
-				<Card.Root class="w-full">
-					<Card.Title class="items-center justify-center px-6 py-2 text-left text-2xl">
-						<input
-							oninput={(e: Event) => {
-								if (!e) return;
-								const target = e.target as HTMLInputElement;
-								const value = target.value;
-								if (!value || value.trim() === '') {
-									JobTitle = 'Type a title to the left to begin';
-									return;
-								}
-								JobTitle = target.value;
-							}}
-							type="text"
-							form="JobForm"
-							name="title"
-							class="w-full bg-transparent focus:outline-none"
-							{...$constraints.title}
-							bind:value={$form.title}
-							placeholder="Type in a job title"
-						/>
-					</Card.Title>
-				</Card.Root>
-				<p class="text-sm text-red-600">{$errors.title}</p>
+<!-- Main page content -->
+<div class="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+	<!-- Header section with breadcrumbs -->
+	<div class="mb-8 flex flex-col gap-2">
+		<div class="flex items-center gap-2 text-sm text-muted-foreground">
+			<a href="/dashboard" class="hover:underline">Dashboard</a>
+			<span>/</span>
+			<a href="/dashboard/jobs" class="hover:underline">Jobs</a>
+			<span>/</span>
+			<span class="font-medium text-foreground">New Job Listing</span>
+		</div>
+
+		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+			<div>
+				<h1 class="text-3xl font-semibold tracking-tight">Create New Job Listing</h1>
+				<p class="text-muted-foreground">
+					Create a detailed job listing to attract qualified interns
+				</p>
 			</div>
 
-			<JobCard.Root class="w-full">
-				<JobCard.Content class="flex w-[305px] flex-col gap-4 lg:w-[550px]">
-					<card-description class="flex flex-col gap-6">
-						<article>
-							<section class="flex flex-col gap-4 text-black">
-								<form
-									id="JobForm"
-									action="?/createJob"
-									method="POST"
-									class="flex flex-1 flex-col items-start gap-6"
-									use:enhance
-								>
-									<div>
-										<h4 class="text-xl font-semibold leading-7 tracking-tight">Basic Details</h4>
-										<p class="text-base font-normal leading-5">
-											Basic details such as the hourly rate and type of job
-										</p>
-										<div class="flex w-full items-center gap-2 pt-4">
-											<Switch
-												name="broadcast_job"
-												bind:checked={$form.broadcast_job}
-												id="broadcast_job"
-												form="JobForm"
-											/>
-											<p class="text-sm font-semibold">Notify everyone when posting this job</p>
+			<div class="flex gap-2">
+				<Button variant="outline" class="gap-2" onclick={() => (showPreview = !showPreview)}>
+					{#if showPreview}
+						<Info size="18" />
+						<span>Edit Details</span>
+					{:else}
+						<FileCheck size="18" />
+						<span>Preview</span>
+					{/if}
+				</Button>
+			</div>
+		</div>
+	</div>
+
+	{#if !showPreview}
+		<!-- Job Creation Form -->
+		<div class="grid gap-8 lg:grid-cols-3">
+			<div class="lg:col-span-2">
+				<Tabs.Root value={activeTab} class="w-full" onValueChange={(value) => (activeTab = value)}>
+					<Tabs.List class="mb-4 w-full">
+						<Tabs.Trigger value="details" class="flex-1">Basic Details</Tabs.Trigger>
+						<Tabs.Trigger value="description" class="flex-1">Job Description</Tabs.Trigger>
+						<Tabs.Trigger value="questions" class="flex-1">Application Questions</Tabs.Trigger>
+					</Tabs.List>
+
+					<!-- Main Form -->
+					<form
+						id="JobForm"
+						action="?/createJob"
+						method="POST"
+						class="flex flex-1 flex-col items-start gap-6"
+						use:enhance
+					>
+						<input type="hidden" name="draft" value={drafting} form="JobForm" />
+
+						<Tabs.Content value="details" class="w-full">
+							<Card.Root class="mb-6">
+								<Card.Header>
+									<Card.Title>Job Information</Card.Title>
+									<Card.Description>Basic details about the position</Card.Description>
+								</Card.Header>
+								<Card.Content class="space-y-6">
+									<div class="space-y-2">
+										<Label for="job-title" class="text-base font-medium">Job Title *</Label>
+										<Input
+											id="job-title"
+											type="text"
+											form="JobForm"
+											name="title"
+											class="w-full"
+											{...$constraints.title}
+											bind:value={$form.title}
+											oninput={(e) => (JobTitle = e.currentTarget.value || 'Type a title to begin')}
+											placeholder="E.g., Frontend Developer, Marketing Intern, Project Coordinator"
+										/>
+										{#if $errors.title}
+											<p class="text-sm text-destructive">{$errors.title}</p>
+										{/if}
+									</div>
+
+									<div class="grid gap-6 sm:grid-cols-2">
+										<div class="space-y-2">
+											<Label for="min-rate" class="text-base font-medium"
+												>Minimum Hourly Rate (USD) *</Label
+											>
+											<div class="relative">
+												<DollarSign class="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+												<Input
+													id="min-rate"
+													type="number"
+													step="0.25"
+													min="0"
+													form="JobForm"
+													name="min_rate"
+													class="pl-10"
+													bind:value={$form.min_rate}
+													{...$constraints.min_rate}
+													placeholder="15.00"
+												/>
+											</div>
+											{#if $errors.min_rate}
+												<p class="text-sm text-destructive">{$errors.min_rate}</p>
+											{/if}
+										</div>
+
+										<div class="space-y-2">
+											<Label for="max-rate" class="text-base font-medium"
+												>Maximum Hourly Rate (USD) *</Label
+											>
+											<div class="relative">
+												<DollarSign class="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+												<Input
+													id="max-rate"
+													type="number"
+													step="0.25"
+													min="0"
+													form="JobForm"
+													name="max_rate"
+													class="pl-10"
+													bind:value={$form.max_rate}
+													{...$constraints.max_rate}
+													placeholder="25.00"
+												/>
+											</div>
+											{#if $errors.max_rate}
+												<p class="text-sm text-destructive">{$errors.max_rate}</p>
+											{/if}
 										</div>
 									</div>
-									<div class="grid w-full max-w-sm items-center gap-1.5">
-										<Label for="min-hourly-rate">Minimum hourly rate*</Label>
-										<Input
-											type="number"
-											step="0.25"
-											min="0"
-											form="JobForm"
-											name="min_rate"
-											bind:value={$form.min_rate}
-											{...$constraints.min_rate}
-											id="min-hourly-rate"
-											placeholder="Type in a minimum hourly rate"
-										/>
-									</div>
-									<p class="text-sm text-red-600">{$errors.min_rate}</p>
 
-									<div class="grid w-full max-w-sm items-center gap-1.5">
-										<Label for="max-hourly-rate">Maximum hourly rate*</Label>
-										<Input
-											type="number"
-											step="0.25"
-											min="0"
-											form="JobForm"
-											bind:value={$form.max_rate}
-											{...$constraints.max_rate}
-											name="max_rate"
-											id="max-hourly-rate"
-											placeholder="Type in a maximum hourly rate"
-										/>
-										<p class="text-sm text-red-600">{$errors.max_rate}</p>
-									</div>
-									<div class="grid w-full max-w-sm items-center gap-1.5">
-										<Label>Type of job*</Label>
-
+									<div class="space-y-2">
+										<Label for="job-type" class="text-base font-medium">Job Type *</Label>
 										<Select
+											id="job-type"
 											{...$constraints.job_type}
 											bind:value={$form.job_type}
 											name="job_type"
 											form="JobForm"
+											class="w-full"
 										>
 											<option disabled selected hidden>Select an option</option>
 											<option selected={$form.job_type === 1} value="1">Hybrid</option>
 											<option selected={$form.job_type === 2} value="2">In-person</option>
 											<option selected={$form.job_type === 3} value="3">Remote</option>
 										</Select>
-										<p class="text-sm text-red-600">{$errors.job_type}</p>
+										{#if $errors.job_type}
+											<p class="text-sm text-destructive">{$errors.job_type}</p>
+										{/if}
 									</div>
-									<div class="grid w-full max-w-sm items-center gap-1.5">
-										<Label>Job description*</Label>
+
+									<div class="flex items-center gap-3 pt-2">
+										<Switch
+											name="broadcast_job"
+											bind:checked={$form.broadcast_job}
+											id="broadcast_job"
+											form="JobForm"
+										/>
+										<div>
+											<Label for="broadcast_job" class="text-base font-medium">Notify users</Label>
+											<p class="text-sm text-muted-foreground">
+												Send an email to all users when this job is published
+											</p>
+										</div>
+									</div>
+								</Card.Content>
+							</Card.Root>
+						</Tabs.Content>
+
+						<Tabs.Content value="description" class="w-full">
+							<Card.Root class="mb-6">
+								<Card.Header>
+									<Card.Title>Job Description</Card.Title>
+									<Card.Description
+										>Provide detailed information about the position</Card.Description
+									>
+								</Card.Header>
+								<Card.Content>
+									<div class="space-y-3">
+										<Label class="text-base font-medium">Job Description *</Label>
 										<RichTextEditor
 											bind:value={$form.description}
 											form="JobForm"
 											name="description"
 											{...$constraints.description}
-										></RichTextEditor>
-										<p class="text-sm text-red-600">{$errors.description}</p>
-									</div>
-								</form>
-								<form id="QuestionForm" action="?/createQuestion" method="POST" use:qEnhance>
-									<div class="mb-6 mt-12">
-										<h4 class="text-xl font-semibold leading-7 tracking-tight">
-											Additional Questions
-										</h4>
-										<p class="text-base font-normal leading-5">
-											Additional questions which you can specify as the employer.
-										</p>
-									</div>
-									<ul class="my-8 flex list-inside list-none flex-col items-start gap-2">
-										{#if questions?.length === 0 || questions === undefined}
-											<li>
-												<p>No questions have been added yet.</p>
-												<p class="text-sm font-normal">
-													You can add additional questions for the applicants to answer in addition
-													to the pre-set questions. These questions can help you gather more
-													information about the candidates.
-												</p>
-											</li>
+										/>
+										{#if $errors.description}
+											<p class="text-sm text-destructive">{$errors.description}</p>
 										{/if}
-										<input
-											type="hidden"
-											name="question_id"
-											bind:this={removalQuestionID}
-											form="QuestionForm"
-										/>
-										{#each questions as question, index}
-											<li>
-												<div class="gap-0.25 flex flex-col items-start">
-													<p class="flex flex-col items-start font-medium italic">
-														{index + 1 + '. '}
-														{question.Content}
-													</p>
-													<p class="flex flex-col items-start italic">
-														{question.Type === false ? 'Short Answer Question' : 'Yes/No Question'}
-													</p>
-												</div>
-												<Button
-													type="submit"
-													onclick={() => (removalQuestionID.value = question.Id.toString())}
-													formaction="?/removeQuestion"
-													class="mb-3 mt-2 w-fit bg-destructive hover:bg-destructive hover:opacity-80"
-													>Remove question</Button
-												>
-											</li>
-										{/each}
-									</ul>
-									<div
-										class="my-4 flex w-full flex-col items-start gap-4 rounded-lg border border-slate-300 p-4"
-									>
-										<div>
-											<p class="text-lg font-semibold">Create a new question (optional)</p>
-										</div>
-										<!-- {...$questionConstraints.question_content} -->
-										<Textarea
-											form="QuestionForm"
-											name="question_content"
-											bind:value={$questionForm.question_content}
-											placeholder="Type the question content here."
-										/>
-										<p class="text-sm text-red-600">{$questionErrors.question_content}</p>
-										<p class="text-lg font-semibold">Question Type</p>
-										<RadioGroup.Root name="question_type" bind:value={$questionForm.question_type}>
-											<div class="flex items-center space-x-2">
-												<RadioGroup.Item value="true-false" form="QuestionForm" id="r2" />
-												<Label for="r1">Yes/No</Label>
-											</div>
-											<div class="flex items-center space-x-2">
-												<RadioGroup.Item value="short-answer" form="QuestionForm" id="r2" />
-												<Label for="r2">Short answer</Label>
-											</div>
-										</RadioGroup.Root>
-										<p class="text-sm text-red-600">
-											{$questionErrors.question_type}
+										<p class="text-sm text-muted-foreground">
+											Include details on responsibilities, requirements, benefits, and company
+											culture
 										</p>
-										<p class="text-sm text-green-600">
-											{$questionMessage}
-										</p>
-										<Button type="submit">Save</Button>
 									</div>
-									<!-- <Button class="w-fit">New Question</Button> -->
+								</Card.Content>
+							</Card.Root>
+						</Tabs.Content>
+					</form>
+
+					<Tabs.Content value="questions" class="w-full">
+						<Card.Root class="mb-6">
+							<Card.Header>
+								<Card.Title>Application Questions</Card.Title>
+								<Card.Description>
+									Create custom questions for candidates to answer when applying
+								</Card.Description>
+							</Card.Header>
+							<Card.Content>
+								<form
+									id="QuestionForm"
+									action="?/createQuestion"
+									method="POST"
+									use:qEnhance
+									class="space-y-6"
+								>
+									<input
+										type="hidden"
+										name="question_id"
+										bind:this={removalQuestionID}
+										form="QuestionForm"
+									/>
+
+									<!-- Current Questions List -->
+									{#if questions?.length > 0}
+										<Accordion.Root type="single" class="w-full">
+											{#each questions as question, index}
+												<Accordion.Item value={`question-${index}`} class="border-b">
+													<Accordion.Trigger
+														class="flex w-full items-center justify-between py-4 text-left font-medium"
+													>
+														<div class="flex flex-1 items-center gap-2">
+															<span
+																class="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary"
+															>
+																{index + 1}
+															</span>
+															<span class="flex-1 truncate">{question.Content}</span>
+														</div>
+													</Accordion.Trigger>
+													<Accordion.Content class="pb-4 pt-1">
+														<div class="flex flex-col gap-3">
+															<div class="flex items-center gap-2 text-sm">
+																<Tag size={16} />
+																<span>
+																	{question.Type === false
+																		? 'Short Answer Question'
+																		: 'Yes/No Question'}
+																</span>
+															</div>
+															<Button
+																type="submit"
+																size="sm"
+																variant="destructive"
+																onclick={() => (removalQuestionID.value = question.Id.toString())}
+																formaction="?/removeQuestion"
+																class="mt-2 w-fit gap-1"
+															>
+																<Trash2 size={16} />
+																<span>Remove Question</span>
+															</Button>
+														</div>
+													</Accordion.Content>
+												</Accordion.Item>
+											{/each}
+										</Accordion.Root>
+									{:else}
+										<div
+											class="flex flex-col items-center justify-center rounded-lg border border-dashed py-8 text-center"
+										>
+											<div class="mb-3 rounded-full bg-primary/10 p-3">
+												<FileQuestion size={24} class="text-primary" />
+											</div>
+											<h3 class="text-lg font-medium">No questions added yet</h3>
+											<p class="mt-1 max-w-sm text-sm text-muted-foreground">
+												Custom questions help you gather specific information from applicants beyond
+												the standard application form.
+											</p>
+										</div>
+									{/if}
+
+									<!-- Add New Question -->
+									<Separator />
+
+									<div class="space-y-4">
+										<h3 class="text-lg font-medium">Add New Question</h3>
+
+										<div class="space-y-2">
+											<Label for="question-content">Question Content</Label>
+											<Textarea
+												id="question-content"
+												form="QuestionForm"
+												name="question_content"
+												bind:value={$questionForm.question_content}
+												placeholder="Type your question here (e.g., 'Describe your experience with React')"
+												rows={3}
+											/>
+											{#if $questionErrors.question_content}
+												<p class="text-sm text-destructive">{$questionErrors.question_content}</p>
+											{/if}
+										</div>
+
+										<div class="space-y-2">
+											<Label>Question Type</Label>
+											<RadioGroup.Root
+												name="question_type"
+												bind:value={$questionForm.question_type}
+												class="flex flex-col gap-3 pt-1"
+											>
+												<div class="flex items-center space-x-2">
+													<RadioGroup.Item value="true-false" form="QuestionForm" id="yes-no" />
+													<Label for="yes-no" class="cursor-pointer">Yes/No Question</Label>
+												</div>
+												<div class="flex items-center space-x-2">
+													<RadioGroup.Item
+														value="short-answer"
+														form="QuestionForm"
+														id="short-answer"
+													/>
+													<Label for="short-answer" class="cursor-pointer"
+														>Short Answer Question</Label
+													>
+												</div>
+											</RadioGroup.Root>
+											{#if $questionErrors.question_type}
+												<p class="text-sm text-destructive">{$questionErrors.question_type}</p>
+											{/if}
+										</div>
+
+										{#if $questionMessage}
+											<p class="text-sm text-green-600">{$questionMessage}</p>
+										{/if}
+
+										<Button type="submit" class="gap-1">
+											<Plus size={16} />
+											<span>Add Question</span>
+										</Button>
+									</div>
 								</form>
-							</section>
-						</article>
-					</card-description>
-					<div class="flex items-start gap-4">
-						<input type="hidden" name="draft" value={drafting} form="JobForm" />
-						<Button class="w-fit" type="submit" onclick={() => (drafting = false)} form="JobForm"
-							>Publish</Button
-						>
-						<Button class="w-fit" type="submit" onclick={() => (drafting = true)} form="JobForm"
-							>Save Draft</Button
-						>
+							</Card.Content>
+						</Card.Root>
+					</Tabs.Content>
+				</Tabs.Root>
+
+				<div class="mt-6 flex items-center justify-between gap-4">
+					<div>
+						{#if data.jobForm.id}
+							<p class="text-sm text-muted-foreground">
+								Last saved: {new Date().toLocaleString()}
+							</p>
+						{/if}
 					</div>
-					<p class="text-sm text-red-600">{$errors.title}</p>
-				</JobCard.Content>
-			</JobCard.Root>
-		</r-column>
-	</div>
-</page>
+					<div class="flex gap-3">
+						<Button
+							variant="outline"
+							type="submit"
+							onclick={() => (drafting = true)}
+							form="JobForm"
+							class="gap-1"
+						>
+							<Save size={16} />
+							<span>Save Draft</span>
+						</Button>
+						<Button type="submit" onclick={() => (drafting = false)} form="JobForm" class="gap-1">
+							<FileCheck size={16} />
+							<span>Publish Job</span>
+						</Button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Preview Card (right column) -->
+			<div class="lg:col-span-1">
+				<div class="sticky top-6 space-y-6">
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>Job Preview</Card.Title>
+							<Card.Description>How your job will appear to applicants</Card.Description>
+						</Card.Header>
+						<Card.Content>
+							<JobCard.Root class="border-0 p-0 shadow-none">
+								<JobCard.Header>
+									<div>
+										<Badge variant={drafting ? 'outline' : 'default'} class="mb-2">
+											{$form.draft === undefined
+												? 'Draft (Unsaved)'
+												: $form.draft === true
+													? 'Draft (Saved)'
+													: 'Live'}
+										</Badge>
+										<JobCard.Title class="line-clamp-2 text-xl font-semibold">
+											{JobTitle || 'Type a title to begin'}
+										</JobCard.Title>
+										<JobCard.Description>HireLATAM</JobCard.Description>
+									</div>
+								</JobCard.Header>
+								<JobCard.Content class="flex flex-col gap-4 pt-4">
+									<div class="flex flex-col gap-3">
+										<div class="flex items-center gap-2 text-sm">
+											<DollarSign size={16} class="text-muted-foreground" />
+											<span>
+												{$form.min_rate ? `$${formatSalary($form.min_rate)}/hr` : '$0/hr'}
+												{$form.max_rate ? ` – $${formatSalary($form.max_rate)}/hr` : ''}
+											</span>
+										</div>
+										<div class="flex items-center gap-2 text-sm">
+											{#if $form.job_type}
+												{@const Icon = getJobTypeIcon($form.job_type)}
+												<Icon size={16} class="text-muted-foreground" />
+												<span>{getJobTypeLabel($form.job_type)}</span>
+											{:else}
+												<Briefcase size={16} class="text-muted-foreground" />
+												<span>Job type not specified</span>
+											{/if}
+										</div>
+										<div class="flex items-center gap-2 text-sm">
+											<Calendar size={16} class="text-muted-foreground" />
+											<span>Posted {new Date().toLocaleDateString()}</span>
+										</div>
+									</div>
+
+									{#if questions?.length > 0}
+										<div class="flex items-center gap-2 rounded-md bg-primary/5 px-3 py-2 text-sm">
+											<Info size={16} class="text-primary" />
+											<span
+												>{questions.length} custom question{questions.length > 1 ? 's' : ''} for applicants</span
+											>
+										</div>
+									{/if}
+
+									<Button variant="outline" class="w-full" disabled={!hasBasicDetails}>
+										View Details
+									</Button>
+								</JobCard.Content>
+							</JobCard.Root>
+						</Card.Content>
+					</Card.Root>
+
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>Tips</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							<ul class="space-y-3 text-sm text-muted-foreground">
+								<li class="flex gap-2">
+									<CheckCircle2 size={16} class="mt-0.5 shrink-0 text-green-500" />
+									<span>Include specific skills and qualifications</span>
+								</li>
+								<li class="flex gap-2">
+									<CheckCircle2 size={16} class="mt-0.5 shrink-0 text-green-500" />
+									<span>Specify education requirements and experience level</span>
+								</li>
+								<li class="flex gap-2">
+									<CheckCircle2 size={16} class="mt-0.5 shrink-0 text-green-500" />
+									<span>Mention work hours and schedule flexibility</span>
+								</li>
+								<li class="flex gap-2">
+									<CheckCircle2 size={16} class="mt-0.5 shrink-0 text-green-500" />
+									<span>Highlight growth opportunities and mentorship</span>
+								</li>
+							</ul>
+						</Card.Content>
+					</Card.Root>
+				</div>
+			</div>
+		</div>
+	{:else}
+		<!-- Full Preview Mode -->
+		<div class="grid gap-8">
+			<Card.Root>
+				<Card.Content class="p-6">
+					<div class="mb-6 flex items-center justify-between">
+						<div>
+							<Badge variant="outline" class="mb-2">
+								{$form.draft === undefined
+									? 'Draft (Unsaved)'
+									: $form.draft === true
+										? 'Draft'
+										: 'Ready to Publish'}
+							</Badge>
+							<h2 class="text-2xl font-bold">{JobTitle || 'Untitled Position'}</h2>
+							<p class="text-muted-foreground">HireLATAM</p>
+						</div>
+						<div>
+							<Button variant="outline" class="gap-1" onclick={() => (showPreview = false)}>
+								<Info size={18} />
+								<span>Edit Details</span>
+							</Button>
+						</div>
+					</div>
+
+					<div class="mb-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+						<div class="flex items-center gap-3">
+							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+								<DollarSign size={20} class="text-primary" />
+							</div>
+							<div>
+								<p class="text-sm font-medium text-muted-foreground">Salary Range</p>
+								<p class="font-medium">
+									{$form.min_rate ? `$${formatSalary($form.min_rate)}/hr` : 'Not specified'}
+									{$form.max_rate ? ` – $${formatSalary($form.max_rate)}/hr` : ''}
+								</p>
+							</div>
+						</div>
+
+						<div class="flex items-center gap-3">
+							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+								{#if $form.job_type}
+									{@const Icon = getJobTypeIcon($form.job_type)}
+									<Icon size={20} class="text-primary" />
+								{/if}
+							</div>
+							<div>
+								<p class="text-sm font-medium text-muted-foreground">Job Type</p>
+								<p class="font-medium">{getJobTypeLabel($form.job_type) || 'Not specified'}</p>
+							</div>
+						</div>
+
+						<div class="flex items-center gap-3">
+							<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+								<Calendar size={20} class="text-primary" />
+							</div>
+							<div>
+								<p class="text-sm font-medium text-muted-foreground">Posting Date</p>
+								<p class="font-medium">{new Date().toLocaleDateString()}</p>
+							</div>
+						</div>
+					</div>
+
+					<Separator class="my-6" />
+
+					<div class="prose max-w-none">
+						<h3 class="mb-4 text-xl font-semibold">Job Description</h3>
+						{#if $form.description}
+							<div class="prose max-w-none">
+								{@html $form.description}
+							</div>
+						{:else}
+							<p class="text-muted-foreground">No job description provided yet.</p>
+						{/if}
+					</div>
+
+					{#if questions?.length > 0}
+						<div class="mt-8">
+							<h3 class="mb-4 text-xl font-semibold">Application Questions</h3>
+							<div class="space-y-4">
+								{#each questions as question, index}
+									<div class="rounded-lg border p-4">
+										<h4 class="mb-1 font-medium">Question {index + 1}</h4>
+										<p>{question.Content}</p>
+										<p class="mt-2 text-sm text-muted-foreground">
+											{question.Type === false ? 'Short Answer Question' : 'Yes/No Question'}
+										</p>
+									</div>
+								{/each}
+							</div>
+						</div>
+					{/if}
+
+					<Separator class="my-6" />
+
+					<div class="mt-8 flex items-center justify-end gap-4">
+						<Button
+							variant="outline"
+							type="submit"
+							onclick={() => {
+								drafting = true;
+								showPreview = false;
+							}}
+							form="JobForm"
+							class="gap-1"
+						>
+							<Save size={16} />
+							<span>Save Draft</span>
+						</Button>
+						<Button
+							type="submit"
+							onclick={() => {
+								drafting = false;
+								showPreview = false;
+							}}
+							form="JobForm"
+							class="gap-1"
+						>
+							<FileCheck size={16} />
+							<span>Publish Job</span>
+						</Button>
+					</div>
+				</Card.Content>
+			</Card.Root>
+		</div>
+	{/if}
+</div>
