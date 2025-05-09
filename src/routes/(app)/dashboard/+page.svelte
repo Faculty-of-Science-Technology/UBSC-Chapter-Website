@@ -53,8 +53,8 @@
 						<FileCheck size={18} />
 					</div>
 				</div>
-				<p class="text-2xl font-semibold">{data.jobApplications?.length || 0}</p>
-				<p class="text-xs text-muted-foreground">Applications this quarter</p>
+				<div class="text-2xl font-semibold">{data.jobApplications?.length || 0}</div>
+				<div class="text-xs text-muted-foreground">Applications this quarter</div>
 			</Card.Content>
 		</Card.Root>
 		
@@ -66,8 +66,8 @@
 						<Briefcase size={18} />
 					</div>
 				</div>
-				<p class="text-2xl font-semibold">{jobsLength}</p>
-				<p class="text-xs text-muted-foreground">Active listings</p>
+				<div class="text-2xl font-semibold">{jobsLength}</div>
+				<div class="text-xs text-muted-foreground">Active listings</div>
 			</Card.Content>
 		</Card.Root>
 		
@@ -79,8 +79,8 @@
 						<User size={18} />
 					</div>
 				</div>
-				<p class="text-2xl font-semibold capitalize">{user.AccountType}</p>
-				<p class="text-xs text-muted-foreground">Account status: Active</p>
+				<div class="text-2xl font-semibold capitalize">{user.AccountType}</div>
+				<div class="text-xs text-muted-foreground">Account status: Active</div>
 			</Card.Content>
 		</Card.Root>
 		
@@ -92,8 +92,8 @@
 						<Calendar size={18} />
 					</div>
 				</div>
-				<p class="text-2xl font-semibold">{formatDate(user.CreatedAt)}</p>
-				<p class="text-xs text-muted-foreground">{new Date(user.CreatedAt).getFullYear()}</p>
+				<div class="text-2xl font-semibold">{formatDate(user.CreatedAt)}</div>
+				<div class="text-xs text-muted-foreground">{new Date(user.CreatedAt).getFullYear()}</div>
 			</Card.Content>
 		</Card.Root>
 	</section>
@@ -121,16 +121,16 @@
 					
 					<div>
 						<h3 class="font-semibold text-lg">{user.FirstName} {user.LastName}</h3>
-						<p class="text-sm text-muted-foreground">{user.Email}</p>
+						<div class="text-sm text-muted-foreground">{user.Email}</div>
 					</div>
 					
-					<p class="text-sm text-center line-clamp-3">
+					<div class="text-sm text-center line-clamp-3">
 						{user.Bio || "No bio provided. Update your profile to add a bio."}
-					</p>
+					</div>
 					
 					<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 						<Calendar size="16" />
-						<p>Joined {new Date(user.CreatedAt).toLocaleDateString()}</p>
+						<div>Joined {new Date(user.CreatedAt).toLocaleDateString()}</div>
 					</div>
 					
 					<Button variant="outline" class="w-full" onclick={() => goto('/dashboard/profile')}>
@@ -151,7 +151,7 @@
 						<div class="px-6 py-12 text-center">
 							<Info size="32" class="mx-auto mb-2 text-muted-foreground" strokeWidth={1.5} />
 							<h4 class="font-medium">No applications yet</h4>
-							<p class="text-sm text-muted-foreground">Start applying to see your applications here</p>
+							<div class="text-sm text-muted-foreground">Start applying to see your applications here</div>
 						</div>
 					{:else}
 						<div class="divide-y">
@@ -160,9 +160,9 @@
 									<div class="flex justify-between items-start">
 										<div>
 											<h4 class="font-medium truncate" title={application.Jobs?.Title}>{application.Jobs?.Title}</h4>
-											<p class="text-sm text-muted-foreground">
+											<div class="text-sm text-muted-foreground">
 												{@render nameof__job_creator(application.Users)}
-											</p>
+											</div>
 										</div>
 										{#if application.JobApplications.Status === 'rejected'}
 											<Badge variant="destructive">Rejected</Badge>
@@ -232,7 +232,7 @@
 						<div class="py-12 text-center">
 							<Info size="48" class="mx-auto mb-3 text-muted-foreground" strokeWidth={1.5} />
 							<h3 class="text-lg font-medium">No jobs available</h3>
-							<p class="text-muted-foreground">Check back later for new opportunities</p>
+							<div class="text-muted-foreground">Check back later for new opportunities</div>
 						</div>
 					{:else}
 						<div class="grid gap-4">
@@ -265,9 +265,9 @@
 											</div>
 											
 											<div class="mt-4">
-												<p class="line-clamp-2 text-sm text-muted-foreground">
+												<div class="line-clamp-2 text-sm text-muted-foreground">
 													{job.Jobs.Description?.replace(/<[^>]*>/g, '').slice(0, 150)}...
-												</p>
+												</div>
 											</div>
 										</div>
 										
