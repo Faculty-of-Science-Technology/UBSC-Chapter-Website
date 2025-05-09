@@ -141,7 +141,7 @@ export const actions: Actions = {
 			console.log('form', form);
 		}
 		if (!form.valid) {
-			setError(form, 'You have some errors in your form. Please fix them and try again.');
+			setError(form, '', 'You have some errors in your form. Please fix them and try again.');
 			return fail(400, { form, user: locals.user });
 		}
 		try {

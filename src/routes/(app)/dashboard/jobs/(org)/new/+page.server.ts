@@ -1,7 +1,15 @@
-import { JWT_SECRET } from '$env/static/private';
+import {
+	DEBUG,
+	IS_DEVELOPMENT,
+	JWT_SECRET,
+	MAIL_SIGNATURE,
+	PLATFORM_URL,
+	PLATFORM_URL_DEVELOPMENT
+} from '$env/static/private';
+import { broadcastEmail } from '$lib/email';
 import { db } from '$lib/server/db';
 import { Jobs, Questions } from '$lib/server/db/schema';
-import { error, isRedirect, redirect, type Actions } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { message, setError, superValidate } from 'sveltekit-superforms';
@@ -24,6 +32,9 @@ const jobSchema = z.object({
 		.min(1, { message: 'Invalid job type' })
 		.max(3, { message: 'Invalid job type' }),
 	draft: z.coerce.boolean({
+		required_error: 'Something happened on our end, try that one more time'
+	}),
+	broadcast_job: z.enum(['on', 'off'], {
 		required_error: 'Something happened on our end, try that one more time'
 	})
 	// userId: z.string().uuid() // Generated on submit by the server
@@ -73,7 +84,8 @@ export const load: PageServerLoad = async (event) => {
 			min_rate: job_found.MinRate,
 			max_rate: job_found.MaxRate,
 			job_type: job_found.JobTypeId ?? 1, // Default to 1 if null
-			draft: job_found.Draft
+			draft: job_found.Draft,
+			broadcast_job: 'off' as 'on' | 'off' | undefined // Default to false
 		};
 
 		const jobForm = await superValidate(mapped_job, zod(jobSchema));
@@ -114,41 +126,25 @@ export const actions: Actions = {
 			throw redirect(301, '/auth/login');
 		}
 
-		try {
-			jobSchema.parse(form);
-			const jobForm = await superValidate(formData, zod(jobSchema));
-			const job_id = cookies.get('job_id') ?? null;
-			if (!user) throw redirect(301, '/auth/login');
+		const jobForm = await superValidate(formData, zod(jobSchema));
+		const job_id = cookies.get('job_id') ?? null;
+		if (!user) throw redirect(301, '/auth/login');
+		if (JSON.parse(DEBUG) ?? JSON.parse(IS_DEVELOPMENT)) {
+			console.log('========== DEVELOPMENT MODE (DEBUG) ==========');
+			console.log('To disable this, set DEBUG to false in your .env file');
+			console.log('form', formData);
+		}
 
-			if (job_id !== null) {
-				// Update the job
-				const updatedJob = await db
-					.update(Jobs)
-					.set({
-						Title: jobForm.data.title,
-						Description: jobForm.data.description,
-						MinRate: jobForm.data.min_rate,
-						MaxRate: jobForm.data.max_rate,
-						JobTypeId: jobForm.data.job_type,
-						Draft: jobForm.data.draft,
-						UserId: user.Id
-					})
-					.where(eq(Jobs.Id, job_id))
-					.returning({ Id: Jobs.Id });
+		if (!jobForm.valid) {
+			setError(jobForm, '', 'You have some errors in your form. Please fix them and try again.');
+			return fail(400, { jobForm });
+		}
 
-				throw redirect(303, '/dashboard/jobs/new?job_id=' + updatedJob[0].Id);
-			}
-
-			// Check if the job already exists
-			const job = await db.select().from(Jobs).where(eq(Jobs.Title, jobForm.data.title));
-			if (job.length > 0) {
-				return setError(jobForm, 'title', 'A job with this name already exists');
-			}
-
-			// Create the job
-			const newJob = await db
-				.insert(Jobs)
-				.values({
+		if (job_id !== null) {
+			// Update the job
+			const updatedJob = await db
+				.update(Jobs)
+				.set({
 					Title: jobForm.data.title,
 					Description: jobForm.data.description,
 					MinRate: jobForm.data.min_rate,
@@ -157,35 +153,61 @@ export const actions: Actions = {
 					Draft: jobForm.data.draft,
 					UserId: user.Id
 				})
-				.returning({ Id: Jobs.Id, Title: Jobs.Title });
+				.where(eq(Jobs.Id, job_id))
+				.returning();
 
-			if (!jobForm.data.draft) {
-				// return redirect(`/dashboard/jobs/${job.Id}`);
-				cookies.set('message_title', 'Job Published', { path: '/' });
-				cookies.set('message_title2', newJob[0].Title, { path: '/' });
-				cookies.set('message_description', 'Your listing has been published', {
-					path: '/'
-				});
-				cookies.set(
-					'message_description2',
-					'This job has been marked visible to applicants, and they can now apply.',
-					{
-						path: '/'
-					}
-				);
-				cookies.set('authenticated', 'true', { path: '/' });
-
-				throw redirect(303, '/backend/message');
-				// return jobForm;
-			}
-			throw redirect(303, '/dashboard/jobs/new?job_id=' + newJob[0].Id);
-		} catch (e) {
-			if (isRedirect(e)) {
-				throw e;
-			}
-			const jobForm = await superValidate(formData, zod(jobSchema));
-			return { jobForm };
+			throw redirect(303, '/dashboard/jobs/new?job_id=' + updatedJob[0].Id);
 		}
+
+		// Check if the job already exists
+		const job = await db.select().from(Jobs).where(eq(Jobs.Title, jobForm.data.title));
+		if (job.length > 0) {
+			return setError(jobForm, 'title', 'A job with this name already exists');
+		}
+
+		// Create the job
+		const newJob = await db
+			.insert(Jobs)
+			.values({
+				Title: jobForm.data.title,
+				Description: jobForm.data.description,
+				MinRate: jobForm.data.min_rate,
+				MaxRate: jobForm.data.max_rate,
+				JobTypeId: jobForm.data.job_type,
+				Draft: jobForm.data.draft,
+				UserId: user.Id
+			})
+			.returning();
+
+		if (!jobForm.data.draft) {
+			if (jobForm.data.broadcast_job === 'on') {
+				// Broadcast the job to all users
+				broadcastEmail({
+					subject: 'New job posted',
+					body:
+						`A new job has been posted: ${newJob[0].Title}\n\nYou can view it here:` +
+						`\n\n${IS_DEVELOPMENT === 'true' ? PLATFORM_URL_DEVELOPMENT : PLATFORM_URL}/dashboard/jobs/view/${newJob[0].Id}` +
+						`\n\nAll the best,\n${MAIL_SIGNATURE}`
+				});
+			}
+			cookies.set('message_title', 'Job Published', { path: '/' });
+			cookies.set('message_title2', newJob[0].Title, { path: '/' });
+			cookies.set('message_description', 'Your listing has been published', {
+				path: '/'
+			});
+			cookies.set(
+				'message_description2',
+				'This job has been marked visible to applicants, and they can now apply.',
+				{
+					path: '/'
+				}
+			);
+			cookies.set('authenticated', 'true', { path: '/' });
+
+			throw redirect(303, '/backend/message');
+			// return jobForm;
+		}
+		throw redirect(303, '/dashboard/jobs/new?job_id=' + newJob[0].Id);
 	},
 	createQuestion: async (event) => {
 		const formData = await event.request.formData();

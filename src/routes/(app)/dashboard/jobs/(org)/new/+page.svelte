@@ -16,19 +16,14 @@
 	import * as RadioGroup from '$lib/components/vendor/ui/radio-group';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 
+	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Briefcase, DollarSign } from 'lucide-svelte';
 	import { superForm, type FormResult } from 'sveltekit-superforms/client';
-	import type { ActionData, PageData } from './$types';
+	import type { ActionData, PageProps } from './$types';
 	let drafting = $state(false);
 	let removalQuestionID: HTMLInputElement;
-	const props = $props();
-	const page_data: JobsData = {
-		...props,
-		data: props.data || {}
-	};
-	type JobsData = PageData & {
-		data: Record<string, any>;
-	};
+	const { data }: PageProps = $props();
+
 	interface IQuestion {
 		Id: number;
 		Content: string;
@@ -36,17 +31,18 @@
 		Draft: boolean;
 		JobsId: string; // UUID
 	}
-	const { data }: JobsData = page_data;
+
 	let questions: IQuestion[] = $state($page.data.questions);
 	let JobTitle: string = $state('Type a title to the left to begin');
 
-	const { form, errors, constraints, enhance } = superForm(
+	const form_obj = superForm(
 		data.jobForm, //?? data.super_form ?? props.form?.super_form ?? data
 		{
 			resetForm: false,
 			invalidateAll: false
 		}
 	);
+	const { form, errors, constraints, enhance } = form_obj;
 	const {
 		form: questionForm,
 		errors: questionErrors,
@@ -166,6 +162,15 @@
 										<p class="text-base font-normal leading-5">
 											Basic details such as the hourly rate and type of job
 										</p>
+										<div class="flex w-full items-center gap-2 pt-4">
+											<Switch
+												name="broadcast_job"
+												bind:checked={$form.broadcast_job}
+												id="broadcast_job"
+												form="JobForm"
+											/>
+											<p class="text-sm font-semibold">Notify all students when posting this job</p>
+										</div>
 									</div>
 									<div class="grid w-full max-w-sm items-center gap-1.5">
 										<Label for="min-hourly-rate">Minimum hourly rate*</Label>
