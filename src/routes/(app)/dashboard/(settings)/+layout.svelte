@@ -1,35 +1,43 @@
 <script lang="ts">
 	import { afterNavigate, goto } from '$app/navigation';
-	import * as DashMenu from '$lib/components/vendor/ui/dashmenu/index';
-	import MenuItem from '$lib/components/vendor/ui/menuitem/menuitem.svelte';
+	import { Button } from '$lib/components/vendor/ui/button';
 	import { Separator } from '$lib/components/vendor/ui/separator/index.js';
+	import { cn } from '$lib/components/vendor/utils';
 	import { NavLink, _Settings_NavLinkIndexes } from '$lib/types/Navigation';
 	import {
-		InfoIcon,
-		LucideCalendarCog,
-		UserIcon,
-		Users
+		Calendar,
+		ChevronLeft,
+		Info,
+		LayoutDashboard,
+		LogOut,
+		Menu,
+		User,
+		Users,
+		X
 	} from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	
 	let { children, data } = $props();
 	let active_link = $state(0);
+	let mobileMenuOpen = $state(false);
 	const user = data.user;
 
-	onMount(() => {
-		// Get the current URL and replace the slashes with dashes
+	// Update active link based on URL
+	function updateActiveLink() {
 		const url = window.location.pathname.replace(/\//g, '-');
-
-		// Set active_link based on the current url
 		active_link = NavLink(url, { repository: _Settings_NavLinkIndexes });
+	}
+
+	onMount(() => {
+		updateActiveLink();
 	});
 
 	afterNavigate(() => {
-		// Get the current URL and replace the slashes with dashes
-		const url = window.location.pathname.replace(/\//g, '-');
-
-		// Set active_link based on the current url
-		active_link = NavLink(url, { repository: _Settings_NavLinkIndexes });
+		updateActiveLink();
+		mobileMenuOpen = false;
 	});
+
+	// Handle keyboard shortcuts
 	onMount(() => {
 		async function handleKeydown(e: KeyboardEvent) {
 			if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
@@ -61,96 +69,131 @@
 	});
 </script>
 
-<page class="flex h-svh">
-	<DashMenu.Root class="h-full rounded-none border-b-0 border-l-0 border-r border-t-0 bg-violet-50">
-		<DashMenu.Content>
-			<DashMenu.Heading
-				class="text-archivo text-lg font-extralight lg:text-4xl"
-				title="Settings & Privacy"
-			/>
-			<DashMenu.Items>
-				<a href="/dashboard/settings" aria-label="Your Profile">
-					<MenuItem
-						noborder
-						cursor="pointer"
-						title="Your Profile"
-						class={active_link === 0 ? 'bg-accent' : ''}
-					>
-						<svelte:fragment slot="start-icon">
-							<UserIcon class="size-5" />
-						</svelte:fragment>
-						⌘P
-					</MenuItem>
-				</a>
-				<!-- <a href="/dashboard/settings/notifications" aria-label="Notifications">
-					<MenuItem
-						noborder
-						cursor="pointer"
-						title="Notifications"
-						class={active_link === 1 ? 'bg-accent' : ''}
-					>
-						<svelte:fragment slot="start-icon">
-							<MessageSquareMoreIcon class="size-5" />
-						</svelte:fragment>
-						⌘M
-					</MenuItem>
-				</a> -->
-				{#if user.AccountType === 'owner'}
-					<Separator />
-					<DashMenu.Heading class="text-md" title="Administrative Tasks" />
-					<a href="/dashboard/settings/setup-agenda" aria-label="Manage Agenda">
-						<MenuItem
-							noborder
-							cursor="pointer"
-							title="Manage Agenda"
-							class={active_link === 2 ? 'bg-accent' : ''}
-						>
-							<svelte:fragment slot="start-icon">
-								<LucideCalendarCog class="size-5" />
-							</svelte:fragment>
-							⌘F
-						</MenuItem>
-					</a>
+<div class="grid lg:grid-cols-5">
+	<!-- Mobile header -->
+	<header class="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 lg:hidden">
+		<Button variant="ghost" size="icon" onclick={() => mobileMenuOpen = !mobileMenuOpen}>
+			{#if mobileMenuOpen}
+				<X class="h-5 w-5" />
+			{:else}
+				<Menu class="h-5 w-5" />
+			{/if}
+			<span class="sr-only">Toggle Menu</span>
+		</Button>
+		<h1 class="flex-1 text-lg font-semibold">Settings</h1>
+		<Button variant="ghost" size="icon" onclick={() => goto('/dashboard')}>
+			<LayoutDashboard class="h-5 w-5" />
+			<span class="sr-only">Dashboard</span>
+		</Button>
+	</header>
 
-					<a href="/dashboard/settings/manage-users" aria-label="Manage Users">
-						<MenuItem
-							noborder
-							cursor="pointer"
-							title="Manage Users"
-							class={active_link === 3 ? 'bg-accent' : ''}
-						>
-							<svelte:fragment slot="start-icon">
-								<Users class="size-5" />
-							</svelte:fragment>
-							⌘U
-						</MenuItem>
-					</a>
-				{/if}
-				<a href="/dashboard/settings/about-system" aria-label="About App">
-					<MenuItem
-						noborder
-						cursor="pointer"
-						title="About App"
-						class={active_link === 4 ? 'bg-accent' : ''}
-					>
-						<svelte:fragment slot="start-icon">
-							<InfoIcon class="size-5" />
-						</svelte:fragment>
-						⌘G
-					</MenuItem>
+	<!-- Settings sidebar -->
+	<aside class={`
+		border-r bg-background transition-all duration-300 ease-in-out
+		${mobileMenuOpen ? 'fixed inset-y-0 z-50 block w-72 border-r' : 'hidden lg:block'}
+		lg:sticky lg:top-0 lg:h-screen
+	`}>
+		<div class="flex h-full flex-col gap-2 py-6">
+			<div class="px-6">
+				<a href="/dashboard" class="flex items-center gap-2">
+					<ChevronLeft class="h-4 w-4" />
+					<span class="text-sm font-medium">Back to Dashboard</span>
 				</a>
-			</DashMenu.Items>
-		</DashMenu.Content>
-	</DashMenu.Root>
-	<main class="flex-1 overflow-auto bg-gray-100 p-8">
-		{@render children?.()}
+				<h2 class="mt-4 text-lg font-semibold">Settings</h2>
+				<p class="text-sm text-muted-foreground">Manage your account settings</p>
+			</div>
+			
+			<Separator class="my-2" />
+			
+			<div class="flex-1 overflow-auto py-2">
+				<nav class="grid gap-1 px-2">
+					<!-- Account settings -->
+					<a 
+						href="/dashboard/settings" 
+						class={cn(
+							"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+							active_link === 0 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+						)}
+					>
+						<User class="h-4 w-4" />
+						<span>Your Profile</span>
+						<span class="ml-auto text-xs text-muted-foreground">⌘P</span>
+					</a>
+					
+					<!-- <a 
+						href="/dashboard/settings/notifications" 
+						class={cn(
+							"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+							active_link === 1 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+						)}
+					>
+						<Bell class="h-4 w-4" />
+						<span>Notifications</span>
+						<span class="ml-auto text-xs text-muted-foreground">⌘M</span>
+					</a> -->
+					
+					{#if user.AccountType === 'owner'}
+						<Separator class="my-2" />
+						<div class="px-3 py-2">
+							<h3 class="mb-1 text-xs font-medium text-muted-foreground">Administrative Tools</h3>
+						</div>
+						
+						<a 
+							href="/dashboard/settings/setup-agenda" 
+							class={cn(
+								"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+								active_link === 2 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+							)}
+						>
+							<Calendar class="h-4 w-4" />
+							<span>Manage Agenda</span>
+							<span class="ml-auto text-xs text-muted-foreground">⌘F</span>
+						</a>
+						
+						<a 
+							href="/dashboard/settings/manage-users" 
+							class={cn(
+								"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+								active_link === 3 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+							)}
+						>
+							<Users class="h-4 w-4" />
+							<span>Manage Users</span>
+							<span class="ml-auto text-xs text-muted-foreground">⌘U</span>
+						</a>
+					{/if}
+					
+					<a 
+						href="/dashboard/settings/about-system" 
+						class={cn(
+							"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+							active_link === 4 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+						)}
+					>
+						<Info class="h-4 w-4" />
+						<span>About System</span>
+						<span class="ml-auto text-xs text-muted-foreground">⌘G</span>
+					</a>
+				</nav>
+			</div>
+			
+			<Separator class="my-2" />
+			
+			<div class="px-4 py-2">
+				<a href="/auth/logout" data-sveltekit-reload>
+					<Button variant="ghost" size="sm" class="w-full justify-start text-muted-foreground">
+						<LogOut class="mr-2 h-4 w-4" />
+						Log out
+					</Button>
+				</a>
+			</div>
+		</div>
+	</aside>
+
+	<!-- Main content -->
+	<main class="col-span-4 min-h-screen overflow-y-auto bg-slate-50 pb-12">
+		<div class="container max-w-4xl py-6 lg:py-10">
+			{@render children?.()}
+		</div>
 	</main>
-</page>
-
-<style>
-	/* Make <main/>'s scrollbar so small it's invisible */
-	main {
-		scrollbar-width: thin;
-		scrollbar-color: transparent transparent;
-	}
-</style>
+</div>
