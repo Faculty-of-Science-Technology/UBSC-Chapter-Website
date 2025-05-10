@@ -20,24 +20,26 @@
 		PenLine,
 		User
 	} from 'lucide-svelte';
-	import { type PageData } from './$types.js';
+	import { type PageProps } from './$types.js';
 
-	const { data: props } = $props();
-	const data: PageData = props;
+	const { data }: PageProps = $props();
 	const user = data.user;
 
 	const jobs = data.jobs;
 	const jobsLength = data.jobsLength;
-	const page_count = Math.ceil(jobsLength / 10);
-	const offset = data.offset;
+
+	const pages_length = data.pagination.totalPages * data.pagination.itemsPerPage;
+	const page_count = data.pagination.totalPages;
+	const page_items_per_page = data.pagination.itemsPerPage;
+	const offset = data.pagination.currentPage;
 
 	const jobApplications = data.jobApplications;
-	
+
 	// For date formatting in stats
 	const formatDate = (date: string | Date) => {
-		return new Date(date).toLocaleDateString('en-US', { 
-			month: 'short', 
-			day: 'numeric' 
+		return new Date(date).toLocaleDateString('en-US', {
+			month: 'short',
+			day: 'numeric'
 		});
 	};
 </script>
@@ -46,10 +48,10 @@
 	<!-- Welcome section with stats -->
 	<section class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 		<Card.Root>
-			<Card.Content class="p-6 flex flex-col gap-2">
-				<div class="flex justify-between items-center">
-					<h3 class="font-medium text-sm">Applied Jobs</h3>
-					<div class="bg-blue-100 p-2 rounded-full text-blue-600">
+			<Card.Content class="flex flex-col gap-2 p-6">
+				<div class="flex items-center justify-between">
+					<h3 class="text-sm font-medium">Applied Jobs</h3>
+					<div class="rounded-full bg-blue-100 p-2 text-blue-600">
 						<FileCheck size={18} />
 					</div>
 				</div>
@@ -57,12 +59,12 @@
 				<div class="text-xs text-muted-foreground">Applications this quarter</div>
 			</Card.Content>
 		</Card.Root>
-		
+
 		<Card.Root>
-			<Card.Content class="p-6 flex flex-col gap-2">
-				<div class="flex justify-between items-center">
-					<h3 class="font-medium text-sm">Available Jobs</h3>
-					<div class="bg-emerald-100 p-2 rounded-full text-emerald-600">
+			<Card.Content class="flex flex-col gap-2 p-6">
+				<div class="flex items-center justify-between">
+					<h3 class="text-sm font-medium">Available Jobs</h3>
+					<div class="rounded-full bg-emerald-100 p-2 text-emerald-600">
 						<Briefcase size={18} />
 					</div>
 				</div>
@@ -70,12 +72,12 @@
 				<div class="text-xs text-muted-foreground">Active listings</div>
 			</Card.Content>
 		</Card.Root>
-		
+
 		<Card.Root>
-			<Card.Content class="p-6 flex flex-col gap-2">
-				<div class="flex justify-between items-center">
-					<h3 class="font-medium text-sm">Account Type</h3>
-					<div class="bg-violet-100 p-2 rounded-full text-violet-600">
+			<Card.Content class="flex flex-col gap-2 p-6">
+				<div class="flex items-center justify-between">
+					<h3 class="text-sm font-medium">Account Type</h3>
+					<div class="rounded-full bg-violet-100 p-2 text-violet-600">
 						<User size={18} />
 					</div>
 				</div>
@@ -83,12 +85,12 @@
 				<div class="text-xs text-muted-foreground">Account status: Active</div>
 			</Card.Content>
 		</Card.Root>
-		
+
 		<Card.Root>
-			<Card.Content class="p-6 flex flex-col gap-2">
-				<div class="flex justify-between items-center">
-					<h3 class="font-medium text-sm">Member Since</h3>
-					<div class="bg-amber-100 p-2 rounded-full text-amber-600">
+			<Card.Content class="flex flex-col gap-2 p-6">
+				<div class="flex items-center justify-between">
+					<h3 class="text-sm font-medium">Member Since</h3>
+					<div class="rounded-full bg-amber-100 p-2 text-amber-600">
 						<Calendar size={18} />
 					</div>
 				</div>
@@ -100,46 +102,46 @@
 
 	<div class="grid gap-6 md:grid-cols-7">
 		<!-- Left sidebar with profile and recent applications -->
-		<div class="md:col-span-2 flex flex-col gap-6">
+		<div class="flex flex-col gap-6 md:col-span-2">
 			<!-- User Profile Card -->
 			<Card.Root>
 				<Card.Header class="pb-0">
 					<Card.Title>Your Profile</Card.Title>
 				</Card.Header>
-				<Card.Content class="py-4 flex flex-col items-center text-center gap-4">
+				<Card.Content class="flex flex-col items-center gap-4 py-4 text-center">
 					<div class="relative">
-						<Avatar.Root class="w-24 h-24">
+						<Avatar.Root class="h-24 w-24">
 							<Avatar.Image src={user.ProfilePicture} alt={getUserFullName(user as IJobCreator)} />
 							<Avatar.Fallback>{user.FirstName[0]}{user.LastName[0]}</Avatar.Fallback>
 						</Avatar.Root>
 						{#if user.Hireable}
-							<span class="absolute -top-1 -right-1">
+							<span class="absolute -right-1 -top-1">
 								<Badge class="bg-success">Hireable</Badge>
 							</span>
 						{/if}
 					</div>
-					
+
 					<div>
-						<h3 class="font-semibold text-lg">{user.FirstName} {user.LastName}</h3>
+						<h3 class="text-lg font-semibold">{user.FirstName} {user.LastName}</h3>
 						<div class="text-sm text-muted-foreground">{user.Email}</div>
 					</div>
-					
-					<div class="text-sm text-center line-clamp-3">
-						{user.Bio || "No bio provided. Update your profile to add a bio."}
+
+					<div class="line-clamp-3 text-center text-sm">
+						{user.Bio || 'No bio provided. Update your profile to add a bio.'}
 					</div>
-					
+
 					<div class="flex flex-row items-center gap-2 text-xs text-slate-400">
 						<Calendar size="16" />
 						<div>Joined {new Date(user.CreatedAt).toLocaleDateString()}</div>
 					</div>
-					
+
 					<Button variant="outline" class="w-full" onclick={() => goto('/dashboard/profile')}>
 						<PenLine size="16" class="mr-2" />
 						Edit Profile
 					</Button>
 				</Card.Content>
 			</Card.Root>
-			
+
 			<!-- Recent Applications -->
 			<Card.Root>
 				<Card.Header class="pb-2">
@@ -151,15 +153,19 @@
 						<div class="px-6 py-12 text-center">
 							<Info size="32" class="mx-auto mb-2 text-muted-foreground" strokeWidth={1.5} />
 							<h4 class="font-medium">No applications yet</h4>
-							<div class="text-sm text-muted-foreground">Start applying to see your applications here</div>
+							<div class="text-sm text-muted-foreground">
+								Start applying to see your applications here
+							</div>
 						</div>
 					{:else}
 						<div class="divide-y">
 							{#each jobApplications as application}
-								<div class="py-4 px-6 hover:bg-slate-50 transition-colors">
-									<div class="flex justify-between items-start">
+								<div class="px-6 py-4 transition-colors hover:bg-slate-50">
+									<div class="flex items-start justify-between">
 										<div>
-											<h4 class="font-medium truncate" title={application.Jobs?.Title}>{application.Jobs?.Title}</h4>
+											<h4 class="truncate font-medium" title={application.Jobs?.Title}>
+												{application.Jobs?.Title}
+											</h4>
 											<div class="text-sm text-muted-foreground">
 												{@render nameof__job_creator(application.Users)}
 											</div>
@@ -174,36 +180,41 @@
 											<Badge>Pending</Badge>
 										{/if}
 									</div>
-									
+
 									<div class="mt-2 flex items-center gap-4 text-sm text-muted-foreground">
 										<div class="flex items-center gap-1">
 											<Briefcase size="14" />
-											<span>{application.JobTypes?.Name || "N/A"}</span>
+											<span>{application.JobTypes?.Name || 'N/A'}</span>
 										</div>
 										<div class="flex items-center gap-1">
 											<Clock3 size="14" />
 											<span>{@render posted_relative_time(application)}</span>
 										</div>
 									</div>
-									
+
 									<div class="mt-3">
 										{#if application.JobApplications.Draft && !application.Jobs?.Draft}
 											<a href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}">
-												<Button variant="secondary" size="sm" class="w-full">Continue application</Button>
+												<Button variant="secondary" size="sm" class="w-full"
+													>Continue application</Button
+												>
 											</a>
 										{:else if !application.JobApplications.Draft}
 											<a href="/dashboard/jobs/apply?job_id={application.Jobs?.Id}">
-												<Button variant="secondary" size="sm" class="w-full">View submission</Button>
+												<Button variant="secondary" size="sm" class="w-full">View submission</Button
+												>
 											</a>
 										{:else}
-											<Button variant="secondary" size="sm" class="w-full" disabled>Not available</Button>
+											<Button variant="secondary" size="sm" class="w-full" disabled
+												>Not available</Button
+											>
 										{/if}
 									</div>
 								</div>
 							{/each}
 						</div>
-						
-						<div class="p-4 border-t">
+
+						<div class="border-t p-4">
 							<a href="/dashboard/submissions">
 								<Button variant="ghost" class="w-full">View all applications</Button>
 							</a>
@@ -212,21 +223,23 @@
 				</Card.Content>
 			</Card.Root>
 		</div>
-		
+
 		<!-- Right section with available jobs -->
 		<div class="md:col-span-5">
 			<Card.Root>
 				<Card.Header class="flex flex-row items-center justify-between">
 					<div>
 						<Card.Title class="text-xl">Available Jobs</Card.Title>
-						<Card.Description>Browse jobs that match your skills and interests</Card.Description>
+						<Card.Description
+							>Browse jobs that match your skills and interests (newest are displayed first)</Card.Description
+						>
 					</div>
-					
+
 					<div class="hidden md:block">
 						{@render jobs_paginator()}
 					</div>
 				</Card.Header>
-				
+
 				<Card.Content>
 					{#if jobs.length === 0}
 						<div class="py-12 text-center">
@@ -237,45 +250,53 @@
 					{:else}
 						<div class="grid gap-4">
 							{#each jobs as job}
-								<div class="rounded-lg border p-5 hover:border-primary/20 hover:bg-accent/10 transition-colors">
+								<div
+									class="rounded-lg border p-5 transition-colors hover:border-primary/20 hover:bg-accent/10"
+								>
 									<div class="flex flex-wrap justify-between gap-4">
-										<div class="flex-1 min-w-0">
-											<h3 class="font-medium text-lg truncate" title={job.Jobs.Title}>{job.Jobs.Title}</h3>
-											
+										<div class="min-w-0 flex-1">
+											<h3 class="truncate text-lg font-medium" title={job.Jobs.Title}>
+												{job.Jobs.Title}
+											</h3>
+
 											<div class="mt-2 flex flex-wrap gap-4">
 												<div class="flex items-center gap-1">
 													<Building size="16" class="text-muted-foreground" />
-													<span class="text-sm">{@render nameof__job_creator(job.Users as unknown as IJobCreator)}</span>
+													<span class="text-sm"
+														>{@render nameof__job_creator(
+															job.Users as unknown as IJobCreator
+														)}</span
+													>
 												</div>
-												
+
 												<div class="flex items-center gap-1">
 													<DollarSign size="16" class="text-muted-foreground" />
 													<span class="text-sm">${job.Jobs.MinRate} - ${job.Jobs.MaxRate}/hr</span>
 												</div>
-												
+
 												<div class="flex items-center gap-1">
 													<Briefcase size="16" class="text-muted-foreground" />
 													<span class="text-sm">{job.JobTypes?.Name}</span>
 												</div>
-												
+
 												<div class="flex items-center gap-1">
 													<Clock3 size="16" class="text-muted-foreground" />
 													<span class="text-sm">{@render posted_relative_time(job)}</span>
 												</div>
 											</div>
-											
+
 											<div class="mt-4">
 												<div class="line-clamp-2 text-sm text-muted-foreground">
 													{job.Jobs.Description?.replace(/<[^>]*>/g, '').slice(0, 150)}...
 												</div>
 											</div>
 										</div>
-										
-										<div class="flex flex-col justify-between items-end">
+
+										<div class="flex flex-col items-end justify-between">
 											{#if job.Jobs.Draft !== undefined && !job.Jobs.Draft}
 												<Badge variant="outline" class="mb-auto">Active</Badge>
 											{/if}
-											
+
 											<a href="/dashboard/jobs/view/{job.Jobs.Id}">
 												<Button>
 													Apply Now
@@ -287,7 +308,7 @@
 								</div>
 							{/each}
 						</div>
-						
+
 						<div class="mt-6 flex justify-center md:hidden">
 							{@render jobs_paginator()}
 						</div>
@@ -299,7 +320,7 @@
 </div>
 
 {#snippet jobs_paginator()}
-	<Pagination.Root count={jobsLength} perPage={10} page={offset}>
+	<Pagination.Root count={pages_length} perPage={page_items_per_page} page={offset}>
 		{#snippet children({ pages, currentPage })}
 			<Pagination.Content>
 				<Pagination.Item>
