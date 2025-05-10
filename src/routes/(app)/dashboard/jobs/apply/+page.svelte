@@ -468,7 +468,8 @@
 									{#each questions as question, index}
 										<div class="rounded-lg border p-4">
 											<div class="space-y-4">
-												{#if question.Type === true}
+												<!-- {JSON.stringify(question)} -->
+												{#if question.Type === false}
 													<!-- Short Answer Question -->
 													<Label class="text-base font-medium"
 														>{index + 1}. {question.Content}

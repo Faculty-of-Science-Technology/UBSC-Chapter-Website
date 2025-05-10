@@ -114,7 +114,6 @@ export const actions: Actions = {
 		const formData = await event.request.formData();
 		const { cookies } = event;
 		const session = cookies.get('session');
-		const form = Object.fromEntries(formData);
 
 		// Check if the user is authenticated
 		if (!session) throw redirect(301, '/auth/login');
