@@ -25,6 +25,72 @@ input {
 	font-style: normal;
 }
 
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes fade-out {
+	to {
+		opacity: 0;
+	}
+}
+
+/* Loading bar */
+/*
+animation: loading2 10s ease-out 1; // Expands the loading bar
+animation: loading 10s ease-out 1;  // Scatters the loading bar colors
+*/
+@keyframes loading2 {
+	from {
+		transform: translateX(-100%);
+	}
+
+	to {
+		transform: translateX(0);
+	}
+}
+
+@keyframes loading {
+	from {
+		transform: translateX(0) scaleX(6);
+	}
+
+	to {
+		transform: translateX(500%) scaleX(6);
+	}
+}
+
+.loading-gradient-2 {
+	will-change: transform;
+}
+
+.loading-gradient {
+	will-change: transform;
+	transform-origin: right;
+	background-image: linear-gradient(
+		to right,
+		hsl(204, 100%, 85%),
+		hsl(280, 100%, 70%),
+		hsl(340, 100%, 60%),
+		hsl(30, 100%, 65%)
+	);
+	/* background-size: 400% 100%; */
+	/* animation: gradient-shift 3s ease infinite; */
+}
+
+@keyframes gradient-shift {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+.animate-fade-out {
+	animation: fade-out 0.3s ease-out;
+	animation-fill-mode: forwards;
+}
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;

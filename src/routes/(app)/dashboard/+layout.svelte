@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate, onNavigate } from '$app/navigation';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import { Separator } from '$lib/components/vendor/ui/separator';
 	import { NavLink } from '$lib/types/Navigation';
+	import type { OnNavigate } from '@sveltejs/kit';
 	import {
 		Briefcase,
 		ChevronLeft,
@@ -25,6 +26,7 @@
 	let active_link = $state(0);
 	let sidebarCollapsed = $state(false);
 	let mobileMenuOpen = $state(false);
+		let loadingBar: HTMLDivElement;
 
 	// Update active link based on current URL
 	function updateActiveLink() {
@@ -41,17 +43,65 @@
 		}
 	});
 
-	afterNavigate(() => {
-		updateActiveLink();
-		mobileMenuOpen = false;
-	});
 
 	// Toggle sidebar collapsed state
 	function toggleSidebar() {
 		sidebarCollapsed = !sidebarCollapsed;
 		localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed));
 	}
+
+	
+		function delayNavigation(navigation: OnNavigate) {
+		if (!document.startViewTransition) return new Promise((res) => setTimeout(res, 500));
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve(void 0);
+				await navigation.complete;
+			});
+		});
+	}
+
+	afterNavigate(() => {
+		updateActiveLink();
+		mobileMenuOpen = false;
+	});
+
+		onNavigate(async (navigation) => {
+		// do some work immediately before the navigation completes
+
+		// optionally return a promise to delay navigation until it resolves
+		await delayNavigation(navigation);
+	});
+
+	beforeNavigate(() => {
+		loadingBar.style.opacity = '1';
+	});
+
+	afterNavigate(() => {
+		setTimeout(() => {
+			loadingBar.classList.add('animate-fade-out');
+		}, 1115);
+		setTimeout(() => {
+			loadingBar.style.opacity = '0';
+			loadingBar.classList.remove('animate-fade-out');
+		}, 1125);
+	});
 </script>
+
+
+	<div
+		bind:this={loadingBar}
+		class="loading-bar overflow-clip"
+		style="height: 3px; width: 100%; position: fixed; top: 0; right: 0; opacity: 0; z-index: 1000"
+	>
+		<div style="height: 3px; animation: loading2 3s ease-out 1" class="loading-gradient-2">
+			<div
+				style="height: 3px; animation: loading 3s ease-out infinite"
+				class="loading-gradient w-full origin-right delay-0 duration-1000 ease-linear"
+			></div>
+		</div>
+	</div>
 
 <div class="flex h-screen w-full flex-col overflow-hidden bg-background">
 	<!-- Mobile header -->
