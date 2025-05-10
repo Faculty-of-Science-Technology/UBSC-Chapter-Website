@@ -3,7 +3,6 @@
 	import { Button } from '$lib/components/vendor/ui/button';
 	import { Separator } from '$lib/components/vendor/ui/separator';
 	import { NavLink } from '$lib/types/Navigation';
-	import type { OnNavigate } from '@sveltejs/kit';
 	import {
 		Briefcase,
 		ChevronLeft,
@@ -51,16 +50,16 @@
 	}
 
 	
-		function delayNavigation(navigation: OnNavigate) {
-		if (!document.startViewTransition) return new Promise((res) => setTimeout(res, 500));
+	// 	function delayNavigation(navigation: OnNavigate) {
+	// 	if (!document.startViewTransition) return new Promise((res) => setTimeout(res, 500));
 
-		return new Promise((resolve) => {
-			document.startViewTransition(async () => {
-				resolve(void 0);
-				await navigation.complete;
-			});
-		});
-	}
+	// 	return new Promise((resolve) => {
+	// 		document.startViewTransition(async () => {
+	// 			resolve(void 0);
+	// 			await navigation.complete;
+	// 		});
+	// 	});
+	// }
 
 	afterNavigate(() => {
 		updateActiveLink();
@@ -71,7 +70,7 @@
 		// do some work immediately before the navigation completes
 
 		// optionally return a promise to delay navigation until it resolves
-		await delayNavigation(navigation);
+		// await delayNavigation(navigation);
 	});
 
 	beforeNavigate(() => {
