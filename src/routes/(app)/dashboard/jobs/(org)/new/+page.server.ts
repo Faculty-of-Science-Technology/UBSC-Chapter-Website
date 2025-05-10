@@ -97,7 +97,7 @@ export const load: PageServerLoad = async (event) => {
 	}
 	const jobForm = await superValidate(zod(jobSchema));
 	const questionForm = await superValidate(zod(questionSchema));
-	return { jobForm, questionForm };
+	return { jobForm, questionForm, user: event.locals.user };
 };
 
 export const actions: Actions = {

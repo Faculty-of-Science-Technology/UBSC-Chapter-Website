@@ -46,6 +46,7 @@
 	let showPreview = $state(false);
 
 	const { data }: PageProps = $props();
+	const user = data.user;
 
 	interface IQuestion {
 		Id: number;
@@ -207,7 +208,7 @@
 											placeholder="E.g., Frontend Developer, Marketing Intern, Project Coordinator"
 										/>
 										{#if $errors.title}
-											<p class="text-sm text-destructive">{$errors.title}</p>
+											<div class="text-sm text-destructive">{$errors.title}</div>
 										{/if}
 									</div>
 
@@ -232,7 +233,7 @@
 												/>
 											</div>
 											{#if $errors.min_rate}
-												<p class="text-sm text-destructive">{$errors.min_rate}</p>
+												<div class="text-sm text-destructive">{$errors.min_rate}</div>
 											{/if}
 										</div>
 
@@ -256,7 +257,7 @@
 												/>
 											</div>
 											{#if $errors.max_rate}
-												<p class="text-sm text-destructive">{$errors.max_rate}</p>
+												<div class="text-sm text-destructive">{$errors.max_rate}</div>
 											{/if}
 										</div>
 									</div>
@@ -277,7 +278,7 @@
 											<option selected={$form.job_type === 3} value="3">Remote</option>
 										</Select>
 										{#if $errors.job_type}
-											<p class="text-sm text-destructive">{$errors.job_type}</p>
+											<div class="text-sm text-destructive">{$errors.job_type}</div>
 										{/if}
 									</div>
 
@@ -290,9 +291,9 @@
 										/>
 										<div>
 											<Label for="broadcast_job" class="text-base font-medium">Notify users</Label>
-											<p class="text-sm text-muted-foreground">
+											<div class="text-sm text-muted-foreground">
 												Send an email to all users when this job is published
-											</p>
+											</div>
 										</div>
 									</div>
 								</Card.Content>
@@ -317,12 +318,12 @@
 											{...$constraints.description}
 										/>
 										{#if $errors.description}
-											<p class="text-sm text-destructive">{$errors.description}</p>
+											<div class="text-sm text-destructive">{$errors.description}</div>
 										{/if}
-										<p class="text-sm text-muted-foreground">
+										<div class="text-sm text-muted-foreground">
 											Include details on responsibilities, requirements, benefits, and company
 											culture
-										</p>
+										</div>
 									</div>
 								</Card.Content>
 							</Card.Root>
@@ -403,10 +404,10 @@
 												<FileQuestion size={24} class="text-primary" />
 											</div>
 											<h3 class="text-lg font-medium">No questions added yet</h3>
-											<p class="mt-1 max-w-sm text-sm text-muted-foreground">
+											<div class="mt-1 max-w-sm text-sm text-muted-foreground">
 												Custom questions help you gather specific information from applicants beyond
 												the standard application form.
-											</p>
+											</div>
 										</div>
 									{/if}
 
@@ -427,7 +428,9 @@
 												rows={3}
 											/>
 											{#if $questionErrors.question_content}
-												<p class="text-sm text-destructive">{$questionErrors.question_content}</p>
+												<div class="text-sm text-destructive">
+													{$questionErrors.question_content}
+												</div>
 											{/if}
 										</div>
 
@@ -454,12 +457,12 @@
 												</div>
 											</RadioGroup.Root>
 											{#if $questionErrors.question_type}
-												<p class="text-sm text-destructive">{$questionErrors.question_type}</p>
+												<div class="text-sm text-destructive">{$questionErrors.question_type}</div>
 											{/if}
 										</div>
 
 										{#if $questionMessage}
-											<p class="text-sm text-green-600">{$questionMessage}</p>
+											<div class="text-sm text-green-600">{$questionMessage}</div>
 										{/if}
 
 										<Button type="submit" class="gap-1">
@@ -610,7 +613,7 @@
 										: 'Ready to Publish'}
 							</Badge>
 							<h2 class="text-2xl font-bold">{JobTitle || 'Untitled Position'}</h2>
-							<p class="text-muted-foreground">HireLATAM</p>
+							<div class="text-muted-foreground">{user!.FirstName + ' ' + user!.LastName}</div>
 						</div>
 						<div>
 							<Button variant="outline" class="gap-1" onclick={() => (showPreview = false)}>
@@ -626,11 +629,11 @@
 								<DollarSign size={20} class="text-primary" />
 							</div>
 							<div>
-								<p class="text-sm font-medium text-muted-foreground">Salary Range</p>
-								<p class="font-medium">
+								<div class="text-sm font-medium text-muted-foreground">Salary Range</div>
+								<div class="font-medium">
 									{$form.min_rate ? `$${formatSalary($form.min_rate)}/hr` : 'Not specified'}
 									{$form.max_rate ? ` – $${formatSalary($form.max_rate)}/hr` : ''}
-								</p>
+								</div>
 							</div>
 						</div>
 
@@ -642,8 +645,8 @@
 								{/if}
 							</div>
 							<div>
-								<p class="text-sm font-medium text-muted-foreground">Job Type</p>
-								<p class="font-medium">{getJobTypeLabel($form.job_type) || 'Not specified'}</p>
+								<div class="text-sm font-medium text-muted-foreground">Job Type</div>
+								<div class="font-medium">{getJobTypeLabel($form.job_type) || 'Not specified'}</div>
 							</div>
 						</div>
 
@@ -652,8 +655,8 @@
 								<Calendar size={20} class="text-primary" />
 							</div>
 							<div>
-								<p class="text-sm font-medium text-muted-foreground">Posting Date</p>
-								<p class="font-medium">{new Date().toLocaleDateString()}</p>
+								<div class="text-sm font-medium text-muted-foreground">Posting Date</div>
+								<div class="font-medium">{new Date().toLocaleDateString()}</div>
 							</div>
 						</div>
 					</div>
@@ -667,7 +670,7 @@
 								{@html $form.description}
 							</div>
 						{:else}
-							<p class="text-muted-foreground">No job description provided yet.</p>
+							<div class="text-muted-foreground">No job description provided yet.</div>
 						{/if}
 					</div>
 
@@ -678,10 +681,10 @@
 								{#each questions as question, index}
 									<div class="rounded-lg border p-4">
 										<h4 class="mb-1 font-medium">Question {index + 1}</h4>
-										<p>{question.Content}</p>
-										<p class="mt-2 text-sm text-muted-foreground">
+										<div>{question.Content}</div>
+										<div class="mt-2 text-sm text-muted-foreground">
 											{question.Type === false ? 'Short Answer Question' : 'Yes/No Question'}
-										</p>
+										</div>
 									</div>
 								{/each}
 							</div>

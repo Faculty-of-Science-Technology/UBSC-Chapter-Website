@@ -742,9 +742,9 @@
 						class="block rounded-md border p-4 transition-colors hover:bg-accent/50"
 					>
 						<h3 class="line-clamp-1 text-lg font-medium">{job.Title}</h3>
-						<p class="text-sm text-muted-foreground">
+						<div class="text-sm text-muted-foreground">
 							{@render nameof__job_creator(job_creator as IJobCreator)}
-						</p>
+						</div>
 
 						<div class="mt-4 flex flex-col gap-3">
 							<div class="flex items-center gap-2">
@@ -811,7 +811,7 @@
 							</div>
 
 							<div>
-								<p class="font-medium">{job_creator?.FirstName} {job_creator?.LastName}</p>
+								<div class="font-medium">{job_creator?.FirstName} {job_creator?.LastName}</p>
 								<a
 									href="/dashboard/organizations/{job_creator?.Id}"
 									class="text-sm text-primary hover:underline"
@@ -853,21 +853,21 @@
 							</div>
 
 							{#if application_status === 'pending' && application_form.data.draft !== true}
-								<p class="mt-2 text-sm text-muted-foreground">
+								<div class="mt-2 text-sm text-muted-foreground">
 									Your application is being reviewed by the employer.
-								</p>
+								</div>
 							{:else if application_status === 'approved'}
-								<p class="mt-2 text-sm text-muted-foreground">
+								<div class="mt-2 text-sm text-muted-foreground">
 									Congratulations! Your application has been approved.
-								</p>
+								</div>
 							{:else if application_status === 'rejected'}
-								<p class="mt-2 text-sm text-muted-foreground">
+								<div class="mt-2 text-sm text-muted-foreground">
 									Unfortunately, your application was not selected at this time.
-								</p>
+								</div>
 							{:else if application_form.data.draft === true}
-								<p class="mt-2 text-sm text-muted-foreground">
+								<div class="mt-2 text-sm text-muted-foreground">
 									Your application is saved as a draft. You can edit and submit it later.
-								</p>
+								</div>
 							{/if}
 						</div>
 					{/if}
@@ -880,9 +880,9 @@
 					<Card.Title>Need Help?</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p class="mb-4 text-sm text-muted-foreground">
+					<div class="mb-4 text-sm text-muted-foreground">
 						If you have any questions about this application, please contact our support team.
-					</p>
+					</div>
 					<Button variant="outline" class="w-full gap-2">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
