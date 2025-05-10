@@ -29,14 +29,16 @@ export const load: PageServerLoad = async (event) => {
 	cookies.delete('message_description2', {
 		path: '/'
 	});
-	
+
 	const user = event.locals.user;
 	if (!user) throw redirect(301, '/auth/login');
 
-    
 	// Get all job applications
 	// The total number of jobs stored in the database
-	const jobsApplicationsLength = await db.$count(JobApplications, eq(JobApplications.UserId, user.Id));
+	const jobsApplicationsLength = await db.$count(
+		JobApplications,
+		eq(JobApplications.UserId, user.Id)
+	);
 
 	// Get all submitted applications and populate
 	const jobApplications = await db
@@ -50,4 +52,40 @@ export const load: PageServerLoad = async (event) => {
 		.limit(10); // Stop after 10 jobs
 
 	return { user, jobsApplicationsLength, jobApplications, offset: page };
+};
+
+export const actions = {
+	default: async ({ request, cookies }) => {
+		const formData = await request.formData();
+		const action = formData.get('action');
+		const applicationId = formData.get('application_id');
+
+		if (action === 'delete') {
+			cookies.set('message_title2', 'Application deleted', { path: '/' });
+			cookies.set('message_description2', 'Return to the dashboard using the button below', {
+				path: '/'
+			});
+			cookies.set('authenticated', 'true', { path: '/' });
+			if (!applicationId) {
+				cookies.set('message_title', 'Error', { path: '/' });
+				cookies.set('message_title2', 'There was an error while processing your request', {
+					path: '/'
+				});
+				cookies.set('message_description', 'No job ID provided.', { path: '/' });
+				cookies.set(
+					'message_description2',
+					'You may retry it again, otherwise contact support for assistance.',
+					{ path: '/' }
+				);
+
+				throw redirect(302, '/backend/message');
+			}
+			await db.delete(JobApplications).where(eq(JobApplications.Id, applicationId.toString()));
+			cookies.set('message_title', 'Application deleted', { path: '/' });
+			cookies.set('message_description', 'Your application has been deleted successfully.', {
+				path: '/'
+			});
+			throw redirect(302, '/backend/message');
+		}
+	}
 };

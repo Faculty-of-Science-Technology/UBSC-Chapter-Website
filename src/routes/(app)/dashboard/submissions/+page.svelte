@@ -160,7 +160,13 @@
 										<div class="flex flex-col gap-6 py-4">
 											<Dialog.Footer class="justify-start text-left">
 												<!--- @todo Implement revoking applications -->
-												<Button type="submit" class="bg-destructive">Revoke & Delete</Button>
+												<form method="POST">
+													<input type="hidden" name="application_id" value={application?.JobApplications.Id} />
+													<!-- <input type="hidden" name="user_id" value={application.Users?.Id} /> -->
+													<!-- <input type="hidden" name="application_id" value={application.JobApplications.Id} /> -->
+													<input type="hidden" name="action" value="delete" />
+													<Button type="submit" class="bg-destructive">Revoke & Delete</Button>
+												</form>
 											</Dialog.Footer>
 										</div></Dialog.Content
 									>
