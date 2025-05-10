@@ -125,9 +125,9 @@
 		<div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 			<div>
 				<h1 class="text-3xl font-semibold tracking-tight">{job.Title}</h1>
-				<p class="text-muted-foreground">
+				<div class="text-muted-foreground">
 					{@render nameof__job_creator(job_creator as IJobCreator)}
-				</p>
+				</div>
 			</div>
 
 			{#if application_status}
@@ -185,7 +185,7 @@
 
 								<div>
 									<h3 class="text-lg font-medium">{user.FirstName} {user.LastName}</h3>
-									<p class="text-muted-foreground">{user.Email}</p>
+									<div class="text-muted-foreground">{user.Email}</div>
 									<div class="mt-2">
 										<a
 											href="/dashboard/settings"
@@ -227,7 +227,7 @@
 										class="max-w-md"
 									/>
 									{#if $errors.phone}
-										<p class="text-sm text-destructive">{$errors.phone}</p>
+										<div class="text-sm text-destructive">{$errors.phone}</div>
 									{/if}
 								</div>
 
@@ -266,7 +266,7 @@
 										</Label>
 									</div>
 									{#if $errors.email}
-										<p class="text-sm text-destructive">{$errors.email}</p>
+										<div class="text-sm text-destructive">{$errors.email}</div>
 									{/if}
 								</div>
 
@@ -276,35 +276,63 @@
 										Resume <span class="text-destructive">*</span>
 									</Label>
 									<div
+										role="button"
+										tabindex="0"
+										aria-label="Upload resume"
 										class={cn(
 											'flex flex-col items-center justify-center rounded-md border border-dashed p-8 transition-colors',
 											isDragOver ? 'border-primary bg-primary/5' : 'border-muted-foreground/25',
 											!$form.draft && 'pointer-events-none opacity-70'
 										)}
+										ondragover={(e) => {
+											e.preventDefault();
+											isDragOver = true;
+										}}
+										ondragleave={() => (isDragOver = false)}
+										ondrop={(e) => {
+											e.preventDefault();
+											isDragOver = false;
+											if (e.dataTransfer?.files.length) {
+												$form.resume = e.dataTransfer.files[0];
+											}
+										}}
+										onkeydown={(e) => {
+											if (e.key === 'Enter' || e.key === ' ') {
+												e.preventDefault();
+												document.getElementById('resume')?.click();
+											}
+										}}
 									>
 										<input
 											id="resume"
 											type="file"
 											name="resume"
+											accept=".pdf,.docx,.txt"
 											class="hidden"
 											oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
 											{...$constraints.resume}
-											ondragenter={() => (isDragOver = true)}
-											ondragleave={() => (isDragOver = false)}
-											ondrop={() => (isDragOver = false)}
 											disabled={!$form.draft}
 										/>
 
 										<div class="flex flex-col items-center gap-2">
 											<Upload class="h-8 w-8 text-muted-foreground" />
-											<div>
-												<p class="text-center font-medium">
-													Drag & drop your resume or click to browse
-												</p>
-												<p class="mt-1 text-center text-xs text-muted-foreground">
-													PDF, DOCX or TXT (Max 5MB)
-												</p>
-											</div>
+											{#if $form.resume}
+												<div class="text-center">
+													<div class="font-medium">Selected: {$form.resume.name}</div>
+													<div class="mt-1 text-xs text-muted-foreground">
+														{($form.resume.size / (1024 * 1024)).toFixed(2)} MB
+													</div>
+												</div>
+											{:else}
+												<div>
+													<div class="text-center font-medium">
+														Drag & drop your resume or click to browse
+													</div>
+													<div class="mt-1 text-center text-xs text-muted-foreground">
+														PDF, DOCX or TXT (Max 5MB)
+													</div>
+												</div>
+											{/if}
 											<Button
 												type="button"
 												variant="outline"
@@ -317,6 +345,19 @@
 											</Button>
 										</div>
 									</div>
+
+									{#if user.ResumeUrl && user.AccountType === 'student'}
+										<div class="mt-2 flex items-center gap-2 text-sm">
+											<FileText class="h-4 w-4 text-muted-foreground" />
+											<a
+												href={user.ResumeUrl}
+												target="_blank"
+												class="font-medium hover:text-primary hover:underline"
+											>
+												View current resume
+											</a>
+										</div>
+									{/if}
 
 									{#if reviewing === false && application_form.data.draft && application_status === 'pending'}
 										<div class="mt-2 flex items-center gap-2 text-sm">
@@ -343,7 +384,7 @@
 									{/if}
 
 									{#if $errors.resume}
-										<p class="text-sm text-destructive">{$errors.resume}</p>
+										<div class="text-sm text-destructive">{$errors.resume}</div>
 									{/if}
 								</div>
 
@@ -361,7 +402,7 @@
 										class="max-w-md"
 									/>
 									{#if $errors.notice_period}
-										<p class="text-sm text-destructive">{$errors.notice_period}</p>
+										<div class="text-sm text-destructive">{$errors.notice_period}</div>
 									{/if}
 								</div>
 							</div>
@@ -418,9 +459,9 @@
 							<Tabs.Content value="questions" class="space-y-6 p-6">
 								<div class="mb-4">
 									<h3 class="text-lg font-medium">Additional Questions</h3>
-									<p class="text-muted-foreground">
+									<div class="text-muted-foreground">
 										Please answer the following questions from the employer
-									</p>
+									</div>
 								</div>
 
 								<div class="space-y-8">
@@ -442,9 +483,9 @@
 														disabled={!$form.draft}
 													/>
 													{#if $errors.question_response_array?.[index]?.response}
-														<p class="text-sm text-destructive">
+														<div class="text-sm text-destructive">
 															{$errors.question_response_array[index].response}
-														</p>
+														</div>
 													{/if}
 												{:else}
 													<!-- Yes/No Question -->
@@ -481,9 +522,9 @@
 														</div>
 													</RadioGroup.Root>
 													{#if $errors.question_response_array?.[index]?.response}
-														<p class="text-sm text-destructive">
+														<div class="text-sm text-destructive">
 															{$errors.question_response_array[index].response}
-														</p>
+														</div>
 													{/if}
 												{/if}
 											</div>
@@ -539,9 +580,9 @@
 						<Tabs.Content value="review" class="space-y-6 p-6">
 							<div>
 								<h3 class="text-lg font-medium">Review Your Application</h3>
-								<p class="text-muted-foreground">
+								<div class="text-muted-foreground">
 									Please review all the information before submitting your application
-								</p>
+								</div>
 							</div>
 
 							<!-- Personal Details Review -->
@@ -553,42 +594,42 @@
 								</h4>
 								<div class="space-y-4 rounded-lg border bg-muted/30 p-4">
 									<div class="grid gap-1">
-										<p class="text-sm text-muted-foreground">Full Name</p>
-										<p class="font-medium">{user.FirstName} {user.LastName}</p>
+										<div class="text-sm text-muted-foreground">Full Name</div>
+										<div class="font-medium">{user.FirstName} {user.LastName}</div>
 									</div>
 
 									<Separator />
 
 									<div class="grid gap-1">
-										<p class="text-sm text-muted-foreground">Email Address</p>
-										<p class="font-medium">{$form.email}</p>
+										<div class="text-sm text-muted-foreground">Email Address</div>
+										<div class="font-medium">{$form.email}</div>
 									</div>
 
 									<Separator />
 
 									<div class="grid gap-1">
-										<p class="text-sm text-muted-foreground">Phone Number</p>
-										<p class="font-medium">{$form.phone || 'Not provided'}</p>
+										<div class="text-sm text-muted-foreground">Phone Number</div>
+										<div class="font-medium">{$form.phone || 'Not provided'}</div>
 									</div>
 
 									<Separator />
 
 									<div class="grid gap-1">
-										<p class="text-sm text-muted-foreground">Notice Period</p>
-										<p class="font-medium">{$form.notice_period} days</p>
+										<div class="text-sm text-muted-foreground">Notice Period</div>
+										<div class="font-medium">{$form.notice_period} days</div>
 									</div>
 
 									<Separator />
 
 									<div class="grid gap-1">
-										<p class="text-sm text-muted-foreground">Resume</p>
+										<div class="text-sm text-muted-foreground">Resume</div>
 										{#if $form.resume}
 											<div class="flex items-center gap-2">
 												<FileText class="h-4 w-4" />
-												<p class="font-medium">Resume attached</p>
+												<div class="font-medium">Resume attached</div>
 											</div>
 										{:else}
-											<p class="font-medium text-amber-500">No resume attached</p>
+											<div class="font-medium text-amber-500">No resume attached</div>
 										{/if}
 									</div>
 
@@ -632,10 +673,10 @@
 													<Separator />
 												{/if}
 												<div>
-													<p class="font-medium">{index + 1}. {question.Content}</p>
-													<p class="mt-2">
+													<div class="font-medium">{index + 1}. {question.Content}</div>
+													<div class="mt-2">
 														{$form.question_response_array[index].response || 'Not answered'}
-													</p>
+													</div>
 												</div>
 											{/each}
 
@@ -668,14 +709,14 @@
 
 							<!-- Disclaimer and Submit buttons -->
 							<div class="mt-6 border-t pt-6">
-								<p class="mb-6 text-sm text-muted-foreground">
+								<div class="mb-6 text-sm text-muted-foreground">
 									By clicking "Submit," you acknowledge that the responsibility for all subsequent
 									actions rests solely with the employer. IT Careers nor The University of Belize is
 									liable for any issues, disputes, or shortcomings that may arise.
-								</p>
+								</div>
 
 								{#if $errors.draft}
-									<p class="mb-4 text-sm text-destructive">{$errors.draft}</p>
+									<div class="mb-4 text-sm text-destructive">{$errors.draft}</div>
 								{/if}
 
 								<div class="flex flex-wrap gap-3">
@@ -811,7 +852,7 @@
 							</div>
 
 							<div>
-								<div class="font-medium">{job_creator?.FirstName} {job_creator?.LastName}</p>
+								<div class="font-medium">{job_creator?.FirstName} {job_creator?.LastName}</div>
 								<a
 									href="/dashboard/organizations/{job_creator?.Id}"
 									class="text-sm text-primary hover:underline"

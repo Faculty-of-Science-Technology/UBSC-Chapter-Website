@@ -42,7 +42,7 @@
 	let skills = $state<string[]>([]);
 	let skillInput = $state('');
 	let resumeUploadIsDragOver = $state(false);
-	let activeTab = $state("general");
+	let activeTab = $state('general');
 
 	// Location search functionality
 	let backoff = 500;
@@ -127,13 +127,22 @@
 				Manage your personal information and how others see you on the platform
 			</p>
 		</div>
-		
+
 		{#if $message}
-			<div class="rounded-md bg-green-50 p-4 border border-green-200">
+			<div class="rounded-md border border-green-200 bg-green-50 p-4">
 				<div class="flex">
 					<div class="flex-shrink-0">
-						<svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+						<svg
+							class="h-5 w-5 text-green-400"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+								clip-rule="evenodd"
+							/>
 						</svg>
 					</div>
 					<div class="ml-3">
@@ -145,13 +154,22 @@
 				</div>
 			</div>
 		{/if}
-		
+
 		{#if $errors._errors}
-			<div class="rounded-md bg-red-50 p-4 border border-red-200">
+			<div class="rounded-md border border-red-200 bg-red-50 p-4">
 				<div class="flex">
 					<div class="flex-shrink-0">
-						<svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-							<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+						<svg
+							class="h-5 w-5 text-red-400"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+								clip-rule="evenodd"
+							/>
 						</svg>
 					</div>
 					<div class="ml-3">
@@ -163,11 +181,11 @@
 				</div>
 			</div>
 		{/if}
-		
+
 		<!-- User Profile Preview -->
-		<div class="flex items-center gap-4 rounded-lg border p-4 bg-white">
+		<div class="flex items-center gap-4 rounded-lg border bg-white p-4">
 			<Avatar.Root class="h-16 w-16">
-				<Avatar.Image src={user.ProfilePicture} alt={user.FirstName + " " + user.LastName} />
+				<Avatar.Image src={user.ProfilePicture} alt={user.FirstName + ' ' + user.LastName} />
 				<Avatar.Fallback>{user.FirstName?.[0]}{user.LastName?.[0]}</Avatar.Fallback>
 			</Avatar.Root>
 			<div>
@@ -199,9 +217,9 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- Settings Tabs -->
-		<Tabs.Root value={activeTab} onValueChange={(v) => activeTab = v} class="w-full">
+		<Tabs.Root value={activeTab} onValueChange={(v) => (activeTab = v)} class="w-full">
 			<Tabs.List class="w-full border-b">
 				<Tabs.Trigger value="general" class="flex gap-2 data-[state=active]:border-primary">
 					<User size={16} />
@@ -216,14 +234,16 @@
 					Social Links
 				</Tabs.Trigger>
 			</Tabs.List>
-			
+
 			<form method="POST" id="profile-form" enctype="multipart/form-data" use:enhance class="mt-6">
 				<!-- General Information Tab -->
 				<Tabs.Content value="general" class="space-y-6">
 					<Card.Root>
 						<Card.Header>
 							<Card.Title>Basic Information</Card.Title>
-							<Card.Description>Update your personal details and contact information</Card.Description>
+							<Card.Description
+								>Update your personal details and contact information</Card.Description
+							>
 						</Card.Header>
 						<Card.Content class="space-y-6">
 							<!-- Username -->
@@ -249,7 +269,7 @@
 									{/if}
 								</p>
 							</div>
-							
+
 							<!-- Phone -->
 							<div class="space-y-2">
 								<Label for="phone">Phone Number</Label>
@@ -268,7 +288,7 @@
 									Providing a phone number is optional but can help employers contact you.
 								</p>
 							</div>
-							
+
 							<!-- Email -->
 							<div class="space-y-2">
 								<Label for="email">Email</Label>
@@ -277,9 +297,7 @@
 										{#snippet children({ props })}
 											<Select.Root type="single" name="email" bind:value={$form.email}>
 												<Select.Trigger class="w-full">
-													{$form.email
-														? $form.email
-														: 'Select a verified email to display'}
+													{$form.email ? $form.email : 'Select a verified email to display'}
 												</Select.Trigger>
 												<Select.Content>
 													<Select.Item value={user.Email} label={user.Email} />
@@ -292,7 +310,7 @@
 									This is your verified email address. Email management is not yet available.
 								</p>
 							</div>
-							
+
 							<!-- Bio -->
 							<div class="space-y-2">
 								<Label for="bio">Bio</Label>
@@ -311,7 +329,7 @@
 									Write a brief bio to introduce yourself to other users.
 								</p>
 							</div>
-							
+
 							<!-- Location -->
 							<div class="space-y-2">
 								<Label for="location">Location</Label>
@@ -406,30 +424,60 @@
 							<!-- Resume Upload -->
 							<div class="space-y-2">
 								<Label for="resume">Resume</Label>
-								<div class={cn(
-									"flex flex-col items-center justify-center rounded-md border border-dashed p-6 transition-colors",
-									resumeUploadIsDragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25"
-								)}>
+								<div
+									role="button"
+									tabindex="0"
+									aria-label="Upload resume"
+									class={cn(
+										'flex flex-col items-center justify-center rounded-md border border-dashed p-6 transition-colors',
+										resumeUploadIsDragOver
+											? 'border-primary bg-primary/5'
+											: 'border-muted-foreground/25'
+									)}
+									ondragover={(e) => {
+										e.preventDefault();
+										resumeUploadIsDragOver = true;
+									}}
+									ondragleave={() => (resumeUploadIsDragOver = false)}
+									ondrop={(e) => {
+										e.preventDefault();
+										resumeUploadIsDragOver = false;
+										if (e.dataTransfer?.files.length) {
+											$form.resume = e.dataTransfer.files[0];
+										}
+									}}
+									onkeydown={(e) => {
+										if (e.key === 'Enter' || e.key === ' ') {
+											e.preventDefault();
+											document.getElementById('resume')?.click();
+										}
+									}}
+								>
 									<div class="flex flex-col items-center gap-1.5">
 										<Upload class="h-8 w-8 text-muted-foreground" />
-										<p class="text-sm font-medium">Drag & drop your resume here</p>
-										<p class="text-xs text-muted-foreground">PDF, DOCX, or TXT (Max 5MB)</p>
+										{#if $form.resume}
+											<p class="text-sm font-medium">Selected: {$form.resume.name}</p>
+											<p class="text-xs text-muted-foreground">
+												{($form.resume.size / 1024 / 1024).toFixed(2)} MB
+											</p>
+										{:else}
+											<p class="text-sm font-medium">Drag & drop your resume here</p>
+											<p class="text-xs text-muted-foreground">PDF, DOCX, or TXT (Max 5MB)</p>
+										{/if}
 										<Input
 											name="resume"
 											type="file"
 											id="resume"
+											accept=".pdf,.docx,.txt"
 											oninput={(e) => ($form.resume = e.currentTarget.files?.item(0) as File)}
 											{...$constraints.resume}
 											class="hidden"
-											ondragenter={() => (resumeUploadIsDragOver = true)}
-											ondragleave={() => (resumeUploadIsDragOver = false)}
-											ondrop={() => (resumeUploadIsDragOver = false)}
 										/>
-										<Button 
-											variant="outline" 
-											size="sm" 
-											type="button" 
-											class="mt-2" 
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											class="mt-2"
 											onclick={() => document.getElementById('resume')?.click()}
 										>
 											Browse files
@@ -439,9 +487,9 @@
 								{#if user.ResumeUrl && user.AccountType === 'student'}
 									<div class="flex items-center gap-2 text-sm">
 										<FileText class="h-4 w-4 text-muted-foreground" />
-										<a 
-											href={user.ResumeUrl} 
-											target="_blank" 
+										<a
+											href={user.ResumeUrl}
+											target="_blank"
 											class="font-medium hover:text-primary hover:underline"
 										>
 											View current resume
@@ -455,7 +503,7 @@
 						</Card.Content>
 					</Card.Root>
 				</Tabs.Content>
-				
+
 				<!-- Skills & Availability Tab -->
 				<Tabs.Content value="skills" class="space-y-6">
 					<Card.Root>
@@ -501,7 +549,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<!-- Skills -->
 							<div class="space-y-3">
 								<h3 class="text-sm font-medium leading-none">
@@ -522,14 +570,14 @@
 										Add skills that showcase your expertise
 									{/if}
 								</p>
-								
+
 								<div class="flex flex-wrap gap-2 pt-2">
 									{#each $form.skills as skill}
-										<Badge variant="secondary" class="px-2 py-1 gap-1 items-center">
+										<Badge variant="secondary" class="items-center gap-1 px-2 py-1">
 											{skill}
-											<button 
-												type="button" 
-												class="ml-1 rounded-full h-4 w-4 inline-flex items-center justify-center hover:bg-muted" 
+											<button
+												type="button"
+												class="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full hover:bg-muted"
 												onclick={() => removeSkill(skill)}
 											>
 												<X class="h-3 w-3" />
@@ -537,12 +585,12 @@
 											</button>
 										</Badge>
 									{/each}
-									
+
 									{#if $form.skills.length === 0}
 										<p class="text-sm text-muted-foreground">No skills added yet</p>
 									{/if}
 								</div>
-								
+
 								<div class="flex gap-2">
 									<Input
 										type="text"
@@ -556,13 +604,13 @@
 										<span class="sr-only">Add skill</span>
 									</Button>
 								</div>
-								
+
 								{#if $form.skills.length >= 12}
 									<p class="text-sm text-amber-600">
 										You can add up to {15 - $form.skills.length} more skill(s)
 									</p>
 								{/if}
-								
+
 								{#if typeof $errors.skills === 'object' && $errors.skills}
 									<p class="text-sm text-destructive">
 										{Object.values($errors.skills).join(', ')}
@@ -570,22 +618,62 @@
 								{:else if $errors.skills}
 									<p class="text-sm text-destructive">{$errors.skills}</p>
 								{/if}
-								
-								<div class="rounded-md bg-muted/50 p-4 mt-2">
+
+								<div class="mt-2 rounded-md bg-muted/50 p-4">
 									<h4 class="text-sm font-medium">Suggested Skills</h4>
 									<div class="mt-2 flex flex-wrap gap-2">
-										<Button variant="outline" size="sm" type="button" onclick={() => {skillInput = 'JavaScript'; addSkill()}}>JavaScript</Button>
-										<Button variant="outline" size="sm" type="button" onclick={() => {skillInput = 'Python'; addSkill()}}>Python</Button>
-										<Button variant="outline" size="sm" type="button" onclick={() => {skillInput = 'SQL'; addSkill()}}>SQL</Button>
-										<Button variant="outline" size="sm" type="button" onclick={() => {skillInput = 'React'; addSkill()}}>React</Button>
-										<Button variant="outline" size="sm" type="button" onclick={() => {skillInput = 'Node.js'; addSkill()}}>Node.js</Button>
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											onclick={() => {
+												skillInput = 'JavaScript';
+												addSkill();
+											}}>JavaScript</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											onclick={() => {
+												skillInput = 'Python';
+												addSkill();
+											}}>Python</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											onclick={() => {
+												skillInput = 'SQL';
+												addSkill();
+											}}>SQL</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											onclick={() => {
+												skillInput = 'React';
+												addSkill();
+											}}>React</Button
+										>
+										<Button
+											variant="outline"
+											size="sm"
+											type="button"
+											onclick={() => {
+												skillInput = 'Node.js';
+												addSkill();
+											}}>Node.js</Button
+										>
 									</div>
 								</div>
 							</div>
 						</Card.Content>
 					</Card.Root>
 				</Tabs.Content>
-				
+
 				<!-- Social Links Tab -->
 				<Tabs.Content value="socials" class="space-y-6">
 					<Card.Root>
@@ -609,9 +697,11 @@
 										value={$form.socials.find((s) => s.platform === platform)?.platform || platform}
 										name="socials[{socialPlatforms[platform].platform}].platform"
 									/>
-									
+
 									<div class="flex items-center gap-2">
-										<div class="flex h-10 w-10 items-center justify-center rounded-md bg-muted text-muted-foreground">
+										<div
+											class="flex h-10 w-10 items-center justify-center rounded-md bg-muted text-muted-foreground"
+										>
 											{@render platformIcon(socialPlatforms[platform])}
 										</div>
 										<div class="flex-1">
@@ -627,17 +717,17 @@
 											/>
 										</div>
 									</div>
-									
+
 									{#if $errors.socials && $errors.socials[index]}
 										<p class="text-sm text-destructive">{$errors.socials[index].url}</p>
 									{/if}
-									
+
 									{#if index < Object.keys(socialPlatforms).length - 1}
 										<Separator class="my-4" />
 									{/if}
 								</div>
 							{/each}
-							
+
 							<p class="text-sm text-muted-foreground">
 								{#if user.AccountType === 'student'}
 									Add links to your profiles so employers can learn more about your work
@@ -650,7 +740,7 @@
 						</Card.Content>
 					</Card.Root>
 				</Tabs.Content>
-				
+
 				<!-- Submit Button -->
 				<div class="mt-8 flex justify-end">
 					<Button type="submit" class="gap-2">
