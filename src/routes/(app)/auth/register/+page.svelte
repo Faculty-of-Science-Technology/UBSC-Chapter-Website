@@ -75,7 +75,7 @@
 										accountType === 'student'
 											? 'border border-violet-900 bg-transparent text-violet-900 hover:bg-transparent'
 											: ''
-									)}>I am a student</Button
+									)}>I'm a student</Button
 								>
 								<Button
 									onclick={() => (accountType = 'host')}
@@ -83,7 +83,7 @@
 										accountType === 'host'
 											? 'border border-violet-900 bg-transparent text-violet-900 hover:bg-transparent'
 											: ''
-									)}>I am a host</Button
+									)}>I'm an organization</Button
 								>
 								<input
 									type="hidden"
