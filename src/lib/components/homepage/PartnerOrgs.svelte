@@ -20,7 +20,7 @@
 	<h2 class="text-gray-750 mb-6 mt-12 text-center text-2xl font-medium lg:text-left">
 		Our Partner Organizations
 	</h2>
-	<div class="mt-2 flex flex-row justify-center gap-4 lg:justify-start">
+	<div class="mt-2 flex flex-row flex-wrap justify-center gap-4 lg:justify-start">
 		{#each org_avatar_data.slice(0, 6) as organization}
 			<!--- @audit UNSTABLE [FRAMEWORK_BUG]: https://github.com/sveltejs/svelte/issues/15337 -->
 			<HoverCard.Root>

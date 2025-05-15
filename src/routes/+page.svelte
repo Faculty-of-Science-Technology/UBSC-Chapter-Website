@@ -1,9 +1,20 @@
 <script lang="ts">
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { Homepage, type AvatarData } from '$lib/assemblies/index';
 	import Logo from '$lib/components/Logo.svelte';
 	import { Button } from '$lib/components/vendor/ui/button';
+	import * as Card from '$lib/components/vendor/ui/card';
 	import * as TabList from '$lib/components/vendor/ui/tablist/index';
-	import { Calendar, CheckSquare, Mail, MapPin, Phone, Rocket, Video } from 'lucide-svelte';
+	import {
+		Briefcase,
+		Calendar,
+		FileCheck,
+		Mail,
+		MapPin,
+		Phone,
+		User,
+		Video
+	} from 'lucide-svelte';
 
 	import { page } from '$app/state';
 	import {
@@ -27,53 +38,134 @@
 	let active_tab = $state(forced_tab ?? 0);
 
 	const { form, errors, constraints, message, enhance } = superForm(data.form);
-</script>
 
-<!-- Main layout with navbar styling similar to the reference -->
-<div class="flex min-h-screen flex-col">
+	let loadingBar: HTMLDivElement;
+	let mobileMenuOpen = $state(false);
+
+	beforeNavigate(() => {
+		loadingBar.style.opacity = '1';
+	});
+
+	afterNavigate(() => {
+		setTimeout(() => {
+			loadingBar.classList.add('animate-fade-out');
+		}, 1115);
+		setTimeout(() => {
+			loadingBar.style.opacity = '0';
+			loadingBar.classList.remove('animate-fade-out');
+		}, 1125);
+		mobileMenuOpen = false;
+	});
+
+	// Format date function
+	const formatDate = (date: string | Date) => {
+		return new Date(date).toLocaleDateString('en-US', {
+			month: 'short',
+			day: 'numeric'
+		});
+	};
+</script>	<div
+	bind:this={loadingBar}
+	class="loading-bar overflow-clip"
+	style="height: 3px; width: 100%; position: fixed; top: 0; right: 0; opacity: 0; z-index: 1000"
+>
+	<div style="height: 3px; animation: loading2 3s ease-out 1" class="loading-gradient-2">
+		<div
+			style="height: 3px; animation: loading 3s ease-out infinite"
+			class="loading-gradient w-full origin-right delay-0 duration-1000 ease-linear"
+		></div>
+	</div>
+</div>
+
+<!-- View transition animations -->
+<style>
+  /* Add fade-in animation for page transitions */
+  main {
+    view-transition-name: main-content;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(15px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  section {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .tab-content {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .card-hover-effect {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .card-hover-effect:hover,
+  .card-hover-effect:focus-within {
+    transform: translateY(-2px);
+  }
+  
+  /* Improve focus styles for accessibility */
+  a:focus, button:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(147, 85, 139, 0.3);
+  }
+</style>
+
+<!-- Main layout with navbar styling similar to the dashboard -->
+<div class="flex min-h-screen flex-col overflow-hidden bg-background">
 	<!-- Navbar -->
-	<nav class="border-b border-amber-200 bg-white px-4 py-2 shadow-sm">
+	<nav class="sticky top-0 z-40 border-b bg-background px-4 py-2 shadow-sm">
 		<div class="container mx-auto flex items-center justify-between">
-			<a href="/" class="flex items-center gap-2">
-				<Logo />
-			</a>
+			<div class="flex items-center gap-2">
+				<a href="/" class="flex items-center gap-2">
+					<Logo />
+				</a>
+			</div>
 
 			<!-- Navigation tabs as buttons on larger screens -->
 			<div class="hidden items-center gap-4 lg:flex">
 				<div class="flex gap-2">
 					<TabList.Root class="items-stretch space-x-8">
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="Home"
 							onclick={() => (active_tab = 0)}
 							active={active_tab === 0}
 						/>
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="IT Talent"
 							onclick={() => (active_tab = 1)}
 							active={active_tab === 1}
 						/>
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="Presentation Agenda"
 							onclick={() => (active_tab = 2)}
 							active={active_tab === 2}
 						/>
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="Host Organizations"
 							onclick={() => (active_tab = 3)}
 							active={active_tab === 3}
 						/>
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="About"
 							onclick={() => (active_tab = 4)}
 							active={active_tab === 4}
 						/>
 						<TabList.Tab
-							class="px-3 py-2 text-gray-700 hover:text-violet-700"
+							class="px-3 py-2 text-muted-foreground hover:text-foreground"
 							title="Archives"
 							onclick={() => (active_tab = 5)}
 							active={active_tab === 5}
@@ -83,371 +175,449 @@
 				<div class="ml-4 flex flex-row gap-2">
 					{#if data.authenticated}
 						<a href="/dashboard">
-							<Button class="bg-amber-500 text-white hover:bg-amber-600">Dash</Button>
+							<Button variant="outline">Dashboard</Button>
 						</a>
 						<a href="/auth/logout" data-sveltekit-reload>
-							<Button class="bg-violet-500 text-white hover:bg-violet-600">Logout</Button>
+							<Button variant="default">Logout</Button>
 						</a>
 					{:else}
-						<a href="/auth/login"
-							><Button class="bg-violet-500 text-white hover:bg-violet-600" data-sveltekit-reload
-								>Login</Button
-							></a
-						>
+						<a href="/auth/login" data-sveltekit-reload>
+							<Button variant="outline">Login</Button>
+						</a>
 						<a href="/auth/register">
-							<Button class="bg-amber-500 text-white hover:bg-amber-600">Register Now</Button>
+							<Button variant="default">Register Now</Button>
 						</a>
 					{/if}
 				</div>
 			</div>
 
 			<!-- Mobile menu button -->
-			<button class="lg:hidden">
-				<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 6h16M4 12h16M4 18h16"
-					/>
-				</svg>
+			<button class="lg:hidden" onclick={() => (mobileMenuOpen = !mobileMenuOpen)}>
+				{#if mobileMenuOpen}
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M6 18L18 6M6 6l12 12"
+						/>
+					</svg>
+				{:else}
+					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 6h16M4 12h16M4 18h16"
+						/>
+					</svg>
+				{/if}
 			</button>
 		</div>
 
-		<!-- Mobile tabs - shown only on small screens -->
-		<div class="mt-2 overflow-x-auto pb-2 lg:hidden">
-			<TabList.Root class="flex gap-2 px-4">
-				<TabList.Tab title="Home" onclick={() => (active_tab = 0)} active={active_tab === 0} />
-				<TabList.Tab title="IT Talent" onclick={() => (active_tab = 1)} active={active_tab === 1} />
-				<TabList.Tab
-					title="Presentation Agenda"
-					onclick={() => (active_tab = 2)}
-					active={active_tab === 2}
-				/>
-				<TabList.Tab
-					title="Host Organizations"
-					onclick={() => (active_tab = 3)}
-					active={active_tab === 3}
-				/>
-				<TabList.Tab title="About" onclick={() => (active_tab = 4)} active={active_tab === 4} />
-				<TabList.Tab title="Archives" onclick={() => (active_tab = 5)} active={active_tab === 5} />
-			</TabList.Root>
+		<!-- Mobile menu - shown only when toggled -->
+		<div class="mt-2 lg:hidden" class:hidden={!mobileMenuOpen}>
+			<div class="space-y-1 px-2 pb-3 pt-2">
+				<TabList.Root class="flex flex-col gap-1">
+					<TabList.Tab
+						title="Home"
+						onclick={() => (active_tab = 0)}
+						active={active_tab === 0}
+						class="rounded-md px-3 py-2"
+					/>
+					<TabList.Tab
+						title="IT Talent"
+						onclick={() => (active_tab = 1)}
+						active={active_tab === 1}
+						class="rounded-md px-3 py-2"
+					/>
+					<TabList.Tab
+						title="Presentation Agenda"
+						onclick={() => (active_tab = 2)}
+						active={active_tab === 2}
+						class="rounded-md px-3 py-2"
+					/>
+					<TabList.Tab
+						title="Host Organizations"
+						onclick={() => (active_tab = 3)}
+						active={active_tab === 3}
+						class="rounded-md px-3 py-2"
+					/>
+					<TabList.Tab
+						title="About"
+						onclick={() => (active_tab = 4)}
+						active={active_tab === 4}
+						class="rounded-md px-3 py-2"
+					/>
+					<TabList.Tab
+						title="Archives"
+						onclick={() => (active_tab = 5)}
+						active={active_tab === 5}
+						class="rounded-md px-3 py-2"
+					/>
+				</TabList.Root>
+				<div class="mt-4 flex flex-col gap-2">
+					{#if data.authenticated}
+						<a href="/dashboard"><Button variant="outline" class="w-full">Dashboard</Button></a>
+						<a href="/auth/logout" data-sveltekit-reload
+							><Button variant="default" class="w-full">Logout</Button></a
+						>
+					{:else}
+						<a href="/auth/login" data-sveltekit-reload
+							><Button variant="outline" class="w-full">Login</Button></a
+						>
+						<a href="/auth/register"
+							><Button variant="default" class="w-full">Register Now</Button></a
+						>
+					{/if}
+				</div>
+			</div>
 		</div>
 	</nav>
 
 	<!-- Main content -->
-	<main class="flex-1">
+	<main class="flex-1 overflow-y-auto">
 		<!-- Tab content -->
-		<div class="py-4">
+		<div class="container mx-auto p-4 md:p-6">
+			<div class="tab-content">
 			{#if active_tab === 0}
 				<!-- Hero Section -->
-				<section class="container mx-auto px-4 py-12">
-					<div class="flex flex-col-reverse items-center gap-8 lg:flex-row lg:gap-12">
-						<div class="lg:w-7/12">
-							<div class="mb-6 flex flex-col gap-3">
-								<!--- hydrocode card --->
-
-								<div class="rounded-md border-2 border-yellow-400 bg-white px-4 pb-4">
-									<div class="mt-4 flex">
-										<!-- Avatar -->
-										<div class="flex-shrink-0">
-											<a
-												href="https://github.com/faculty-of-science-technology"
-												aria-label="UniversityOfBelize"
-											>
-												<img
-													class="h-11 w-11 rounded-full border-2 border-gray-200"
-													alt="University of Belize"
-													src="https://avatars.githubusercontent.com/u/168884004"
-												/>
-											</a>
+				<section class="mb-10">
+					<div class="rounded-lg bg-gradient-to-r from-primary/5 via-primary/5 to-primary/10 p-6 shadow-sm">
+						<div class="flex flex-col-reverse lg:items-center gap-8 lg:flex-row lg:gap-12">
+							<div class="lg:w-7/12">
+								<!--- Institution card --->
+								<div class="mb-6 rounded-md border bg-card p-4 shadow-sm transition-all hover:shadow">
+									<div class="flex items-center gap-4">
+										<div class="h-12 w-12 overflow-hidden rounded-full border-2 border-muted">
+											<img
+												class="h-full w-full object-cover"
+												alt="University of Belize"
+												src="https://avatars.githubusercontent.com/u/168884004"
+											/>
 										</div>
+										<div>
+											<h4 class="text-base font-medium">University of Belize</h4>
+											<p class="text-sm text-muted-foreground">Education Empowers a Nation</p>
+										</div>
+									</div>
+								</div>
+								<!-- End institution card -->
+								
+								<h1 class="mb-4 text-3xl font-bold leading-tight tracking-tight md:text-4xl">Welcome to the University of Belize IT Talent Network</h1>
+								<p class="mb-6 text-lg text-muted-foreground">Connecting UB's Brightest Minds with the Tech Industry</p>
 
-										<!-- Info Block -->
-										<div class="ml-4 flex-grow overflow-hidden">
-											<div class="flex items-center space-x-1">
-												<a
-													href="https://github.com/faculty-of-science-technology"
-													class="text-base font-semibold text-blue-600 hover:underline"
-												>
-													University of Belize
-												</a>
-												<a
-													href="https://github.com/faculty-of-science-technology"
-													class="text-sm text-gray-500 hover:underline"
-												>
-													@Faculty-of-Science-Technology
-												</a>
-											</div>
-											<p class="mt-1 text-sm leading-snug text-gray-600">
-												Education Empowers a Nation
+								<p class="mb-6 max-w-3xl text-muted-foreground">
+									Welcome to the University of Belize's exclusive online portal for IT talent.
+									Whether you're looking for bright interns or experienced alumni, this is your
+									direct link to a growing network of skilled professionals from the UB IT
+									program.
+								</p>
+
+								<div class="mb-6">
+									<h4 class="mb-3 font-medium">What You'll Find:</h4>
+									<ul class="ml-5 list-disc space-y-2 text-muted-foreground">
+										<li class="flex items-start gap-2">
+											<span class="mt-1 text-primary">•</span>
+											<span>Profiles and resumes of current IT students and graduates</span>
+										</li>
+										<li class="flex items-start gap-2">
+											<span class="mt-1 text-primary">•</span>
+											<span>A curated community of tech professionals educated at UB</span>
+										</li>
+										<li class="flex items-start gap-2">
+											<span class="mt-1 text-primary">•</span>
+											<span>Quick, seamless connection with candidates ready to make an impact</span>
+										</li>
+									</ul>
+								</div>
+
+								<div class="mb-6 flex flex-wrap gap-3">
+									<a href="/auth/register">
+										<Button class="transition-all hover:shadow">Register as an Intern</Button>
+									</a>
+									<a href="/auth/register?force_choice=host">
+										<Button variant="outline" class="transition-all hover:bg-primary/10">Register as a Host</Button>
+									</a>
+								</div>
+
+								<!-- Partner orgs -->
+								<div class="mt-5">
+									<PartnerOrgs {org_avatar_data}>
+										<a href="#host-organizations" onclick={() => (active_tab = 3)}>
+											<p class="mt-4 text-sm font-medium text-primary opacity-80 hover:opacity-100">
+												See more partner organizations →
+											</p>
+										</a>
+									</PartnerOrgs>
+								</div>
+							</div>
+							<!-- Image hidden on mobile, shown on lg screens -->
+							<div class="hidden lg:block lg:w-5/12">
+								<div class="overflow-hidden rounded-lg border bg-card shadow-sm">
+									<img
+										src="/static/featured/Zyon_Morter.jpg"
+										alt="Featured Intern"
+										class="h-auto w-full object-cover"
+									/>
+									<div class="p-2 text-left text-xs italic text-muted-foreground">
+										Photo: Zyon Morter &mdash; Past Intern
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Registration and Calendar Section -->
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					<!-- Registration Card -->
+					<Card.Root class="card-hover-effect transition-all hover:shadow-md">
+						<Card.Header>
+							<Card.Title>Register For The Event</Card.Title>
+							<Card.Description>
+								Sign up to attend our upcoming internship presentations and connect with talented IT students.
+							</Card.Description>
+						</Card.Header>
+						<Card.Content>
+							<form
+								class="flex flex-col gap-4"
+								action="?/signUpForDefaultEvent"
+								method="POST"
+								use:enhance
+							>
+								<div>
+									<label for="name" class="mb-1 block text-sm font-medium">Your name</label>
+									<p class="text-xs text-destructive">{$errors.name}</p>
+									<input
+										type="text"
+										class="w-full rounded-md border bg-background p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+										id="name"
+										name="name"
+										bind:value={$form.name}
+										{...$constraints.name}
+										placeholder="Your Name"
+										required
+									/>
+								</div>
+								<div>
+									<label for="email" class="mb-1 block text-sm font-medium">Email Address</label>
+									<p class="text-xs text-destructive">{$errors.email}</p>
+									<input
+										type="email"
+										class="w-full rounded-md border bg-background p-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+										id="email"
+										name="email"
+										bind:value={$form.email}
+										{...$constraints.email}
+										placeholder="Email Address"
+										required
+									/>
+								</div>
+								{#if $message}
+									<p class="text-sm text-success">{$message}</p>
+								{/if}
+								{#if $errors._errors}
+									<p class="text-sm text-destructive">{$errors._errors}</p>
+								{/if}
+								<Button type="submit" class="mt-2 w-full transition-all hover:shadow">Register for the event</Button>
+							</form>
+						</Card.Content>
+					</Card.Root>
+					
+					<!-- Calendar Events Card -->
+					<Card.Root class="card-hover-effect transition-all hover:shadow-md">
+						<Card.Header>
+							<Card.Title>Upcoming Presentations</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							<ul class="space-y-4">
+								<li>
+									<div class="flex items-start gap-3">
+										<div class="rounded-full bg-primary/10 p-2 text-primary">
+											<Calendar size={18} />
+										</div>
+										<div>
+											<p class="font-medium">Associates Presentation</p>
+											<p class="text-sm text-muted-foreground">May 8, 2025 • 9:00 AM - 12:00 PM</p>
+											<p class="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+												<MapPin size={12} />
+												<span>Belmopan Campus, Auditorium</span>
 											</p>
 										</div>
 									</div>
-								</div>
-								<!-- End hydrocode card -->
-								<h1 class="text-center text-4xl font-bold text-gray-900 lg:text-left lg:text-5xl">
-									Welcome to the University of Belize IT Talent Network
-								</h1>
-								<p class="text-slate-600">
-									Connecting UB&#39;s Brightest Minds with the Tech Industry
-								</p>
-							</div>
-							<p class="text-lg text-gray-700">
-								Welcome to the University of Belize's exclusive online portal for IT talent. Whether
-								you're looking for bright interns or experienced alumni, this is your direct link to
-								a growing network of skilled professionals from the UB IT program.
-							</p>
-							<div class="mt-4 text-lg text-gray-700">
-								<span class="font-semibold">What You'll Find:</span>
-								<ul class="ml-5 mt-2 list-disc space-y-1">
-									<li>Profiles and resumes of current IT students and graduates</li>
-									<li>A curated community of tech professionals educated at UB</li>
-									<li>Quick, seamless connection with candidates ready to make an impact</li>
-								</ul>
-							</div>
-							<div class="mt-8 flex justify-center lg:justify-start">
-								<a href="/auth/register">
-									<Button class="bg-violet-600 text-white hover:bg-violet-700"
-										>Register as an Intern</Button
-									>
-								</a>
-								<a href="/auth/register?force_choice=host" class="ml-4">
-									<Button class="bg-amber-500 text-white hover:bg-amber-600"
-										>Register as a Host</Button
-									>
-								</a>
-							</div>
-							<!-- Partner orgs -->
-							<div class="mt-3 block opacity-75">
-								<PartnerOrgs {org_avatar_data}>
-									<a href="#host-organizations" onclick={() => (active_tab = 3)}>
-										<p class="mt-4 text-sm text-violet-800 opacity-60">
-											See more partner organizations
-										</p>
-									</a>
-								</PartnerOrgs>
-							</div>
-						</div>
-						<div class="lg:w-5/12">
-							<div class="overflow-hidden rounded-lg">
-								<img
-									src="/static/featured/Zyon_Morter.jpg"
-									alt="Featured Intern"
-									class="h-auto w-full rounded-lg object-cover"
-								/>
-								<div class="mt-2 text-left italic text-gray-400">
-									Photo: Zyon Morter &mdash; Past Intern
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<!-- Registration Section -->
-				<section class="bg-gradient-to-r from-violet-700 to-fuchsia-600 py-16 text-white">
-					<div class="container mx-auto px-4">
-						<div class="flex flex-col items-center gap-12 lg:flex-row lg:items-start">
-							<div class="lg:w-7/12">
-								<h2 class="mb-6 text-4xl font-bold">EXPLORE WHAT OUR INTERNS HAVE ACCOMPLISHED</h2>
-								<p class="mb-8 text-xl">
-									Come explore the diverse experiences and contributions of our final-year IT
-									interns — from both the Associate and Bachelor programs — as they present insights
-									from their recently completed internships. This event showcases the skills,
-									growth, and professional development of tomorrow's tech leaders.
-								</p>
-
-								<div class="flex flex-col gap-6 sm:flex-row">
-									<div class="rounded-lg border border-white/30 bg-white/10 p-4">
-										<p class="font-bold">Associates Presentation</p>
-										<a href="#" class="flex items-center gap-2 text-white hover:underline">
-											<Calendar size={20} />
-											<span>May 8, 2025</span>
-										</a>
-									</div>
-
-									<div class="rounded-lg border border-white/30 bg-white/10 p-4">
-										<p class="font-bold">Bachelors Presentation</p>
-										<a href="#" class="flex items-center gap-2 text-white hover:underline">
-											<Calendar size={20} />
-											<span>May 9, 2025</span>
-										</a>
-									</div>
-								</div>
-							</div>
-
-							<div class="w-full lg:w-5/12">
-								<div class="rounded-lg bg-white p-6 text-gray-800 shadow-lg">
-									<h3 class="mb-2 text-2xl font-bold text-violet-800">Register For The Event</h3>
-									<p class="mb-6 text-gray-600">
-										Not an organization? No problem. You can still sign up to attend the internship
-										presentation.
-									</p>
-
-									<form
-										class="flex flex-col gap-4"
-										action="?/signUpForDefaultEvent"
-										method="POST"
-										use:enhance
-									>
-										<div>
-											<label for="name" class="mb-1 block text-sm font-medium">Your name</label>
-											<p class="mt-2 text-sm text-red-500">{$errors.name}</p>
-											<input
-												type="text"
-												class="w-full rounded-md border bg-transparent p-2"
-												id="name"
-												name="name"
-												bind:value={$form.name}
-												{...$constraints.name}
-												placeholder="Your Name"
-												required
-											/>
+								</li>
+								<li>
+									<div class="flex items-start gap-3">
+										<div class="rounded-full bg-primary/10 p-2 text-primary">
+											<Calendar size={18} />
 										</div>
 										<div>
-											<label for="email" class="mb-1 block text-sm font-medium">Email Address</label
-											>
-											<p class="mt-2 text-sm text-red-500">{$errors.email}</p>
-											<input
-												type="email"
-												class="w-full rounded-md border bg-transparent p-2"
-												id="email"
-												name="email"
-												bind:value={$form.email}
-												{...$constraints.email}
-												placeholder="Email Address"
-												required
-											/>
+											<p class="font-medium">Bachelors Presentation</p>
+											<p class="text-sm text-muted-foreground">May 9, 2025 • 9:00 AM - 3:00 PM</p>
+											<p class="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+												<MapPin size={12} />
+												<span>Belmopan Campus, Auditorium</span>
+											</p>
 										</div>
-
-										<p class="mt-2 text-sm text-green-500">{$message}</p>
-										<p class="mt-2 text-sm text-red-500">{$errors._errors}</p>
-
-										<Button
-											type="submit"
-											class="mt-4 w-full bg-amber-500 text-white hover:bg-amber-600"
-											>Register for the event</Button
-										>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<!-- Join us online section -->
-				<section class="container mx-auto px-4 py-16">
-					<div class="flex flex-col items-center gap-8 lg:flex-row lg:items-start">
-						<div class="lg:w-7/12">
-							<h2 class="mb-6 text-4xl font-bold">JOIN US ONLINE!</h2>
-							<p class="mb-4 text-lg">
-								Can't make it in person? No problem! We've got you covered. You can join us online
-								via Zoom.
-							</p>
-
-							<div class="mb-6 flex flex-col items-start gap-2 sm:flex-row sm:items-center">
-								<div class="flex h-14 w-14 items-center justify-center rounded-full bg-violet-100">
-									<Video size={32} class="text-violet-600" />
+									</div>
+								</li>
+							</ul>
+						</Card.Content>
+						<Card.Footer class="pt-2">
+							<a href="/?tab=2" class="text-xs font-medium text-primary hover:underline">
+								View full schedule →
+							</a>
+						</Card.Footer>
+					</Card.Root>
+					
+					<!-- Join Online Card -->
+					<Card.Root class="card-hover-effect transition-all hover:shadow-md">
+						<Card.Header>
+							<Card.Title>Join Us Online</Card.Title>
+						</Card.Header>
+						<Card.Content>
+							<div class="flex items-center gap-3">
+								<div class="rounded-full bg-primary/10 p-2 text-primary">
+									<Video size={18} />
 								</div>
 								<div>
-									<p class="font-medium">Zoom Meeting Link:</p>
+									<p class="font-medium">Zoom Meeting</p>
 									<a
-										href="https://us06web.zoom.us/j/86803449142?pwd=T7tDCvQpKZ7j76swtHkVHzDRTnxKYX.1"
-										class="text-violet-600 hover:underline"
+										href="https://us06web.zoom.us/j/86803449142"
+										class="text-sm text-primary hover:underline"
 									>
-										Click here to join the meeting
+										Click to join the meeting
 									</a>
 								</div>
 							</div>
-
-							<p class="mb-4 text-lg">
-								To make things even easier, you can scan the QR code with your smartphone to join
-								the meeting instantly.
-							</p>
-
-							<p class="mb-4 text-lg">
-								Please note: If you're using Zoom for the first time, you might need to install the
-								Zoom app on your device.
-							</p>
-
-							<p class="text-lg">We look forward to seeing you online!</p>
-						</div>
-
-						<div class="flex justify-center lg:w-5/12">
-							<div class="h-60 w-60 rounded-xl border-4 border-amber-300 bg-white p-4 shadow-lg">
-								<!-- Placeholder for QR code -->
-								<img
-									class="flex h-full w-full items-center justify-center bg-violet-50"
-									alt="QR Code for Zoom Meeting"
-									src="/static/featured/zoom_meeting.svg"
-								/>
+							<div class="mt-4 flex justify-center">
+								<div class="rounded-lg border bg-background p-2 shadow-sm">
+									<img
+										class="h-32 w-32"
+										alt="QR Code for Zoom Meeting"
+										src="/static/featured/zoom_meeting.svg"
+									/>
+								</div>
 							</div>
+							<p class="mt-4 text-center text-xs text-muted-foreground">
+								Scan QR code with your smartphone to join instantly
+							</p>
+						</Card.Content>
+					</Card.Root>
+				</div>
+				
+				<!-- Explore Interns Accomplishments Section -->
+				<section class="mb-8 mt-8">
+					<div class="rounded-lg bg-gradient-to-r from-primary/90 to-primary p-6 text-primary-foreground shadow-sm">
+						<h2 class="mb-4 text-2xl font-bold">EXPLORE WHAT OUR INTERNS HAVE ACCOMPLISHED</h2>
+						<p class="mb-6 max-w-3xl">
+							Come explore the diverse experiences and contributions of our final-year IT
+							interns — from both the Associate and Bachelor programs — as they present insights
+							from their recently completed internships. This event showcases the skills,
+							growth, and professional development of tomorrow's tech leaders.
+						</p>
+						
+						<div class="flex flex-col gap-6 sm:flex-row">
+							<a href="/?tab=2" class="card-hover-effect flex-1 rounded-lg border border-white/30 bg-white/10 p-4 transition-all hover:bg-white/20 hover:shadow-md">
+								<div class="flex items-center gap-3">
+									<div class="rounded-full bg-white/20 p-2">
+										<Calendar size={20} class="text-white" />
+									</div>
+									<p class="font-bold">See Presentation Details</p>
+								</div>
+								<div class="mt-2 text-sm">
+									View the full schedule and learn more about the upcoming presentations
+								</div>
+							</a>
+
+							<a href="/auth/register" class="card-hover-effect flex-1 rounded-lg border border-white/30 bg-white/10 p-4 transition-all hover:bg-white/20 hover:shadow-md">
+								<div class="flex items-center gap-3">
+									<div class="rounded-full bg-white/20 p-2">
+										<FileCheck size={20} class="text-white" />
+									</div>
+									<p class="font-bold">Register to Participate</p>
+								</div>
+								<div class="mt-2 text-sm">
+									Join as a student or organization to be part of this exciting event
+								</div>
+							</a>
 						</div>
 					</div>
 				</section>
 
-				<!-- Options -->
-				<section class="bg-gradient-to-r from-amber-50 to-violet-50 py-16">
-					<div class="container mx-auto px-4">
-						<h2 class="mb-12 text-center text-4xl font-semibold">Let's Get You Connected</h2>
-						<p class="mb-8 text-center text-xl">
+				<!-- Options Cards Grid -->
+				<section class="mb-10 mt-8">
+					<div class="mb-6">
+						<h2 class="mb-2 text-2xl font-medium">Let's Get You Connected</h2>
+						<p class="max-w-3xl text-muted-foreground">
 							Whether you're launching your career or building a team, start here.
 						</p>
-						<div class="flex flex-col gap-8 md:flex-row">
-							<div
-								class="flex-1 rounded-lg border border-violet-200 bg-white p-6 shadow-md transition-all hover:shadow-lg"
-							>
-								<Rocket size="64" class="mb-4 text-amber-500" strokeWidth="1" />
-								<h3 class="mb-2 text-2xl font-medium">
-									For <span class="font-bold underline">Students &amp; Alumni</span>
-								</h3>
-								<p class="mb-4 text-lg">Launch Your Tech Career with Confidence</p>
-								<p class="mb-6">
-									Join UB's exclusive network of IT professionals. Whether you're preparing for your
-									first internship or seeking new opportunities, this platform puts your profile in
-									front of real employers.
-								</p>
-								<div class="mb-6">
-									<p class="font-medium">Why Join:</p>
-									<ul class="ml-5 mt-2 list-disc space-y-1">
-										<li>Build your professional profile and showcase your work</li>
-										<li>Be visible to top employers hiring tech talent</li>
-										<li>Access exclusive internship and job opportunities</li>
-									</ul>
+					</div>
+					
+					<div class="grid gap-6 md:grid-cols-2">
+						<Card.Root class="card-hover-effect transition-all hover:shadow-md">
+							<Card.Content class="p-6">
+								<div class="flex h-full flex-col">
+									<div class="mb-4 w-fit rounded-full bg-primary/10 p-4">
+										<User size={28} class="text-primary" />
+									</div>
+									<h3 class="mb-2 text-xl font-medium">
+										For <span class="font-semibold">Students & Alumni</span>
+									</h3>
+									<p class="mb-4 text-muted-foreground">Launch Your Tech Career with Confidence</p>
+									<p class="mb-4 text-sm">
+										Join UB's exclusive network of IT professionals. Whether you're preparing for
+										your first internship or seeking new opportunities, this platform puts your
+										profile in front of real employers.
+									</p>
+									<div class="mb-6">
+										<p class="mb-2 font-medium">Why Join:</p>
+										<ul class="ml-5 list-disc space-y-1 text-sm text-muted-foreground">
+											<li>Build your professional profile and showcase your work</li>
+											<li>Be visible to top employers hiring tech talent</li>
+											<li>Access exclusive internship and job opportunities</li>
+										</ul>
+									</div>
+									<div class="mt-auto pt-4">
+										<a href="/auth/register">
+											<Button class="transition-all hover:shadow">Create Your Profile</Button>
+										</a>
+									</div>
 								</div>
-								<a href="/auth/register">
-									<Button class="w-fit bg-violet-600 text-white hover:bg-violet-700">
-										Create Your Profile
-									</Button>
-								</a>
-							</div>
+							</Card.Content>
+						</Card.Root>
 
-							<div
-								class="flex-1 rounded-lg border border-amber-200 bg-white p-6 shadow-md transition-all hover:shadow-lg"
-							>
-								<CheckSquare size="64" class="mb-4 text-violet-500" strokeWidth="1" />
-								<h3 class="mb-2 text-2xl font-medium">
-									For <span class="font-bold underline">Employers</span>
-								</h3>
-								<p class="mb-4 text-lg">Connect with UB's Tech Talent</p>
-								<p class="mb-6">
-									Looking for skilled interns or graduates in IT? This is your direct link to the
-									University of Belize's top talent — trained in theory, practice, and innovation.
-								</p>
-								<div class="mb-6">
-									<p class="font-medium">What You Get:</p>
-									<ul class="ml-5 mt-2 list-disc space-y-1">
-										<li>Access to curated profiles of UB IT students and alumni</li>
-										<li>A streamlined path to recruit the right talent for your team</li>
-									</ul>
+						<Card.Root class="card-hover-effect transition-all hover:shadow-md">
+							<Card.Content class="p-6">
+								<div class="flex h-full flex-col">
+									<div class="mb-4 w-fit rounded-full bg-primary/10 p-4">
+										<Briefcase size={28} class="text-primary" />
+									</div>
+									<h3 class="mb-2 text-xl font-medium">
+										For <span class="font-semibold">Employers</span>
+									</h3>
+									<p class="mb-4 text-muted-foreground">Connect with UB's Tech Talent</p>
+									<p class="mb-4 text-sm">
+										Looking for skilled interns or graduates in IT? This is your direct link to the
+										University of Belize's top talent — trained in theory, practice, and innovation.
+									</p>
+									<div class="mb-6">
+										<p class="mb-2 font-medium">What You Get:</p>
+										<ul class="ml-5 list-disc space-y-1 text-sm text-muted-foreground">
+											<li>Access to curated profiles of UB IT students and alumni</li>
+											<li>A streamlined path to recruit the right talent for your team</li>
+											<li>Connect directly with qualified candidates</li>
+										</ul>
+									</div>
+									<div class="mt-auto pt-4">
+										<a href="/auth/register?force_choice=host">
+											<Button variant="outline" class="transition-all hover:bg-primary/10">Register as a Host</Button>
+										</a>
+									</div>
 								</div>
-								<a href="/auth/register?force_choice=host">
-									<Button class="w-fit bg-amber-500 text-white hover:bg-amber-600">
-										Register as a host
-									</Button>
-								</a>
-							</div>
-						</div>
+							</Card.Content>
+						</Card.Root>
 					</div>
 				</section>
 			{:else if active_tab === 1}
@@ -461,58 +631,67 @@
 			{:else if active_tab === 5}
 				<Homepage.Archives />
 			{/if}
+			</div>
 		</div>
 	</main>
 
 	<!-- Footer -->
-	<footer class="bg-gradient-to-r from-violet-800 to-fuchsia-700 py-12 text-white">
+	<footer class="border-t bg-background py-8 shadow-sm">
 		<div class="container mx-auto px-4">
-			<div class="flex flex-col gap-12 lg:flex-row">
+			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-12">
 				<!-- Logo and about section -->
-				<div class="lg:w-5/12">
-					<div
-						class="mb-6 flex w-fit justify-center rounded-lg bg-violet-50 px-4 py-2 lg:justify-start"
-					>
+				<div class="lg:col-span-5">
+					<div class="mb-4 flex items-center gap-2">
 						<Logo />
 					</div>
-					<p class="mb-4 text-lg">
+					<p class="mb-6 max-w-md text-muted-foreground">
 						IT Careers connects employers with emerging and experienced tech talent from the
 						University of Belize — quickly, easily, and all in one place. Join our growing network
 						today.
 					</p>
-					<a href="/auth/login">
-						<Button
-							class="flex w-fit items-center gap-2 bg-white text-violet-800 hover:bg-amber-100"
-						>
-							<Mail size={16} />
-							<span>Login with email</span>
-						</Button>
-					</a>
+					<div class="flex gap-3">
+						<a href="/auth/login">
+							<Button variant="outline" size="sm" class="flex items-center gap-2 transition-all hover:bg-primary/10">
+								<Mail size={14} />
+								<span>Login</span>
+							</Button>
+						</a>
+						<a href="/auth/register">
+							<Button size="sm" class="transition-all hover:shadow">Register</Button>
+						</a>
+					</div>
 				</div>
 
 				<!-- Links section -->
-				<div class="lg:w-3/12">
-					<h3 class="mb-4 text-xl font-bold">Sitemap</h3>
-					<ul class="space-y-2">
-						<li><a href="/" class="hover:text-amber-300" data-sveltekit-reload>Home</a></li>
+				<div class="lg:col-span-3">
+					<h3 class="mb-4 text-sm font-medium">Sitemap</h3>
+					<ul class="grid gap-2 text-sm">
 						<li>
-							<a href="/?tab=1" class="hover:text-amber-300" data-sveltekit-reload>Interns</a>
+							<a href="/" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload>Home</a>
 						</li>
 						<li>
-							<a href="/?tab=2" class="hover:text-amber-300" data-sveltekit-reload
+							<a href="/?tab=1" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload>Interns</a>
+						</li>
+						<li>
+							<a href="/?tab=2" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload
 								>Presentation Agenda</a
 							>
 						</li>
 						<li>
-							<a href="/?tab=3" class="hover:text-amber-300" data-sveltekit-reload
+							<a href="/?tab=3" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload
 								>Host Organizations</a
 							>
 						</li>
 						<li>
-							<a href="/auth/login" class="hover:text-amber-300" data-sveltekit-reload>Login</a>
+							<a href="/?tab=4" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload
+								>About</a
+							>
 						</li>
 						<li>
-							<a href="/auth/register" class="hover:text-amber-300" data-sveltekit-reload
+							<a href="/auth/login" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload>Login</a>
+						</li>
+						<li>
+							<a href="/auth/register" class="text-muted-foreground transition-colors hover:text-foreground" data-sveltekit-reload
 								>Register</a
 							>
 						</li>
@@ -520,30 +699,39 @@
 				</div>
 
 				<!-- Contact section -->
-				<div class="lg:w-4/12">
-					<h3 class="mb-4 text-xl font-bold">Contact</h3>
-					<ul class="space-y-3">
-						<li class="flex items-start gap-2">
-							<MapPin size={20} class="mt-1 flex-shrink-0 text-amber-300" />
-							<p>Hummingbird Avenue, Belmopan, Belize</p>
+				<div class="lg:col-span-4">
+					<h3 class="mb-4 text-sm font-medium">Contact</h3>
+					<ul class="space-y-4">
+						<li class="flex items-start gap-3">
+							<div class="mt-0.5 rounded-full bg-primary/10 p-1.5 text-primary">
+								<MapPin size={14} />
+							</div>
+							<p class="text-sm text-muted-foreground">Hummingbird Avenue, Belmopan, Belize</p>
 						</li>
-						<li class="flex items-start gap-2">
-							<Phone size={20} class="mt-1 flex-shrink-0 text-amber-300" />
-							<p>(501) 822-1000</p>
+						<li class="flex items-start gap-3">
+							<div class="mt-0.5 rounded-full bg-primary/10 p-1.5 text-primary">
+								<Phone size={14} />
+							</div>
+							<p class="text-sm text-muted-foreground">(501) 822-1000</p>
 						</li>
-						<li class="flex items-start gap-2">
-							<Mail size={20} class="mt-1 flex-shrink-0 text-amber-300" />
-							<a href="mailto:{PUBLIC_SUPPORT_EMAIL}" class="hover:text-amber-300"
-								>{PUBLIC_SUPPORT_EMAIL}</a
+						<li class="flex items-start gap-3">
+							<div class="mt-0.5 rounded-full bg-primary/10 p-1.5 text-primary">
+								<Mail size={14} />
+							</div>
+							<a 
+								href="mailto:{PUBLIC_SUPPORT_EMAIL}" 
+								class="text-sm text-muted-foreground transition-colors hover:text-foreground"
 							>
+								{PUBLIC_SUPPORT_EMAIL}
+							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 
 			<!-- Copyright -->
-			<div class="mt-12 border-t border-white/20 pt-6 text-center">
-				<p>
+			<div class="mt-10 border-t border-muted pt-6 text-center">
+				<p class="text-sm text-muted-foreground">
 					&copy; {new Date().getFullYear()}
 					{PUBLIC_PLATFORM_NAME} Platform {PUBLIC_PLATFORM_SPONSOR_NAME} | All rights reserved
 				</p>
