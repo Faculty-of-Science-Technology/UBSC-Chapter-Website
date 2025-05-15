@@ -22,8 +22,8 @@
 				// Clear the form after successful submission
 				$form.subject = '';
 				$form.message = '';
-                isSubmitting = false;
 			}
+            isSubmitting = false;
 		}
 	});
 

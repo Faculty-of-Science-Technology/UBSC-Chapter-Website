@@ -2,10 +2,13 @@ import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME } from '$env/static/priv
 import { getUserEmails } from '$lib/server/db/users';
 import nodemailer from 'nodemailer';
 // Fire up nodemailer
+const CHUNK_SIZE = 100;
 const transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
 	port: 465,
 	secure: true,
+	pool: true,
+	maxMessages: Infinity,
 	auth: {
 		user: MAIL_USERNAME,
 		pass: MAIL_PASSWORD
@@ -49,12 +52,34 @@ export async function broadcastEmail({
 		throw new Error('No email recipients found');
 	}
 
-	// Use the email service to send the email
-	return transporter.sendMail({
-		from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
-		bcc: bcc ? EVERYONE : undefined,
-		to: bcc ? undefined : EVERYONE,
-		subject: subject,
-		text: body
-	});
+	// Define chunk size
+	const results = [];
+	
+	// Split emails into chunks and send them
+	for (let i = 0; i < EVERYONE.length; i += CHUNK_SIZE) {
+		const chunk = EVERYONE.slice(i, i + CHUNK_SIZE);
+		
+		// Use the email service to send the email to current chunk
+		const result = await transporter.sendMail({
+			from: `"${MAIL_DISPLAYNAME}" <${MAIL_USERNAME}>`,
+			bcc: bcc ? chunk : undefined,
+			to: bcc ? undefined : chunk,
+			subject: subject,
+			text: body
+		});
+		
+		results.push(result);
+		
+		// Add a small delay between chunks to avoid overwhelming the mail server
+		if (i + CHUNK_SIZE < EVERYONE.length) {
+			await new Promise(resolve => setTimeout(resolve, 3000));
+		}
+	}
+	
+	return {
+		success: true,
+		totalRecipients: EVERYONE.length,
+		chunksCount: Math.ceil(EVERYONE.length / CHUNK_SIZE),
+		results
+	};
 }
