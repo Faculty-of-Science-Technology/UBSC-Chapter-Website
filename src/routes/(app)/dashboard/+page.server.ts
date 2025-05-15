@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect } from '@sveltejs/kit';
-import { desc, eq, or } from 'drizzle-orm';
+import { and, desc, eq, or } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async (event) => {
@@ -32,7 +32,10 @@ export const load: PageServerLoad = async (event) => {
 	}
 
 	// Filter condition for jobs
-	const jobsFilter = or(eq(Jobs.Draft, false), eq(Jobs.UserId, user.Id));
+	const jobsFilter = and(
+		or(eq(Jobs.Draft, false), eq(Jobs.UserId, user.Id)),
+		eq(Jobs.Draft, false)
+	);
 
 	// Get all jobs for current page with proper ordering to ensure consistent pagination
 	const jobs = await db
