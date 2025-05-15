@@ -441,7 +441,11 @@
 								</ul>
 							</Card.Content>
 							<Card.Footer class="pt-2">
-								<a href="/?tab=2" class="text-xs font-medium text-primary hover:underline">
+								<a
+									href="/?tab=2"
+									class="text-xs font-medium text-primary hover:underline"
+									onclick={() => (active_tab = 2)}
+								>
 									View full schedule →
 								</a>
 							</Card.Footer>
