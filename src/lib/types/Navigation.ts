@@ -13,7 +13,9 @@ export const SettingsNavLinks = {
 	notifications: '-dashboard-settings-notifications',
 	agenda: '-dashboard-settings-setup-agenda',
 	users: '-dashboard-settings-manage-users',
-	groups: '-dashboard-settings-manage-groups'
+	groups: '-dashboard-settings-manage-groups',
+	about: '-dashboard-settings-about-system',
+	broadcast: '-dashboard-settings-broadcast-manager'
 };
 
 export const _Settings_NavLinkIndexes = {
@@ -21,7 +23,9 @@ export const _Settings_NavLinkIndexes = {
 	[SettingsNavLinks.notifications]: 1,
 	[SettingsNavLinks.agenda]: 2,
 	[SettingsNavLinks.users]: 3,
-	[SettingsNavLinks.groups]: 4
+	[SettingsNavLinks.groups]: 4,
+	[SettingsNavLinks.about]: 5,
+	[SettingsNavLinks.broadcast]: 6
 };
 
 const _NavLinkIndexes = {

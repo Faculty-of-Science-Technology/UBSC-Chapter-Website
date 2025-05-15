@@ -11,6 +11,7 @@
 		LayoutDashboard,
 		LogOut,
 		Menu,
+		Radio,
 		User,
 		Users,
 		X
@@ -59,6 +60,10 @@
 			if (e.key === 'g' && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
 				await goto('/dashboard/settings/about-system');
+			}
+			if (e.key === 'l' && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				await goto('/dashboard/settings/broadcast-manager');
 			}
 		}
 
@@ -151,6 +156,18 @@
 						</a>
 						
 						<a 
+							href="/dashboard/settings/broadcast-manager" 
+							class={cn(
+								"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
+								active_link === 6 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+							)}
+						>
+							<Radio class="h-4 w-4" />
+							<span>Broadcast Management</span>
+							<span class="ml-auto text-xs text-muted-foreground">⌘L</span>
+						</a>
+						
+						<a 
 							href="/dashboard/settings/manage-users" 
 							class={cn(
 								"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
@@ -167,7 +184,7 @@
 						href="/dashboard/settings/about-system" 
 						class={cn(
 							"flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-accent hover:text-accent-foreground", 
-							active_link === 4 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
+							active_link === 5 ? "bg-accent text-accent-foreground" : "text-muted-foreground"
 						)}
 					>
 						<Info class="h-4 w-4" />
