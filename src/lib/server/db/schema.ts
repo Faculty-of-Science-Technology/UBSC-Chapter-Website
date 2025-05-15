@@ -104,6 +104,7 @@ export const Jobs = pgTable('Jobs', {
 	Description: text('description').notNull(),
 	JobTypeId: integer('job_type_id').references(() => JobTypes.Id, { onDelete: 'cascade' }),
 	Draft: boolean('draft').notNull(),
+	Deleted: boolean('deleted').notNull().default(false),
 	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)

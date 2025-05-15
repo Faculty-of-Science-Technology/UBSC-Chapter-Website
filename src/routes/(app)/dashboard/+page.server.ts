@@ -34,7 +34,8 @@ export const load: PageServerLoad = async (event) => {
 	// Filter condition for jobs
 	const jobsFilter = and(
 		or(eq(Jobs.Draft, false), eq(Jobs.UserId, user.Id)),
-		eq(Jobs.Draft, false)
+		eq(Jobs.Draft, false),
+		eq(Jobs.Deleted, false)
 	);
 
 	// Get all jobs for current page with proper ordering to ensure consistent pagination
