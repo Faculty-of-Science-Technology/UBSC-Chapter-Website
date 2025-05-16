@@ -185,7 +185,11 @@
 		<!-- User Profile Preview -->
 		<div class="flex items-center gap-4 rounded-lg border bg-white p-4">
 			<Avatar.Root class="h-16 w-16">
-				<Avatar.Image src={user.ProfilePicture} alt={user.FirstName + ' ' + user.LastName} />
+				<Avatar.Image
+					class="object-cover"
+					src={user.ProfilePicture}
+					alt={user.FirstName + ' ' + user.LastName}
+				/>
 				<Avatar.Fallback>{user.FirstName?.[0]}{user.LastName?.[0]}</Avatar.Fallback>
 			</Avatar.Root>
 			<div>

@@ -111,7 +111,11 @@
 				<Card.Content class="flex flex-col items-center gap-4 py-4 text-center">
 					<div class="relative">
 						<Avatar.Root class="h-24 w-24">
-							<Avatar.Image src={user.ProfilePicture} alt={getUserFullName(user as IJobCreator)} />
+							<Avatar.Image
+								class="object-cover"
+								src={user.ProfilePicture}
+								alt={getUserFullName(user as IJobCreator)}
+							/>
 							<Avatar.Fallback>{user.FirstName[0]}{user.LastName[0]}</Avatar.Fallback>
 						</Avatar.Root>
 						{#if user.Hireable}
