@@ -68,6 +68,7 @@ export const Users = pgTable('Users', {
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
 	Bio: varchar('bio', { length: 255 }),
 	Hireable: boolean('hireable').notNull().default(false),
+	Hidden: boolean('hidden').notNull().default(false),
 	CreatedAt: date('__created_at__')
 		.default(sql`CURRENT_DATE`)
 		.notNull()

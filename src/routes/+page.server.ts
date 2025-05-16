@@ -1,9 +1,8 @@
-import { MAIL_DISPLAYNAME, MAIL_PASSWORD, MAIL_USERNAME, PLATFORM_NAME } from '$env/static/private';
+import { MAIL_DISPLAYNAME, MAIL_USERNAME, PLATFORM_NAME } from '$env/static/private';
 import type { AvatarData } from '$lib/assemblies';
 import { sendMail } from '$lib/email';
 import { db } from '$lib/server/db';
 import { and, eq, isNull } from 'drizzle-orm';
-import nodemailer from 'nodemailer';
 import { fail, setError, setMessage } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -27,7 +26,8 @@ export const load: PageServerLoad = async (request) => {
 		}
 	});
 	const users = await db.query.Users.findMany({
-		where: (users) => and(eq(users.AccountType, 'student'), isNull(users.ActivationCode)),
+		where: (users) =>
+			and(eq(users.AccountType, 'student'), isNull(users.ActivationCode), eq(users.Hidden, false)),
 		columns: {
 			Id: true,
 			FirstName: true,
@@ -42,7 +42,7 @@ export const load: PageServerLoad = async (request) => {
 
 	// Get all users who are organizations (modify the query based on your database schema)
 	const orgs = await db.query.Users.findMany({
-		where: (users, { eq }) => and(eq(users.AccountType, 'org')),
+		where: (users, { eq }) => and(eq(users.AccountType, 'org'), eq(users.Hidden, false)),
 		columns: {
 			Id: true,
 			FirstName: true,
@@ -119,17 +119,6 @@ export const actions: Actions = {
 			setError(form, '', 'You have some errors in your form. Please fix them and try again.');
 			return fail(400, { form });
 		}
-
-		// Fire up nodemailer
-		const transporter = nodemailer.createTransport({
-			host: 'smtp.gmail.com',
-			port: 465,
-			secure: true,
-			auth: {
-				user: MAIL_USERNAME,
-				pass: MAIL_PASSWORD
-			}
-		});
 
 		// Send confirmation email
 		await sendMail({

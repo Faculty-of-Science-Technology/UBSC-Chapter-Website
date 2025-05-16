@@ -20,7 +20,7 @@ interface SendMailOptions {
 	to: string;
 	subject: string;
 	body: string;
-	bcc: boolean | undefined;
+	bcc?: boolean | undefined;
 }
 
 export async function sendMail({ from, to, subject, body }: SendMailOptions) {
