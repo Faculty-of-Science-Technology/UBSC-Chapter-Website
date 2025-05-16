@@ -71,7 +71,7 @@ export const load: PageServerLoad = async (event) => {
 			.leftJoin(Users, eq(Jobs.UserId, Users.Id))
 			.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
 			.innerJoin(JobApplications, eq(Jobs.Id, JobApplications.JobsId)) // Inner join to get only jobs with applications
-			.where(eq(Jobs.UserId, user.Id)) // Only get jobs owned by the current user
+			.where(and(eq(Jobs.UserId, user.Id), eq(Jobs.Deleted, false))) // Only get jobs owned by the current user
 			.groupBy(Jobs.Id, Users.Id, JobTypes.Id)
 			.offset(offset) // Move forward by the offset
 			.limit(10); // Stop after 10 jobs
@@ -101,7 +101,7 @@ export const load: PageServerLoad = async (event) => {
 	const job = await db
 		.select()
 		.from(Jobs)
-		.where(eq(Jobs.Id, job_id))
+		.where(and(eq(Jobs.Id, job_id), eq(Jobs.Deleted, false)))
 		.then((res) => res[0]);
 
 	// Get all submitted applications and populate
@@ -311,7 +311,7 @@ const getJob = async (job_id: string, userId: string): Promise<typeof Jobs | und
 	return (await db
 		.select()
 		.from(Jobs)
-		.where(and(eq(Jobs.Id, job_id), eq(Jobs.UserId, userId)))
+		.where(and(eq(Jobs.Id, job_id), eq(Jobs.UserId, userId), eq(Jobs.Deleted, false)))
 		.limit(1)
 		.then((res) => res[0])) as typeof Jobs | undefined;
 };

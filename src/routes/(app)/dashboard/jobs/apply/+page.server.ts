@@ -92,7 +92,7 @@ export const load: PageServerLoad = async (event) => {
 			.from(Jobs)
 			.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
 			.leftJoin(Users, eq(Jobs.UserId, Users.Id))
-			.where(eq(Jobs.Id, job_id))
+			.where(and(eq(Jobs.Id, job_id), eq(Jobs.Deleted, false))) // Only get jobs that are not deleted
 			.limit(1)
 			.then((res) => res[0]); // Turn the array into an object
 		if (!job) throw redirect(301, '/dashboard/'); // Redirect if the job doesn't exist
@@ -315,7 +315,7 @@ const getJob = async (job_id: string): Promise<typeof Jobs | undefined> => {
 	return (await db
 		.select()
 		.from(Jobs)
-		.where(eq(Jobs.Id, job_id))
+		.where(and(eq(Jobs.Id, job_id), eq(Jobs.Deleted, false)))
 		.limit(1)
 		.then((res) => res[0])) as typeof Jobs | undefined;
 };

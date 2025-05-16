@@ -10,7 +10,7 @@ import { broadcastEmail } from '$lib/email';
 import { db } from '$lib/server/db';
 import { Jobs, Questions } from '$lib/server/db/schema';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import Jwt from 'jsonwebtoken';
 import { message, setError, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -70,7 +70,10 @@ export const load: PageServerLoad = async (event) => {
 		// Set the cookie
 		cookies.set('job_id', job_id, { path: '/' });
 		// Lookup the job
-		const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
+		const job = await db
+			.select()
+			.from(Jobs)
+			.where(and(eq(Jobs.Id, job_id), eq(Jobs.Deleted, false)));
 		if (!job) throw redirect(301, '/dashboard/');
 		const job_found = job[0];
 
@@ -152,7 +155,7 @@ export const actions: Actions = {
 					Draft: jobForm.data.draft,
 					UserId: user.Id
 				})
-				.where(eq(Jobs.Id, job_id))
+				.where(and(eq(Jobs.Id, job_id), eq(Jobs.UserId, user.Id), eq(Jobs.Deleted, false)))
 				.returning();
 
 			throw redirect(303, '/dashboard/jobs/new?job_id=' + updatedJob[0].Id);
@@ -209,10 +212,10 @@ export const actions: Actions = {
 		}
 		throw redirect(303, '/dashboard/jobs/new?job_id=' + newJob[0].Id);
 	},
-	createQuestion: async (event) => {
-		const formData = await event.request.formData();
+	createQuestion: async ({ request, cookies, locals }) => {
+		const formData = await request.formData();
 		const form = Object.fromEntries(formData);
-		const cookies = event.cookies;
+		const user = locals.user;
 		const job_id = cookies.get('job_id') ?? null;
 		const session = cookies.get('session');
 
@@ -241,11 +244,13 @@ export const actions: Actions = {
 			const questionForm = await superValidate(formData, zod(questionSchema));
 
 			// Create the question
-			const user = event.locals.user;
 			if (!user) throw redirect(301, '/auth/login');
 
 			// Do we own the job?
-			const job = await db.select().from(Jobs).where(eq(Jobs.Id, job_id));
+			const job = await db
+				.select()
+				.from(Jobs)
+				.where(and(eq(Jobs.Id, job_id), eq(Jobs.UserId, user.Id), eq(Jobs.Deleted, false)));
 			if (job.length === 0 || job[0].UserId !== user.Id) {
 				throw redirect(301, '/dashboard/');
 			}
@@ -267,8 +272,8 @@ export const actions: Actions = {
 			return { questionForm };
 		}
 	},
-	removeQuestion: async (event) => {
-		const user = event.locals.user;
+	removeQuestion: async ({ request, cookies, locals }) => {
+		const user = locals.user;
 
 		if (user !== null && user !== undefined) {
 			if (user.AccountType !== 'org' && user.AccountType !== 'owner') {
@@ -277,8 +282,6 @@ export const actions: Actions = {
 		} else {
 			throw redirect(301, '/auth/login');
 		}
-
-		const cookies = event.cookies;
 		const session = cookies.get('session');
 		if (!session) throw redirect(301, '/auth/login');
 
@@ -291,7 +294,7 @@ export const actions: Actions = {
 		const job_id = cookies.get('job_id') ?? null;
 		if (!job_id) throw redirect(301, '/dashboard/jobs/new');
 
-		const formData = await event.request.formData();
+		const formData = await request.formData();
 		const questionForm = await superValidate(formData, zod(removeQuestionSchema));
 		if (!questionForm.valid) return { questionForm };
 

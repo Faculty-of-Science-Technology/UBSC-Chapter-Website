@@ -36,7 +36,7 @@ export const load: ServerLoad = async (event) => {
 	const jobsLength = await db
 		.select({ count: count() })
 		.from(Jobs)
-		.where(eq(Jobs.UserId, user.Id))
+		.where(and(eq(Jobs.UserId, user.Id), eq(Jobs.Deleted, false))) // Only get jobs owned by the current user and not deleted
 		.then((res) => res[0].count);
 
 	// Get all jobs and populate
