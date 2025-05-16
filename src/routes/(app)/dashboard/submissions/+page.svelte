@@ -105,7 +105,15 @@
 								>
 
 								{#if application.JobApplications.Draft === true && application.Jobs?.Draft}
-									<span class="tracking-wide"><Badge>Currently unavailable</Badge></span>
+									<span class="tracking-wide"
+										><Badge variant="outline">Currently unavailable</Badge></span
+									>
+								{/if}
+
+								{#if application.Jobs?.Deleted}
+									<span class="tracking-wide"
+										><Badge variant="destructive">Listing removed by poster</Badge></span
+									>
 								{/if}
 							</div>
 						</JobCard.Title>
@@ -159,9 +167,12 @@
 										</Dialog.Header>
 										<div class="flex flex-col gap-6 py-4">
 											<Dialog.Footer class="justify-start text-left">
-												<!--- @todo Implement revoking applications -->
 												<form method="POST">
-													<input type="hidden" name="application_id" value={application?.JobApplications.Id} />
+													<input
+														type="hidden"
+														name="application_id"
+														value={application?.JobApplications.Id}
+													/>
 													<!-- <input type="hidden" name="user_id" value={application.Users?.Id} /> -->
 													<!-- <input type="hidden" name="application_id" value={application.JobApplications.Id} /> -->
 													<input type="hidden" name="action" value="delete" />
