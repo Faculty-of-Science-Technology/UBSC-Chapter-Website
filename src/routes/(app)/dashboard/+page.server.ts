@@ -25,6 +25,8 @@ export const load: PageServerLoad = async (event) => {
 	cookies.delete('message_title2', { path: '/' });
 	cookies.delete('message_description', { path: '/' });
 	cookies.delete('message_description2', { path: '/' });
+	cookies.delete('message_button', { path: '/' });
+	cookies.delete('message_button_path', { path: '/' });
 
 	const user = event.locals.user;
 	if (!user) {

@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { JobApplications, Jobs, JobTypes, Users } from '$lib/server/db/schema.js';
 import { redirect, type ServerLoad } from '@sveltejs/kit';
-import { count, eq, inArray } from 'drizzle-orm';
+import { and, count, eq, inArray } from 'drizzle-orm';
 
 export const load: ServerLoad = async (event) => {
 	const cookies = event.cookies;
@@ -45,7 +45,7 @@ export const load: ServerLoad = async (event) => {
 		.from(Jobs)
 		.leftJoin(Users, eq(Jobs.UserId, Users.Id))
 		.leftJoin(JobTypes, eq(Jobs.JobTypeId, JobTypes.Id))
-		.where(eq(Jobs.UserId, user.Id)) // Only get jobs owned by the current user
+		.where(and(eq(Jobs.UserId, user.Id), eq(Jobs.Deleted, false))) // Only get jobs owned by the current user and not deleted
 		.offset(offset) // Move forward by the offset
 		.limit(10); // Stop after 10 jobs
 
@@ -71,4 +71,39 @@ export const load: ServerLoad = async (event) => {
 			return grouped;
 		});
 	return { user, jobsLength, jobs, jobApplications, offset: page };
+};
+
+export const actions = {
+	default: async ({ request, locals, cookies }) => {
+		const user = locals.user;
+		if (!user) throw redirect(301, '/auth/login');
+		const formData = await request.formData();
+		const jobId = formData.get('jobId');
+		if (typeof jobId !== 'string') {
+			throw redirect(301, '/dashboard/jobs');
+		}
+
+		// Check if the job exists and is owned by the user
+		await db
+			.update(Jobs)
+			.set({
+				Deleted: true
+			})
+			.where(and(eq(Jobs.Id, jobId), eq(Jobs.UserId, user.Id)))
+
+			.then(() => {
+				cookies.set('message_title', 'Job Deleted', { path: '/' });
+				cookies.set('message_description', 'Job deleted successfully.', { path: '/' });
+				cookies.set('message_title2', 'What Next?', { path: '/' });
+				cookies.set(
+					'message_description2',
+					'You can create a new job or manage your existing ones.',
+					{ path: '/' }
+				);
+				cookies.set('message_button_path', 'dashboard/jobs', { path: '/' });
+				cookies.set('message_button', 'Manage Jobs', { path: '/' });
+				cookies.set('authenticated', 'true', { path: '/' });
+			});
+		throw redirect(301, '/backend/message');
+	}
 };

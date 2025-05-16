@@ -1,9 +1,8 @@
 <!-- STUB -->
 <script lang="ts">
 	import DashboardPage from '../settings/+page.svelte';
-	import { type PageData } from './$types';
-	const { data: props } = $props();
-	const data: PageData = props;
+	import { type PageProps } from './$types';
+	const { data }: PageProps = $props();
 </script>
 
 <!-- This is a good example of how to pass data from a parent page to a child page. -->
