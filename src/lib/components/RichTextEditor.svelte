@@ -20,6 +20,7 @@
 	let markdownBuffer = '';
 	let createList = false;
 	let editor: HTMLDivElement;
+	let savedRange: Range | null = null;
 	let { oninput = () => {}, value = $bindable(), form = '', name = '' } = $props();
 	function dispatchInputEvent(content: string) {
 		value = content;
@@ -28,9 +29,9 @@
 	}
 	function justSanitize(html: string) {
 		const content = sanitizeHtml(html, {
-			allowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'strong', 'em', 'u', 'strike', 'ul', 'ol', 'li'],
+			allowedTags: ['p', 'h1', 'h2', 'h3', 'h4', 'strong', 'b', 'em', 'u', 'strike', 'ul', 'ol', 'li', 'br'],
 			allowedAttributes: {
-				'*': ['class']
+				'*': ['class', 'style']
 			}
 		});
 		return content;
@@ -42,10 +43,11 @@
 				'p',
 				'h1',
 				'h2',
-				'br',
 				'h3',
 				'h4',
 				'strong',
+				'br',
+				'b',
 				'em',
 				'u',
 				'strike',
@@ -54,10 +56,46 @@
 				'li'
 			],
 			allowedAttributes: {
-				'*': ['class']
+				'*': ['class', 'style']
 			}
 		});
 		dispatchInputEvent(content);
+	}
+
+	// Add selection saving and restoring functionality
+	function saveSelection(): Range | null {
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0) {
+			return selection.getRangeAt(0).cloneRange();
+		}
+		return null;
+	}
+
+	function restoreSelection(range: Range): void {
+		const selection = window.getSelection();
+		if (selection) {
+			selection.removeAllRanges();
+			selection.addRange(range);
+		}
+	}
+
+	// Save selection when editor gets focus
+	function handleFocus() {
+		savedRange = saveSelection();
+	}
+
+	// Save selection when clicking inside the editor
+	function handleClick() {
+		savedRange = saveSelection();
+	}
+
+	// Save selection when there's any selection change
+	function handleSelectionChange() {
+		const selection = window.getSelection();
+		if (selection && selection.rangeCount > 0 && 
+			editor && editor.contains(selection.anchorNode)) {
+			savedRange = saveSelection();
+		}
 	}
 	function handleKeydown(event: KeyboardEvent) {
 		const selection = window.getSelection();
@@ -73,28 +111,19 @@
 			return;
 		}
 
-		// Start collecting markdown symbols
+		// Handle markdown shortcuts
 		if (event.key === 'Enter') {
 			markdownBuffer = '';
-			// const range = selection.getRangeAt(0);
-			// const br = document.createElement('br');
-			// range.insertNode(br);
-			// range.setStartAfter(br);
-			// range.setEndAfter(br);
 			createList = true;
-		} else if (event.key === '#' || event.key === '-' || event.key === '*') {
+		} else if ((event.key === '#' || event.key === '-' || event.key === '*') && selection.isCollapsed) {
 			markdownBuffer += event.key;
-		} else if (event.key === ' ' && markdownBuffer) {
+		} else if (event.key === ' ' && markdownBuffer && selection.isCollapsed) {
 			event.preventDefault();
 			const range = selection.getRangeAt(0);
-			const currentLine = range.startContainer.textContent || '';
-
+			
 			// Handle headings
 			if (markdownBuffer.startsWith('#')) {
-				// We start by removing the markdown symbol
-
 				const level = Math.min(markdownBuffer.length, 4);
-				// const heading = currentLine.replace(markdownBuffer, '');
 				range.setStart(range.startContainer, 0);
 				range.deleteContents();
 				document.execCommand('formatBlock', false, `h${level}`);
@@ -117,25 +146,53 @@
 			}
 			// Handle lists
 			else if ((markdownBuffer === '-' || markdownBuffer === '*') && createList) {
-				const ul = document.createElement('ul');
-				ul.className = 'list-inside list-disc';
-				const li = document.createElement('li');
-				ul.appendChild(li);
-				range.setStart(range.startContainer, 0);
-				range.deleteContents();
-				range.insertNode(ul);
-				li.focus();
+				event.preventDefault();
+				if (markdownBuffer === '-') {
+					document.execCommand('insertUnorderedList', false);
+				} else {
+					// For * we'll use ordered lists
+					document.execCommand('insertOrderedList', false);
+				}
+				
+				// Apply proper styling to the list
+				const selection = window.getSelection();
+				if (selection) {
+					let node = selection.anchorNode;
+					let tagName = markdownBuffer === '-' ? 'UL' : 'OL';
+					while (node && node.nodeName !== tagName) {
+						node = node.parentNode;
+					}
+					if (node) {
+						(node as HTMLElement).classList.add(
+							'list-inside',
+							tagName === 'UL' ? 'list-disc' : 'list-decimal'
+						);
+					}
+				}
 			}
 			markdownBuffer = '';
 			createList = false;
-		} else {
+		} else if (event.key !== ' ') {
 			markdownBuffer = '';
 			createList = false;
 		}
 	}
 
 	function format(command: string, imgString?: string) {
+		// First ensure the editor has focus
+		editor.focus();
+		
+		// Use the previously saved selection if we have one
+		if (savedRange) {
+			restoreSelection(savedRange);
+		}
+		
+		// Apply the command
 		document.execCommand(command, false, imgString);
+		
+		// Save the new selection after command
+		savedRange = saveSelection();
+		
 		if (command === 'heading') {
 			document.execCommand('formatBlock', false, 'h2');
 			const selection = window.getSelection();
@@ -154,7 +211,27 @@
 				}
 			}
 		}
-		if (command === 'insertUnorderedList' || command === 'insertOrderedList') {
+		else if (command === 'justifyLeft' || command === 'justifyCenter' || command === 'justifyRight') {
+			const selection = window.getSelection();
+			if (selection) {
+				const node = selection.anchorNode;
+				if (node) {
+					let element = node.nodeType === 3 ? node.parentNode : node;
+					while (element && element.nodeName !== 'DIV' && element.nodeName !== 'P' && 
+					       element.nodeName !== 'H1' && element.nodeName !== 'H2' && 
+					       element.nodeName !== 'H3' && element.nodeName !== 'H4') {
+						element = element.parentNode;
+					}
+					
+					if (element) {
+						const align = command === 'justifyLeft' ? 'left' : 
+						             command === 'justifyCenter' ? 'center' : 'right';
+						(element as HTMLElement).style.textAlign = align;
+					}
+				}
+			}
+		}
+		else if (command === 'insertUnorderedList' || command === 'insertOrderedList') {
 			// Hot-patch the execCommand to add classes to the stuff
 			const selection = window.getSelection();
 			if (selection) {
@@ -171,6 +248,14 @@
 				}
 			}
 		}
+		
+		// Make sure we maintain focus after formatting
+		editor.focus();
+		
+		// If we had a selection, restore it
+		if (savedRange) {
+			restoreSelection(savedRange);
+		}
 	}
 </script>
 
@@ -181,35 +266,35 @@
 	<div
 		class="sticky top-0 z-10 flex w-full flex-wrap gap-2 rounded-md border border-slate-100 bg-white p-2"
 	>
-		<Button aria-label="Undo" onclick={() => format('undo')}>
+		<Button aria-label="Undo" onmousedown={(e) => { e.preventDefault(); format('undo'); }}>
 			<Undo />
 		</Button>
-		<Button aria-label="Redo" onclick={() => format('redo')}>
+		<Button aria-label="Redo" onmousedown={(e) => { e.preventDefault(); format('redo'); }}>
 			<Redo />
 		</Button>
 		<ToggleGroup.Root type="single">
-			<ToggleGroup.Item value="heading" aria-label="heading" onclick={() => format('heading')}>
+			<ToggleGroup.Item value="heading" aria-label="heading" onmousedown={(e) => { e.preventDefault(); format('heading'); }}>
 				<Heading />
 			</ToggleGroup.Item></ToggleGroup.Root
 		>
 		<ToggleGroup.Root type="multiple">
-			<ToggleGroup.Item value="bold" aria-label="Bold" onclick={() => format('bold')}>
+			<ToggleGroup.Item value="bold" aria-label="Bold" onmousedown={(e) => { e.preventDefault(); format('bold'); }}>
 				<Bold />
 			</ToggleGroup.Item>
-			<ToggleGroup.Item value="italic" aria-label="Italic" onclick={() => format('italic')}>
+			<ToggleGroup.Item value="italic" aria-label="Italic" onmousedown={(e) => { e.preventDefault(); format('italic'); }}>
 				<Italic />
 			</ToggleGroup.Item>
 			<ToggleGroup.Item
 				value="underline"
 				aria-label="Underline"
-				onclick={() => format('underline')}
+				onmousedown={(e) => { e.preventDefault(); format('underline'); }}
 			>
 				<Underline />
 			</ToggleGroup.Item>
 			<ToggleGroup.Item
 				value="strikethrough"
 				aria-label="Strikethrough"
-				onclick={() => format('strikethrough')}
+				onmousedown={(e) => { e.preventDefault(); format('strikethrough'); }}
 			>
 				<Strikethrough />
 			</ToggleGroup.Item>
@@ -218,21 +303,21 @@
 			<ToggleGroup.Item
 				value="justifyLeft"
 				aria-label="Align Left"
-				onclick={() => format('justifyLeft')}
+				onmousedown={(e) => { e.preventDefault(); format('justifyLeft'); }}
 			>
 				<AlignLeft />
 			</ToggleGroup.Item>
 			<ToggleGroup.Item
 				value="justifyCenter"
 				aria-label="Align Center"
-				onclick={() => format('justifyCenter')}
+				onmousedown={(e) => { e.preventDefault(); format('justifyCenter'); }}
 			>
 				<AlignCenter />
 			</ToggleGroup.Item>
 			<ToggleGroup.Item
 				value="justifyRight"
 				aria-label="Align Right"
-				onclick={() => format('justifyRight')}
+				onmousedown={(e) => { e.preventDefault(); format('justifyRight'); }}
 			>
 				<AlignRight />
 			</ToggleGroup.Item>
@@ -241,14 +326,14 @@
 			<ToggleGroup.Item
 				value="insertUnorderedList"
 				aria-label="Bullet List"
-				onclick={() => format('insertUnorderedList')}
+				onmousedown={(e) => { e.preventDefault(); format('insertUnorderedList'); }}
 			>
 				<List />
 			</ToggleGroup.Item>
 			<ToggleGroup.Item
 				value="insertOrderedList"
 				aria-label="Numbered List"
-				onclick={() => format('insertOrderedList')}
+				onmousedown={(e) => { e.preventDefault(); format('insertOrderedList'); }}
 			>
 				<ListOrdered />
 			</ToggleGroup.Item>
@@ -262,6 +347,10 @@
 			data-placeholder="Start typing here..."
 			onkeydown={handleKeydown}
 			onblur={sanitizeContent}
+			onfocus={handleFocus}
+			onclick={handleClick}
+			onmouseup={handleSelectionChange}
+			onkeyup={handleSelectionChange}
 			role="textbox"
 			tabindex="0"
 		>
