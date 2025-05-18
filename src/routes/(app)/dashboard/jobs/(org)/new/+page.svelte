@@ -118,7 +118,9 @@
 	}
 
 	onMount(() => {
-		$form.description = `<p>Tips: Provide a summary of the role, what success in the position looks like, and how this role fits into the organization overall.</p><p>&nbsp;</p><strong>Responsibilities</strong><p>[Be specific when describing each of the responsibilities. Use gender-neutral, inclusive language.]</p><p>Example: Determine and develop user requirements for systems in production, to ensure maximum usability</p><p>&nbsp;</p><strong>Qualifications</strong><p>[Some qualifications you may want to include are Skills, Education, Experience, or Certifications.]</p><p>Example: Excellent verbal and written communication skills</p>`;
+		if ($form.description.trim() === '') {
+			$form.description = `<p>Tips: Provide a summary of the role, what success in the position looks like, and how this role fits into the organization overall.</p><p>&nbsp;</p><strong>Responsibilities</strong><p>[Be specific when describing each of the responsibilities. Use gender-neutral, inclusive language.]</p><p>Example: Determine and develop user requirements for systems in production, to ensure maximum usability</p><p>&nbsp;</p><strong>Qualifications</strong><p>[Some qualifications you may want to include are Skills, Education, Experience, or Certifications.]</p><p>Example: Excellent verbal and written communication skills</p>`;
+		}
 	});
 
 	// Check if form is valid for preview
@@ -329,7 +331,7 @@
 											Include details on responsibilities, requirements, benefits, and company
 											culture
 										</div>
-										<div class="flex space-x-2 items-center text-sm text-muted-foreground">
+										<div class="flex items-center space-x-2 text-sm text-muted-foreground">
 											<!-- @todo Make this a reality one day -->
 											<!-- <Fa icon={faMarkdown} /> <span>MarkDown supported</span> -->
 										</div>
