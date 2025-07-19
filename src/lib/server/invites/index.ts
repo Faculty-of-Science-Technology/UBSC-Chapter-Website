@@ -1,6 +1,6 @@
+import { and, count, desc, eq } from 'drizzle-orm';
 import { db } from '../db';
 import { InviteCodes, InviteCodeUsage, Users } from '../db/schema';
-import { eq, and, desc, count } from 'drizzle-orm';
 
 export interface CreateInviteData {
 	createdBy: string;
