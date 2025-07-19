@@ -6,22 +6,23 @@ declare global {
 		interface Locals {
 			user?: {
 				Id: string;
-				AccountType: 'org' | 'student' | 'owner';
-				Administrator: boolean;
+				Email: string;
+				Username: string;
 				FirstName: string;
 				LastName: string;
-				Email: string;
-				Phone: string | null;
-				Location: string | null;
-				ProfilePicture: string | null;
-				CoverPhoto: string | null;
-				Username: string;
-				ResumeUrl: string | null;
-				Password: string;
-				ActivationCode: string | null;
-				Bio: string | null;
-				Hireable: boolean;
-				CreatedAt: Date | string;
+				AccountType: string;
+				Administrator: boolean;
+				Roles: string[];
+				Permissions: {
+					CanManageUsers: boolean;
+					CanManageEvents: boolean;
+					CanManageGroups: boolean;
+					CanManagePosts: boolean;
+					CanEditOthersPosts: boolean;
+					CanManageRoles: boolean;
+					CanManageInvites: boolean;
+					CanManageTheme: boolean;
+				};
 			};
 		}
 		// interface PageData {}

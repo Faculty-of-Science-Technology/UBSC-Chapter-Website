@@ -1,38 +1,55 @@
-import { JWT_SECRET } from '$env/static/private';
-import { getUser } from '$lib/functions/users';
 import { i18n } from '$lib/i18n';
-import { Users } from '$lib/server/db/schema';
+import { AuthService } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
-import Jwt from 'jsonwebtoken';
+import { redirect } from '@sveltejs/kit';
+
 const handleI18n: Handle = i18n.handle();
+
 export const handle: Handle = async ({ event, resolve }) => {
+	const cookies = event.cookies;
+	const authToken = cookies.get('auth_token');
+	
 	try {
-		const cookies = event.cookies;
-		const session = cookies.get('session');
 
 		// Check if the user is authenticated
-		if (!session) return await handleI18n({ event, resolve });
-		const jwt: Jwt.JwtPayload = Jwt.verify(session, JWT_SECRET) as Jwt.JwtPayload;
-		if (!jwt) return await handleI18n({ event, resolve });
+		if (authToken) {
+			const authResult = await AuthService.verifyToken(authToken);
+			if (authResult.success && authResult.user) {
+				// Set the user in the event locals
+				event.locals.user = authResult.user;
+			} else {
+				// Invalid token, clear it
+				cookies.delete('auth_token', { path: '/' });
+			}
+		}
 
-		// Get the user's raw data from the database
-		const temp_user = await getUser(Users.Email, jwt['email']);
-		if (!temp_user) throw new Error('User not found');
+		// Protect dashboard routes - require authentication
+		if (event.url.pathname.startsWith('/dashboard')) {
+			if (!event.locals.user) {
+				throw redirect(302, '/auth/login');
+			}
+		}
 
-		// Cast the raw data to the User type
-		const new_user: App.Locals['user'] = temp_user as unknown as App.Locals['user'];
-		if(!new_user) throw new Error('User not found');
+		// Protect admin routes - require admin permissions
+		if (event.url.pathname.startsWith('/dashboard/admin')) {
+			if (!event.locals.user || (!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageUsers)) {
+				throw redirect(302, '/dashboard');
+			}
+		}
 
-		// Reassign the correct types to the user object
-		new_user.CreatedAt = new Date(temp_user.CreatedAt);
-		
-		// Set the user in the event locals
-		event.locals.user = new_user;
-		
-		// response = await handleI18n({ event, resolve });
-	} catch (e) {
-		console.error(e);
-		return await handleI18n({ event, resolve });
+		// Redirect logged-in users away from auth pages
+		if (event.url.pathname.startsWith('/auth/') && event.locals.user) {
+			throw redirect(302, '/dashboard');
+		}
+
+	} catch (error) {
+		// If it's a redirect, re-throw it
+		if (error instanceof Response && error.status >= 300 && error.status < 400) {
+			throw error;
+		}
+		console.error('Authentication error:', error);
+		// Clear invalid session
+		cookies.delete('auth_token', { path: '/' });
 	}
 
 	const response = await handleI18n({ event, resolve });

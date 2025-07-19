@@ -29,3 +29,4 @@ src/lib/paraglide
 dbml-error.log
 .env*.local
 .env copy
+reference
