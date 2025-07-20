@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -353,121 +357,104 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Event</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="title" class="block text-sm font-medium text-gray-700">Event Title</label>
-							<input
+							<Label for="title">Event Title</Label>
+							<Input
 								type="text"
 								id="title"
 								bind:value={newEvent.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 
 						<div>
-							<label for="content" class="block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
+							<Label for="content">Description</Label>
+							<Textarea
 								id="content"
 								bind:value={newEvent.content}
-								rows="4"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								rows={4}
 								required
-							></textarea>
+							/>
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="eventDate" class="block text-sm font-medium text-gray-700"
-									>Date & Time</label
-								>
-								<input
+								<Label for="eventDate">Date & Time</Label>
+								<Input
 									type="datetime-local"
 									id="eventDate"
 									bind:value={newEvent.eventDate}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 							<div>
-								<label for="eventLocation" class="block text-sm font-medium text-gray-700"
-									>Location</label
-								>
-								<input
+								<Label for="eventLocation">Location</Label>
+								<Input
 									type="text"
 									id="eventLocation"
 									bind:value={newEvent.eventLocation}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="eventCapacity" class="block text-sm font-medium text-gray-700"
-									>Capacity (optional)</label
-								>
-								<input
+								<Label for="eventCapacity">Capacity (optional)</Label>
+								<Input
 									type="number"
 									id="eventCapacity"
 									bind:value={newEvent.eventCapacity}
 									min="1"
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 							<div>
-								<label for="eventPrice" class="block text-sm font-medium text-gray-700"
-									>Price (optional)</label
-								>
-								<input
+								<Label for="eventPrice">Price (optional)</Label>
+								<Input
 									type="number"
 									id="eventPrice"
 									bind:value={newEvent.eventPrice}
 									min="0"
 									step="0.01"
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 						</div>
 
 						<div>
-							<label for="groupId" class="block text-sm font-medium text-gray-700"
-								>Group (optional)</label
-							>
-							<select
-								id="groupId"
-								bind:value={newEvent.groupId}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="">No Group</option>
-								{#each data.availableGroups as group}
-									<option value={group.id}>{group.name} ({group.type})</option>
-								{/each}
-							</select>
+							<Label for="groupId">Group (optional)</Label>
+							<Select.Root type="single" bind:value={newEvent.groupId}>
+								<Select.Trigger class="w-full">
+									{newEvent.groupId ?? "Select a group"}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="">No Group</Select.Item>
+									{#each data.availableGroups as group}
+										<Select.Item value={group.id}>{group.name} ({group.type})</Select.Item>
+									{/each}
+								</Select.Content>
+							</Select.Root>
 						</div>
 
 						<div class="flex items-center space-x-4">
 							<div class="flex items-center">
-								<input
+								<Input
 									type="checkbox"
 									id="featured"
 									bind:checked={newEvent.featured}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+									class="h-4 w-4"
 								/>
-								<label for="featured" class="ml-2 block text-sm text-gray-700">
+								<Label for="featured" class="ml-2">
 									Featured Event
-								</label>
+								</Label>
 							</div>
 							<div class="flex items-center">
-								<input
+								<Input
 									type="checkbox"
 									id="published"
 									bind:checked={newEvent.published}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+									class="h-4 w-4"
 								/>
-								<label for="published" class="ml-2 block text-sm text-gray-700">
+								<Label for="published" class="ml-2">
 									Publish immediately
-								</label>
+								</Label>
 							</div>
 						</div>
 					</div>
@@ -509,29 +496,23 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Event</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-title" class="block text-sm font-medium text-gray-700"
-								>Event Title</label
-							>
-							<input
+							<Label for="edit-title">Event Title</Label>
+							<Input
 								type="text"
 								id="edit-title"
 								bind:value={editEvent.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 
 						<div>
-							<label for="edit-content" class="block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
+							<Label for="edit-content">Description</Label>
+							<Textarea
 								id="edit-content"
 								bind:value={editEvent.content}
-								rows="4"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								rows={4}
 								required
-							></textarea>
+							/>
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">

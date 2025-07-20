@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { GroupMembers, Groups } from '$lib/server/db/schema';
-import { error, json } from '@sveltejs/kit';
+import { error, isHttpError, json } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
@@ -118,6 +118,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 throw error(400, 'Invalid action');
         }
     } catch (err) {
+        if (isHttpError(err)) throw err;
         console.error('Groups API error:', err);
         throw error(500, 'Internal server error');
     }
