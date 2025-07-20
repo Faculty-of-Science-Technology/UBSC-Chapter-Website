@@ -209,17 +209,17 @@ export class AuthService {
 				CanManageTheme: userRoles.some(r => r.canManageTheme) || user.Administrator
 			};
 
-			const userSession: UserSession = {
-				Id: user.Id,
-				Email: user.Email,
-				Username: user.Username,
-				FirstName: user.FirstName,
-				LastName: user.LastName,
-				AccountType: user.AccountType,
-				Administrator: user.Administrator,
-				Roles: userRoles.map(r => r.roleName),
-				Permissions: permissions
-			};
+            const userSession: UserSession = {
+                Id: user.Id,
+                Email: user.Email,
+                Username: user.Username,
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                AccountType: user.AccountType,
+                Administrator: user.Administrator,
+                Roles: userRoles.map(r => r.roleName),
+                Permissions: permissions
+            };
 
 			// Generate JWT token
 			const token = jwt.sign(
@@ -279,26 +279,26 @@ export class AuthService {
 
 			// Aggregate permissions
 			const permissions = {
-				canManageUsers: userRoles.some(r => r.canManageUsers) || user.Administrator,
-				canManageEvents: userRoles.some(r => r.canManageEvents) || user.Administrator,
-				canManageGroups: userRoles.some(r => r.canManageGroups) || user.Administrator,
-				canManagePosts: userRoles.some(r => r.canManagePosts) || user.Administrator,
-				canEditOthersPosts: userRoles.some(r => r.canEditOthersPosts) || user.Administrator,
-				canManageRoles: userRoles.some(r => r.canManageRoles) || user.Administrator,
-				canManageInvites: userRoles.some(r => r.canManageInvites) || user.Administrator,
-				canManageTheme: userRoles.some(r => r.canManageTheme) || user.Administrator
+				CanManageUsers: userRoles.some(r => r.canManageUsers) || user.Administrator,
+				CanManageEvents: userRoles.some(r => r.canManageEvents) || user.Administrator,
+				CanManageGroups: userRoles.some(r => r.canManageGroups) || user.Administrator,
+				CanManagePosts: userRoles.some(r => r.canManagePosts) || user.Administrator,
+				CanEditOthersPosts: userRoles.some(r => r.canEditOthersPosts) || user.Administrator,
+				CanManageRoles: userRoles.some(r => r.canManageRoles) || user.Administrator,
+				CanManageInvites: userRoles.some(r => r.canManageInvites) || user.Administrator,
+				CanManageTheme: userRoles.some(r => r.canManageTheme) || user.Administrator
 			};
 
 			const userSession: UserSession = {
-				id: user.Id,
-				email: user.Email,
-				username: user.Username,
-				firstName: user.FirstName,
-				lastName: user.LastName,
-				accountType: user.AccountType,
-				administrator: user.Administrator,
-				roles: userRoles.map(r => r.roleName),
-				permissions
+				Id: user.Id,
+				Email: user.Email,
+				Username: user.Username,
+				FirstName: user.FirstName,
+				LastName: user.LastName,
+				AccountType: user.AccountType,
+				Administrator: user.Administrator,
+				Roles: userRoles.map(r => r.roleName),
+				Permissions: permissions
 			};
 
 			return { success: true, user: userSession };
