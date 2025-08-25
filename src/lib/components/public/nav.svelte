@@ -9,7 +9,9 @@
 <component
 	class="flex w-full items-center justify-between bg-sky-950 px-4 py-2 text-slate-50 lg:px-20 xl:px-80"
 >
-	<Logo mode="dark" />
+	<a href="/">
+		<Logo mode="dark" />
+	</a>
 	<NavigationLinks />
 	<a href="/auth/login">
 		<Button class="bg-sky-500 hover:bg-sky-600">
