@@ -7,7 +7,7 @@ echo "----------------- POST-RECEIVE HOOK v1.0 ---------------"
 echo "Author: @AlexDev404 (Immanuel Garcia)"
 echo "You can either safely press CTRL+C or wait for this to complete"
 
-cd /app
+cd /home/ubschosting/app
 echo "[STEP 1/5]: Resetting tree to HEAD"
 git reset --hard
 git reflog expire --expire=all --all
