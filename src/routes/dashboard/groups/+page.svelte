@@ -439,6 +439,7 @@
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Manage Members</h3>
 					<p class="mt-2 text-sm text-gray-500">
+						<!--- @todo You can't remove people from the group -->
 						Add members to {selectedGroup?.name}
 					</p>
 					<div class="mt-4">

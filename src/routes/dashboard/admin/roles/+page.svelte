@@ -1,7 +1,13 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Switch } from '$lib/components/vendor/ui/switch';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import type { PageData } from './$types';
 
+	// @todo Fix this page Add/Edit
 	export let data: PageData;
 
 	let showCreateRole = false;
@@ -43,14 +49,46 @@
 	};
 
 	const permissions = [
-		{ key: 'canManageUsers', label: 'Manage Users', description: 'Create, edit, and delete user accounts' },
-		{ key: 'canManageRoles', label: 'Manage Roles', description: 'Create and modify user roles and permissions' },
-		{ key: 'canManageEvents', label: 'Manage Events', description: 'Create, edit, and delete events' },
-		{ key: 'canManagePosts', label: 'Manage Blog Posts', description: 'Create, edit, and delete blog posts' },
-		{ key: 'canEditOthersPosts', label: 'Edit Others\' Posts', description: 'Edit and delete posts created by other users' },
-		{ key: 'canManageGroups', label: 'Manage Groups', description: 'Create and manage chapter groups' },
-		{ key: 'canManageInvites', label: 'Manage Invites', description: 'Create and manage invite codes' },
-		{ key: 'canManageTheme', label: 'Manage Theme', description: 'Customize website appearance and colors' }
+		{
+			key: 'canManageUsers',
+			label: 'Manage Users',
+			description: 'Create, edit, and delete user accounts'
+		},
+		{
+			key: 'canManageRoles',
+			label: 'Manage Roles',
+			description: 'Create and modify user roles and permissions'
+		},
+		{
+			key: 'canManageEvents',
+			label: 'Manage Events',
+			description: 'Create, edit, and delete events'
+		},
+		{
+			key: 'canManagePosts',
+			label: 'Manage Blog Posts',
+			description: 'Create, edit, and delete blog posts'
+		},
+		{
+			key: 'canEditOthersPosts',
+			label: "Edit Others' Posts",
+			description: 'Edit and delete posts created by other users'
+		},
+		{
+			key: 'canManageGroups',
+			label: 'Manage Groups',
+			description: 'Create and manage chapter groups'
+		},
+		{
+			key: 'canManageInvites',
+			label: 'Manage Invites',
+			description: 'Create and manage invite codes'
+		},
+		{
+			key: 'canManageTheme',
+			label: 'Manage Theme',
+			description: 'Customize website appearance and colors'
+		}
 	];
 
 	const roleTypes = [
@@ -146,7 +184,8 @@
 	}
 
 	async function deleteRole(roleId: string) {
-		if (!confirm('Are you sure you want to delete this role? This will remove it from all users.')) return;
+		if (!confirm('Are you sure you want to delete this role? This will remove it from all users.'))
+			return;
 
 		loading = true;
 		try {
@@ -178,7 +217,7 @@
 	}
 
 	function getPermissionCount(role: any) {
-		return permissions.filter(perm => role[perm.key]).length;
+		return permissions.filter((perm) => role[perm.key]).length;
 	}
 </script>
 
@@ -191,7 +230,8 @@
 		<div class="sm:flex-auto">
 			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
-				Create and manage user roles with granular permissions to control access to different features.
+				Create and manage user roles with granular permissions to control access to different
+				features.
 			</p>
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -210,33 +250,36 @@
 			<div class="relative overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:px-6">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center">
-						<div class="flex items-center justify-center w-8 h-8 rounded-full mr-3" style="background-color: {role.color}20;">
+						<div
+							class="mr-3 flex h-8 w-8 items-center justify-center rounded-full"
+							style="background-color: {role.color}20;"
+						>
 							<span class="text-sm font-medium" style="color: {role.color};">
 								{role.name.charAt(0).toUpperCase()}
 							</span>
 						</div>
 						<div>
-							<h3 class="text-lg font-medium text-gray-900 truncate">{role.name}</h3>
+							<h3 class="truncate text-lg font-medium text-gray-900">{role.name}</h3>
 							<p class="text-sm text-gray-500">{role.type}</p>
 						</div>
 					</div>
 					<div class="flex space-x-2">
 						<button
 							onclick={() => handleEditRole(role)}
-							class="text-indigo-600 hover:text-indigo-900 text-sm"
+							class="text-sm text-indigo-600 hover:text-indigo-900"
 						>
 							Edit
 						</button>
 						<button
 							onclick={() => deleteRole(role.id)}
-							class="text-red-600 hover:text-red-900 text-sm"
+							class="text-sm text-red-600 hover:text-red-900"
 						>
 							Delete
 						</button>
 					</div>
 				</div>
-				
-				<p class="mt-2 text-sm text-gray-500 line-clamp-2">
+
+				<p class="mt-2 line-clamp-2 text-sm text-gray-500">
 					{role.description || 'No description provided'}
 				</p>
 
@@ -250,13 +293,17 @@
 					<div class="mt-1 flex flex-wrap gap-1">
 						{#each permissions.slice(0, 4) as perm}
 							{#if role[perm.key]}
-								<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+								<span
+									class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+								>
 									{perm.label}
 								</span>
 							{/if}
 						{/each}
 						{#if getPermissionCount(role) > 4}
-							<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">
+							<span
+								class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20"
+							>
 								+{getPermissionCount(role) - 4} more
 							</span>
 						{/if}
@@ -264,7 +311,7 @@
 				</div>
 
 				<div class="mt-3 text-xs text-gray-400">
-					Created {formatDate(role.createdAt)}
+					Created {formatDate(role.createdAt.toJSON())}
 				</div>
 			</div>
 		{/each}
@@ -275,68 +322,69 @@
 {#if showCreateRole}
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-			<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick={() => showCreateRole = false}></div>
-			<div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6">
+			<div
+				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				onclick={() => (showCreateRole = false)}
+			></div>
+			<div
+				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+			>
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Role</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="name" class="block text-sm font-medium text-gray-700">Role Name</label>
-							<input
+							<Label for="name">Role Name</Label>
+							<Input
 								type="text"
 								id="name"
 								bind:value={newRole.name}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								placeholder="e.g., Moderator"
 								required
 							/>
 						</div>
 						<div>
-							<label for="type" class="block text-sm font-medium text-gray-700">Role Type</label>
-							<select
-								id="type"
-								bind:value={newRole.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							>
-								{#each roleTypes as roleType}
-									<option value={roleType.value}>{roleType.label}</option>
-								{/each}
-							</select>
+							<Label for="type">Role Type</Label>
+							<Select.Root type="single" bind:value={newRole.type}>
+								<Select.Trigger class="w-full">
+									{#if newRole.type.trim() === ''}
+										Select a role
+									{/if}
+									{#each roleTypes as role}
+										{#if newRole.type === role.value}
+											{role.label}
+										{/if}
+									{/each}
+								</Select.Trigger>
+								<Select.Content>
+									{#each roleTypes as roleType}
+										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
+									{/each}
+								</Select.Content>
+							</Select.Root>
 						</div>
 						<div>
-							<label for="color" class="block text-sm font-medium text-gray-700">Role Color</label>
-							<input
-								type="color"
-								id="color"
-								bind:value={newRole.color}
-								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+							<Label for="color">Role Color</Label>
+							<Input type="color" id="color" bind:value={newRole.color} class="h-10" />
+						</div>
+						<div>
+							<Label for="description">Description</Label>
+							<Textarea
+								id="description"
+								bind:value={newRole.description}
+								rows={3}
+								placeholder="Describe what this role is for..."
 							/>
 						</div>
 						<div>
-							<label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-							<textarea
-								id="description"
-								bind:value={newRole.description}
-								rows="3"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								placeholder="Describe what this role is for..."
-							></textarea>
-						</div>
-						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-3">Permissions</label>
+							<div class="mb-3 text-sm font-medium text-gray-700">Permissions</div>
 							<div class="space-y-3">
 								{#each permissions as perm}
-									<div class="flex items-start">
-										<div class="flex h-5 items-center">
-											<input
-												type="checkbox"
-												bind:checked={newRole[perm.key]}
-												class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-											/>
-										</div>
-										<div class="ml-3 text-sm">
-											<label class="font-medium text-gray-700">{perm.label}</label>
+									<div class="flex items-start space-x-3">
+										<Switch id="perm-{perm.key}" bind:checked={newRole[perm.key]} />
+										<div class="text-sm">
+											<Label for="perm-{perm.key}" class="font-medium text-gray-700"
+												>{perm.label}</Label
+											>
 											<p class="text-gray-500">{perm.description}</p>
 										</div>
 									</div>
@@ -350,13 +398,13 @@
 						type="button"
 						onclick={submitCreateRole}
 						disabled={loading || !newRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50"
+						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Role'}
 					</button>
 					<button
 						type="button"
-						onclick={() => showCreateRole = false}
+						onclick={() => (showCreateRole = false)}
 						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
 					>
 						Cancel
@@ -371,66 +419,58 @@
 {#if showEditRole}
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-			<div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onclick={() => showEditRole = false}></div>
-			<div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6">
+			<div
+				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				onclick={() => (showEditRole = false)}
+			></div>
+			<div
+				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+			>
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Role</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-name" class="block text-sm font-medium text-gray-700">Role Name</label>
-							<input
-								type="text"
-								id="edit-name"
-								bind:value={editRole.name}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							/>
+							<Label for="edit-name">Role Name</Label>
+							<Input type="text" id="edit-name" bind:value={editRole.name} required />
 						</div>
 						<div>
-							<label for="edit-type" class="block text-sm font-medium text-gray-700">Role Type</label>
-							<select
-								id="edit-type"
-								bind:value={editRole.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							>
-								{#each roleTypes as roleType}
-									<option value={roleType.value}>{roleType.label}</option>
-								{/each}
-							</select>
+							<Label for="edit-type">Role Type</Label>
+							<Select.Root type="single" bind:value={editRole.type}>
+								<Select.Trigger class="w-full">
+									{#if editRole.type.trim() === ''}
+										Select a role
+									{/if}
+									{#each roleTypes as role}
+										{#if editRole.type === role.value}
+											{role.label}
+										{/if}
+									{/each}
+								</Select.Trigger>
+								<Select.Content>
+									{#each roleTypes as roleType}
+										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
+									{/each}
+								</Select.Content>
+							</Select.Root>
 						</div>
 						<div>
-							<label for="edit-color" class="block text-sm font-medium text-gray-700">Role Color</label>
-							<input
-								type="color"
-								id="edit-color"
-								bind:value={editRole.color}
-								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-							/>
+							<Label for="edit-color">Role Color</Label>
+							<Input type="color" id="edit-color" bind:value={editRole.color} class="h-10" />
 						</div>
 						<div>
-							<label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>
-							<textarea
-								id="edit-description"
-								bind:value={editRole.description}
-								rows="3"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							></textarea>
+							<Label for="edit-description">Description</Label>
+							<Textarea id="edit-description" bind:value={editRole.description} rows={3} />
 						</div>
 						<div>
-							<label class="block text-sm font-medium text-gray-700 mb-3">Permissions</label>
+							<div class="mb-3 text-sm font-medium text-gray-700">Permissions</div>
 							<div class="space-y-3">
 								{#each permissions as perm}
-									<div class="flex items-start">
-										<div class="flex h-5 items-center">
-											<input
-												type="checkbox"
-												bind:checked={editRole[perm.key]}
-												class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-											/>
-										</div>
-										<div class="ml-3 text-sm">
-											<label class="font-medium text-gray-700">{perm.label}</label>
+									<div class="flex items-start space-x-3">
+										<Switch id="edit-perm-{perm.key}" bind:checked={editRole[perm.key]} />
+										<div class="text-sm">
+											<Label for="edit-perm-{perm.key}" class="font-medium text-gray-700"
+												>{perm.label}</Label
+											>
 											<p class="text-gray-500">{perm.description}</p>
 										</div>
 									</div>
@@ -444,13 +484,13 @@
 						type="button"
 						onclick={submitEditRole}
 						disabled={loading || !editRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50"
+						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Role'}
 					</button>
 					<button
 						type="button"
-						onclick={() => showEditRole = false}
+						onclick={() => (showEditRole = false)}
 						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
 					>
 						Cancel

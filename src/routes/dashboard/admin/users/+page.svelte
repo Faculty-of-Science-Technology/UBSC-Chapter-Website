@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Switch } from '$lib/components/vendor/ui/switch';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -221,6 +225,7 @@
 				onclick={handleCreateUser}
 				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 			>
+			<!-- @todo This does not work properly -->
 				Add User
 			</button>
 		</div>
@@ -353,67 +358,57 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New User</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-							<input
+							<Label for="email">Email</Label>
+							<Input
 								type="email"
 								id="email"
 								bind:value={newUser.email}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 						<div>
-							<label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-							<input
+							<Label for="username">Username</Label>
+							<Input
 								type="text"
 								id="username"
 								bind:value={newUser.username}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
-								<input
+								<Label for="firstName">First Name</Label>
+								<Input
 									type="text"
 									id="firstName"
 									bind:value={newUser.firstName}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 							<div>
-								<label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
-								<input
+								<Label for="lastName">Last Name</Label>
+								<Input
 									type="text"
 									id="lastName"
 									bind:value={newUser.lastName}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 						</div>
 						<div>
-							<label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-							<input
+							<Label for="password">Password</Label>
+							<Input
 								type="password"
 								id="password"
 								bind:value={newUser.password}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="administrator"
-								bind:checked={newUser.administrator}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="administrator" class="ml-2 block text-sm text-gray-700">
+						<div class="flex items-center space-x-2">
+							<Switch id="administrator" bind:checked={newUser.administrator} />
+							<Label for="administrator">
 								Administrator
-							</label>
+							</Label>
 						</div>
 					</div>
 				</div>
@@ -449,57 +444,48 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit User</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-email" class="block text-sm font-medium text-gray-700">Email</label>
-							<input
+							<Label for="edit-email">Email</Label>
+							<Input
 								type="email"
 								id="edit-email"
 								bind:value={editUser.email}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 						<div>
-							<label for="edit-username" class="block text-sm font-medium text-gray-700">Username</label>
-							<input
+							<Label for="edit-username">Username</Label>
+							<Input
 								type="text"
 								id="edit-username"
 								bind:value={editUser.username}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="edit-firstName" class="block text-sm font-medium text-gray-700">First Name</label>
-								<input
+								<Label for="edit-firstName">First Name</Label>
+								<Input
 									type="text"
 									id="edit-firstName"
 									bind:value={editUser.firstName}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 							<div>
-								<label for="edit-lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
-								<input
+								<Label for="edit-lastName">Last Name</Label>
+								<Input
 									type="text"
 									id="edit-lastName"
 									bind:value={editUser.lastName}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 						</div>
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="edit-administrator"
-								bind:checked={editUser.administrator}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="edit-administrator" class="ml-2 block text-sm text-gray-700">
+						<div class="flex items-center space-x-2">
+							<Switch id="edit-administrator" bind:checked={editUser.administrator} />
+							<Label for="edit-administrator">
 								Administrator
-							</label>
+							</Label>
 						</div>
 					</div>
 				</div>
@@ -537,17 +523,17 @@
 						Assign a role to {selectedUser?.firstName} {selectedUser?.lastName}
 					</p>
 					<div class="mt-4">
-						<label for="role-select" class="block text-sm font-medium text-gray-700">Select Role</label>
-						<select
-							id="role-select"
-							bind:value={selectedRole}
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-						>
-							<option value="">Select a role...</option>
-							{#each data.availableRoles as role}
-								<option value={role.id}>{role.name}</option>
-							{/each}
-						</select>
+						<Label for="role-select">Select Role</Label>
+						<Select.Root bind:selected={selectedRole}>
+							<Select.Trigger class="w-full">
+								<Select.Value placeholder="Select a role..." />
+							</Select.Trigger>
+							<Select.Content>
+								{#each data.availableRoles as role}
+									<Select.Item value={role.id}>{role.name}</Select.Item>
+								{/each}
+							</Select.Content>
+						</Select.Root>
 					</div>
 				</div>
 				<div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
