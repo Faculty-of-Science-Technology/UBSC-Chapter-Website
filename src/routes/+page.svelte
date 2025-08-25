@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
 	import PublicNav from '$lib/components/public/nav.svelte';
+	import SectionFour from '$lib/templates/landing/sections/section-four.svelte';
 	import SectionOne from '$lib/templates/landing/sections/section-one.svelte';
 	import SectionThree from '$lib/templates/landing/sections/section-three.svelte';
 	import SectionTwo from '$lib/templates/landing/sections/section-two.svelte';
@@ -15,6 +16,7 @@
 		<SectionOne statistics={data.statistics} />
 		<SectionTwo statistics={data.statistics} />
 		<SectionThree statistics={data.statistics} groups={data.groups} />
+		<SectionFour statistics={data.statistics} recentPosts={data.recentPosts} />
 	</main>
 	<Footer/>
 </page>
