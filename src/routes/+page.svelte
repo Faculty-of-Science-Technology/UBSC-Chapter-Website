@@ -12,7 +12,7 @@
 
 <page class="inline-flex flex-col items-center gap-32 w-full h-full">
 	<PublicNav />
-	<main class="flex flex-col items-center gap-48 self-stretch mx-2 lg:mx-20 xl:mx-80">
+	<main class="flex flex-col items-center gap-48 self-stretch mx-2 lg:mx-20 xl:mx-60">
 		<SectionOne statistics={data.statistics} />
 		<SectionTwo statistics={data.statistics} />
 		<SectionThree statistics={data.statistics} groups={data.groups} />

@@ -20,7 +20,7 @@
 
 <page class="inline-flex h-full w-full flex-col items-center gap-32">
 	<PublicNav />
-	<main class="mx-2 flex flex-col items-center gap-48 self-stretch lg:mx-20 xl:mx-80">
+	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
 		<!-- Hero Section -->
 		<section class="w-full">
 			<HeroBlock
