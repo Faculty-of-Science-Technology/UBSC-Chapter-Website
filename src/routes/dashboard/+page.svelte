@@ -3,102 +3,44 @@
 
 	const { data }: PageProps = $props();
 
-	// Mock data for dashboard overview
+	// Transform server data into display format
 	const stats = [
 		{
 			name: 'Total Members',
-			value: '142',
-			change: '+12',
-			changeType: 'increase',
+			value: data.stats.totalMembers.value.toString(),
+			change: data.stats.totalMembers.change >= 0 ? `+${data.stats.totalMembers.change}` : data.stats.totalMembers.change.toString(),
+			changeType: data.stats.totalMembers.changeType,
 			icon: 'users'
 		},
 		{
 			name: 'Active Events',
-			value: '8',
-			change: '+2',
-			changeType: 'increase',
+			value: data.stats.activeEvents.value.toString(),
+			change: data.stats.activeEvents.change >= 0 ? `+${data.stats.activeEvents.change}` : data.stats.activeEvents.change.toString(),
+			changeType: data.stats.activeEvents.changeType,
 			icon: 'calendar'
 		},
 		{
 			name: 'Blog Posts',
-			value: '24',
-			change: '+4',
-			changeType: 'increase',
+			value: data.stats.blogPosts.value.toString(),
+			change: data.stats.blogPosts.change >= 0 ? `+${data.stats.blogPosts.change}` : data.stats.blogPosts.change.toString(),
+			changeType: data.stats.blogPosts.changeType,
 			icon: 'document'
 		},
 		{
 			name: 'Active Groups',
-			value: '6',
-			change: '0',
-			changeType: 'neutral',
+			value: data.stats.activeGroups.value.toString(),
+			change: data.stats.activeGroups.change >= 0 ? `+${data.stats.activeGroups.change}` : data.stats.activeGroups.change.toString(),
+			changeType: data.stats.activeGroups.changeType,
 			icon: 'user-group'
 		}
 	];
 
-	const recentActivity = [
-		{
-			id: 1,
-			user: 'Alex Rodriguez',
-			action: 'created a new event',
-			target: 'Web Development Workshop',
-			time: '2 hours ago',
-			avatar: 'AR'
-		},
-		{
-			id: 2,
-			user: 'Maria Santos',
-			action: 'published a blog post',
-			target: 'Getting Started with React',
-			time: '4 hours ago',
-			avatar: 'MS'
-		},
-		{
-			id: 3,
-			user: 'John Smith',
-			action: 'joined the group',
-			target: 'Frontend Developers',
-			time: '6 hours ago',
-			avatar: 'JS'
-		},
-		{
-			id: 4,
-			user: 'Sarah Williams',
-			action: 'registered for event',
-			target: 'Machine Learning Basics',
-			time: '1 day ago',
-			avatar: 'SW'
-		}
-	];
+	// Use server data for upcoming events
 
-	const upcomingEvents = [
-		{
-			id: 1,
-			title: 'Web Development Workshop',
-			date: '2025-01-22',
-			time: '2:00 PM',
-			attendees: 28,
-			location: 'Computer Lab A'
-		},
-		{
-			id: 2,
-			title: 'Machine Learning Basics',
-			date: '2025-01-25',
-			time: '10:00 AM',
-			attendees: 15,
-			location: 'Virtual Event'
-		},
-		{
-			id: 3,
-			title: 'Code Review Session',
-			date: '2025-01-28',
-			time: '4:00 PM',
-			attendees: 12,
-			location: 'Conference Room B'
-		}
-	];
+	const upcomingEvents = data.upcomingEvents;
 
 	function getIconPath(iconName: string): string {
-		const icons = {
+		const icons: Record<string, string> = {
 			users:
 				'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
 			calendar:
@@ -106,7 +48,7 @@
 			document:
 				'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
 			'user-group':
-				'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
+				'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
 		};
 		return icons[iconName] || icons.users;
 	}
@@ -177,42 +119,7 @@
 			{/each}
 		</div>
 
-		<div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-			<!-- Recent Activity -->
-			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
-				<div class="border-b border-gray-200 px-6 py-4">
-					<h2 class="text-lg font-medium text-gray-900">Recent Activity</h2>
-				</div>
-				<div class="divide-y divide-gray-200">
-					{#each recentActivity as activity}
-						<div class="px-6 py-4">
-							<div class="flex items-center space-x-3">
-								<div class="flex-shrink-0">
-									<div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200">
-										<span class="text-xs font-medium text-gray-600">{activity.avatar}</span>
-									</div>
-								</div>
-								<div class="min-w-0 flex-1">
-									<p class="text-sm text-gray-900">
-										<span class="font-medium">{activity.user}</span>
-										{activity.action}
-										<span class="font-medium">{activity.target}</span>
-									</p>
-									<p class="text-xs text-gray-500">{activity.time}</p>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</div>
-				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
-					<a
-						href="/dashboard/activity"
-						class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-					>
-						View all activity →
-					</a>
-				</div>
-			</div>
+		<div class="grid grid-cols-1 gap-8">
 
 			<!-- Upcoming Events -->
 			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -220,29 +127,35 @@
 					<h2 class="text-lg font-medium text-gray-900">Upcoming Events</h2>
 				</div>
 				<div class="divide-y divide-gray-200">
-					{#each upcomingEvents as event}
-						<div class="px-6 py-4">
-							<div class="flex items-center justify-between">
-								<div class="min-w-0 flex-1">
-									<h3 class="truncate text-sm font-medium text-gray-900">
-										{event.title}
-									</h3>
-									<div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
-										<span>{event.date}</span>
-										<span>•</span>
-										<span>{event.time}</span>
-										<span>•</span>
-										<span>{event.location}</span>
+					{#if upcomingEvents.length > 0}
+						{#each upcomingEvents as event}
+							<div class="px-6 py-4">
+								<div class="flex items-center justify-between">
+									<div class="min-w-0 flex-1">
+										<h3 class="truncate text-sm font-medium text-gray-900">
+											{event.title}
+										</h3>
+										<div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
+											<span>{event.date}</span>
+											<span>•</span>
+											<span>{event.time}</span>
+											<span>•</span>
+											<span>{event.location}</span>
+										</div>
 									</div>
-								</div>
-								<div class="flex-shrink-0 text-right">
-									<div class="text-sm font-medium text-gray-900">
-										{event.attendees} attending
+									<div class="flex-shrink-0 text-right">
+										<div class="text-sm font-medium text-gray-900">
+											{event.attendees} attending
+										</div>
 									</div>
 								</div>
 							</div>
+						{/each}
+					{:else}
+						<div class="px-6 py-8 text-center">
+							<p class="text-sm text-gray-500">No upcoming events scheduled</p>
 						</div>
-					{/each}
+					{/if}
 				</div>
 				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
 					<a
