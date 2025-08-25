@@ -36,7 +36,7 @@
 				no_signup
 				text_light_blue="Chapter"
 				text="Special Interest Groups & Commitees"
-				subtitle="Find your field of interest and develop your skills beyond the classroom. Our SIGs cater to a variety of interests, from Artificial Intelligence to Cybersecurity to Web Development - whatever your interest, there's a group for you."
+				subtitle="Here are the groups and commitees that you can take part in at the UB ACM Student Chapter. Whatever interest you may have, there is a group with like minded inviduals that you can network with! Find your field(s) of interest and develop your skills beyond the classroom!"
 			/>
 		</section>
 

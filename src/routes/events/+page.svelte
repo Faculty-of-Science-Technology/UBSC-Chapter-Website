@@ -52,7 +52,7 @@
 	<title>Events - UBSC Chapter</title>
 	<meta
 		name="description"
-		content="Discover upcoming workshops, seminars, networking events, and other activities organized by the University of Belize ACM Chapter."
+		content="Through deliberate planning by the chapter officers, every year the ACM Chapter hosts events to allow members to network, use their skills, and learn new skills. Additionaly, the Chapter incorporates events designed to cultivate a passion for technology in young participants and university students."
 	/>
 </svelte:head>
 
@@ -65,7 +65,7 @@
 				no_signup
 				text_light_blue="Chapter"
 				text="Events & Activities"
-				subtitle="Join us for workshops, seminars, networking events, and other exciting activities that will help you grow your skills, expand your network, and advance your career in technology."
+				subtitle="Through deliberate planning by the chapter officers, every year the ACM Chapter hosts events to allow members to network, use their skills, and learn new skills. Additionaly, the Chapter incorporates events designed to cultivate a passion for technology in young participants and university students."
 			/>
 		</section>
 

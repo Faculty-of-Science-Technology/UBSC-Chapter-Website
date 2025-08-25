@@ -2,5 +2,4 @@
 	<a href="/about" class="hover:text-blue-600 transition-colors">ABOUT US</a>
 	<a href="/groups" class="hover:text-blue-600 transition-colors">GROUPS & COMMITEES</a>
 	<a href="/events" class="hover:text-blue-600 transition-colors">EVENTS</a>
-	<a href="/contact" class="hover:text-blue-600 transition-colors">CONTACT</a>
 </div>
