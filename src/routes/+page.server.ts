@@ -2,7 +2,8 @@ import { MAIL_DISPLAYNAME, MAIL_USERNAME, PLATFORM_NAME } from '$env/static/priv
 import type { AvatarData } from '$lib/assemblies';
 import { sendMail } from '$lib/email';
 import { db } from '$lib/server/db';
-import { and, eq, isNull } from 'drizzle-orm';
+import { Groups, Posts, Users } from '$lib/server/db/schema';
+import { and, count, eq, isNull } from 'drizzle-orm';
 import { fail, setError, setMessage } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -54,6 +55,61 @@ export const load: PageServerLoad = async (request) => {
 		limit: 50 // Limit to 50 orgs for the grid
 	});
 
+	// Get dynamic statistics for the landing page
+	const [
+		totalMembersResult,
+		totalEventsResult,
+		totalGroupsResult,
+		totalPostsResult,
+		activeGroupsResult,
+		recentPosts
+	] = await Promise.all([
+		// Total active members (students and organizations)
+		db.select({ count: count() }).from(Users).where(
+			and(isNull(Users.ActivationCode), eq(Users.Hidden, false))
+		),
+		
+		// Total events (published events)
+		db.select({ count: count() }).from(Posts).where(
+			and(eq(Posts.Type, 'EVENT'), eq(Posts.Published, true))
+		),
+		
+		// Total active groups
+		db.select({ count: count() }).from(Groups).where(
+			eq(Groups.IsActive, true)
+		),
+		
+		// Total published posts (blogs + events)
+		db.select({ count: count() }).from(Posts).where(
+			eq(Posts.Published, true)
+		),
+		
+		// Active groups count using the existing groups data
+		groups.filter(group => group.IsActive).length,
+		
+		// Get recent posts for display (optional for future use)
+		db.query.Posts.findMany({
+			where: (posts) => eq(posts.Published, true),
+			with: {
+				author: {
+					columns: {
+						FirstName: true,
+						LastName: true,
+						ProfilePicture: true
+					}
+				}
+			},
+			orderBy: (posts, { desc }) => [desc(posts.CreatedAt)],
+			limit: 3
+		})
+	]);
+
+	const totalMembers = totalMembersResult[0]?.count || 0;
+	const totalEvents = totalEventsResult[0]?.count || 0;
+	const totalGroups = totalGroupsResult[0]?.count || 0;
+	const totalPosts = totalPostsResult[0]?.count || 0;
+	const activeGroups = activeGroupsResult;
+
 	// Get all users
 	const avatar_data: AvatarData[] = users.map((user) => ({
 		id: user.Id,
@@ -95,11 +151,22 @@ export const load: PageServerLoad = async (request) => {
 
 	const form = await superValidate(request, zod(eventRegisterSchema));
 
+	// Prepare statistics for the landing page
+	const statistics = {
+		totalMembers,
+		totalEvents,
+		totalGroups,
+		totalPosts,
+		activeGroups
+	};
+
 	return {
 		avatar_data,
 		org_avatar_data,
 		agendas,
 		groups,
+		statistics,
+		recentPosts,
 		form
 	};
 };

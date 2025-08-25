@@ -7,12 +7,14 @@
 </script>
 
 <component
-	class="flex text-slate-50 bg-sky-950 justify-between items-center px-4 lg:px-20 xl:px-80 py-2 w-full"
+	class="flex w-full items-center justify-between bg-sky-950 px-4 py-2 text-slate-50 lg:px-20 xl:px-80"
 >
 	<Logo mode="dark" />
 	<NavigationLinks />
-	<Button class="bg-sky-500 hover:bg-sky-600">
-		<MailOpen class="mr-2 h-4 w-4" />
-		<span>Login with Email</span>
-	</Button>
+	<a href="/auth/login">
+		<Button class="bg-sky-500 hover:bg-sky-600">
+			<MailOpen class="mr-2 h-4 w-4" />
+			<span>Login with Email</span>
+		</Button>
+	</a>
 </component>
