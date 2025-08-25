@@ -10,7 +10,7 @@ export interface AvatarData {
 	image_url: string;
 	name: string;
 	bio: string | null;
-	hireable: boolean;
+	hireable?: boolean;
 	activation_code?: string | null;
 }
 
@@ -29,3 +29,4 @@ export interface GroupData {
 }
 
 export { About, Archives, Home, HostOrganizations, Interns, PresentationAgenda };
+

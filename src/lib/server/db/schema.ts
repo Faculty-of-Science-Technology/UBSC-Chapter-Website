@@ -284,7 +284,8 @@ export const UsersRelations = relations(Users, ({ many }) => ({
 	eventAttendances: many(EventAttendees),
 	groupMemberships: many(GroupMembers),
 	createdGroups: many(Groups),
-	assignedRoles: many(UserRoles, { relationName: 'assignedBy' })
+	assignedRoles: many(UserRoles, { relationName: 'assignedBy' }),
+	themeUpdates: many(ThemeSettings)
 }));
 
 export const RolesRelations = relations(Roles, ({ many }) => ({
@@ -331,6 +332,10 @@ export const PostsRelations = relations(Posts, ({ one, many }) => ({
 		fields: [Posts.AuthorId],
 		references: [Users.Id]
 	}),
+	group: one(Groups, {
+		fields: [Posts.GroupId],
+		references: [Groups.Id]
+	}),
 	tags: many(PostTags),
 	attendees: many(EventAttendees)
 }));
@@ -358,7 +363,8 @@ export const GroupsRelations = relations(Groups, ({ one, many }) => ({
 		fields: [Groups.CreatedBy],
 		references: [Users.Id]
 	}),
-	members: many(GroupMembers)
+	members: many(GroupMembers),
+	posts: many(Posts)
 }));
 
 export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
@@ -368,6 +374,13 @@ export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
 	}),
 	user: one(Users, {
 		fields: [GroupMembers.UserId],
+		references: [Users.Id]
+	})
+}));
+
+export const ThemeSettingsRelations = relations(ThemeSettings, ({ one }) => ({
+	updatedBy: one(Users, {
+		fields: [ThemeSettings.UpdatedBy],
 		references: [Users.Id]
 	})
 }));
