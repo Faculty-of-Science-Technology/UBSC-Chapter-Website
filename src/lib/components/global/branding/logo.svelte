@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let mode: 'light' | 'dark' = 'light';
+	interface Props {
+		mode?: 'light' | 'dark';
+	}
+
+	let { mode = 'light' }: Props = $props();
 </script>
 
 <div class="nav-logo flex items-center gap-1">

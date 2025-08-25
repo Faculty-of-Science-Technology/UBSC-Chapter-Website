@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Input } from '$lib/vendor/shadcn/components/ui/input';
-	import { Label } from '$lib/vendor/shadcn/components/ui/label';
-	import Button from '$lib/vendor/shadcn/components/ui/button/button.svelte';
+	import Button from '$lib/components/vendor/ui/button/button.svelte';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
 </script>
 
 <component class="w-full">

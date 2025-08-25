@@ -1,0 +1,1903 @@
+{
+    "extension": "linecounter",
+    "version": "0.2.7",
+    "workspace": "e:\\Data\\PROGRAMMING\\NODE\\talentpool",
+    "linecount": [
+        {
+            "version": "0.2.7",
+            "counttime": "2025-02-22 16:15:05",
+            "filesum": 303,
+            "codesum": 19118,
+            "commentsum": 767,
+            "blanksum": 1203,
+            "statistics": {
+                ".js": {
+                    "code": 249,
+                    "comment": 241,
+                    "blank": 69
+                },
+                ".json": {
+                    "code": 9049,
+                    "comment": 5,
+                    "blank": 213
+                },
+                ".ts": {
+                    "code": 4520,
+                    "comment": 415,
+                    "blank": 485
+                },
+                ".md": {
+                    "code": 12,
+                    "comment": 1,
+                    "blank": 7
+                },
+                "": {
+                    "code": 102,
+                    "comment": 9,
+                    "blank": 15
+                },
+                ".svg": {
+                    "code": 8,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".svelte": {
+                    "code": 4809,
+                    "comment": 92,
+                    "blank": 371
+                },
+                ".html": {
+                    "code": 101,
+                    "comment": 0,
+                    "blank": 3
+                },
+                ".css": {
+                    "code": 92,
+                    "comment": 1,
+                    "blank": 5
+                },
+                ".dbml": {
+                    "code": 94,
+                    "comment": 0,
+                    "blank": 25
+                },
+                ".log": {
+                    "code": 0,
+                    "comment": 0,
+                    "blank": 0
+                },
+                ".txt": {
+                    "code": 9,
+                    "comment": 0,
+                    "blank": 2
+                },
+                ".sql": {
+                    "code": 73,
+                    "comment": 3,
+                    "blank": 8
+                }
+            },
+            "filelist": [
+                {
+                    "blank": 9,
+                    "code": 44,
+                    "comment": 6,
+                    "filename": ".env"
+                },
+                {
+                    "blank": 6,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": ".gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".npmrc"
+                },
+                {
+                    "blank": 0,
+                    "code": 4,
+                    "comment": 0,
+                    "filename": ".prettierignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": ".prettierrc"
+                },
+                {
+                    "blank": 7,
+                    "code": 275,
+                    "comment": 58,
+                    "filename": ".svelte-kit\\ambient.d.ts"
+                },
+                {
+                    "blank": 8,
+                    "code": 56,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\app.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\matchers.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\0.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\1.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\10.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\11.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\12.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\13.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\14.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\15.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\16.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\17.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\18.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\19.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\2.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\20.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\21.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\22.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\23.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\3.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\4.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\5.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\6.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\7.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\8.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\client\\nodes\\9.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\generated\\root.js"
+                },
+                {
+                    "blank": 15,
+                    "code": 74,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\generated\\root.svelte"
+                },
+                {
+                    "blank": 6,
+                    "code": 40,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\generated\\server\\internal.js"
+                },
+                {
+                    "blank": 4,
+                    "code": 20,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\non-ambient.d.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 43,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\tsconfig.json"
+                },
+                {
+                    "blank": 22,
+                    "code": 65,
+                    "comment": 0,
+                    "filename": ".svelte-kit\\types\\route_meta_data.json"
+                },
+                {
+                    "blank": 2,
+                    "code": 29,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\auth\\activate\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\auth\\login\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\auth\\logout\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 29,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\auth\\register\\$types.d.ts"
+                },
+                {
+                    "blank": 13,
+                    "code": 128,
+                    "comment": 8,
+                    "filename": ".svelte-kit\\types\\src\\routes\\auth\\register\\proxy+page.server.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\backend\\message\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 7,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\backend\\resume\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 26,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 16,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\profile\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\settings\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\settings\\manage-groups\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\settings\\manage-users\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\settings\\notifications\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\(settings)\\settings\\setup-agenda\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\applicants\\$types.d.ts"
+                },
+                {
+                    "blank": 36,
+                    "code": 244,
+                    "comment": 35,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\applicants\\proxy+page.server.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\apply\\$types.d.ts"
+                },
+                {
+                    "blank": 49,
+                    "code": 477,
+                    "comment": 46,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\apply\\proxy+page.server.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 27,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\new\\$types.d.ts"
+                },
+                {
+                    "blank": 32,
+                    "code": 219,
+                    "comment": 19,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\new\\proxy+page.server.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\jobs\\view\\[job_id]\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\people\\[person]\\$types.d.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 1,
+                    "filename": ".svelte-kit\\types\\src\\routes\\dashboard\\submissions\\$types.d.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 29,
+                    "comment": 3,
+                    "filename": ".svelte-kit\\types\\src\\routes\\proxy+page.server.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": ".vercel\\project.json"
+                },
+                {
+                    "blank": 2,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": ".vercel\\README.txt"
+                },
+                {
+                    "blank": 0,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "components.json"
+                },
+                {
+                    "blank": 25,
+                    "code": 94,
+                    "comment": 0,
+                    "filename": "database.dbml"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "dbml-error.log"
+                },
+                {
+                    "blank": 3,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "drizzle.config.ts"
+                },
+                {
+                    "blank": 8,
+                    "code": 73,
+                    "comment": 3,
+                    "filename": "drizzle\\0000_mushy_rumiko_fujikawa.sql"
+                },
+                {
+                    "blank": 0,
+                    "code": 498,
+                    "comment": 0,
+                    "filename": "drizzle\\meta\\0000_snapshot.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "drizzle\\meta\\_journal.json"
+                },
+                {
+                    "blank": 2,
+                    "code": 32,
+                    "comment": 0,
+                    "filename": "eslint.config.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "i18n\\en.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "i18n\\es.json"
+                },
+                {
+                    "blank": 184,
+                    "code": 8298,
+                    "comment": 0,
+                    "filename": "package-lock.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 66,
+                    "comment": 0,
+                    "filename": "package.json"
+                },
+                {
+                    "blank": 0,
+                    "code": 6,
+                    "comment": 0,
+                    "filename": "postcss.config.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\.gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\1nkc5xzakbuv7"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\1p8lqorlgekl1"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 1,
+                    "filename": "project.inlang\\cache\\modules\\24t33a883yuxo"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\37mhdpvjokwcz"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\3l51rujslkmxd"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\3sy5er9yssvsx"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\cache\\modules\\j8uajsc6e0tm"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "project.inlang\\project_id"
+                },
+                {
+                    "blank": 1,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "project.inlang\\settings.json"
+                },
+                {
+                    "blank": 7,
+                    "code": 12,
+                    "comment": 1,
+                    "filename": "README.md"
+                },
+                {
+                    "blank": 5,
+                    "code": 92,
+                    "comment": 1,
+                    "filename": "src\\app.css"
+                },
+                {
+                    "blank": 2,
+                    "code": 24,
+                    "comment": 6,
+                    "filename": "src\\app.d.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "src\\app.html"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 2,
+                    "filename": "src\\hooks.server.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "src\\hooks.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\about.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\archives.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\home.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\host-organizations.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\interns.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\homepage\\presentation-agenda.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 9,
+                    "comment": 0,
+                    "filename": "src\\lib\\assemblies\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\compatibility\\select.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\dashboard\\shard\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\dashboard\\shard\\nav-shard.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\dashboard\\shard\\shard-link.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\Logo.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\Navigation.svelte"
+                },
+                {
+                    "blank": 11,
+                    "code": 260,
+                    "comment": 11,
+                    "filename": "src\\lib\\components\\RichTextEditor.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\.gitkeep"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\avatar\\avatar-fallback.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\avatar\\avatar-image.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\avatar\\avatar.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 11,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\avatar\\index.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 44,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\badge\\badge.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\badge\\index.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 63,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\button\\button.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 15,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\button\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card-description.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card-footer.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card-header.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card-title.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\card.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\card\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 33,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-dialog.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-empty.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 25,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-group.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-input.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-item.svelte"
+                },
+                {
+                    "blank": 4,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-item2.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-link-item.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-list.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 10,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-separator.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command-shortcut.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\command.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 36,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\command\\index.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dashmenu\\dashmenu-content.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dashmenu\\dashmenu-heading.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dashmenu\\dashmenu-items.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dashmenu\\dashmenu.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 8,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dashmenu\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-description.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-footer.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-header.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-overlay.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\dialog-title.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 33,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\dialog\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-button.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-description.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-element-field.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 28,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-field-errors.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-field.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-fieldset.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-label.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\form-legend.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 30,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\form\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\hover-card\\hover-card-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\hover-card\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\input\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\input\\input.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card-description.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card-footer.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card-header.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card-title.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\card.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 20,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\job-card\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\label\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\label\\label.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\menuitem\\menuitem.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 23,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-ellipsis.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-item.svelte"
+                },
+                {
+                    "blank": 4,
+                    "code": 37,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-link.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-next-button.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination-prev-button.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\pagination\\pagination.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\progress\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\progress\\progress.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\radio-group\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 39,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\radio-group\\radio-group-item.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\radio-group\\radio-group.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 30,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\index.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 35,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-group-heading.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 35,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-item.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-scroll-down-button.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-scroll-up-button.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 11,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-separator.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\select\\select-trigger.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\separator\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\separator\\separator.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 1,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\sonner\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\sonner\\sonner.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\switch\\index.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 24,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\switch\\switch.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 26,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-body.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-caption.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-cell.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-footer.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-head.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-header.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 21,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table-row.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 16,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\table\\table.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 6,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tablist\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 32,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tablist\\tablist-tab.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 20,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tablist\\tablist.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 15,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tabs\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tabs\\tabs-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 17,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tabs\\tabs-list.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 19,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\tabs\\tabs-trigger.svelte"
+                },
+                {
+                    "blank": 3,
+                    "code": 24,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\textarea\\index.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 22,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\textarea\\textarea.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\toggle-group\\index.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 27,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\toggle-group\\toggle-group-item.svelte"
+                },
+                {
+                    "blank": 5,
+                    "code": 36,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\toggle-group\\toggle-group.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 11,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\toggle\\index.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 45,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\toggle\\toggle.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-content.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-description.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-footer.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 14,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-header.svelte"
+                },
+                {
+                    "blank": 9,
+                    "code": 67,
+                    "comment": 2,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-profile-banner.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 23,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card-title.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 18,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\card.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 22,
+                    "comment": 1,
+                    "filename": "src\\lib\\components\\vendor\\ui\\user-card\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "src\\lib\\components\\vendor\\utils.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 36,
+                    "comment": 3,
+                    "filename": "src\\lib\\functions\\auth.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 13,
+                    "comment": 0,
+                    "filename": "src\\lib\\functions\\users.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 0,
+                    "filename": "src\\lib\\i18n.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 1,
+                    "filename": "src\\lib\\index.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 1,
+                    "filename": "src\\lib\\paraglide\\.gitignore"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 1,
+                    "filename": "src\\lib\\paraglide\\.prettierignore"
+                },
+                {
+                    "blank": 18,
+                    "code": 39,
+                    "comment": 79,
+                    "filename": "src\\lib\\paraglide\\messages.js"
+                },
+                {
+                    "blank": 12,
+                    "code": 6,
+                    "comment": 40,
+                    "filename": "src\\lib\\paraglide\\messages\\en.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 1,
+                    "comment": 10,
+                    "filename": "src\\lib\\paraglide\\messages\\es-mx.js"
+                },
+                {
+                    "blank": 12,
+                    "code": 6,
+                    "comment": 40,
+                    "filename": "src\\lib\\paraglide\\messages\\es.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 1,
+                    "comment": 10,
+                    "filename": "src\\lib\\paraglide\\messages\\sp.js"
+                },
+                {
+                    "blank": 5,
+                    "code": 21,
+                    "comment": 55,
+                    "filename": "src\\lib\\paraglide\\runtime.js"
+                },
+                {
+                    "blank": 0,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "src\\lib\\server\\db\\index.ts"
+                },
+                {
+                    "blank": 15,
+                    "code": 166,
+                    "comment": 5,
+                    "filename": "src\\lib\\server\\db\\schema.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 26,
+                    "comment": 0,
+                    "filename": "src\\lib\\snippets\\names\\index.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 5,
+                    "comment": 0,
+                    "filename": "src\\lib\\snippets\\names\\index.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 31,
+                    "comment": 0,
+                    "filename": "src\\lib\\snippets\\time\\index.d.ts"
+                },
+                {
+                    "blank": 8,
+                    "code": 77,
+                    "comment": 0,
+                    "filename": "src\\lib\\snippets\\time\\index.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 2,
+                    "comment": 0,
+                    "filename": "src\\lib\\snippets\\time\\index.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 74,
+                    "comment": 0,
+                    "filename": "src\\lib\\testdata\\job_description.html"
+                },
+                {
+                    "blank": 4,
+                    "code": 51,
+                    "comment": 0,
+                    "filename": "src\\lib\\types\\GeoJSON.ts"
+                },
+                {
+                    "blank": 5,
+                    "code": 45,
+                    "comment": 3,
+                    "filename": "src\\lib\\types\\Navigation.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 31,
+                    "comment": 1,
+                    "filename": "src\\lib\\utility\\utility.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 7,
+                    "comment": 0,
+                    "filename": "src\\routes\\+layout.server.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 15,
+                    "comment": 0,
+                    "filename": "src\\routes\\+layout.svelte"
+                },
+                {
+                    "blank": 4,
+                    "code": 28,
+                    "comment": 2,
+                    "filename": "src\\routes\\+page.server.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 47,
+                    "comment": 1,
+                    "filename": "src\\routes\\+page.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 46,
+                    "comment": 3,
+                    "filename": "src\\routes\\auth\\activate\\+page.server.ts"
+                },
+                {
+                    "blank": 14,
+                    "code": 133,
+                    "comment": 12,
+                    "filename": "src\\routes\\auth\\login\\+page.server.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 118,
+                    "comment": 0,
+                    "filename": "src\\routes\\auth\\login\\+page.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 11,
+                    "comment": 1,
+                    "filename": "src\\routes\\auth\\logout\\+page.server.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 3,
+                    "comment": 1,
+                    "filename": "src\\routes\\auth\\logout\\+page.svelte"
+                },
+                {
+                    "blank": 13,
+                    "code": 127,
+                    "comment": 7,
+                    "filename": "src\\routes\\auth\\register\\+page.server.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 205,
+                    "comment": 5,
+                    "filename": "src\\routes\\auth\\register\\+page.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "src\\routes\\auth\\register\\+page.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 34,
+                    "comment": 0,
+                    "filename": "src\\routes\\backend\\message\\+page.server.ts"
+                },
+                {
+                    "blank": 2,
+                    "code": 49,
+                    "comment": 0,
+                    "filename": "src\\routes\\backend\\message\\+page.svelte"
+                },
+                {
+                    "blank": 6,
+                    "code": 37,
+                    "comment": 7,
+                    "filename": "src\\routes\\backend\\resume\\+server.ts"
+                },
+                {
+                    "blank": 7,
+                    "code": 141,
+                    "comment": 7,
+                    "filename": "src\\routes\\dashboard\\(settings)\\+layout.svelte"
+                },
+                {
+                    "blank": 2,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\profile\\+page.server.ts"
+                },
+                {
+                    "blank": 1,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\profile\\+page.svelte"
+                },
+                {
+                    "blank": 15,
+                    "code": 84,
+                    "comment": 5,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\+page.server.ts"
+                },
+                {
+                    "blank": 19,
+                    "code": 173,
+                    "comment": 7,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\+page.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 112,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\manage-groups\\+page.svelte"
+                },
+                {
+                    "blank": 1,
+                    "code": 75,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\manage-users\\+page.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\notifications\\+page.svelte"
+                },
+                {
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0,
+                    "filename": "src\\routes\\dashboard\\(settings)\\settings\\setup-agenda\\+page.svelte"
+                },
+                {
+                    "blank": 5,
+                    "code": 89,
+                    "comment": 6,
+                    "filename": "src\\routes\\dashboard\\+layout.svelte"
+                },
+                {
+                    "blank": 7,
+                    "code": 47,
+                    "comment": 11,
+                    "filename": "src\\routes\\dashboard\\+page.server.ts"
+                },
+                {
+                    "blank": 6,
+                    "code": 133,
+                    "comment": 2,
+                    "filename": "src\\routes\\dashboard\\+page.svelte"
+                },
+                {
+                    "blank": 6,
+                    "code": 63,
+                    "comment": 10,
+                    "filename": "src\\routes\\dashboard\\jobs\\+page.server.ts"
+                },
+                {
+                    "blank": 4,
+                    "code": 65,
+                    "comment": 2,
+                    "filename": "src\\routes\\dashboard\\jobs\\+page.svelte"
+                },
+                {
+                    "blank": 36,
+                    "code": 244,
+                    "comment": 34,
+                    "filename": "src\\routes\\dashboard\\jobs\\applicants\\+page.server.ts"
+                },
+                {
+                    "blank": 11,
+                    "code": 198,
+                    "comment": 21,
+                    "filename": "src\\routes\\dashboard\\jobs\\applicants\\+page.svelte"
+                },
+                {
+                    "blank": 49,
+                    "code": 476,
+                    "comment": 45,
+                    "filename": "src\\routes\\dashboard\\jobs\\apply\\+page.server.ts"
+                },
+                {
+                    "blank": 12,
+                    "code": 267,
+                    "comment": 4,
+                    "filename": "src\\routes\\dashboard\\jobs\\apply\\+page.svelte"
+                },
+                {
+                    "blank": 32,
+                    "code": 218,
+                    "comment": 18,
+                    "filename": "src\\routes\\dashboard\\jobs\\new\\+page.server.ts"
+                },
+                {
+                    "blank": 7,
+                    "code": 319,
+                    "comment": 4,
+                    "filename": "src\\routes\\dashboard\\jobs\\new\\+page.svelte"
+                },
+                {
+                    "blank": 7,
+                    "code": 28,
+                    "comment": 9,
+                    "filename": "src\\routes\\dashboard\\jobs\\view\\[job_id]\\+page.server.ts"
+                },
+                {
+                    "blank": 3,
+                    "code": 36,
+                    "comment": 1,
+                    "filename": "src\\routes\\dashboard\\jobs\\view\\[job_id]\\+page.svelte"
+                },
+                {
+                    "blank": 5,
+                    "code": 50,
+                    "comment": 7,
+                    "filename": "src\\routes\\dashboard\\people\\[person]\\+page.server.ts"
+                },
+                {
+                    "blank": 11,
+                    "code": 166,
+                    "comment": 15,
+                    "filename": "src\\routes\\dashboard\\people\\[person]\\+page.svelte"
+                },
+                {
+                    "blank": 8,
+                    "code": 38,
+                    "comment": 9,
+                    "filename": "src\\routes\\dashboard\\submissions\\+page.server.ts"
+                },
+                {
+                    "blank": 5,
+                    "code": 67,
+                    "comment": 2,
+                    "filename": "src\\routes\\dashboard\\submissions\\+page.svelte"
+                },
+                {
+                    "filename": "static\\favicon.png",
+                    "isbinaryfile": true,
+                    "blank": 0,
+                    "code": 0,
+                    "comment": 0
+                },
+                {
+                    "blank": 0,
+                    "code": 8,
+                    "comment": 0,
+                    "filename": "static\\static\\Google.svg"
+                },
+                {
+                    "blank": 2,
+                    "code": 12,
+                    "comment": 6,
+                    "filename": "svelte.config.js"
+                },
+                {
+                    "blank": 2,
+                    "code": 98,
+                    "comment": 0,
+                    "filename": "tailwind.config.ts"
+                },
+                {
+                    "blank": 0,
+                    "code": 14,
+                    "comment": 5,
+                    "filename": "tsconfig.json"
+                },
+                {
+                    "blank": 1,
+                    "code": 12,
+                    "comment": 0,
+                    "filename": "vite.config.ts"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"register__fullname_required": "Full name is required",
+	"welcome": "Kickstart Your ",
+	"welcome_2": "Career",
+	"welcome_description": "Because, why not?",
+	"welcome_rc": "Acquire ",
+	"welcome_rc_2": "Talent"
+}

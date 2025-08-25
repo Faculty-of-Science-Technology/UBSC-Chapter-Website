@@ -1,31 +1,31 @@
 <script lang="ts">
-	import Fa from 'svelte-fa';
+	import Logo from '$lib/components/global/branding/logo.svelte';
+	import NavigationLinks from '$lib/components/global/navigation/navigation-links.svelte';
+	import Button from '$lib/components/vendor/ui/button/button.svelte';
 	import {
 		faFacebook,
 		faInstagram,
-		faTwitter,
 		faLinkedin,
+		faTwitter,
 		faYoutube
 	} from '@fortawesome/free-brands-svg-icons';
-	import Logo from '$lib/components/global/branding/logo.svelte';
-	import Button from '$lib/vendor/shadcn/components/ui/button/button.svelte';
-	import NavigationLinks from '$lib/components/global/navigation/navigation-links.svelte';
+	import Fa from 'svelte-fa';
 </script>
 
 <component
-	class="flex flex-col-reverse lg:flex-row justify-between items-center gap-42 self-stretch bg-slate-50 w-full lg:px-20 xl:px-80 py-12"
+	class="gap-42 flex w-full flex-col-reverse items-center justify-between self-stretch bg-slate-50 py-12 lg:flex-row lg:px-20 xl:px-80"
 >
-	<div class="flex flex-col items-start gap-8 w-3/4 lg:w-1/2 pt-12">
+	<div class="flex w-3/4 flex-col items-start gap-8 pt-12 lg:w-1/2">
 		<Logo />
 
 		<article
-			class="inter text-sm font-light leading-tight flex flex-col items-start justify-center gap-2.5"
+			class="inter flex flex-col items-start justify-center gap-2.5 text-sm font-light leading-tight"
 		>
 			<section>
 				The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The
 				University of Belize is dedicated to upskilling and informing Belizeans about Technology.
 			</section>
-			<section class="flex justify-center items-center gap-8">
+			<section class="flex items-center justify-center gap-8">
 				<a
 					href="https://www.facebook.com/UBACMStudentChapter/"
 					target="_blank"
@@ -51,9 +51,11 @@
 				</a>
 			</section>
 		</article>
-		<Button class="bg-sky-500 hover:bg-sky-600">
-			<span>Join Us</span>
-		</Button>
+		<a href="/auth/register">
+			<Button class="bg-sky-500 hover:bg-sky-600">
+				<span>Join Us</span>
+			</Button>
+		</a>
 	</div>
 	<NavigationLinks />
 </component>

@@ -5,15 +5,23 @@
 		link?: string;
 		linkText?: string;
 	};
-	export let data: Data = {
-		number: '#####Z',
-		title: 'Activity Data',
-		link: '/activity-link',
-		linkText: 'Learn More'
-	};
 
-	export let size: string = '';
-	export let center: boolean = false;
+	interface Props {
+		data?: Data;
+		size?: string;
+		center?: boolean;
+	}
+
+	let {
+		data = {
+			number: '#####Z',
+			title: 'Activity Data',
+			link: '/activity-link',
+			linkText: 'Learn More'
+		},
+		size = '',
+		center = false
+	}: Props = $props();
 </script>
 
 <preload class="hidden text-5xl text-center md:text-left" />

@@ -1,0 +1,64 @@
+# Use an official Rust image as a parent image
+FROM rust:bookworm AS builder
+
+# Set the working directory
+WORKDIR /usr/src/neon
+
+# Install dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bison build-essential clang cmake flex libcurl4-openssl-dev libicu-dev \
+    libpq-dev libprotobuf-dev libreadline-dev libseccomp-dev libssl-dev libtool \
+    lsof openssl pkg-config postgresql-client protobuf-compiler python3-poetry zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Rust
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y \
+#    && . "$HOME/.cargo/env"
+
+# Clone the repository
+RUN git clone --recursive https://github.com/neondatabase/neon.git .
+
+# Build Neon and patched Postgres
+RUN BUILD_TYPE=release make -j$(nproc) -s
+
+# Remove all directories in the release folder except for the files
+WORKDIR /usr/src/neon/target/release
+RUN find . -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
+WORKDIR /usr/src/neon
+
+# Final stage
+FROM rust:bookworm
+
+# Set the working directory
+WORKDIR /usr/src/neon
+
+# Copy the built binaries from the builder stage
+COPY --from=builder /usr/src/neon/target/release /usr/src/neon
+COPY --from=builder /usr/src/neon/pg_install /usr/src/neon/pg_install
+# Create Postgres User and set ownership
+RUN useradd -m -s /bin/bash postgres && \
+    chown -R postgres:postgres /usr/src/neon
+
+# Switch to the non-root user
+USER postgres
+
+# Initialize Neon
+RUN ./neon_local init && \
+    ./neon_local start && \
+    ./neon_local tenant create --set-default && \
+    ./neon_local endpoint create main && \
+    ./neon_local stop
+
+# Set the stopsignal
+STOPSIGNAL SIGINT
+
+# Expose ports
+EXPOSE 50051 64000 5454 55432 55434 1235
+
+# Start Neon and create initial tenant and compute node
+# Start Neon and create initial tenant and compute node
+CMD ["/bin/bash", "-c", "\
+    pkill -f postgres || true && \
+    ./neon_local start && \
+    ./neon_local endpoint start main && \
+    tail -f /dev/null"]

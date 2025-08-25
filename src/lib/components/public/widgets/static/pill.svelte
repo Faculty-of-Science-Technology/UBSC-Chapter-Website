@@ -1,7 +1,11 @@
 <!-- Pill component -->
 <script lang="ts">
-	export let background: string = '';
-	export let text: string = '<No text provided>';
+	interface Props {
+		background?: string;
+		text?: string;
+	}
+
+	let { background = '', text = '<No text provided>' }: Props = $props();
 </script>
 
 <component

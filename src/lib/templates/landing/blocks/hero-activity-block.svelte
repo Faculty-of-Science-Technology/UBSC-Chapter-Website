@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let activities_column: boolean = false;
+	interface Props {
+		activities_column?: boolean;
+	}
+
+	let { activities_column = false }: Props = $props();
 </script>
 
 <preload class="hidden flex-col" />
