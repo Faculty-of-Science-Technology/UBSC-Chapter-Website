@@ -4,6 +4,7 @@
 	"description": "University of Belize ACM Chapter (UBSC) Management Platform",
 	"type": "module",
 	"scripts": {
+		"start": "PORT=30500 node index.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
