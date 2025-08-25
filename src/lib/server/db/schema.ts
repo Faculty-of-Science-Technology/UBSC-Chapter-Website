@@ -17,14 +17,7 @@ export const accountTypeEnum = pgEnum('account_type', ['org', 'student', 'owner'
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 export const groupTypeEnum = pgEnum('group_type', ['STANDARD', 'COMMITTEE']);
 export const postTypeEnum = pgEnum('post_type', ['EVENT', 'BLOG']);
-export const roleTypeEnum = pgEnum('role_type', [
-	'ADMIN',
-	'MODERATOR',
-	'EVENT_MANAGER',
-	'USER_MANAGER',
-	'CONTENT_MANAGER',
-	'MEMBER'
-]);
+export const roleTypeEnum = pgEnum('role_type', ['ADMIN', 'MODERATOR', 'EVENT_MANAGER', 'USER_MANAGER', 'CONTENT_MANAGER', 'MEMBER']);
 // Apparently, the bytea type is not supported by drizzle-orm, so we have to create a custom type for it
 // https://stackoverflow.com/a/76499742/10976415
 // Fast implementation
