@@ -9,7 +9,7 @@ echo "You can either safely press CTRL+C or wait for this to complete"
 
 cd /home/ubschosting/app
 echo "[STEP 1/5]: Resetting tree to HEAD"
-git reset --hard
+git reset HEAD --hard
 git reflog expire --expire=all --all
 git gc --prune=now --aggressive
 
