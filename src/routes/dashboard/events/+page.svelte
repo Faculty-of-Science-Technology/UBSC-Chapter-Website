@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Select from '$lib/components/vendor/ui/select';
+	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import type { PageProps } from './$types';
 
@@ -66,8 +67,8 @@
 			eventCapacity: event.eventCapacity,
 			eventPrice: event.eventPrice,
 			groupId: event.groupId || '',
-			featured: event.featured,
-			published: event.published
+			featured: event.featured ?? false,
+			published: event.published ?? false
 		};
 		showEditEvent = true;
 	}
@@ -441,25 +442,16 @@
 						</div>
 
 						<div class="flex items-center space-x-4">
-							<div class="flex items-center">
-								<Input
-									type="checkbox"
-									id="featured"
-									bind:checked={newEvent.featured}
-									class="h-4 w-4"
-								/>
-								<Label for="featured" class="ml-2">
+							<div class="flex items-center space-x-2">
+								
+								<Switch id="featured" bind:checked={newEvent.featured} />
+								<Label for="featured">
 									Featured Event
 								</Label>
 							</div>
-							<div class="flex items-center">
-								<Input
-									type="checkbox"
-									id="published"
-									bind:checked={newEvent.published}
-									class="h-4 w-4"
-								/>
-								<Label for="published" class="ml-2">
+							<div class="flex items-center space-x-2">
+								<Switch id="published" bind:checked={newEvent.published} />
+								<Label for="published">
 									Publish immediately
 								</Label>
 							</div>
@@ -524,96 +516,73 @@
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="edit-eventStartTime" class="block text-sm font-medium text-gray-700"
-									>Date & Time</label
-								>
-								<input
+								<Label for="edit-eventStartTime">Date & Time</Label>
+								<Input
 									type="datetime-local"
 									id="edit-eventStartTime"
 									bind:value={editEvent.eventStartTime}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>
 							</div>
 							<div>
-								<label for="edit-eventLocation" class="block text-sm font-medium text-gray-700"
-									>Location</label
-								>
-								<input
+								<Label for="edit-eventLocation">Location</Label>
+								<Input
 									type="text"
 									id="edit-eventLocation"
 									bind:value={editEvent.eventLocation}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="edit-eventCapacity" class="block text-sm font-medium text-gray-700"
-									>Capacity (optional)</label
-								>
-								<input
+								<Label for="edit-eventCapacity">Capacity (optional)</Label>
+								<Input
 									type="number"
 									id="edit-eventCapacity"
 									bind:value={editEvent.eventCapacity}
 									min="1"
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 							<div>
-								<label for="edit-eventPrice" class="block text-sm font-medium text-gray-700"
-									>Price (optional)</label
-								>
-								<input
+								<Label for="edit-eventPrice">Price (optional)</Label>
+								<Input
 									type="number"
 									id="edit-eventPrice"
 									bind:value={editEvent.eventPrice}
 									min="0"
 									step="0.01"
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								/>
 							</div>
 						</div>
 
 						<div>
-							<label for="edit-groupId" class="block text-sm font-medium text-gray-700"
-								>Group (optional)</label
-							>
-							<select
-								id="edit-groupId"
-								bind:value={editEvent.groupId}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="">No Group</option>
-								{#each data.availableGroups as group}
-									<option value={group.id}>{group.name} ({group.type})</option>
-								{/each}
-							</select>
+							<Label for="edit-groupId">Group (optional)</Label>
+							<Select.Root type="single" bind:value={editEvent.groupId}>
+									<Select.Trigger class="w-full">
+										{editEvent.groupId ?? "Select a group"}
+									</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="">No Group</Select.Item>
+									{#each data.availableGroups as group}
+										<Select.Item value={group.id}>{group.name} ({group.type})</Select.Item>
+									{/each}
+								</Select.Content>
+							</Select.Root>
 						</div>
 
 						<div class="flex items-center space-x-4">
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="edit-featured"
-									bind:checked={editEvent.featured}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="edit-featured" class="ml-2 block text-sm text-gray-700">
+							<div class="flex items-center space-x-2">
+								<Switch id="edit-featured" bind:checked={editEvent.featured} />
+								<Label for="edit-featured">
 									Featured Event
-								</label>
+								</Label>
 							</div>
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="edit-published"
-									bind:checked={editEvent.published}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="edit-published" class="ml-2 block text-sm text-gray-700">
+							<div class="flex items-center space-x-2">
+								<Switch id="edit-published" bind:checked={editEvent.published} />
+								<Label for="edit-published">
 									Published
-								</label>
+								</Label>
 							</div>
 						</div>
 					</div>
