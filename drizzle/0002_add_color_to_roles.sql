@@ -1,1 +1,0 @@
-ALTER TABLE "Roles" ADD COLUMN "color" varchar(7) DEFAULT '#6366f1' NOT NULL;
