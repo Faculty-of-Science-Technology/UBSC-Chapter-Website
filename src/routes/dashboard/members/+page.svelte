@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { Button } from '$lib/components/vendor/ui/button';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -227,66 +231,78 @@
 	<div class="mt-8 rounded-lg bg-white p-6 shadow">
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
 			<div>
-				<label for="search" class="block text-sm font-medium text-gray-700">Search</label>
-				<input
+				<Label for="search">Search</Label>
+				<Input
 					type="text"
 					id="search"
 					bind:value={searchTerm}
 					placeholder="Name, email, or username..."
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 				/>
 			</div>
 
 			<div>
-				<label for="role-filter" class="block text-sm font-medium text-gray-700">Role</label>
-				<select
-					id="role-filter"
-					bind:value={filterRole}
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-				>
-					<option value="">All Roles</option>
-					{#each data.availableRoles as role}
-						<option value={role.id}>{role.name}</option>
-					{/each}
-				</select>
+				<Label for="role-filter">Role</Label>
+				<Select.Root type="single" bind:value={filterRole}>
+					<Select.Trigger class="w-full">
+						{#if filterRole.trim() === ''}
+							All Roles
+						{:else}
+							{#each data.availableRoles as role}
+								{#if filterRole === role.id}{role.name}{/if}
+							{/each}
+						{/if}
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value="">All Roles</Select.Item>
+						{#each data.availableRoles as role}
+							<Select.Item value={role.id}>{role.name}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
 			</div>
 
 			<div>
-				<label for="group-filter" class="block text-sm font-medium text-gray-700">Group</label>
-				<select
-					id="group-filter"
-					bind:value={filterGroup}
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-				>
-					<option value="">All Groups</option>
-					{#each data.availableGroups as group}
-						<option value={group.id}>{group.name} ({group.type})</option>
-					{/each}
-				</select>
+				<Label for="group-filter">Group</Label>
+				<Select.Root type="single" bind:value={filterGroup}>
+					<Select.Trigger class="w-full">
+						{#if filterGroup.trim() === ''}
+							All Groups
+						{:else}
+							{#each data.availableGroups as group}
+								{#if filterGroup === group.id}{group.name}{/if}
+							{/each}
+						{/if}
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value="">All Groups</Select.Item>
+						{#each data.availableGroups as group}
+							<Select.Item value={group.id}>{group.name} ({group.type})</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
 			</div>
 
 			<div>
-				<label for="status-filter" class="block text-sm font-medium text-gray-700">Status</label>
-				<select
-					id="status-filter"
-					bind:value={filterStatus}
-					class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-				>
-					<option value="">All Status</option>
-					<option value="verified">Verified</option>
-					<option value="unverified">Unverified</option>
-					<option value="admin">Administrator</option>
-				</select>
+				<Label for="status-filter">Status</Label>
+				<Select.Root type="single" bind:value={filterStatus}>
+					<Select.Trigger class="w-full">
+						{#if filterStatus.trim() === ''}
+							All Status
+						{:else}
+							{filterStatus[0].toLocaleUpperCase() + filterStatus.slice(1, 99)}
+						{/if}
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value="">All Status</Select.Item>
+						<Select.Item value="verified">Verified</Select.Item>
+						<Select.Item value="unverified">Unverified</Select.Item>
+						<Select.Item value="admin">Administrator</Select.Item>
+					</Select.Content>
+				</Select.Root>
 			</div>
 
 			<div class="flex items-end">
-				<button
-					type="button"
-					onclick={clearFilters}
-					class="w-full rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500"
-				>
-					Clear Filters
-				</button>
+				<Button onclick={clearFilters} variant="secondary" class="w-full">Clear Filters</Button>
 			</div>
 		</div>
 
