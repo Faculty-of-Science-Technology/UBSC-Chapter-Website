@@ -66,6 +66,7 @@
 		"bcryptjs": "^3.0.2",
 		"dotenv": "^16.5.0",
 		"drizzle-orm": "^0.38.1",
+		"embla-carousel-svelte": "^8.6.0",
 		"jsonwebtoken": "^9.0.2",
 		"nodemailer": "^6.10.0",
 		"pg": "^8.15.5",

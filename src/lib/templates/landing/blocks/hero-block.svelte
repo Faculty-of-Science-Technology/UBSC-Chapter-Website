@@ -1,18 +1,23 @@
 <!-- Description: Hero block component -->
 <script lang="ts">
+	import { cn } from '$lib/components/vendor/utils.js';
 	import HeroActivityBlock from '$lib/templates/landing/blocks/hero-activity-block.svelte';
 	import HeroSignup from '$lib/templates/landing/widgets/hero-signup.svelte';
 	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	
 	interface Props {
+		prelude?: string;
 		text_light_blue?: string;
 		text?: string;
 		subtitle?: string;
 		no_signup?: boolean;
 		activities_column_on_mobile?: boolean;
+		class?: string;
 	}
 	
 	let {
+		class: className,
+		prelude = '',
 		text_light_blue = '',
 		text = '',
 		subtitle = '',
@@ -21,8 +26,8 @@
 	}: Props = $props();
 </script>
 
-<assembly class="flex flex-col items-start self-stretch gap-8">
-	<HeroText {text_light_blue} {text} {subtitle} />
+<assembly class={cn("flex flex-col items-start self-stretch gap-8", className)}>
+	<HeroText {prelude} {text_light_blue} {text} {subtitle} />
 	{#if !no_signup}
 		<HeroSignup />
 	{/if}
