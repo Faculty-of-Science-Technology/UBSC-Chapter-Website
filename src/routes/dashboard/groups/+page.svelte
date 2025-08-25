@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Button } from '$lib/components/vendor/ui/button';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -211,9 +216,7 @@
 								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
 									Members
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-									Visibility
-								</th>
+
 								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
 									Created
 								</th>
@@ -265,24 +268,10 @@
 											</button>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-										{#if group.isPublic}
-											<span
-												class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
-											>
-												Public
-											</span>
-										{:else}
-											<span
-												class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
-											>
-												Private
-											</span>
-										{/if}
-									</td>
+
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 										<div>
-											<div>{formatDate(group.createdAt)}</div>
+											<div>{formatDate(group.createdAt.toJSON())}</div>
 											<div class="text-xs text-gray-400">
 												by {group.creatorName}
 												{group.creatorLastName}
@@ -331,38 +320,26 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="title" class="block text-sm font-medium text-gray-700">Group Name</label>
-							<input
-								type="text"
-								id="title"
-								bind:value={newGroup.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							/>
+							<Label for="title">Group Name</Label>
+							<Input type="text" id="title" bind:value={newGroup.title} required />
 						</div>
 
 						<div>
-							<label for="description" class="block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
-								id="description"
-								bind:value={newGroup.description}
-								rows="3"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							></textarea>
+							<Label for="description">Description</Label>
+							<Textarea id="description" bind:value={newGroup.description} rows={3} />
 						</div>
 
 						<div>
-							<label for="type" class="block text-sm font-medium text-gray-700">Group Type</label>
-							<select
-								id="type"
-								bind:value={newGroup.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="STANDARD">Standard Group</option>
-								<option value="COMMITTEE">Committee</option>
-							</select>
+							<Label for="type">Group Type</Label>
+							<Select.Root type="single" bind:value={newGroup.type}>
+								<Select.Trigger class="w-full">
+									{newGroup.type ?? 'Select group type'}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="STANDARD">Standard Group</Select.Item>
+									<Select.Item value="COMMITTEE">Committee</Select.Item>
+								</Select.Content>
+							</Select.Root>
 						</div>
 					</div>
 				</div>
@@ -403,42 +380,26 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-title" class="block text-sm font-medium text-gray-700"
-								>Group Name</label
-							>
-							<input
-								type="text"
-								id="edit-title"
-								bind:value={editGroup.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							/>
+							<Label for="edit-title">Group Name</Label>
+							<Input type="text" id="edit-title" bind:value={editGroup.title} required />
 						</div>
 
 						<div>
-							<label for="edit-description" class="block text-sm font-medium text-gray-700"
-								>Description</label
-							>
-							<textarea
-								id="edit-description"
-								bind:value={editGroup.description}
-								rows="3"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							></textarea>
+							<Label for="edit-description">Description</Label>
+							<Textarea id="edit-description" bind:value={editGroup.description} rows={3} />
 						</div>
 
 						<div>
-							<label for="edit-type" class="block text-sm font-medium text-gray-700"
-								>Group Type</label
-							>
-							<select
-								id="edit-type"
-								bind:value={editGroup.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="STANDARD">Standard Group</option>
-								<option value="COMMITTEE">Committee</option>
-							</select>
+							<Label for="edit-type">Group Type</Label>
+							<Select.Root type="single" bind:value={editGroup.type}>
+								<Select.Trigger class="w-full">
+									{editGroup.type ?? 'Select group type'}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="STANDARD">Standard Group</Select.Item>
+									<Select.Item value="COMMITTEE">Committee</Select.Item>
+								</Select.Content>
+							</Select.Root>
 						</div>
 					</div>
 				</div>
@@ -481,30 +442,35 @@
 						Add members to {selectedGroup?.name}
 					</p>
 					<div class="mt-4">
-						<label for="member-select" class="block text-sm font-medium text-gray-700"
-							>Add Member</label
-						>
+						<Label for="member-select">Add Member</Label>
 						<div class="mt-1 flex space-x-2">
-							<select
-								id="member-select"
-								bind:value={selectedMember}
-								class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="">Select a member...</option>
-								{#each data.availableUsers as user}
-									<option value={user.id}
-										>{user.firstName} {user.lastName} (@{user.username})</option
-									>
-								{/each}
-							</select>
-							<button
-								type="button"
+							<Select.Root type="single" bind:value={selectedMember}>
+								<Select.Trigger class="w-full">
+									{#if selectedMember.trim() === ''}
+										Select a member...
+									{/if}
+									{#each data.availableUsers as user}
+										{#if selectedMember === user.id}
+											{`${user.firstName} ${user.lastName} (@${user.username})`}
+										{/if}
+									{/each}
+								</Select.Trigger>
+								<Select.Content>
+									{#each data.availableUsers as user}
+										<Select.Item value={user.id}>
+											{user.firstName}
+											{user.lastName} (@{user.username})
+										</Select.Item>
+									{/each}
+								</Select.Content>
+							</Select.Root>
+							<Button
 								onclick={addMember}
 								disabled={loading || !selectedMember}
-								class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+								class="flex-shrink-0"
 							>
 								Add
-							</button>
+							</Button>
 						</div>
 					</div>
 				</div>
