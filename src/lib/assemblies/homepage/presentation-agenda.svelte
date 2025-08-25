@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { PUBLIC_PLATFORM_CURRENT_INTERNSHIP_YEAR } from '$env/static/public';
 
 	type PresentationEvent = {
 		Id: string;
@@ -51,7 +50,7 @@
 	class="flex w-full flex-col items-start justify-center gap-4 self-stretch rounded-lg border border-muted p-8 text-left"
 >
 	<h1 class="w-full text-3xl font-semibold lg:w-[775px] lg:text-6xl">
-		Explore the {PUBLIC_PLATFORM_CURRENT_INTERNSHIP_YEAR} UB IT Internship Presentation Agenda
+		Explore the UB IT Internship Presentation Agenda
 	</h1>
 	<p class="text-xl lg:w-[720px]">
 		View the full lineup of presentations, complete with presenter names, internship summaries, and
