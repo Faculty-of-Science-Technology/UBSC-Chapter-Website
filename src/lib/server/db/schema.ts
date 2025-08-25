@@ -7,7 +7,6 @@ import {
 	pgEnum,
 	pgTable,
 	real,
-	serial,
 	text,
 	timestamp,
 	uuid,
@@ -18,7 +17,14 @@ export const accountTypeEnum = pgEnum('account_type', ['org', 'student', 'owner'
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 export const groupTypeEnum = pgEnum('group_type', ['STANDARD', 'COMMITTEE']);
 export const postTypeEnum = pgEnum('post_type', ['EVENT', 'BLOG']);
-export const roleTypeEnum = pgEnum('role_type', ['ADMIN', 'MODERATOR', 'EVENT_MANAGER', 'USER_MANAGER', 'CONTENT_MANAGER', 'MEMBER']);
+export const roleTypeEnum = pgEnum('role_type', [
+	'ADMIN',
+	'MODERATOR',
+	'EVENT_MANAGER',
+	'USER_MANAGER',
+	'CONTENT_MANAGER',
+	'MEMBER'
+]);
 // Apparently, the bytea type is not supported by drizzle-orm, so we have to create a custom type for it
 // https://stackoverflow.com/a/76499742/10976415
 // Fast implementation
@@ -30,7 +36,7 @@ const bytea = customType<{ data: Buffer; notNull: false; default: false }>({
 		return val;
 	},
 	fromDriver(val: unknown) {
-		return (val as Buffer);
+		return val as Buffer;
 	}
 });
 // Slow-implementation
@@ -67,10 +73,8 @@ export const Users = pgTable('Users', {
 	CoverPhoto: text('cover_photo'), // URL to Cover Photo
 	Password: text('password').notNull(),
 	Username: varchar('username', { length: 16 }).unique().notNull(),
-	ResumeUrl: text('resume_url'), // MediaPool URL to Resume
 	ActivationCode: varchar('activation_code', { length: 255 }).unique(),
 	Bio: varchar('bio', { length: 255 }),
-	Hireable: boolean('hireable').notNull().default(false),
 	Hidden: boolean('hidden').notNull().default(false),
 	InviteCodeUsed: varchar('invite_code_used', { length: 255 }),
 	CreatedAt: date('__created_at__')
@@ -107,8 +111,12 @@ export const UserRoles = pgTable('UserRoles', {
 		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
 		.unique()
 		.primaryKey(),
-	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }).notNull(),
-	RoleId: uuid('role_id').references(() => Roles.Id, { onDelete: 'cascade' }).notNull(),
+	UserId: uuid('user_id')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
+	RoleId: uuid('role_id')
+		.references(() => Roles.Id, { onDelete: 'cascade' })
+		.notNull(),
 	AssignedBy: uuid('assigned_by').references(() => Users.Id),
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
@@ -122,7 +130,9 @@ export const InviteCodes = pgTable('InviteCodes', {
 		.unique()
 		.primaryKey(),
 	Code: varchar('code', { length: 32 }).unique().notNull(),
-	CreatedBy: uuid('created_by').references(() => Users.Id, { onDelete: 'cascade' }).notNull(),
+	CreatedBy: uuid('created_by')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
 	MaxUses: integer('max_uses').notNull().default(1),
 	CurrentUses: integer('current_uses').notNull().default(0),
 	ExpiresAt: timestamp('expires_at', { withTimezone: true }),
@@ -138,8 +148,12 @@ export const InviteCodeUsage = pgTable('InviteCodeUsage', {
 		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
 		.unique()
 		.primaryKey(),
-	InviteCodeId: uuid('invite_code_id').references(() => InviteCodes.Id, { onDelete: 'cascade' }).notNull(),
-	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }).notNull(),
+	InviteCodeId: uuid('invite_code_id')
+		.references(() => InviteCodes.Id, { onDelete: 'cascade' })
+		.notNull(),
+	UserId: uuid('user_id')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
 	UsedAt: timestamp('used_at', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull()
@@ -166,94 +180,6 @@ export const ThemeSettings = pgTable('ThemeSettings', {
 		.notNull()
 });
 
-export const JobTypes = pgTable('JobTypes', {
-	Id: integer('id').unique().primaryKey().generatedAlwaysAsIdentity(),
-	Name: varchar('name', { length: 255 }).notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const Questions = pgTable('Questions', {
-	Id: integer('id').unique().primaryKey().generatedAlwaysAsIdentity(),
-	JobsId: uuid('jobs_id').references(() => Jobs.Id, { onDelete: 'cascade' }),
-	Content: varchar('content', { length: 255 }).notNull(),
-	Type: boolean('type').notNull(),
-	Draft: boolean('draft').notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const Jobs = pgTable('Jobs', {
-	Id: uuid('id')
-		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
-		.unique()
-		.primaryKey(),
-	Title: varchar('title', { length: 255 }).notNull(),
-	MinRate: real('min_rate').notNull(),
-	MaxRate: real('max_rate').notNull(),
-	Description: text('description').notNull(),
-	JobTypeId: integer('job_type_id').references(() => JobTypes.Id, { onDelete: 'cascade' }),
-	Draft: boolean('draft').notNull(),
-	Deleted: boolean('deleted').notNull().default(false),
-	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const JobApplications = pgTable('JobApplications', {
-	Id: uuid('id')
-		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
-		.unique()
-		.primaryKey(),
-	JobsId: uuid('jobs_id').references(() => Jobs.Id, { onDelete: 'cascade' }),
-	FirstName: varchar('first_name', { length: 255 }).notNull(),
-	LastName: varchar('last_name', { length: 255 }).notNull(),
-	PhoneNumber: varchar('phone_number', { length: 15 }).notNull(),
-	EmailAddress: varchar('email_address', { length: 64 }).notNull(),
-	ResumeUrl: text('resume_url').notNull(),
-	NoticePeriod: integer('notice_period').notNull(),
-	Draft: boolean('draft').notNull(),
-	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
-	Status: jobTypeStatusEnum('status').notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const JobQuestionResponses = pgTable('JobQuestionResponses', {
-	Id: integer('id').unique().primaryKey().generatedAlwaysAsIdentity(),
-	QuestionsId: integer('questions_id').references(() => Questions.Id, { onDelete: 'cascade' }),
-	JobApplicationId: uuid('job_application_id').references(() => JobApplications.Id, {
-		onDelete: 'cascade'
-	}),
-	Content: varchar('content', { length: 512 }).notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const UserSkills = pgTable('UserSkills', {
-	Id: serial('id').primaryKey(),
-	UserId: uuid('user_id').references(() => Users.Id),
-	Name: varchar('name', { length: 64 }).notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
-export const UserSocialLinks = pgTable('UserSocialLinks', {
-	Id: serial('id').primaryKey(),
-	UserId: uuid('user_id').references(() => Users.Id),
-	Platform: varchar('platform', { length: 32 }).notNull(), // 'LinkedIn', 'GitHub', 'Twitter', etc.
-	Url: varchar('url', { length: 255 }).notNull(),
-	CreatedAt: timestamp('__created_at__', { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull()
-});
-
 export const MediaPool = pgTable('MediaPool', {
 	Id: text('id').primaryKey().unique().notNull(),
 	File: bytea('file').notNull(),
@@ -263,107 +189,94 @@ export const MediaPool = pgTable('MediaPool', {
 		.notNull()
 });
 
-export const Agenda = pgTable('Agenda', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    Title: varchar('title', { length: 255 }).notNull(),
-    Subtitle: varchar('subtitle', { length: 255 }),
-    Body: text('body').notNull(),
-    StartTime: timestamp('start_time', { withTimezone: true }).default(sql`CURRENT_TIMESTAMP`).notNull(),
-    EndTime: timestamp('end_time', { withTimezone: true }).notNull(),
-    UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
-});
-
-export const AgendaEvents = pgTable('AgendaEvents', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'cascade' }),
-    Title: varchar('title', { length: 255 }).notNull(),
-    Subtitle: varchar('subtitle', { length: 255 }),
-    Body: text('body').notNull(),
-    SpeakerName: varchar('speaker_name', { length: 255 }),
-    StartTime: timestamp('start_time', { withTimezone: true }).notNull(),
-    EndTime: timestamp('end_time', { withTimezone: true }).notNull(),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
-});
-
 export const Groups = pgTable('Groups', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    Title: varchar('title', { length: 255 }).notNull(),
-    Description: text('description'),
-    Type: groupTypeEnum('type').notNull().default('STANDARD'),
-    AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'set null' }), // Made optional
-    IsActive: boolean('is_active').notNull().default(true),
-    CreatedBy: uuid('created_by').references(() => Users.Id, { onDelete: 'cascade' }),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.primaryKey(),
+	Title: varchar('title', { length: 255 }).notNull(),
+	Description: text('description'),
+	Type: groupTypeEnum('type').notNull().default('STANDARD'),
+	IsActive: boolean('is_active').notNull().default(true),
+	CreatedBy: uuid('created_by').references(() => Users.Id, { onDelete: 'cascade' }),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 // Blog Posts and Events unified as Posts
 export const Posts = pgTable('Posts', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    Title: varchar('title', { length: 255 }).notNull(),
-    Slug: varchar('slug', { length: 255 }).unique().notNull(),
-    Content: text('content').notNull(),
-    Excerpt: text('excerpt'),
-    Type: postTypeEnum('type').notNull(),
-    AuthorId: uuid('author_id').references(() => Users.Id, { onDelete: 'cascade' }).notNull(),
-    FeaturedImage: text('featured_image'),
-    Published: boolean('published').notNull().default(false),
-    PublishedAt: timestamp('published_at', { withTimezone: true }),
-    // Event-specific fields (only used when type = 'EVENT')
-    EventStartTime: timestamp('event_start_time', { withTimezone: true }),
-    EventEndTime: timestamp('event_end_time', { withTimezone: true }),
-    EventLocation: varchar('event_location', { length: 255 }),
-    EventMaxAttendees: integer('event_max_attendees'),
-    EventCurrentAttendees: integer('event_current_attendees').notNull().default(0),
-    EventPrice: real('event_price'), // Price for the event (null means free)
-    GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'set null' }), // Associate event with a group
-    AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'set null' }),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull(),
-    UpdatedAt: timestamp('__updated_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.primaryKey(),
+	Title: varchar('title', { length: 255 }).notNull(),
+	Slug: varchar('slug', { length: 255 }).unique().notNull(),
+	Content: text('content').notNull(),
+	Excerpt: text('excerpt'),
+	Type: postTypeEnum('type').notNull(),
+	AuthorId: uuid('author_id')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
+	FeaturedImage: text('featured_image'),
+	Published: boolean('published').notNull().default(false),
+	PublishedAt: timestamp('published_at', { withTimezone: true }),
+	// Event-specific fields (only used when type = 'EVENT')
+	EventStartTime: timestamp('event_start_time', { withTimezone: true }),
+	EventEndTime: timestamp('event_end_time', { withTimezone: true }),
+	EventLocation: varchar('event_location', { length: 255 }),
+	EventMaxAttendees: integer('event_max_attendees'),
+	EventCurrentAttendees: integer('event_current_attendees').notNull().default(0),
+	EventPrice: real('event_price'), // Price for the event (null means free)
+	GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'set null' }), // Associate event with a group
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	UpdatedAt: timestamp('__updated_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const PostTags = pgTable('PostTags', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    PostId: uuid('post_id').references(() => Posts.Id, { onDelete: 'cascade' }).notNull(),
-    TagName: varchar('tag_name', { length: 50 }).notNull(),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.primaryKey(),
+	PostId: uuid('post_id')
+		.references(() => Posts.Id, { onDelete: 'cascade' })
+		.notNull(),
+	TagName: varchar('tag_name', { length: 50 }).notNull(),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const EventAttendees = pgTable('EventAttendees', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    PostId: uuid('post_id').references(() => Posts.Id, { onDelete: 'cascade' }).notNull(),
-    UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }).notNull(),
-    Status: varchar('status', { length: 20 }).notNull().default('attending'), // attending, maybe, not_attending
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.primaryKey(),
+	PostId: uuid('post_id')
+		.references(() => Posts.Id, { onDelete: 'cascade' })
+		.notNull(),
+	UserId: uuid('user_id')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
+	Status: varchar('status', { length: 20 }).notNull().default('attending'), // attending, maybe, not_attending
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 export const GroupMembers = pgTable('GroupMembers', {
-    Id: uuid('id').$defaultFn(() => sql.raw('uuid_generate_v4()')).primaryKey(),
-    GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'cascade' }),
-    UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
-    CreatedAt: timestamp('__created_at__', { withTimezone: true })
-        .default(sql`CURRENT_TIMESTAMP`)
-        .notNull()
+	Id: uuid('id')
+		.$defaultFn(() => sql.raw('uuid_generate_v4()'))
+		.primaryKey(),
+	GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'cascade' }),
+	UserId: uuid('user_id').references(() => Users.Id, { onDelete: 'cascade' }),
+	CreatedAt: timestamp('__created_at__', { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull()
 });
 
 // Database relations
 export const UsersRelations = relations(Users, ({ many }) => ({
-	jobs: many(Jobs),
-	jobApplications: many(JobApplications),
 	userRoles: many(UserRoles),
 	createdInvites: many(InviteCodes),
 	usedInvites: many(InviteCodeUsage),
@@ -418,10 +331,6 @@ export const PostsRelations = relations(Posts, ({ one, many }) => ({
 		fields: [Posts.AuthorId],
 		references: [Users.Id]
 	}),
-	agenda: one(Agenda, {
-		fields: [Posts.AgendaId],
-		references: [Agenda.Id]
-	}),
 	tags: many(PostTags),
 	attendees: many(EventAttendees)
 }));
@@ -444,90 +353,21 @@ export const EventAttendeesRelations = relations(EventAttendees, ({ one }) => ({
 	})
 }));
 
-export const JobTypesRelations = relations(JobTypes, ({ many }) => ({
-	jobs: many(Jobs)
-}));
-
-export const JobsRelations = relations(Jobs, ({ one, many }) => ({
-	jobType: one(JobTypes, {
-		fields: [Jobs.JobTypeId],
-		references: [JobTypes.Id]
-	}),
-	user: one(Users, {
-		fields: [Jobs.UserId],
-		references: [Users.Id]
-	}),
-	questions: many(Questions),
-	jobApplications: many(JobApplications)
-}));
-
-export const QuestionsRelations = relations(Questions, ({ one, many }) => ({
-	job: one(Jobs, {
-		fields: [Questions.JobsId],
-		references: [Jobs.Id]
-	}),
-	jobQuestionResponses: many(JobQuestionResponses)
-}));
-
-export const JobApplicationsRelations = relations(JobApplications, ({ one, many }) => ({
-	job: one(Jobs, {
-		fields: [JobApplications.JobsId],
-		references: [Jobs.Id]
-	}),
-	user: one(Users, {
-		fields: [JobApplications.UserId],
-		references: [Users.Id]
-	}),
-	jobQuestionResponses: many(JobQuestionResponses)
-}));
-
-export const JobQuestionResponsesRelations = relations(JobQuestionResponses, ({ one }) => ({
-	question: one(Questions, {
-		fields: [JobQuestionResponses.QuestionsId],
-		references: [Questions.Id]
-	}),
-	jobApplication: one(JobApplications, {
-		fields: [JobQuestionResponses.JobApplicationId],
-		references: [JobApplications.Id]
-	})
-}));
-
-export const AgendaRelations = relations(Agenda, ({ one, many }) => ({
-    creator: one(Users, {
-        fields: [Agenda.UserId],
-        references: [Users.Id]
-    }),
-    groups: many(Groups),
-    events: many(AgendaEvents),
-    posts: many(Posts)
-}));
-
-export const AgendaEventsRelations = relations(AgendaEvents, ({ one }) => ({
-    agenda: one(Agenda, {
-        fields: [AgendaEvents.AgendaId],
-        references: [Agenda.Id]
-    })
-}));
-
 export const GroupsRelations = relations(Groups, ({ one, many }) => ({
-    agenda: one(Agenda, {
-        fields: [Groups.AgendaId],
-        references: [Agenda.Id]
-    }),
-    creator: one(Users, {
-        fields: [Groups.CreatedBy],
-        references: [Users.Id]
-    }),
-    members: many(GroupMembers)
+	creator: one(Users, {
+		fields: [Groups.CreatedBy],
+		references: [Users.Id]
+	}),
+	members: many(GroupMembers)
 }));
 
 export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
-    group: one(Groups, {
-        fields: [GroupMembers.GroupId],
-        references: [Groups.Id]
-    }),
-    user: one(Users, {
-        fields: [GroupMembers.UserId],
-        references: [Users.Id]
-    })
+	group: one(Groups, {
+		fields: [GroupMembers.GroupId],
+		references: [Groups.Id]
+	}),
+	user: one(Users, {
+		fields: [GroupMembers.UserId],
+		references: [Users.Id]
+	})
 }));
