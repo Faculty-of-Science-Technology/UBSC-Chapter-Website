@@ -29,7 +29,8 @@ export const load: PageServerLoad = async ({ locals }) => {
                 createdAt: Users.CreatedAt,
                 roleId: UserRoles.RoleId,
                 roleName: Roles.Name,
-                roleType: Roles.Type
+                roleType: Roles.Type,
+                roleColor: Roles.Color
             })
             .from(Users)
             .leftJoin(UserRoles, eq(Users.Id, UserRoles.UserId))
@@ -64,7 +65,8 @@ export const load: PageServerLoad = async ({ locals }) => {
                 memberMap.get(member.id).roles.push({
                     id: member.roleId,
                     name: member.roleName,
-                    type: member.roleType
+                    type: member.roleType,
+                    color: member.roleColor || '#6366f1'
                 });
             }
         });
@@ -91,7 +93,7 @@ export const load: PageServerLoad = async ({ locals }) => {
             }
             memberGroupMap.get(mg.userId).push({
                 id: mg.groupId,
-                title: mg.groupTitle,
+                name: mg.groupTitle,
                 type: mg.groupType,
                 joinedAt: mg.joinedAt
             });
@@ -99,6 +101,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
         members.forEach(member => {
             member.groups = memberGroupMap.get(member.id) || [];
+            member.emailVerified = !member.hidden; // Use hidden status as email verification proxy
         });
 
         // Calculate member statistics
@@ -116,7 +119,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         const availableGroups = await db
             .select({
                 id: Groups.Id,
-                title: Groups.Title,
+                name: Groups.Title,
                 type: Groups.Type
             })
             .from(Groups)
@@ -127,7 +130,8 @@ export const load: PageServerLoad = async ({ locals }) => {
             .select({
                 id: Roles.Id,
                 name: Roles.Name,
-                type: Roles.Type
+                type: Roles.Type,
+                color: Roles.Color
             })
             .from(Roles)
             .orderBy(Roles.Name);

@@ -13,8 +13,10 @@
 	let newPost = $state({
 		title: '',
 		content: '',
-		groupId: '',
-		featured: false,
+		slug: '',
+		excerpt: '',
+		type: 'BLOG',
+		featuredImage: '',
 		published: false,
 		tags: '' // Comma-separated tags
 	});
@@ -24,10 +26,27 @@
 		id: '',
 		title: '',
 		content: '',
-		groupId: '',
-		featured: false,
+		slug: '',
+		excerpt: '',
+		type: 'BLOG',
+		featuredImage: '',
 		published: false,
 		tags: '' // Comma-separated tags
+	});
+
+	// Helper function to generate URL slug from title
+	function generateSlug(title: string) {
+		return title
+			.toLowerCase()
+			.replace(/[^a-z0-9]+/g, '-')
+			.replace(/(^-|-$)+/g, '');
+	}
+
+	// Auto-generate slug when title changes
+	$effect(() => {
+		if (newPost.title && !newPost.slug) {
+			newPost.slug = generateSlug(newPost.title);
+		}
 	});
 
 	function handleCreatePost() {
@@ -35,8 +54,10 @@
 		newPost = {
 			title: '',
 			content: '',
-			groupId: '',
-			featured: false,
+			slug: '',
+			excerpt: '',
+			type: 'BLOG',
+			featuredImage: '',
 			published: false,
 			tags: ''
 		};
@@ -48,8 +69,10 @@
 			id: post.id,
 			title: post.title,
 			content: post.content,
-			groupId: post.groupId || '',
-			featured: post.featured,
+			slug: post.slug || '',
+			excerpt: post.excerpt || '',
+			type: post.type || 'BLOG',
+			featuredImage: post.featuredImage || '',
 			published: post.published,
 			tags: post.tags.join(', ')
 		};
@@ -340,6 +363,30 @@
 						</div>
 
 						<div>
+							<label for="slug" class="block text-sm font-medium text-gray-700">URL Slug</label>
+							<input
+								type="text"
+								id="slug"
+								bind:value={newPost.slug}
+								placeholder="my-blog-post"
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							/>
+							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
+						</div>
+
+						<div>
+							<label for="excerpt" class="block text-sm font-medium text-gray-700">Excerpt</label>
+							<textarea
+								id="excerpt"
+								bind:value={newPost.excerpt}
+								rows="2"
+								placeholder="A brief description of the post..."
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+							></textarea>
+						</div>
+
+						<div>
 							<label for="content" class="block text-sm font-medium text-gray-700">Content</label>
 							<textarea
 								id="content"
@@ -348,6 +395,30 @@
 								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							></textarea>
+						</div>
+
+						<div>
+							<label for="type" class="block text-sm font-medium text-gray-700">Post Type</label>
+							<select
+								id="type"
+								bind:value={newPost.type}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							>
+								<option value="BLOG">Blog Post</option>
+								<option value="EVENT">Event</option>
+							</select>
+						</div>
+
+						<div>
+							<label for="featuredImage" class="block text-sm font-medium text-gray-700">Featured Image URL</label>
+							<input
+								type="url"
+								id="featuredImage"
+								bind:value={newPost.featuredImage}
+								placeholder="https://example.com/image.jpg"
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+							/>
 						</div>
 
 						<div>
@@ -363,45 +434,16 @@
 							/>
 						</div>
 
-						<div>
-							<label for="groupId" class="block text-sm font-medium text-gray-700"
-								>Group (optional)</label
-							>
-							<select
-								id="groupId"
-								bind:value={newPost.groupId}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="">No Group</option>
-								{#each data.availableGroups as group}
-									<option value={group.id}>{group.name} ({group.type})</option>
-								{/each}
-							</select>
-						</div>
-
-						<div class="flex items-center space-x-4">
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="featured"
-									bind:checked={newPost.featured}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="featured" class="ml-2 block text-sm text-gray-700">
-									Featured Post
-								</label>
-							</div>
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="published"
-									bind:checked={newPost.published}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="published" class="ml-2 block text-sm text-gray-700">
-									Publish immediately
-								</label>
-							</div>
+						<div class="flex items-center">
+							<input
+								type="checkbox"
+								id="published"
+								bind:checked={newPost.published}
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+							/>
+							<label for="published" class="ml-2 block text-sm text-gray-700">
+								Publish immediately
+							</label>
 						</div>
 					</div>
 				</div>
@@ -455,6 +497,30 @@
 						</div>
 
 						<div>
+							<label for="edit-slug" class="block text-sm font-medium text-gray-700">URL Slug</label>
+							<input
+								type="text"
+								id="edit-slug"
+								bind:value={editPost.slug}
+								placeholder="my-blog-post"
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							/>
+							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
+						</div>
+
+						<div>
+							<label for="edit-excerpt" class="block text-sm font-medium text-gray-700">Excerpt</label>
+							<textarea
+								id="edit-excerpt"
+								bind:value={editPost.excerpt}
+								rows="2"
+								placeholder="A brief description of the post..."
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+							></textarea>
+						</div>
+
+						<div>
 							<label for="edit-content" class="block text-sm font-medium text-gray-700"
 								>Content</label
 							>
@@ -465,6 +531,30 @@
 								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							></textarea>
+						</div>
+
+						<div>
+							<label for="edit-type" class="block text-sm font-medium text-gray-700">Post Type</label>
+							<select
+								id="edit-type"
+								bind:value={editPost.type}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							>
+								<option value="BLOG">Blog Post</option>
+								<option value="EVENT">Event</option>
+							</select>
+						</div>
+
+						<div>
+							<label for="edit-featuredImage" class="block text-sm font-medium text-gray-700">Featured Image URL</label>
+							<input
+								type="url"
+								id="edit-featuredImage"
+								bind:value={editPost.featuredImage}
+								placeholder="https://example.com/image.jpg"
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+							/>
 						</div>
 
 						<div>
@@ -480,45 +570,16 @@
 							/>
 						</div>
 
-						<div>
-							<label for="edit-groupId" class="block text-sm font-medium text-gray-700"
-								>Group (optional)</label
-							>
-							<select
-								id="edit-groupId"
-								bind:value={editPost.groupId}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							>
-								<option value="">No Group</option>
-								{#each data.availableGroups as group}
-									<option value={group.id}>{group.name} ({group.type})</option>
-								{/each}
-							</select>
-						</div>
-
-						<div class="flex items-center space-x-4">
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="edit-featured"
-									bind:checked={editPost.featured}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="edit-featured" class="ml-2 block text-sm text-gray-700">
-									Featured Post
-								</label>
-							</div>
-							<div class="flex items-center">
-								<input
-									type="checkbox"
-									id="edit-published"
-									bind:checked={editPost.published}
-									class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-								/>
-								<label for="edit-published" class="ml-2 block text-sm text-gray-700">
-									Published
-								</label>
-							</div>
+						<div class="flex items-center">
+							<input
+								type="checkbox"
+								id="edit-published"
+								bind:checked={editPost.published}
+								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+							/>
+							<label for="edit-published" class="ml-2 block text-sm text-gray-700">
+								Published
+							</label>
 						</div>
 					</div>
 				</div>

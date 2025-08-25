@@ -88,6 +88,7 @@ export const Roles = pgTable('Roles', {
 	Name: varchar('name', { length: 100 }).notNull().unique(),
 	Description: text('description'),
 	Type: roleTypeEnum('type').notNull(),
+	Color: varchar('color', { length: 7 }).notNull().default('#6366f1'),
 	CanManageUsers: boolean('can_manage_users').notNull().default(false),
 	CanManageEvents: boolean('can_manage_events').notNull().default(false),
 	CanManageGroups: boolean('can_manage_groups').notNull().default(false),
@@ -320,6 +321,8 @@ export const Posts = pgTable('Posts', {
     EventLocation: varchar('event_location', { length: 255 }),
     EventMaxAttendees: integer('event_max_attendees'),
     EventCurrentAttendees: integer('event_current_attendees').notNull().default(0),
+    EventPrice: real('event_price'), // Price for the event (null means free)
+    GroupId: uuid('group_id').references(() => Groups.Id, { onDelete: 'set null' }), // Associate event with a group
     AgendaId: uuid('agenda_id').references(() => Agenda.Id, { onDelete: 'set null' }),
     CreatedAt: timestamp('__created_at__', { withTimezone: true })
         .default(sql`CURRENT_TIMESTAMP`)

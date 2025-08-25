@@ -24,6 +24,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     name,
                     description,
                     type,
+                    color,
                     canManageUsers,
                     canManageRoles,
                     canManageEvents,
@@ -39,9 +40,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     throw error(400, 'Role name is required');
                 }
 
-                if (!type) {
-                    throw error(400, 'Role type is required');
-                }
+                // Default type to MEMBER if not provided
+                const roleType = type || 'MEMBER';
 
                 // Check if role already exists
                 const existingRole = await db
@@ -60,7 +60,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     .values({
                         Name: name,
                         Description: description || null,
-                        Type: type,
+                        Type: roleType,
+                        Color: color || '#6366f1',
                         CanManageUsers: canManageUsers || false,
                         CanManageRoles: canManageRoles || false,
                         CanManageEvents: canManageEvents || false,
@@ -81,6 +82,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     name,
                     description,
                     type,
+                    color,
                     canManageUsers,
                     canManageRoles,
                     canManageEvents,
@@ -99,9 +101,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     throw error(400, 'Role name is required');
                 }
 
-                if (!type) {
-                    throw error(400, 'Role type is required');
-                }
+                // Default type to MEMBER if not provided
+                const roleType = type || 'MEMBER';
 
                 // Update role
                 const [updatedRole] = await db
@@ -109,7 +110,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     .set({
                         Name: name,
                         Description: description || null,
-                        Type: type,
+                        Type: roleType,
+                        Color: color || '#6366f1',
                         CanManageUsers: canManageUsers || false,
                         CanManageRoles: canManageRoles || false,
                         CanManageEvents: canManageEvents || false,

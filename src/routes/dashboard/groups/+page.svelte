@@ -12,21 +12,17 @@
 
 	// Form data for creating new group
 	let newGroup = $state({
-		name: '',
+		title: '',
 		description: '',
-		type: 'STANDARD' as 'STANDARD' | 'COMMITTEE',
-		color: '#6366f1',
-		isPublic: true
+		type: 'STANDARD' as 'STANDARD' | 'COMMITTEE'
 	});
 
 	// Edit group data
 	let editGroup = $state({
 		id: '',
-		name: '',
+		title: '',
 		description: '',
-		type: 'STANDARD' as 'STANDARD' | 'COMMITTEE',
-		color: '#6366f1',
-		isPublic: true
+		type: 'STANDARD' as 'STANDARD' | 'COMMITTEE'
 	});
 
 	// Member management
@@ -35,11 +31,9 @@
 	function handleCreateGroup() {
 		showCreateGroup = true;
 		newGroup = {
-			name: '',
+			title: '',
 			description: '',
-			type: 'STANDARD',
-			color: '#6366f1',
-			isPublic: true
+			type: 'STANDARD'
 		};
 	}
 
@@ -47,11 +41,9 @@
 		selectedGroup = group;
 		editGroup = {
 			id: group.id,
-			name: group.name,
+			title: group.title,
 			description: group.description || '',
-			type: group.type,
-			color: group.color || '#6366f1',
-			isPublic: group.isPublic
+			type: group.type
 		};
 		showEditGroup = true;
 	}
@@ -339,11 +331,11 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="name" class="block text-sm font-medium text-gray-700">Group Name</label>
+							<label for="title" class="block text-sm font-medium text-gray-700">Group Name</label>
 							<input
 								type="text"
-								id="name"
-								bind:value={newGroup.name}
+								id="title"
+								bind:value={newGroup.title}
 								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
@@ -371,28 +363,6 @@
 								<option value="STANDARD">Standard Group</option>
 								<option value="COMMITTEE">Committee</option>
 							</select>
-						</div>
-
-						<div>
-							<label for="color" class="block text-sm font-medium text-gray-700">Group Color</label>
-							<input
-								type="color"
-								id="color"
-								bind:value={newGroup.color}
-								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-							/>
-						</div>
-
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="isPublic"
-								bind:checked={newGroup.isPublic}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="isPublic" class="ml-2 block text-sm text-gray-700">
-								Public group (visible to all members)
-							</label>
 						</div>
 					</div>
 				</div>
@@ -433,13 +403,13 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-name" class="block text-sm font-medium text-gray-700"
+							<label for="edit-title" class="block text-sm font-medium text-gray-700"
 								>Group Name</label
 							>
 							<input
 								type="text"
-								id="edit-name"
-								bind:value={editGroup.name}
+								id="edit-title"
+								bind:value={editGroup.title}
 								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
@@ -469,30 +439,6 @@
 								<option value="STANDARD">Standard Group</option>
 								<option value="COMMITTEE">Committee</option>
 							</select>
-						</div>
-
-						<div>
-							<label for="edit-color" class="block text-sm font-medium text-gray-700"
-								>Group Color</label
-							>
-							<input
-								type="color"
-								id="edit-color"
-								bind:value={editGroup.color}
-								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-							/>
-						</div>
-
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="edit-isPublic"
-								bind:checked={editGroup.isPublic}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="edit-isPublic" class="ml-2 block text-sm text-gray-700">
-								Public group (visible to all members)
-							</label>
 						</div>
 					</div>
 				</div>

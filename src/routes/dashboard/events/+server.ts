@@ -15,11 +15,15 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
         switch (action) {
             case 'create': {
-                const { title, content, eventStartTime, eventEndTime, eventLocation, eventMaxAttendees, agendaId, published } = body;
+                const { title, content, eventDate, eventStartTime, eventEndTime, eventLocation, eventCapacity, eventMaxAttendees, eventPrice, groupId, featured, agendaId, published } = body;
 
-                if (!title || !content || !eventStartTime) {
-                    throw error(400, 'Title, content, and event start time are required');
+                if (!title || !content || (!eventDate && !eventStartTime)) {
+                    throw error(400, 'Title, content, and event date/time are required');
                 }
+
+                // Use eventDate if provided, otherwise use eventStartTime
+                const startTime = eventDate ? new Date(eventDate) : new Date(eventStartTime);
+                const maxAttendees = eventCapacity || eventMaxAttendees;
 
                 // Generate slug from title
                 const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -29,11 +33,14 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     Slug: slug,
                     Content: content,
                     Type: 'EVENT',
-                    EventStartTime: new Date(eventStartTime),
+                    EventStartTime: startTime,
                     EventEndTime: eventEndTime ? new Date(eventEndTime) : null,
+                    EventPrice: eventPrice || null,
+                    GroupId: groupId || null,
                     EventLocation: eventLocation || null,
-                    EventMaxAttendees: eventMaxAttendees || null,
+                    EventMaxAttendees: maxAttendees || null,
                     AgendaId: agendaId || null,
+                    FeaturedImage: featured ? 'featured' : null, // Using FeaturedImage to store featured status
                     Published: published || false,
                     PublishedAt: published ? new Date() : null,
                     AuthorId: locals.user.Id,
@@ -45,7 +52,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
             }
 
             case 'update': {
-                const { id, title, content, eventStartTime, eventEndTime, eventLocation, eventMaxAttendees, agendaId, published } = body;
+                const { id, title, content, eventStartTime, eventEndTime, eventLocation, eventMaxAttendees, eventPrice, groupId, agendaId, published } = body;
 
                 if (!id || !title || !content || !eventStartTime) {
                     throw error(400, 'ID, title, content, and event start time are required');
@@ -62,6 +69,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                         Content: content,
                         EventStartTime: new Date(eventStartTime),
                         EventEndTime: eventEndTime ? new Date(eventEndTime) : null,
+                        EventPrice: eventPrice || null,
+                        GroupId: groupId || null,
                         EventLocation: eventLocation || null,
                         EventMaxAttendees: eventMaxAttendees || null,
                         AgendaId: agendaId || null,

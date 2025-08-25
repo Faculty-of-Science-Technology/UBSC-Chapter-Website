@@ -47,6 +47,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         // Add member counts to groups
         const groupsWithCounts = allGroups.map(group => ({
             ...group,
+            name: group.title,
             memberCount: memberCountMap.get(group.id) || 0
         }));
 

@@ -20,6 +20,8 @@ export const load: PageServerLoad = async ({ locals }) => {
                 published: Posts.Published,
                 eventStartTime: Posts.EventStartTime,
                 eventEndTime: Posts.EventEndTime,
+                eventPrice: Posts.EventPrice,
+                groupId: Posts.GroupId,
                 eventLocation: Posts.EventLocation,
                 eventMaxAttendees: Posts.EventMaxAttendees,
                 eventCurrentAttendees: Posts.EventCurrentAttendees,

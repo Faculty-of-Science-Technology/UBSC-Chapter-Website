@@ -22,6 +22,7 @@ export const load: PageServerLoad = async ({ locals }) => {
                 name: Roles.Name,
                 description: Roles.Description,
                 type: Roles.Type,
+                color: Roles.Color,
                 canManageUsers: Roles.CanManageUsers,
                 canManageRoles: Roles.CanManageRoles,
                 canManageEvents: Roles.CanManageEvents,

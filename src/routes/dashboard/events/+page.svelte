@@ -17,7 +17,7 @@
 	let newEvent = $state({
 		title: '',
 		content: '',
-		eventDate: '',
+		eventStartTime: '',
 		eventLocation: '',
 		eventCapacity: null as number | null,
 		eventPrice: null as number | null,
@@ -31,7 +31,7 @@
 		id: '',
 		title: '',
 		content: '',
-		eventDate: '',
+		eventStartTime: '',
 		eventLocation: '',
 		eventCapacity: null as number | null,
 		eventPrice: null as number | null,
@@ -45,7 +45,7 @@
 		newEvent = {
 			title: '',
 			content: '',
-			eventDate: '',
+			eventStartTime: '',
 			eventLocation: '',
 			eventCapacity: null,
 			eventPrice: null,
@@ -61,7 +61,7 @@
 			id: event.id,
 			title: event.title,
 			content: event.content,
-			eventDate: event.eventDate ? new Date(event.eventDate).toISOString().slice(0, 16) : '',
+			eventStartTime: event.eventStartTime ? new Date(event.eventStartTime).toISOString().slice(0, 16) : '',
 			eventLocation: event.eventLocation || '',
 			eventCapacity: event.eventCapacity,
 			eventPrice: event.eventPrice,
@@ -176,17 +176,17 @@
 	}
 
 	function formatPrice(price: number | null) {
-		if (price === null || price === 0) return 'Free';
+		if (price === undefined || price === null || price === 0) return 'Free';
 		return `$${price.toFixed(2)}`;
 	}
 
 	function getEventStatus(event: any) {
 		const now = new Date();
-		const eventDate = new Date(event.eventDate);
+		const eventStartTime = new Date(event.eventStartTime);
 
 		if (!event.published) return { text: 'Draft', color: 'gray' };
-		if (eventDate < now) return { text: 'Past', color: 'red' };
-		if (eventDate > now) return { text: 'Upcoming', color: 'green' };
+		if (eventStartTime < now) return { text: 'Past', color: 'red' };
+		if (eventStartTime > now) return { text: 'Upcoming', color: 'green' };
 		return { text: 'Live', color: 'blue' };
 	}
 </script>
@@ -260,8 +260,15 @@
 													{/if}
 												</div>
 												<div class="text-gray-500">
-													{event.groupName || 'No Group'} • by {event.authorName}
-													{event.authorLastName}
+													{#if event.groupId}
+													{#each data.availableGroups as group}
+														{#if group.id === event.groupId}
+															{group.name} • by {event.authorName} {event.authorLastName}
+														{/if}
+													{/each}
+													{:else}
+														No group • by {event.authorName} {event.authorLastName}
+													{/if}
 												</div>
 											</div>
 										</div>
@@ -269,7 +276,7 @@
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
 										<div>
 											<div class="font-medium text-gray-900">
-												{formatDate(event.eventDate)}
+												{formatDate(event.eventStartTime)}
 											</div>
 											<div class="text-gray-500">
 												{event.eventLocation || 'Location TBD'}
@@ -378,11 +385,11 @@
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<Label for="eventDate">Date & Time</Label>
+								<Label for="eventStartTime">Date & Time</Label>
 								<Input
 									type="datetime-local"
-									id="eventDate"
-									bind:value={newEvent.eventDate}
+									id="eventStartTime"
+									bind:value={newEvent.eventStartTime}
 									required
 								/>
 							</div>
@@ -517,13 +524,13 @@
 
 						<div class="grid grid-cols-2 gap-4">
 							<div>
-								<label for="edit-eventDate" class="block text-sm font-medium text-gray-700"
+								<label for="edit-eventStartTime" class="block text-sm font-medium text-gray-700"
 									>Date & Time</label
 								>
 								<input
 									type="datetime-local"
-									id="edit-eventDate"
-									bind:value={editEvent.eventDate}
+									id="edit-eventStartTime"
+									bind:value={editEvent.eventStartTime}
 									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 									required
 								/>

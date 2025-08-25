@@ -13,15 +13,16 @@
 	let newRole = {
 		name: '',
 		description: '',
-		color: '#3B82F6',
+		type: 'MEMBER',
+		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
 		canManageEvents: false,
 		canManagePosts: false,
+		canEditOthersPosts: false,
 		canManageGroups: false,
 		canManageInvites: false,
-		canManageTheme: false,
-		canViewAnalytics: false
+		canManageTheme: false
 	};
 
 	// Edit role data
@@ -29,15 +30,16 @@
 		id: '',
 		name: '',
 		description: '',
-		color: '#3B82F6',
+		type: 'MEMBER',
+		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
 		canManageEvents: false,
 		canManagePosts: false,
+		canEditOthersPosts: false,
 		canManageGroups: false,
 		canManageInvites: false,
-		canManageTheme: false,
-		canViewAnalytics: false
+		canManageTheme: false
 	};
 
 	const permissions = [
@@ -45,10 +47,19 @@
 		{ key: 'canManageRoles', label: 'Manage Roles', description: 'Create and modify user roles and permissions' },
 		{ key: 'canManageEvents', label: 'Manage Events', description: 'Create, edit, and delete events' },
 		{ key: 'canManagePosts', label: 'Manage Blog Posts', description: 'Create, edit, and delete blog posts' },
+		{ key: 'canEditOthersPosts', label: 'Edit Others\' Posts', description: 'Edit and delete posts created by other users' },
 		{ key: 'canManageGroups', label: 'Manage Groups', description: 'Create and manage chapter groups' },
 		{ key: 'canManageInvites', label: 'Manage Invites', description: 'Create and manage invite codes' },
-		{ key: 'canManageTheme', label: 'Manage Theme', description: 'Customize website appearance and colors' },
-		{ key: 'canViewAnalytics', label: 'View Analytics', description: 'Access detailed usage statistics and reports' }
+		{ key: 'canManageTheme', label: 'Manage Theme', description: 'Customize website appearance and colors' }
+	];
+
+	const roleTypes = [
+		{ value: 'ADMIN', label: 'Administrator' },
+		{ value: 'MODERATOR', label: 'Moderator' },
+		{ value: 'EVENT_MANAGER', label: 'Event Manager' },
+		{ value: 'USER_MANAGER', label: 'User Manager' },
+		{ value: 'CONTENT_MANAGER', label: 'Content Manager' },
+		{ value: 'MEMBER', label: 'Member' }
 	];
 
 	function handleCreateRole() {
@@ -56,15 +67,15 @@
 		newRole = {
 			name: '',
 			description: '',
-			color: '#3B82F6',
+			type: 'MEMBER',
 			canManageUsers: false,
 			canManageRoles: false,
 			canManageEvents: false,
 			canManagePosts: false,
+			canEditOthersPosts: false,
 			canManageGroups: false,
 			canManageInvites: false,
-			canManageTheme: false,
-			canViewAnalytics: false
+			canManageTheme: false
 		};
 	}
 
@@ -74,15 +85,16 @@
 			id: role.id,
 			name: role.name,
 			description: role.description,
-			color: role.color,
+			type: role.type,
+			color: role.color || '#6366f1',
 			canManageUsers: role.canManageUsers,
 			canManageRoles: role.canManageRoles,
 			canManageEvents: role.canManageEvents,
 			canManagePosts: role.canManagePosts,
+			canEditOthersPosts: role.canEditOthersPosts,
 			canManageGroups: role.canManageGroups,
 			canManageInvites: role.canManageInvites,
-			canManageTheme: role.canManageTheme,
-			canViewAnalytics: role.canViewAnalytics
+			canManageTheme: role.canManageTheme
 		};
 		showEditRole = true;
 	}
@@ -198,11 +210,15 @@
 			<div class="relative overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:px-6">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center">
-						<div 
-							class="h-3 w-3 rounded-full mr-3"
-							style="background-color: {role.color ?? "red"};"  
-						></div><!--@todo Fix this ---->
-						<h3 class="text-lg font-medium text-gray-900 truncate">{role.name}</h3>
+						<div class="flex items-center justify-center w-8 h-8 rounded-full mr-3" style="background-color: {role.color}20;">
+							<span class="text-sm font-medium" style="color: {role.color};">
+								{role.name.charAt(0).toUpperCase()}
+							</span>
+						</div>
+						<div>
+							<h3 class="text-lg font-medium text-gray-900 truncate">{role.name}</h3>
+							<p class="text-sm text-gray-500">{role.type}</p>
+						</div>
 					</div>
 					<div class="flex space-x-2">
 						<button
@@ -264,27 +280,38 @@
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Role</h3>
 					<div class="mt-4 space-y-4">
-						<div class="grid grid-cols-2 gap-4">
-							<div>
-								<label for="name" class="block text-sm font-medium text-gray-700">Role Name</label>
-								<input
-									type="text"
-									id="name"
-									bind:value={newRole.name}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-									placeholder="e.g., Moderator"
-									required
-								/>
-							</div>
-							<div>
-								<label for="color" class="block text-sm font-medium text-gray-700">Color</label>
-								<input
-									type="color"
-									id="color"
-									bind:value={newRole.color}
-									class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-								/>
-							</div>
+						<div>
+							<label for="name" class="block text-sm font-medium text-gray-700">Role Name</label>
+							<input
+								type="text"
+								id="name"
+								bind:value={newRole.name}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								placeholder="e.g., Moderator"
+								required
+							/>
+						</div>
+						<div>
+							<label for="type" class="block text-sm font-medium text-gray-700">Role Type</label>
+							<select
+								id="type"
+								bind:value={newRole.type}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							>
+								{#each roleTypes as roleType}
+									<option value={roleType.value}>{roleType.label}</option>
+								{/each}
+							</select>
+						</div>
+						<div>
+							<label for="color" class="block text-sm font-medium text-gray-700">Role Color</label>
+							<input
+								type="color"
+								id="color"
+								bind:value={newRole.color}
+								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+							/>
 						</div>
 						<div>
 							<label for="description" class="block text-sm font-medium text-gray-700">Description</label>
@@ -349,26 +376,37 @@
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Role</h3>
 					<div class="mt-4 space-y-4">
-						<div class="grid grid-cols-2 gap-4">
-							<div>
-								<label for="edit-name" class="block text-sm font-medium text-gray-700">Role Name</label>
-								<input
-									type="text"
-									id="edit-name"
-									bind:value={editRole.name}
-									class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-									required
-								/>
-							</div>
-							<div>
-								<label for="edit-color" class="block text-sm font-medium text-gray-700">Color</label>
-								<input
-									type="color"
-									id="edit-color"
-									bind:value={editRole.color}
-									class="mt-1 block w-full h-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-								/>
-							</div>
+						<div>
+							<label for="edit-name" class="block text-sm font-medium text-gray-700">Role Name</label>
+							<input
+								type="text"
+								id="edit-name"
+								bind:value={editRole.name}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							/>
+						</div>
+						<div>
+							<label for="edit-type" class="block text-sm font-medium text-gray-700">Role Type</label>
+							<select
+								id="edit-type"
+								bind:value={editRole.type}
+								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								required
+							>
+								{#each roleTypes as roleType}
+									<option value={roleType.value}>{roleType.label}</option>
+								{/each}
+							</select>
+						</div>
+						<div>
+							<label for="edit-color" class="block text-sm font-medium text-gray-700">Role Color</label>
+							<input
+								type="color"
+								id="edit-color"
+								bind:value={editRole.color}
+								class="mt-1 block h-10 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+							/>
 						</div>
 						<div>
 							<label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>

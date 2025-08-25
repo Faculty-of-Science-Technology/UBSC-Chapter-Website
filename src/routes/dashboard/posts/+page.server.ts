@@ -57,6 +57,8 @@ export const load: PageServerLoad = async ({ locals }) => {
         // Add tags to blog posts
         const postsWithTags = blogPosts.map(post => ({
             ...post,
+            authorName: post.authorFirstName,
+            authorLastName: post.authorLastName,
             tags: tagsMap.get(post.id) || []
         }));
 
@@ -64,7 +66,7 @@ export const load: PageServerLoad = async ({ locals }) => {
         const availableGroups = await db
             .select({
                 id: Groups.Id,
-                title: Groups.Title,
+                name: Groups.Title,
                 type: Groups.Type
             })
             .from(Groups)
