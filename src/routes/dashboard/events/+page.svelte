@@ -62,7 +62,9 @@
 			id: event.id,
 			title: event.title,
 			content: event.content,
-			eventStartTime: event.eventStartTime ? new Date(event.eventStartTime).toISOString().slice(0, 16) : '',
+			eventStartTime: event.eventStartTime
+				? new Date(event.eventStartTime).toISOString().slice(0, 16)
+				: '',
 			eventLocation: event.eventLocation || '',
 			eventCapacity: event.eventCapacity,
 			eventPrice: event.eventPrice,
@@ -262,11 +264,11 @@
 												</div>
 												<div class="text-gray-500">
 													{#if event.groupId}
-													{#each data.availableGroups as group}
-														{#if group.id === event.groupId}
-															{group.name} • by {event.authorName} {event.authorLastName}
-														{/if}
-													{/each}
+														{#each data.availableGroups as group}
+															{#if group.id === event.groupId}
+																{group.name} • by {event.authorName} {event.authorLastName}
+															{/if}
+														{/each}
 													{:else}
 														No group • by {event.authorName} {event.authorLastName}
 													{/if}
@@ -366,22 +368,12 @@
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="title">Event Title</Label>
-							<Input
-								type="text"
-								id="title"
-								bind:value={newEvent.title}
-								required
-							/>
+							<Input type="text" id="title" bind:value={newEvent.title} required />
 						</div>
 
 						<div>
 							<Label for="content">Description</Label>
-							<Textarea
-								id="content"
-								bind:value={newEvent.content}
-								rows={4}
-								required
-							/>
+							<Textarea id="content" bind:value={newEvent.content} rows={4} required />
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">
@@ -396,11 +388,7 @@
 							</div>
 							<div>
 								<Label for="eventLocation">Location</Label>
-								<Input
-									type="text"
-									id="eventLocation"
-									bind:value={newEvent.eventLocation}
-								/>
+								<Input type="text" id="eventLocation" bind:value={newEvent.eventLocation} />
 							</div>
 						</div>
 
@@ -430,7 +418,14 @@
 							<Label for="groupId">Group (optional)</Label>
 							<Select.Root type="single" bind:value={newEvent.groupId}>
 								<Select.Trigger class="w-full">
-									{newEvent.groupId ?? "Select a group"}
+									{#if newEvent.groupId.trim() === ''}
+										Select a group
+									{/if}
+									{#each data.availableGroups as group}
+										{#if group.id === newEvent.groupId}
+											{group.name} ({group.type})
+										{/if}
+									{/each}
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Item value="">No Group</Select.Item>
@@ -443,17 +438,12 @@
 
 						<div class="flex items-center space-x-4">
 							<div class="flex items-center space-x-2">
-								
 								<Switch id="featured" bind:checked={newEvent.featured} />
-								<Label for="featured">
-									Featured Event
-								</Label>
+								<Label for="featured">Featured Event</Label>
 							</div>
 							<div class="flex items-center space-x-2">
 								<Switch id="published" bind:checked={newEvent.published} />
-								<Label for="published">
-									Publish immediately
-								</Label>
+								<Label for="published">Publish immediately</Label>
 							</div>
 						</div>
 					</div>
@@ -496,22 +486,12 @@
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-title">Event Title</Label>
-							<Input
-								type="text"
-								id="edit-title"
-								bind:value={editEvent.title}
-								required
-							/>
+							<Input type="text" id="edit-title" bind:value={editEvent.title} required />
 						</div>
 
 						<div>
 							<Label for="edit-content">Description</Label>
-							<Textarea
-								id="edit-content"
-								bind:value={editEvent.content}
-								rows={4}
-								required
-							/>
+							<Textarea id="edit-content" bind:value={editEvent.content} rows={4} required />
 						</div>
 
 						<div class="grid grid-cols-2 gap-4">
@@ -526,11 +506,7 @@
 							</div>
 							<div>
 								<Label for="edit-eventLocation">Location</Label>
-								<Input
-									type="text"
-									id="edit-eventLocation"
-									bind:value={editEvent.eventLocation}
-								/>
+								<Input type="text" id="edit-eventLocation" bind:value={editEvent.eventLocation} />
 							</div>
 						</div>
 
@@ -559,9 +535,16 @@
 						<div>
 							<Label for="edit-groupId">Group (optional)</Label>
 							<Select.Root type="single" bind:value={editEvent.groupId}>
-									<Select.Trigger class="w-full">
-										{editEvent.groupId ?? "Select a group"}
-									</Select.Trigger>
+								<Select.Trigger class="w-full">
+								{#if editEvent.groupId.trim() === ''}
+										Select a group
+									{/if}
+									{#each data.availableGroups as group}
+										{#if group.id === editEvent.groupId}
+											{group.name} ({group.type})
+										{/if}
+									{/each}
+								</Select.Trigger>
 								<Select.Content>
 									<Select.Item value="">No Group</Select.Item>
 									{#each data.availableGroups as group}
@@ -574,15 +557,11 @@
 						<div class="flex items-center space-x-4">
 							<div class="flex items-center space-x-2">
 								<Switch id="edit-featured" bind:checked={editEvent.featured} />
-								<Label for="edit-featured">
-									Featured Event
-								</Label>
+								<Label for="edit-featured">Featured Event</Label>
 							</div>
 							<div class="flex items-center space-x-2">
 								<Switch id="edit-published" bind:checked={editEvent.published} />
-								<Label for="edit-published">
-									Published
-								</Label>
+								<Label for="edit-published">Published</Label>
 							</div>
 						</div>
 					</div>
