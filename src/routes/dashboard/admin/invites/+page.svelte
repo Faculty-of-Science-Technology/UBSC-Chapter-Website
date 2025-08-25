@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -411,40 +413,31 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Invite Code</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="description" class="block text-sm font-medium text-gray-700"
-								>Description (Optional)</label
-							>
-							<input
+							<Label for="description">Description (Optional)</Label>
+							<Input
 								type="text"
 								id="description"
 								bind:value={newInvite.description}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								placeholder="e.g., New Member Recruitment - Fall 2025"
 							/>
 						</div>
 						<div>
-							<label for="maxUses" class="block text-sm font-medium text-gray-700"
-								>Maximum Uses (Optional)</label
-							>
-							<input
+							<Label for="maxUses">Maximum Uses (Optional)</Label>
+							<Input
 								type="number"
 								id="maxUses"
 								bind:value={newInvite.maxUses}
 								min="1"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								placeholder="Leave empty for unlimited uses"
 							/>
 						</div>
 						<div>
-							<label for="expiresAt" class="block text-sm font-medium text-gray-700"
-								>Expiration Date (Optional)</label
-							>
-							<input
+							<Label for="expiresAt">Expiration Date (Optional)</Label>
+							<Input
 								type="datetime-local"
 								id="expiresAt"
 								bind:value={newInvite.expiresAt}
 								min={getTomorrowDate()}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 							/>
 						</div>
 					</div>
