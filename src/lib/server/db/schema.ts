@@ -17,14 +17,7 @@ export const accountTypeEnum = pgEnum('account_type', ['org', 'student', 'owner'
 export const jobTypeStatusEnum = pgEnum('jobtype_status', ['pending', 'approved', 'rejected']);
 export const groupTypeEnum = pgEnum('group_type', ['STANDARD', 'COMMITTEE']);
 export const postTypeEnum = pgEnum('post_type', ['EVENT', 'BLOG']);
-export const roleTypeEnum = pgEnum('role_type', [
-	'ADMIN',
-	'MODERATOR',
-	'EVENT_MANAGER',
-	'USER_MANAGER',
-	'CONTENT_MANAGER',
-	'MEMBER'
-]);
+export const roleTypeEnum = pgEnum('role_type', ['ADMIN', 'MODERATOR', 'EVENT_MANAGER', 'USER_MANAGER', 'CONTENT_MANAGER', 'MEMBER']);
 // Apparently, the bytea type is not supported by drizzle-orm, so we have to create a custom type for it
 // https://stackoverflow.com/a/76499742/10976415
 // Fast implementation
@@ -284,7 +277,8 @@ export const UsersRelations = relations(Users, ({ many }) => ({
 	eventAttendances: many(EventAttendees),
 	groupMemberships: many(GroupMembers),
 	createdGroups: many(Groups),
-	assignedRoles: many(UserRoles, { relationName: 'assignedBy' })
+	assignedRoles: many(UserRoles, { relationName: 'assignedBy' }),
+	themeUpdates: many(ThemeSettings)
 }));
 
 export const RolesRelations = relations(Roles, ({ many }) => ({
@@ -331,6 +325,10 @@ export const PostsRelations = relations(Posts, ({ one, many }) => ({
 		fields: [Posts.AuthorId],
 		references: [Users.Id]
 	}),
+	group: one(Groups, {
+		fields: [Posts.GroupId],
+		references: [Groups.Id]
+	}),
 	tags: many(PostTags),
 	attendees: many(EventAttendees)
 }));
@@ -358,7 +356,8 @@ export const GroupsRelations = relations(Groups, ({ one, many }) => ({
 		fields: [Groups.CreatedBy],
 		references: [Users.Id]
 	}),
-	members: many(GroupMembers)
+	members: many(GroupMembers),
+	posts: many(Posts)
 }));
 
 export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
@@ -368,6 +367,13 @@ export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
 	}),
 	user: one(Users, {
 		fields: [GroupMembers.UserId],
+		references: [Users.Id]
+	})
+}));
+
+export const ThemeSettingsRelations = relations(ThemeSettings, ({ one }) => ({
+	updatedBy: one(Users, {
+		fields: [ThemeSettings.UpdatedBy],
 		references: [Users.Id]
 	})
 }));

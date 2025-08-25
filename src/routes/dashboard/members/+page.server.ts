@@ -24,7 +24,6 @@ export const load: PageServerLoad = async ({ locals }) => {
                 location: Users.Location,
                 profilePicture: Users.ProfilePicture,
                 bio: Users.Bio,
-                hireable: Users.Hireable,
                 hidden: Users.Hidden,
                 createdAt: Users.CreatedAt,
                 roleId: UserRoles.RoleId,
@@ -54,7 +53,6 @@ export const load: PageServerLoad = async ({ locals }) => {
                     location: member.location,
                     profilePicture: member.profilePicture,
                     bio: member.bio,
-                    hireable: member.hireable,
                     hidden: member.hidden,
                     createdAt: member.createdAt,
                     roles: []

@@ -34,7 +34,6 @@ export const load: PageServerLoad = async (request) => {
 			FirstName: true,
 			LastName: true,
 			Bio: true,
-			Hireable: true,
 			ProfilePicture: true,
 			ActivationCode: true
 		},
@@ -49,7 +48,6 @@ export const load: PageServerLoad = async (request) => {
 			FirstName: true,
 			LastName: true,
 			Bio: true,
-			Hireable: true,
 			ProfilePicture: true
 		},
 		limit: 50 // Limit to 50 orgs for the grid
@@ -116,7 +114,6 @@ export const load: PageServerLoad = async (request) => {
 		image_url: user.ProfilePicture ?? '',
 		name: `${user.FirstName} ${user.LastName}`,
 		bio: user.Bio,
-		hireable: user.Hireable,
 		activation_code: user.ActivationCode
 	}));
 
@@ -125,18 +122,14 @@ export const load: PageServerLoad = async (request) => {
 		id: user.Id,
 		image_url: user.ProfilePicture ?? '',
 		name: `${user.FirstName} ${user.LastName}`,
-		bio: user.Bio,
-		hireable: user.Hireable
+		bio: user.Bio
 	}));
 	// Get all presentation agendas with their events
 	const agenda_groups = await db.query.Groups.findMany({
 		with: {
-			agenda: {
-				with: {
-					events: {
-						orderBy: (events, { asc }) => [asc(events.StartTime)]
-					}
-				}
+			posts: {
+				where: (posts) => eq(posts.Type, 'EVENT'),
+				orderBy: (posts, { asc }) => [asc(posts.EventStartTime)]
 			}
 		}
 	});
@@ -146,7 +139,7 @@ export const load: PageServerLoad = async (request) => {
 		groupId: group.Id,
 		groupCreatedAt: group.CreatedAt,
 		groupName: group.Title,
-		agenda: group.agenda
+		events: group.posts
 	}));
 
 	const form = await superValidate(request, zod(eventRegisterSchema));
