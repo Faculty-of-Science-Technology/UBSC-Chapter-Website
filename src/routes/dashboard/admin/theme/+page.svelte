@@ -189,14 +189,14 @@
 		<div class="mt-4 space-x-3 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
-				on:click={() => (previewMode = !previewMode)}
+				onclick={() => (previewMode = !previewMode)}
 				class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 			>
 				{previewMode ? 'Exit Preview' : 'Preview'}
 			</button>
 			<button
 				type="button"
-				on:click={resetToDefault}
+				onclick={resetToDefault}
 				disabled={loading}
 				class="inline-flex items-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 disabled:opacity-50"
 			>
@@ -204,7 +204,7 @@
 			</button>
 			<button
 				type="button"
-				on:click={saveTheme}
+				onclick={saveTheme}
 				disabled={loading}
 				class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 disabled:opacity-50"
 			>
@@ -392,7 +392,7 @@
 						class="overflow-x-auto rounded-lg bg-gray-50 p-3 font-mono text-xs">{generateCSSVariables()}</pre>
 					<button
 						type="button"
-						on:click={() => navigator.clipboard.writeText(generateCSSVariables())}
+						onclick={() => navigator.clipboard.writeText(generateCSSVariables())}
 						class="text-sm text-indigo-600 hover:text-indigo-900"
 					>
 						Copy CSS Variables
@@ -419,7 +419,7 @@
 				<h1 class="text-xl font-bold">UBSC Chapter</h1>
 			</div>
 			<button
-				on:click={() => (previewMode = false)}
+				onclick={() => (previewMode = false)}
 				class="rounded bg-white px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
 			>
 				Exit Preview

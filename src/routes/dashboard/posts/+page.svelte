@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { Input } from '$lib/components/vendor/ui/input';
+	import { Label } from '$lib/components/vendor/ui/label';
+	import * as Select from '$lib/components/vendor/ui/select';
+	import { Switch } from '$lib/components/vendor/ui/switch';
+	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -203,7 +208,7 @@
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
-				on:click={handleCreatePost}
+				onclick={handleCreatePost}
 				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 			>
 				Create Post
@@ -301,26 +306,26 @@
 										{/if}
 									</td>
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-										{formatDate(post.createdAt)}
+										{formatDate(post.createdAt.toJSON())}
 									</td>
 									<td
 										class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
 									>
 										<button
-											on:click={() => togglePublished(post.id, post.published)}
+											onclick={() => togglePublished(post.id, post.published)}
 											class="mr-4 text-indigo-600 hover:text-indigo-900"
 											disabled={loading}
 										>
 											{post.published ? 'Unpublish' : 'Publish'}
 										</button>
 										<button
-											on:click={() => handleEditPost(post)}
+											onclick={() => handleEditPost(post)}
 											class="mr-4 text-indigo-600 hover:text-indigo-900"
 										>
 											Edit
 										</button>
 										<button
-											on:click={() => deletePost(post.id)}
+											onclick={() => deletePost(post.id)}
 											class="text-red-600 hover:text-red-900"
 											disabled={loading}
 										>
@@ -343,7 +348,7 @@
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
 				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-				on:click={() => (showCreatePost = false)}
+				onclick={() => (showCreatePost = false)}
 			></div>
 			<div
 				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
@@ -352,105 +357,94 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Blog Post</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="title" class="block text-sm font-medium text-gray-700">Post Title</label>
-							<input
+							<Label for="title">Post Title</Label>
+							<Input
 								type="text"
 								id="title"
 								bind:value={newPost.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 
 						<div>
-							<label for="slug" class="block text-sm font-medium text-gray-700">URL Slug</label>
-							<input
+							<Label for="slug">URL Slug</Label>
+							<Input
 								type="text"
 								id="slug"
 								bind:value={newPost.slug}
 								placeholder="my-blog-post"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
 						</div>
 
 						<div>
-							<label for="excerpt" class="block text-sm font-medium text-gray-700">Excerpt</label>
-							<textarea
+							<Label for="excerpt">Excerpt</Label>
+							<Textarea
 								id="excerpt"
 								bind:value={newPost.excerpt}
-								rows="2"
+								rows={2}
 								placeholder="A brief description of the post..."
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							></textarea>
+							/>
 						</div>
 
 						<div>
-							<label for="content" class="block text-sm font-medium text-gray-700">Content</label>
-							<textarea
+							<Label for="content">Content</Label>
+							<Textarea
 								id="content"
 								bind:value={newPost.content}
-								rows="6"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								rows={6}
 								required
-							></textarea>
+							/>
 						</div>
 
 						<div>
-							<label for="type" class="block text-sm font-medium text-gray-700">Post Type</label>
-							<select
-								id="type"
-								bind:value={newPost.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							>
-								<option value="BLOG">Blog Post</option>
-								<option value="EVENT">Event</option>
-							</select>
+							<Label for="type">Post Type</Label>
+							<Select.Root type="single" bind:value={newPost.type}>
+								<Select.Trigger class="w-full">
+									<!--- String hacking for title-case -->
+									{(newPost.type? newPost.type[0] + newPost.type.toLocaleLowerCase().slice(1, 99) : "Select post type")}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="BLOG">Blog Post</Select.Item>
+									<Select.Item value="EVENT">Event</Select.Item>
+								</Select.Content>
+							</Select.Root>
+							<p class="mt-1 text-sm text-gray-500">Once converted, you cannot change the post type.</p>
 						</div>
 
 						<div>
-							<label for="featuredImage" class="block text-sm font-medium text-gray-700">Featured Image URL</label>
-							<input
+							<Label for="featuredImage">Featured Image URL</Label>
+							<Input
 								type="url"
 								id="featuredImage"
 								bind:value={newPost.featuredImage}
 								placeholder="https://example.com/image.jpg"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 							/>
 						</div>
 
 						<div>
-							<label for="tags" class="block text-sm font-medium text-gray-700"
-								>Tags (comma-separated)</label
-							>
-							<input
+							<Label for="tags">Tags (comma-separated)</Label>
+							<Input
 								type="text"
 								id="tags"
 								bind:value={newPost.tags}
 								placeholder="web development, programming, tutorial"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 							/>
 						</div>
 
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="published"
-								bind:checked={newPost.published}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="published" class="ml-2 block text-sm text-gray-700">
+						<div class="flex items-center space-x-2">
+							<Switch id="published" bind:checked={newPost.published} />
+							<Label for="published">
 								Publish immediately
-							</label>
+							</Label>
 						</div>
 					</div>
 				</div>
 				<div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
 					<button
 						type="button"
-						on:click={submitCreatePost}
+						onclick={submitCreatePost}
 						disabled={loading}
 						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
 					>
@@ -458,7 +452,7 @@
 					</button>
 					<button
 						type="button"
-						on:click={() => (showCreatePost = false)}
+						onclick={() => (showCreatePost = false)}
 						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
 					>
 						Cancel
@@ -475,7 +469,7 @@
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
 				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-				on:click={() => (showEditPost = false)}
+				onclick={() => (showEditPost = false)}
 			></div>
 			<div
 				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
@@ -484,109 +478,94 @@
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Blog Post</h3>
 					<div class="mt-4 space-y-4">
 						<div>
-							<label for="edit-title" class="block text-sm font-medium text-gray-700"
-								>Post Title</label
-							>
-							<input
+							<Label for="edit-title">Post Title</Label>
+							<Input
 								type="text"
 								id="edit-title"
 								bind:value={editPost.title}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 						</div>
 
 						<div>
-							<label for="edit-slug" class="block text-sm font-medium text-gray-700">URL Slug</label>
-							<input
+							<Label for="edit-slug">URL Slug</Label>
+							<Input
 								type="text"
 								id="edit-slug"
 								bind:value={editPost.slug}
 								placeholder="my-blog-post"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 								required
 							/>
 							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
 						</div>
 
 						<div>
-							<label for="edit-excerpt" class="block text-sm font-medium text-gray-700">Excerpt</label>
-							<textarea
+							<Label for="edit-excerpt">Excerpt</Label>
+							<Textarea
 								id="edit-excerpt"
 								bind:value={editPost.excerpt}
-								rows="2"
+								rows={2}
 								placeholder="A brief description of the post..."
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-							></textarea>
+							/>
 						</div>
 
 						<div>
-							<label for="edit-content" class="block text-sm font-medium text-gray-700"
-								>Content</label
-							>
-							<textarea
+							<Label for="edit-content">Content</Label>
+							<Textarea
 								id="edit-content"
 								bind:value={editPost.content}
-								rows="6"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+								rows={6}
 								required
-							></textarea>
+							/>
 						</div>
 
 						<div>
-							<label for="edit-type" class="block text-sm font-medium text-gray-700">Post Type</label>
-							<select
-								id="edit-type"
-								bind:value={editPost.type}
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-								required
-							>
-								<option value="BLOG">Blog Post</option>
-								<option value="EVENT">Event</option>
-							</select>
+							<Label for="edit-type">Post Type</Label>
+							<Select.Root type="single" bind:value={editPost.type}>
+								<Select.Trigger class="w-full">
+									<!-- String-hacking for title-case -->
+									{(editPost.type ? editPost.type[0] + editPost.type.toLocaleLowerCase().slice(1, 99) : "Select post type")}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="BLOG">Blog Post</Select.Item>
+									<Select.Item value="EVENT">Event</Select.Item>
+								</Select.Content>
+							</Select.Root>
+							<p class="mt-1 text-sm text-gray-500">Once converted, you cannot change the post type.</p>
 						</div>
 
 						<div>
-							<label for="edit-featuredImage" class="block text-sm font-medium text-gray-700">Featured Image URL</label>
-							<input
+							<Label for="edit-featuredImage">Featured Image URL</Label>
+							<Input
 								type="url"
 								id="edit-featuredImage"
 								bind:value={editPost.featuredImage}
 								placeholder="https://example.com/image.jpg"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 							/>
 						</div>
 
 						<div>
-							<label for="edit-tags" class="block text-sm font-medium text-gray-700"
-								>Tags (comma-separated)</label
-							>
-							<input
+							<Label for="edit-tags">Tags (comma-separated)</Label>
+							<Input
 								type="text"
 								id="edit-tags"
 								bind:value={editPost.tags}
 								placeholder="web development, programming, tutorial"
-								class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
 							/>
 						</div>
 
-						<div class="flex items-center">
-							<input
-								type="checkbox"
-								id="edit-published"
-								bind:checked={editPost.published}
-								class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-							/>
-							<label for="edit-published" class="ml-2 block text-sm text-gray-700">
+						<div class="flex items-center space-x-2">
+							<Switch id="edit-published" bind:checked={editPost.published} />
+							<Label for="edit-published">
 								Published
-							</label>
+							</Label>
 						</div>
 					</div>
 				</div>
 				<div class="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
 					<button
 						type="button"
-						on:click={submitEditPost}
+						onclick={submitEditPost}
 						disabled={loading}
 						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
 					>
@@ -594,7 +573,7 @@
 					</button>
 					<button
 						type="button"
-						on:click={() => (showEditPost = false)}
+						onclick={() => (showEditPost = false)}
 						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
 					>
 						Cancel

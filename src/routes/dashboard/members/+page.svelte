@@ -92,7 +92,7 @@
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
-				on:click={exportMembers}
+				onclick={exportMembers}
 				class="mr-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 			>
 				<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -282,7 +282,7 @@
 			<div class="flex items-end">
 				<button
 					type="button"
-					on:click={clearFilters}
+					onclick={clearFilters}
 					class="w-full rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500"
 				>
 					Clear Filters
