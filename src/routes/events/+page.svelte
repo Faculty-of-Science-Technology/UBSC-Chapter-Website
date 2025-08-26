@@ -90,7 +90,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-purple-600"
+						<Card.Title class="text-3xl font-bold text-sky-600"
 							>{data.statistics.totalAttendees}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Attendees</p>
@@ -173,10 +173,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-purple-600"
+								class="h-8 w-8 text-sky-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -501,7 +501,7 @@
 
 		<!-- Call to Action Section -->
 		<section class="w-full">
-			<Card.Root class="bg-gradient-to-r from-blue-50 to-purple-50 p-12">
+			<Card.Root class="bg-gradient-to-r from-blue-50 to-sky-50 p-12">
 				<Card.Header class="text-center">
 					<Card.Title class="mb-4 text-3xl font-bold">Stay Updated</Card.Title>
 				</Card.Header>

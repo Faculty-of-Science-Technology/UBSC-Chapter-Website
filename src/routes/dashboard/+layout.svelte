@@ -101,7 +101,9 @@
 		<div class="flex h-16 items-center justify-between border-b border-gray-200 px-6">
 			<div class="flex items-center">
 				<div class="mx-auto flex h-fit w-full items-center justify-center">
-					<Logo mode="dark" size="sm" />
+					<a href="/dashboard">
+						<Logo mode="dark" size="sm" />
+					</a>
 				</div>
 			</div>
 			<button class="lg:hidden" onclick={() => (sidebarOpen = false)}>

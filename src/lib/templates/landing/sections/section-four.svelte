@@ -126,7 +126,7 @@
 								/>
 							</AspectRatio>
 						{:else}
-							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-purple-600">
+							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-sky-600">
 								<div class="flex items-center justify-center h-full">
 									<CalendarIcon class="w-12 h-12 text-white/80" />
 								</div>

@@ -61,7 +61,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-purple-600"
+						<Card.Title class="text-3xl font-bold text-sky-600"
 							>{data.statistics.totalMembers}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Members</p>
@@ -95,7 +95,7 @@
 							<div class="p-1">
 								<AspectRatio
 									ratio={16 / 9}
-									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-purple-600"
+									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-sky-600"
 								>
 									<div class="absolute inset-0 bg-black/40"></div>
 									<div class="absolute inset-0 flex flex-col justify-end p-4 text-white">
@@ -189,7 +189,7 @@
 
 		<!-- How to Join Section -->
 		<section class="w-full">
-			<Card.Root class="bg-gradient-to-r from-blue-50 to-purple-50 p-12">
+			<Card.Root class="bg-gradient-to-r from-blue-50 to-sky-50 p-12">
 				<Card.Header class="text-center">
 					<Card.Title class="mb-4 text-3xl font-bold">Join a Group</Card.Title>
 				</Card.Header>
@@ -221,9 +221,9 @@
 						</div>
 						<div class="text-center">
 							<div
-								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100"
+								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-100"
 							>
-								<span class="text-xl font-bold text-purple-600">3</span>
+								<span class="text-xl font-bold text-sky-600">3</span>
 							</div>
 							<h4 class="mb-2 font-semibold">Get Involved</h4>
 							<p class="text-sm text-gray-600">
