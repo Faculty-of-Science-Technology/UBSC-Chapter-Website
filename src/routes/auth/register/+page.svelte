@@ -134,11 +134,11 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4 py-12 sm:px-6 lg:px-8"
+	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100 px-4 py-12 sm:px-6 lg:px-8"
 >
 	<div class="w-full max-w-md space-y-8">
 		<div class="text-center">
-			<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600">
+			<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-600">
 				<svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path
 						stroke-linecap="round"
@@ -165,7 +165,7 @@
 							type="text"
 							required
 							bind:value={formData.inviteCode}
-							class="w-full rounded-lg border border-gray-300 px-3 py-2 text-center font-mono text-lg uppercase tracking-widest shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 text-center font-mono text-lg uppercase tracking-widest shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 							placeholder="ABC12345"
 							disabled={checkingInvite}
 							maxlength="8"
@@ -185,7 +185,7 @@
 					<button
 						type="submit"
 						disabled={checkingInvite}
-						class="flex w-full justify-center rounded-lg border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if checkingInvite}
 							<svg
@@ -219,7 +219,7 @@
 							Already have an account?
 							<a
 								href="/auth/login"
-								class="font-medium text-indigo-600 transition-colors hover:text-indigo-500"
+								class="font-medium text-sky-600 transition-colors hover:text-sky-500"
 							>
 								Sign in
 							</a>
@@ -231,7 +231,7 @@
 				<div class="mb-4 flex items-center">
 					<button
 						onclick={goBackToInviteStep}
-						class="flex items-center text-sm font-medium text-indigo-600 transition-colors hover:text-indigo-500"
+						class="flex items-center text-sm font-medium text-sky-600 transition-colors hover:text-sky-500"
 					>
 						<svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -266,7 +266,7 @@
 								type="text"
 								required
 								bind:value={formData.firstName}
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 								disabled={loading}
 							/>
 						</div>
@@ -279,7 +279,7 @@
 								type="text"
 								required
 								bind:value={formData.lastName}
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 								disabled={loading}
 							/>
 						</div>
@@ -294,7 +294,7 @@
 							type="email"
 							required
 							bind:value={formData.email}
-							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 							placeholder="your.email@ub.edu.bz"
 							disabled={loading}
 						/>
@@ -309,7 +309,7 @@
 							type="text"
 							required
 							bind:value={formData.username}
-							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 							placeholder="Username (3-16 characters)"
 							disabled={loading}
 							maxlength="16"
@@ -324,7 +324,7 @@
 							id="phone"
 							type="tel"
 							bind:value={formData.phone}
-							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+							class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 							placeholder="(Optional)"
 							disabled={loading}
 						/>
@@ -340,7 +340,7 @@
 								type="password"
 								required
 								bind:value={formData.password}
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 								placeholder="Min. 6 characters"
 								disabled={loading}
 							/>
@@ -354,7 +354,7 @@
 								type="password"
 								required
 								bind:value={formData.confirmPassword}
-								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-500"
+								class="w-full rounded-lg border border-gray-300 px-3 py-2 shadow-sm transition-colors focus:border-transparent focus:outline-none focus:ring-2 focus:ring-sky-500"
 								placeholder="Repeat password"
 								disabled={loading}
 							/>
@@ -370,7 +370,7 @@
 					<button
 						type="submit"
 						disabled={loading}
-						class="flex w-full justify-center rounded-lg border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if loading}
 							<svg

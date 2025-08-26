@@ -223,7 +223,7 @@
 			<button
 				type="button"
 				onclick={handleCreateUser}
-				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 			<!-- @todo This does not work properly -->
 				Add User
@@ -264,7 +264,7 @@
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div class="h-10 w-10 flex-shrink-0">
-												<div class="h-10 w-10 rounded-full bg-indigo-600 flex items-center justify-center">
+												<div class="h-10 w-10 rounded-full bg-sky-600 flex items-center justify-center">
 													<span class="text-sm font-medium text-white">
 														{user.firstName?.charAt(0) || ''}{user.lastName?.charAt(0) || ''}
 													</span>
@@ -327,7 +327,7 @@
 									<td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
 										<button
 											onclick={() => handleEditUser(user)}
-											class="text-indigo-600 hover:text-indigo-900 mr-4"
+											class="text-sky-600 hover:text-sky-900 mr-4"
 										>
 											Edit
 										</button>
@@ -417,7 +417,7 @@
 						type="button"
 						onclick={submitCreateUser}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 sm:col-start-2 disabled:opacity-50"
 					>
 						{loading ? 'Creating...' : 'Create User'}
 					</button>
@@ -494,7 +494,7 @@
 						type="button"
 						onclick={submitEditUser}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 sm:col-start-2 disabled:opacity-50"
 					>
 						{loading ? 'Updating...' : 'Update User'}
 					</button>
@@ -541,7 +541,7 @@
 						type="button"
 						onclick={submitAssignRole}
 						disabled={loading || !selectedRole}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:col-start-2 disabled:opacity-50"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 sm:col-start-2 disabled:opacity-50"
 					>
 						{loading ? 'Assigning...' : 'Assign Role'}
 					</button>

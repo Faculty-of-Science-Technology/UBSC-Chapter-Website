@@ -99,7 +99,7 @@
 	>
 		<div class="flex h-16 items-center justify-between border-b border-gray-200 px-6">
 			<div class="flex items-center">
-				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
+				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-600">
 					<svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path
 							stroke-linecap="round"
@@ -129,12 +129,12 @@
 					<a
 						href={item.href}
 						class="group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors {item.current
-							? 'bg-indigo-100 text-indigo-900'
+							? 'bg-sky-100 text-sky-900'
 							: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}"
 					>
 						<svg
 							class="mr-3 h-5 w-5 {item.current
-								? 'text-indigo-500'
+								? 'text-sky-500'
 								: 'text-gray-400 group-hover:text-gray-500'}"
 							fill="none"
 							viewBox="0 0 24 24"
@@ -187,7 +187,7 @@
 		<!-- User info -->
 		<div class="absolute bottom-0 w-full border-t border-gray-200 p-4">
 			<div class="flex items-center">
-				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500">
+				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500">
 					<span class="text-sm font-medium text-white">
 						{data.user?.FirstName?.[0] || 'U'}{data.user?.LastName?.[0] || 'S'}
 					</span>

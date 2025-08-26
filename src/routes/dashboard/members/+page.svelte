@@ -175,7 +175,7 @@
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
 						<svg
-							class="h-6 w-6 text-indigo-400"
+							class="h-6 w-6 text-sky-400"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -318,7 +318,7 @@
 				<div class="p-6">
 					<div class="flex items-center">
 						<div class="h-12 w-12 flex-shrink-0">
-							<div class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600">
+							<div class="flex h-12 w-12 items-center justify-center rounded-full bg-sky-600">
 								<span class="text-lg font-medium text-white">
 									{member.firstName?.charAt(0) || ''}{member.lastName?.charAt(0) || ''}
 								</span>

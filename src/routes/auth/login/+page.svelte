@@ -50,10 +50,10 @@
 	<meta name="description" content="Sign in to your UBSC Chapter account" />
 </svelte:head>
 
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100 py-12 px-4 sm:px-6 lg:px-8">
 	<div class="max-w-md w-full space-y-8">
 		<div class="text-center">
-			<div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-indigo-600">
+			<div class="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-sky-600">
 				<svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
 				</svg>
@@ -77,7 +77,7 @@
 						type="email"
 						required
 						bind:value={email}
-						class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+						class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
 						placeholder="your.email@ub.edu.bz"
 						disabled={loading}
 					/>
@@ -92,7 +92,7 @@
 						type="password"
 						required
 						bind:value={password}
-						class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
+						class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-transparent transition-colors"
 						placeholder="Your password"
 						disabled={loading}
 					/>
@@ -107,7 +107,7 @@
 				<button
 					type="submit"
 					disabled={loading}
-					class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+					class="w-full flex justify-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 				>
 					{#if loading}
 						<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -125,7 +125,7 @@
 						Don't have an account?
 						<a 
 							href="/auth/register" 
-							class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+							class="font-medium text-sky-600 hover:text-sky-500 transition-colors"
 						>
 							Register with invite code
 						</a>
