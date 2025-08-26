@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Select from '$lib/components/vendor/ui/select';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -88,10 +89,16 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Chapter Members</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Chapter Members"
+				text=""
+				subtitle="Manage chapter members, their roles, and group memberships."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Chapter Members</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				View and manage all chapter members, their roles, and group memberships.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
@@ -174,12 +181,7 @@
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
-						<svg
-							class="h-6 w-6 text-sky-400"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
+						<svg class="h-6 w-6 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"

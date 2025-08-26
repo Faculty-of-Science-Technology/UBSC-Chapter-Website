@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Select from '$lib/components/vendor/ui/select';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -181,10 +182,16 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Groups</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Groups"
+				text=""
+				subtitle="Manage chapter groups and committees."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Groups</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Manage chapter groups, committees, and working groups.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button

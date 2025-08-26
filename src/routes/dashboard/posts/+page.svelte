@@ -5,6 +5,7 @@
 	import * as Select from '$lib/components/vendor/ui/select';
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -200,10 +201,16 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Blog Posts</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Blog Posts"
+				text=""
+				subtitle="Manage chapter blog posts, announcements, and articles."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Blog Posts</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Manage chapter blog posts, announcements, and articles.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
@@ -358,12 +365,7 @@
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="title">Post Title</Label>
-							<Input
-								type="text"
-								id="title"
-								bind:value={newPost.title}
-								required
-							/>
+							<Input type="text" id="title" bind:value={newPost.title} required />
 						</div>
 
 						<div>
@@ -375,7 +377,9 @@
 								placeholder="my-blog-post"
 								required
 							/>
-							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
+							<p class="mt-1 text-sm text-gray-500">
+								Used in the URL. Only letters, numbers, and dashes.
+							</p>
 						</div>
 
 						<div>
@@ -390,12 +394,7 @@
 
 						<div>
 							<Label for="content">Content</Label>
-							<Textarea
-								id="content"
-								bind:value={newPost.content}
-								rows={6}
-								required
-							/>
+							<Textarea id="content" bind:value={newPost.content} rows={6} required />
 						</div>
 
 						<div>
@@ -403,14 +402,18 @@
 							<Select.Root type="single" bind:value={newPost.type}>
 								<Select.Trigger class="w-full">
 									<!--- String hacking for title-case -->
-									{(newPost.type? newPost.type[0] + newPost.type.toLocaleLowerCase().slice(1, 99) : "Select post type")}
+									{newPost.type
+										? newPost.type[0] + newPost.type.toLocaleLowerCase().slice(1, 99)
+										: 'Select post type'}
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Item value="BLOG">Blog Post</Select.Item>
 									<Select.Item value="EVENT">Event</Select.Item>
 								</Select.Content>
 							</Select.Root>
-							<p class="mt-1 text-sm text-gray-500">Once converted, you cannot change the post type.</p>
+							<p class="mt-1 text-sm text-gray-500">
+								Once converted, you cannot change the post type.
+							</p>
 						</div>
 
 						<div>
@@ -435,9 +438,7 @@
 
 						<div class="flex items-center space-x-2">
 							<Switch id="published" bind:checked={newPost.published} />
-							<Label for="published">
-								Publish immediately
-							</Label>
+							<Label for="published">Publish immediately</Label>
 						</div>
 					</div>
 				</div>
@@ -479,12 +480,7 @@
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-title">Post Title</Label>
-							<Input
-								type="text"
-								id="edit-title"
-								bind:value={editPost.title}
-								required
-							/>
+							<Input type="text" id="edit-title" bind:value={editPost.title} required />
 						</div>
 
 						<div>
@@ -496,7 +492,9 @@
 								placeholder="my-blog-post"
 								required
 							/>
-							<p class="mt-1 text-sm text-gray-500">Used in the URL. Only letters, numbers, and dashes.</p>
+							<p class="mt-1 text-sm text-gray-500">
+								Used in the URL. Only letters, numbers, and dashes.
+							</p>
 						</div>
 
 						<div>
@@ -511,12 +509,7 @@
 
 						<div>
 							<Label for="edit-content">Content</Label>
-							<Textarea
-								id="edit-content"
-								bind:value={editPost.content}
-								rows={6}
-								required
-							/>
+							<Textarea id="edit-content" bind:value={editPost.content} rows={6} required />
 						</div>
 
 						<div>
@@ -524,14 +517,18 @@
 							<Select.Root type="single" bind:value={editPost.type}>
 								<Select.Trigger class="w-full">
 									<!-- String-hacking for title-case -->
-									{(editPost.type ? editPost.type[0] + editPost.type.toLocaleLowerCase().slice(1, 99) : "Select post type")}
+									{editPost.type
+										? editPost.type[0] + editPost.type.toLocaleLowerCase().slice(1, 99)
+										: 'Select post type'}
 								</Select.Trigger>
 								<Select.Content>
 									<Select.Item value="BLOG">Blog Post</Select.Item>
 									<Select.Item value="EVENT">Event</Select.Item>
 								</Select.Content>
 							</Select.Root>
-							<p class="mt-1 text-sm text-gray-500">Once converted, you cannot change the post type.</p>
+							<p class="mt-1 text-sm text-gray-500">
+								Once converted, you cannot change the post type.
+							</p>
 						</div>
 
 						<div>
@@ -556,9 +553,7 @@
 
 						<div class="flex items-center space-x-2">
 							<Switch id="edit-published" bind:checked={editPost.published} />
-							<Label for="edit-published">
-								Published
-							</Label>
+							<Label for="edit-published">Published</Label>
 						</div>
 					</div>
 				</div>
