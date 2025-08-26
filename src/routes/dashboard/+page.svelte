@@ -1,4 +1,5 @@
 <script lang="ts">
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -8,28 +9,40 @@
 		{
 			name: 'Total Members',
 			value: data.stats.totalMembers.value.toString(),
-			change: data.stats.totalMembers.change >= 0 ? `+${data.stats.totalMembers.change}` : data.stats.totalMembers.change.toString(),
+			change:
+				data.stats.totalMembers.change >= 0
+					? `+${data.stats.totalMembers.change}`
+					: data.stats.totalMembers.change.toString(),
 			changeType: data.stats.totalMembers.changeType,
 			icon: 'users'
 		},
 		{
 			name: 'Active Events',
 			value: data.stats.activeEvents.value.toString(),
-			change: data.stats.activeEvents.change >= 0 ? `+${data.stats.activeEvents.change}` : data.stats.activeEvents.change.toString(),
+			change:
+				data.stats.activeEvents.change >= 0
+					? `+${data.stats.activeEvents.change}`
+					: data.stats.activeEvents.change.toString(),
 			changeType: data.stats.activeEvents.changeType,
 			icon: 'calendar'
 		},
 		{
 			name: 'Blog Posts',
 			value: data.stats.blogPosts.value.toString(),
-			change: data.stats.blogPosts.change >= 0 ? `+${data.stats.blogPosts.change}` : data.stats.blogPosts.change.toString(),
+			change:
+				data.stats.blogPosts.change >= 0
+					? `+${data.stats.blogPosts.change}`
+					: data.stats.blogPosts.change.toString(),
 			changeType: data.stats.blogPosts.changeType,
 			icon: 'document'
 		},
 		{
 			name: 'Active Groups',
 			value: data.stats.activeGroups.value.toString(),
-			change: data.stats.activeGroups.change >= 0 ? `+${data.stats.activeGroups.change}` : data.stats.activeGroups.change.toString(),
+			change:
+				data.stats.activeGroups.change >= 0
+					? `+${data.stats.activeGroups.change}`
+					: data.stats.activeGroups.change.toString(),
 			changeType: data.stats.activeGroups.changeType,
 			icon: 'user-group'
 		}
@@ -62,10 +75,16 @@
 	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 		<!-- Page header -->
 		<div class="mb-8">
-			<h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Dashboard Overview"
+				text=""
+				subtitle="Welcome back, {data.user?.FirstName}! Here's what's happening with UBSC."
+			/>
+			<!-- <h1 class="text-2xl font-bold text-gray-900"></h1>
 			<p class="mt-1 text-sm text-gray-500">
-				Welcome back, {data.user?.FirstName}! Here's what's happening with UBSC.
-			</p>
+				
+			</p> -->
 		</div>
 
 		<!-- Stats -->
@@ -75,7 +94,7 @@
 					<div class="p-5">
 						<div class="flex items-center">
 							<div class="flex-shrink-0">
-								<div class="flex h-8 w-8 items-center justify-center rounded-md bg-indigo-500">
+								<div class="flex h-8 w-8 items-center justify-center rounded-md bg-sky-500">
 									<svg
 										class="h-5 w-5 text-white"
 										fill="none"
@@ -120,7 +139,6 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-8">
-
 			<!-- Upcoming Events -->
 			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
 				<div class="border-b border-gray-200 px-6 py-4">
@@ -158,10 +176,7 @@
 					{/if}
 				</div>
 				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
-					<a
-						href="/dashboard/events"
-						class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-					>
+					<a href="/dashboard/events" class="text-sm font-medium text-sky-600 hover:text-sky-500">
 						View all events →
 					</a>
 				</div>
@@ -177,11 +192,11 @@
 				<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
 					<a
 						href="/dashboard/events/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-indigo-600"
+								class="h-6 w-6 text-sky-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -202,11 +217,11 @@
 
 					<a
 						href="/dashboard/posts/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-indigo-600"
+								class="h-6 w-6 text-sky-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -227,11 +242,11 @@
 
 					<a
 						href="/dashboard/groups/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-indigo-600"
+								class="h-6 w-6 text-sky-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -253,11 +268,11 @@
 					{#if data.user?.Permissions.CanManageInvites}
 						<a
 							href="/dashboard/admin/invites"
-							class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+							class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 						>
 							<div class="flex-shrink-0">
 								<svg
-									class="h-6 w-6 text-indigo-600"
+									class="h-6 w-6 text-sky-600"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"

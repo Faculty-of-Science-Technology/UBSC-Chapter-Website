@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/vendor/ui/label';
 	import * as Select from '$lib/components/vendor/ui/select';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -181,16 +182,22 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Groups</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Groups"
+				text=""
+				subtitle="Manage chapter groups and committees."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Groups</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Manage chapter groups, committees, and working groups.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
 				onclick={handleCreateGroup}
-				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Group
 			</button>
@@ -262,7 +269,7 @@
 											<span class="font-medium text-gray-900">{group.memberCount}</span>
 											<button
 												onclick={() => handleManageMembers(group)}
-												class="ml-2 text-indigo-600 hover:text-indigo-900"
+												class="ml-2 text-sky-600 hover:text-sky-900"
 											>
 												Manage
 											</button>
@@ -283,7 +290,7 @@
 									>
 										<button
 											onclick={() => handleEditGroup(group)}
-											class="mr-4 text-indigo-600 hover:text-indigo-900"
+											class="mr-4 text-sky-600 hover:text-sky-900"
 										>
 											Edit
 										</button>
@@ -348,7 +355,7 @@
 						type="button"
 						onclick={submitCreateGroup}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Group'}
 					</button>
@@ -408,7 +415,7 @@
 						type="button"
 						onclick={submitEditGroup}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Group'}
 					</button>

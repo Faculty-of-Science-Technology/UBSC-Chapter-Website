@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import Logo from '$lib/components/global/branding/logo.svelte';
 	import type { PageProps } from './$types';
 
 	const props: PageProps = $props();
@@ -99,17 +100,9 @@
 	>
 		<div class="flex h-16 items-center justify-between border-b border-gray-200 px-6">
 			<div class="flex items-center">
-				<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
-					<svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							stroke-width="2"
-							d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
-						/>
-					</svg>
+				<div class="mx-auto flex h-fit w-full items-center justify-center">
+					<Logo mode="dark" size="sm" />
 				</div>
-				<span class="ml-2 text-lg font-semibold text-gray-900">UBSC</span>
 			</div>
 			<button class="lg:hidden" onclick={() => (sidebarOpen = false)}>
 				<svg class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -129,12 +122,12 @@
 					<a
 						href={item.href}
 						class="group flex items-center rounded-md px-2 py-2 text-sm font-medium transition-colors {item.current
-							? 'bg-indigo-100 text-indigo-900'
+							? 'bg-sky-100 text-sky-900'
 							: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'}"
 					>
 						<svg
 							class="mr-3 h-5 w-5 {item.current
-								? 'text-indigo-500'
+								? 'text-sky-500'
 								: 'text-gray-400 group-hover:text-gray-500'}"
 							fill="none"
 							viewBox="0 0 24 24"
@@ -187,7 +180,7 @@
 		<!-- User info -->
 		<div class="absolute bottom-0 w-full border-t border-gray-200 p-4">
 			<div class="flex items-center">
-				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-500">
+				<div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500">
 					<span class="text-sm font-medium text-white">
 						{data.user?.FirstName?.[0] || 'U'}{data.user?.LastName?.[0] || 'S'}
 					</span>
@@ -253,8 +246,8 @@
 		</div>
 
 		<!-- Page content -->
-		<main class="flex-1 h-full">
-			<div class="py-8 h-fit overflow-clip">
+		<main class="h-full flex-1">
+			<div class="h-fit overflow-clip py-8">
 				{@render props?.children()}
 			</div>
 		</main>

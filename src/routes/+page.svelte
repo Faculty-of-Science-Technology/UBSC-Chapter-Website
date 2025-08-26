@@ -10,6 +10,14 @@
 	let { data }: { data: PageData } = $props();
 </script>
 
+<svelte:head>
+	<title>UBACMSC &mdash; UB ACM Student Chapter</title>
+	<meta
+		name="description"
+		content="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
+	/>
+</svelte:head>
+
 <page class="inline-flex flex-col items-center gap-32 w-full h-full">
 	<PublicNav />
 	<main class="flex flex-col items-center gap-48 self-stretch mx-2 lg:mx-20 xl:mx-60">

@@ -2,6 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -120,16 +121,22 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Invite Code Management</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Invite Codes"
+				text=""
+				subtitle="Create and manage invite codes to control chapter membership registration."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Invite Code Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Create and manage invite codes to control chapter membership registration.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
 				onclick={handleCreateInvite}
-				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Invite Code
 			</button>
@@ -289,7 +296,7 @@
 											</div>
 											<button
 												onclick={() => copyToClipboard(getInviteUrl(invite.code))}
-												class="ml-2 text-xs text-indigo-600 hover:text-indigo-900"
+												class="ml-2 text-xs text-sky-600 hover:text-sky-900"
 												title="Copy invite URL"
 											>
 												Copy URL
@@ -447,7 +454,7 @@
 						type="button"
 						onclick={submitCreateInvite}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Invite Code'}
 					</button>

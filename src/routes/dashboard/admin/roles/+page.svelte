@@ -5,6 +5,7 @@
 	import * as Select from '$lib/components/vendor/ui/select';
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageData } from './$types';
 
 	// @todo Fix this page Add/Edit
@@ -228,17 +229,23 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Role Management"
+				text=""
+				subtitle="Create and manage user roles with granular permissions to control access to different features."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Create and manage user roles with granular permissions to control access to different
 				features.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
 				onclick={handleCreateRole}
-				class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Role
 			</button>
@@ -266,7 +273,7 @@
 					<div class="flex space-x-2">
 						<button
 							onclick={() => handleEditRole(role)}
-							class="text-sm text-indigo-600 hover:text-indigo-900"
+							class="text-sm text-sky-600 hover:text-sky-900"
 						>
 							Edit
 						</button>
@@ -398,7 +405,7 @@
 						type="button"
 						onclick={submitCreateRole}
 						disabled={loading || !newRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Role'}
 					</button>
@@ -484,7 +491,7 @@
 						type="button"
 						onclick={submitEditRole}
 						disabled={loading || !editRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Role'}
 					</button>
