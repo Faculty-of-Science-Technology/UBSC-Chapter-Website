@@ -2,6 +2,7 @@
 	import { invalidateAll } from '$app/navigation';
 	import { Input } from '$lib/components/vendor/ui/input';
 	import { Label } from '$lib/components/vendor/ui/label';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -120,10 +121,16 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Invite Code Management</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Invite Codes"
+				text=""
+				subtitle="Create and manage invite codes to control chapter membership registration."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Invite Code Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Create and manage invite codes to control chapter membership registration.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button

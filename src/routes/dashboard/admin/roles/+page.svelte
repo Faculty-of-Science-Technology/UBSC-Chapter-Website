@@ -5,6 +5,7 @@
 	import * as Select from '$lib/components/vendor/ui/select';
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import type { PageData } from './$types';
 
 	// @todo Fix this page Add/Edit
@@ -228,11 +229,17 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
+			<HeroText
+				prelude=""
+				text_light_blue="Role Management"
+				text=""
+				subtitle="Create and manage user roles with granular permissions to control access to different features."
+			/>
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
 				Create and manage user roles with granular permissions to control access to different
 				features.
-			</p>
+			</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
