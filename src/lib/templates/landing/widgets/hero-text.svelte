@@ -1,24 +1,33 @@
 <script lang="ts">
+	import { cn } from '$lib/components/vendor/utils';
+
 	interface Props {
 		prelude?: string;
 		text?: string;
 		text_light_blue?: string;
 		subtitle?: string;
+		class?: string;
 	}
 
-	let { prelude = '<no prelude provided>', text = '<no text provided>', text_light_blue = '', subtitle = '<no subtitle provided>' }: Props = $props();
+	let {
+		prelude = '<no prelude provided>',
+		text = '<no text provided>',
+		text_light_blue = '',
+		subtitle = '<no subtitle provided>',
+		class: className
+	}: Props = $props();
 </script>
 
-<article class="flex flex-col items-start gap-3">
+<article class={cn('flex flex-col items-start gap-3', className)}>
 	<div>
-		<prelude class="font-light text-xl text-sky-500">
+		<prelude class="text-xl font-light text-sky-500">
 			{prelude}
 		</prelude>
-		<div class="font-light text-5xl text-sky-500">
+		<div class="text-5xl font-light text-sky-500">
 			{text_light_blue} <span class="text-sky-600">{text}</span>
 		</div>
 	</div>
-	<p class="self-stretch inter text-sm font-normal leading-snug">
+	<p class="inter self-stretch text-sm font-normal leading-snug">
 		{subtitle}
 	</p>
 </article>

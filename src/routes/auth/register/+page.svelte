@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import Logo from '$lib/components/global/branding/logo.svelte';
+	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
 	import { onMount } from 'svelte';
 
 	let formData = $state({
@@ -138,18 +140,18 @@
 >
 	<div class="w-full max-w-md space-y-8">
 		<div class="text-center">
-			<div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sky-600">
-				<svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
-					/>
-				</svg>
+			<div class="mx-auto flex h-fit w-full items-center justify-center">
+				<Logo mode="dark" size="md" />
 			</div>
-			<h2 class="mt-6 text-3xl font-bold text-gray-900">Join UBSC Chapter</h2>
-			<p class="mt-2 text-sm text-gray-600">Registration is invite-only</p>
+			<HeroText
+				class="items-center"
+				prelude=""
+				text_light_blue="Join UBACMSC"
+				text=""
+				subtitle="Join using your invite code"
+			/>
+			<!-- <h2 class="mt-6 text-3xl font-bold text-gray-900">Welcome to UBSC</h2> -->
+			<!-- <p class="mt-2 text-sm text-gray-600">University of Belize ACM Chapter</p> -->
 		</div>
 
 		<div class="rounded-xl bg-white p-8 shadow-lg">
