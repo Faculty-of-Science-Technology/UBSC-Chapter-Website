@@ -79,7 +79,7 @@
 									<span class="tracking-wide">
 										{#if organization.hireable}
 											<span class="flex h-fit w-fit items-start">
-												<Badge class="bg-primary">Active Hiring</Badge>
+												<Badge class="bg-sky-500">Active Hiring</Badge>
 											</span>
 										{/if}
 									</span>
@@ -148,7 +148,7 @@
 									<h4 class="text-sm font-semibold">{organization.name}</h4>
 									<span class="tracking-wide">
 										<span class="flex h-fit w-fit items-start">
-											<Badge class="bg-primary">Active Hiring</Badge>
+											<Badge class="bg-sky-500">Active Hiring</Badge>
 										</span>
 									</span>
 									<p class="text-sm">{organization.bio}</p>

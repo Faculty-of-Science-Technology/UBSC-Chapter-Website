@@ -300,7 +300,7 @@
 								class="w-10 h-10 rounded-full object-cover"
 							/>
 						{:else}
-							<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+							<div class="w-10 h-10 rounded-full bg-sky-500/10 flex items-center justify-center">
 								<span class="text-sm font-medium">
 									{selectedEvent.author.FirstName[0]}{selectedEvent.author.LastName[0]}
 								</span>

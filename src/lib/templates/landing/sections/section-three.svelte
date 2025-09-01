@@ -155,7 +155,7 @@
 											class="w-8 h-8 rounded-full object-cover"
 										/>
 									{:else}
-										<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+										<div class="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center">
 											<span class="text-xs font-medium">
 												{member.user.FirstName[0]}{member.user.LastName[0]}
 											</span>

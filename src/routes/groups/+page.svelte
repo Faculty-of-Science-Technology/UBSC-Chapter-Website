@@ -277,7 +277,7 @@
 											/>
 										{:else}
 											<div
-												class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10"
+												class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10"
 											>
 												<span class="text-xs font-medium">
 													{member.user.FirstName[0]}{member.user.LastName[0]}
