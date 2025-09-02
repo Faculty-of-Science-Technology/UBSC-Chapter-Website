@@ -83,7 +83,7 @@
 							class="w-full text-left transition-transform hover:scale-105"
 							onclick={() => selectedGroup = group}
 						>
-							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-purple-600 relative overflow-hidden">
+							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-sky-600 relative overflow-hidden">
 								<div class="absolute inset-0 bg-black/40"></div>
 								<div class="absolute inset-0 flex flex-col justify-end p-4 text-white">
 									<h3 class="font-bold text-lg mb-1">{group.Title}</h3>
@@ -155,7 +155,7 @@
 											class="w-8 h-8 rounded-full object-cover"
 										/>
 									{:else}
-										<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+										<div class="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center">
 											<span class="text-xs font-medium">
 												{member.user.FirstName[0]}{member.user.LastName[0]}
 											</span>

@@ -170,7 +170,7 @@
 
 	function getTypeColor(type: string) {
 		return type === 'COMMITTEE'
-			? 'bg-purple-50 text-purple-700 ring-purple-600/20'
+			? 'bg-sky-50 text-sky-700 ring-sky-600/20'
 			: 'bg-blue-50 text-blue-700 ring-blue-600/20';
 	}
 </script>

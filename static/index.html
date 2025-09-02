@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script>
+			tailwind.config = {
+				theme: {
+					extend: {
+						colors: {
+							primary: {
+								DEFAULT: 'hsl(262.1, 83.3%, 57.8%)',
+								foreground: 'hsl(210, 20%, 98%)',
+							},
+							background: 'hsl(0, 0%, 100%)',
+							foreground: 'hsl(224, 71.4%, 4.1%)',
+							card: {
+								DEFAULT: 'hsl(0, 0%, 100%)',
+								foreground: 'hsl(224, 71.4%, 4.1%)',
+							},
+							secondary: {
+								DEFAULT: 'hsl(220, 14.3%, 95.9%)',
+								foreground: 'hsl(220.9, 39.3%, 11%)',
+							},
+							muted: {
+								DEFAULT: 'hsl(220, 14.3%, 95.9%)',
+								foreground: 'hsl(220, 8.9%, 46.1%)',
+							},
+							border: 'hsl(220, 13%, 91%)',
+						}
+					}
+				}
+			}
+		</script>
+		<title>Legacy Sites - UBACMSC</title>
+		<meta
+			name="description"
+			content="View legacy sites from the University of Belize ACM Student Chapter."
+		/>
+		<style>
+			body {
+				font-family: 'Inter Tight', sans-serif;
+				font-optical-sizing: auto;
+				font-style: normal;
+			}
+			.inter {
+				font-family: 'Inter', serif;
+				font-optical-sizing: auto;
+				font-style: normal;
+			}
+		</style>
+	</head>
+	<body class="bg-background text-foreground">
+		<!-- Navigation -->
+		<nav class="flex w-full items-center justify-between bg-sky-950 px-4 py-2 text-slate-50 lg:px-20 xl:px-60">
+			<a href="/">
+				<div class="flex items-center gap-2">
+					<div class="h-8 w-8 rounded bg-sky-500"></div>
+					<span class="text-xl font-bold">UBACMSC</span>
+				</div>
+			</a>
+			<div class="hidden lg:flex items-center gap-6">
+				<a href="/about" class="hover:text-sky-300 transition-colors">About</a>
+				<a href="/events" class="hover:text-sky-300 transition-colors">Events</a>
+				<a href="/groups" class="hover:text-sky-300 transition-colors">Groups</a>
+				<a href="/dashboard" class="hover:text-sky-300 transition-colors">Dashboard</a>
+			</div>
+			<a href="/auth/login">
+				<button class="bg-sky-500 hover:bg-sky-600 px-4 py-2 rounded text-white font-medium transition-colors">
+					Login
+				</button>
+			</a>
+		</nav>
+
+		<!-- Main Content -->
+		<main class="flex flex-col items-center gap-12 mx-2 lg:mx-20 xl:mx-60 py-16">
+			<!-- Header Section -->
+			<div class="text-center max-w-3xl">
+				<div class="flex flex-col items-center gap-3">
+					<prelude class="text-xl font-light text-sky-500">
+						Legacy Archive
+					</prelude>
+					<div class="text-5xl font-light text-sky-500">
+						View <span class="text-sky-600">Legacy Sites</span>
+					</div>
+				</div>
+				<p class="inter self-stretch text-sm font-normal leading-snug mt-6 text-muted-foreground">
+					Explore archived versions of previous UBACMSC websites and platforms. 
+					These sites represent our chapter's digital evolution over the years.
+				</p>
+			</div>
+
+			<!-- Legacy Sites Grid -->
+			<div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<!-- Site 1 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">UBACM 2023 Portal</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						The 2023 version of our student portal featuring event management, 
+						member profiles, and project showcases.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2023
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+
+				<!-- Site 2 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">ACM Competition Hub</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						Dedicated platform for programming competitions, coding challenges, 
+						and hackathon submissions from 2022-2023.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2022
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+
+				<!-- Site 3 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">UBACM Original Site</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						The original chapter website launched in 2021, featuring our 
+						founding mission and early community initiatives.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2021
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+
+				<!-- Site 4 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">Tech Workshop Portal</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						Interactive learning platform for technical workshops, 
+						tutorials, and skill development programs.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2023
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+
+				<!-- Site 5 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">Alumni Network Hub</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						Platform connecting UBACM alumni with current students, 
+						featuring mentorship programs and career resources.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2022
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+
+				<!-- Site 6 -->
+				<div class="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+					<h3 class="text-xl font-semibold mb-3 text-sky-900">Research Showcase</h3>
+					<p class="text-muted-foreground mb-4 text-sm">
+						Digital gallery showcasing student research projects, 
+						publications, and academic achievements in computer science.
+					</p>
+					<div class="flex items-center justify-between">
+						<span class="text-xs bg-secondary px-2 py-1 rounded text-secondary-foreground">
+							Archive: 2021
+						</span>
+						<button class="bg-sky-500 hover:bg-sky-500/90 text-primary-foreground px-4 py-2 rounded text-sm font-medium transition-colors">
+							View this site
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Back to Main Site -->
+			<div class="text-center mt-12">
+				<a href="/">
+					<button class="bg-sky-500 hover:bg-sky-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+						← Back to Main Site
+					</button>
+				</a>
+			</div>
+		</main>
+
+		<!-- Footer -->
+		<footer class="flex w-full flex-col-reverse items-center justify-between bg-slate-50 py-12 lg:flex-row lg:px-20 xl:px-80">
+			<div class="flex w-3/4 flex-col items-start gap-8 pt-12 lg:w-1/2">
+				<div class="flex items-center gap-2">
+					<div class="h-8 w-8 rounded bg-sky-500"></div>
+					<span class="text-xl font-bold">UBACMSC</span>
+				</div>
+
+				<article class="flex flex-col items-start justify-center gap-2.5 text-sm font-light leading-tight">
+					<section>
+						The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The
+						University of Belize is dedicated to upskilling and informing Belizeans about Technology.
+					</section>
+					<section class="flex items-center justify-center gap-8 mt-4">
+						<a href="https://www.facebook.com/UBACMStudentChapter/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800">
+							Facebook
+						</a>
+						<a href="https://www.instagram.com/ub_acm/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800">
+							Instagram
+						</a>
+						<a href="https://twitter.com/AcmUB" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800">
+							Twitter
+						</a>
+						<a href="https://www.linkedin.com/company/ubacm/" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800">
+							LinkedIn
+						</a>
+						<a href="https://www.youtube.com/channel/UCN3pAPtsyCUL841e5my0PLw" target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:text-sky-800">
+							YouTube
+						</a>
+					</section>
+				</article>
+				<a href="/auth/register">
+					<button class="bg-sky-500 hover:bg-sky-600 px-4 py-2 rounded text-white font-medium transition-colors">
+						Join Us
+					</button>
+				</a>
+			</div>
+			<div class="hidden lg:flex flex-col items-end gap-4">
+				<a href="/about" class="hover:text-sky-600 transition-colors">About</a>
+				<a href="/events" class="hover:text-sky-600 transition-colors">Events</a>
+				<a href="/groups" class="hover:text-sky-600 transition-colors">Groups</a>
+				<a href="/dashboard" class="hover:text-sky-600 transition-colors">Dashboard</a>
+			</div>
+		</footer>
+	</body>
+</html>

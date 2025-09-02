@@ -5,7 +5,7 @@
 		variants: {
 			variant: {
 				default:
-					"bg-primary text-primary-foreground hover:bg-primary/80 border-transparent shadow",
+					"bg-sky-500 text-primary-foreground hover:bg-sky-500/80 border-transparent shadow",
 				secondary:
 					"bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent",
 				destructive:
@@ -22,9 +22,9 @@
 </script>
 
 <script lang="ts">
+	import { cn } from "$lib/components/vendor/utils.js";
 	import type { WithElementRef } from "bits-ui";
 	import type { HTMLAnchorAttributes } from "svelte/elements";
-	import { cn } from "$lib/components/vendor/utils.js";
 
 	let {
 		ref = $bindable(null),

@@ -101,7 +101,7 @@
 						<div class="mt-6 space-y-4">
 							{#each group.agenda.events as event}
 								<div class="relative flex gap-4 border-l-2 border-primary pb-8 pl-4">
-									<div class="absolute -left-[5px] h-3 w-3 rounded-full bg-primary"></div>
+									<div class="absolute -left-[5px] h-3 w-3 rounded-full bg-sky-500"></div>
 									<div class="w-full rounded-lg bg-muted/50 p-4">
 										<h3 class="text-lg font-semibold">{event.Title}</h3>
 										{#if event.Subtitle}
@@ -166,7 +166,7 @@
 						<div class="mt-6 space-y-4">
 							{#each group.agenda.events as event}
 								<div class="relative flex gap-4 border-l-2 border-primary pb-8 pl-4">
-									<div class="absolute -left-[5px] h-3 w-3 rounded-full bg-primary"></div>
+									<div class="absolute -left-[5px] h-3 w-3 rounded-full bg-sky-500"></div>
 									<div class="w-full rounded-lg bg-muted/50 p-4">
 										<h3 class="text-lg font-semibold">{event.Title}</h3>
 										{#if event.Subtitle}

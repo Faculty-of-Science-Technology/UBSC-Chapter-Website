@@ -50,7 +50,7 @@
 
 				<Card.Root class="p-8">
 					<Card.Header>
-						<Card.Title class="text-2xl font-bold text-purple-600">Our Vision</Card.Title>
+						<Card.Title class="text-2xl font-bold text-sky-600">Our Vision</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<p class="leading-relaxed text-gray-700">
@@ -135,10 +135,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-purple-600"
+								class="h-8 w-8 text-sky-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -239,7 +239,7 @@
 
 		<!-- Join Us Section -->
 		<section class="w-full text-center">
-			<Card.Root class="bg-gradient-to-r from-blue-50 to-purple-50 p-12">
+			<Card.Root class="bg-gradient-to-r from-blue-50 to-sky-50 p-12">
 				<Card.Header>
 					<Card.Title class="mb-4 text-3xl font-bold">Join Our Community</Card.Title>
 				</Card.Header>
