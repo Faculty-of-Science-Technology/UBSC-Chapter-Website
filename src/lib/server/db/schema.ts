@@ -85,7 +85,7 @@ export const Roles = pgTable('Roles', {
 	Name: varchar('name', { length: 100 }).notNull().unique(),
 	Description: text('description'),
 	Type: roleTypeEnum('type').notNull(),
-	Color: varchar('color', { length: 7 }).notNull().default('#6366f1'),
+	Color: varchar('color', { length: 7 }).notNull().default('#0284c7'),
 	CanManageUsers: boolean('can_manage_users').notNull().default(false),
 	CanManageEvents: boolean('can_manage_events').notNull().default(false),
 	CanManageGroups: boolean('can_manage_groups').notNull().default(false),

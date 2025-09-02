@@ -125,7 +125,7 @@
 			name: role.name,
 			description: role.description,
 			type: role.type,
-			color: role.color || '#6366f1',
+			color: role.color || '#0284c7',
 			canManageUsers: role.canManageUsers,
 			canManageRoles: role.canManageRoles,
 			canManageEvents: role.canManageEvents,
