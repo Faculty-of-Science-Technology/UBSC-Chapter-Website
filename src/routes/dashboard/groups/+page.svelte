@@ -33,6 +33,8 @@
 
 	// Member management
 	let selectedMember = $state('');
+	let groupMembers = $state<any[]>([]);
+	let loadingMembers = $state(false);
 
 	function handleCreateGroup() {
 		showCreateGroup = true;
@@ -54,10 +56,30 @@
 		showEditGroup = true;
 	}
 
-	function handleManageMembers(group: any) {
+	async function handleManageMembers(group: any) {
 		selectedGroup = group;
 		selectedMember = '';
 		showManageMembers = true;
+		await fetchGroupMembers(group.id);
+	}
+
+	async function fetchGroupMembers(groupId: string) {
+		loadingMembers = true;
+		try {
+			const response = await fetch(`/dashboard/groups?action=get-members&groupId=${groupId}`);
+			if (response.ok) {
+				const result = await response.json();
+				groupMembers = result.members || [];
+			} else {
+				console.error('Failed to fetch group members');
+				groupMembers = [];
+			}
+		} catch (error) {
+			console.error('Error fetching group members:', error);
+			groupMembers = [];
+		} finally {
+			loadingMembers = false;
+		}
 	}
 
 	async function submitCreateGroup() {
@@ -123,6 +145,7 @@
 
 			if (response.ok) {
 				selectedMember = '';
+				await fetchGroupMembers(selectedGroup.id);
 				await invalidateAll();
 			} else {
 				const error = await response.text();
@@ -130,6 +153,35 @@
 			}
 		} catch (error) {
 			alert('Error adding member: ' + error);
+		} finally {
+			loading = false;
+		}
+	}
+
+	async function removeMember(userId: string) {
+		if (!confirm('Are you sure you want to remove this member from the group?')) return;
+
+		loading = true;
+		try {
+			const response = await fetch('/dashboard/groups', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					action: 'remove-member',
+					groupId: selectedGroup.id,
+					userId
+				})
+			});
+
+			if (response.ok) {
+				await fetchGroupMembers(selectedGroup.id);
+				await invalidateAll();
+			} else {
+				const error = await response.text();
+				alert('Error removing member: ' + error);
+			}
+		} catch (error) {
+			alert('Error removing member: ' + error);
 		} finally {
 			loading = false;
 		}
@@ -441,27 +493,66 @@
 				onclick={() => (showManageMembers = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
 					<h3 class="text-lg font-semibold leading-6 text-gray-900">Manage Members</h3>
 					<p class="mt-2 text-sm text-gray-500">
-						<!--- @todo You can't remove people from the group -->
-						Add members to {selectedGroup?.name}
+						Manage members of {selectedGroup?.name}
 					</p>
+
+					<!-- Current Members List -->
+					<div class="mt-4">
+						<h4 class="text-sm font-medium text-gray-900">Current Members ({groupMembers.length})</h4>
+						{#if loadingMembers}
+							<p class="mt-2 text-sm text-gray-500">Loading members...</p>
+						{:else if groupMembers.length === 0}
+							<p class="mt-2 text-sm text-gray-500">No members in this group yet.</p>
+						{:else}
+							<ul class="mt-2 max-h-60 divide-y divide-gray-200 overflow-y-auto rounded-md border border-gray-200">
+								{#each groupMembers as member}
+									<li class="flex items-center justify-between px-3 py-2">
+										<div class="flex items-center">
+											<div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-600">
+												<span class="text-xs font-medium text-white">
+													{member.firstName?.charAt(0) || ''}{member.lastName?.charAt(0) || ''}
+												</span>
+											</div>
+											<div class="ml-3">
+												<p class="text-sm font-medium text-gray-900">
+													{member.firstName} {member.lastName}
+												</p>
+												<p class="text-xs text-gray-500">@{member.username}</p>
+											</div>
+										</div>
+										<button
+											onclick={() => removeMember(member.userId)}
+											disabled={loading}
+											class="text-sm text-red-600 hover:text-red-900 disabled:opacity-50"
+										>
+											Remove
+										</button>
+									</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
+
+					<!-- Add Member Section -->
 					<div class="mt-4">
 						<Label for="member-select">Add Member</Label>
 						<div class="mt-1 flex space-x-2">
-							<Select.Root type="single" bind:value={selectedMember}>
+							<Select.Root bind:selected={selectedMember}>
 								<Select.Trigger class="w-full">
-									{#if selectedMember.trim() === ''}
+									{#if !selectedMember || selectedMember === ''}
 										Select a member...
+									{:else}
+										{#each data.availableUsers as user}
+											{#if selectedMember === user.id}
+												{user.firstName} {user.lastName} (@{user.username})
+											{/if}
+										{/each}
 									{/if}
-									{#each data.availableUsers as user}
-										{#if selectedMember === user.id}
-											{`${user.firstName} ${user.lastName} (@${user.username})`}
-										{/if}
-									{/each}
 								</Select.Trigger>
 								<Select.Content>
 									{#each data.availableUsers as user}

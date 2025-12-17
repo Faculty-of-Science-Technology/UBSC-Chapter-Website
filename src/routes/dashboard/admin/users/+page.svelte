@@ -23,6 +23,7 @@
 		firstName: '',
 		lastName: '',
 		password: '',
+		accountType: { value: 'student', label: 'Student' },
 		administrator: false
 	});
 
@@ -33,6 +34,7 @@
 		username: '',
 		firstName: '',
 		lastName: '',
+		accountType: { value: 'student', label: 'Student' },
 		administrator: false
 	});
 
@@ -44,6 +46,7 @@
 			firstName: '',
 			lastName: '',
 			password: '',
+			accountType: { value: 'student', label: 'Student' },
 			administrator: false
 		};
 	}
@@ -56,6 +59,9 @@
 			username: user.username,
 			firstName: user.firstName,
 			lastName: user.lastName,
+			accountType: user.accountType 
+				? { value: user.accountType, label: user.accountType.charAt(0).toUpperCase() + user.accountType.slice(1) }
+				: { value: 'student', label: 'Student' },
 			administrator: user.administrator
 		};
 		showEditUser = true;
@@ -73,7 +79,16 @@
 			const response = await fetch('/dashboard/admin/users', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'create', ...newUser })
+				body: JSON.stringify({ 
+					action: 'create', 
+					email: newUser.email,
+					username: newUser.username,
+					firstName: newUser.firstName,
+					lastName: newUser.lastName,
+					password: newUser.password,
+					accountType: newUser.accountType.value,
+					administrator: newUser.administrator
+				})
 			});
 
 			if (response.ok) {
@@ -96,7 +111,16 @@
 			const response = await fetch('/dashboard/admin/users', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'update', ...editUser })
+				body: JSON.stringify({ 
+					action: 'update', 
+					id: editUser.id,
+					email: editUser.email,
+					username: editUser.username,
+					firstName: editUser.firstName,
+					lastName: editUser.lastName,
+					accountType: editUser.accountType.value,
+					administrator: editUser.administrator
+				})
 			});
 
 			if (response.ok) {
@@ -406,6 +430,20 @@
 							<Label for="password">Password</Label>
 							<Input type="password" id="password" bind:value={newUser.password} required />
 						</div>
+						<div>
+							<Label for="accountType">Account Type</Label>
+							<Select.Root bind:selected={newUser.accountType}>
+								<Select.Trigger class="w-full">
+									{newUser.accountType?.label || 'Select account type'}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value={{ value: 'student', label: 'Student' }}>Student</Select.Item>
+									<Select.Item value={{ value: 'faculty', label: 'Faculty' }}>Faculty</Select.Item>
+									<Select.Item value={{ value: 'staff', label: 'Staff' }}>Staff</Select.Item>
+									<Select.Item value={{ value: 'alumni', label: 'Alumni' }}>Alumni</Select.Item>
+								</Select.Content>
+							</Select.Root>
+						</div>
 						<div class="flex items-center space-x-2">
 							<Switch id="administrator" bind:checked={newUser.administrator} />
 							<Label for="administrator">Administrator</Label>
@@ -465,6 +503,20 @@
 								<Label for="edit-lastName">Last Name</Label>
 								<Input type="text" id="edit-lastName" bind:value={editUser.lastName} required />
 							</div>
+						</div>
+						<div>
+							<Label for="edit-accountType">Account Type</Label>
+							<Select.Root bind:selected={editUser.accountType}>
+								<Select.Trigger class="w-full">
+									{editUser.accountType?.label || 'Select account type'}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value={{ value: 'student', label: 'Student' }}>Student</Select.Item>
+									<Select.Item value={{ value: 'faculty', label: 'Faculty' }}>Faculty</Select.Item>
+									<Select.Item value={{ value: 'staff', label: 'Staff' }}>Staff</Select.Item>
+									<Select.Item value={{ value: 'alumni', label: 'Alumni' }}>Alumni</Select.Item>
+								</Select.Content>
+							</Select.Root>
 						</div>
 						<div class="flex items-center space-x-2">
 							<Switch id="edit-administrator" bind:checked={editUser.administrator} />

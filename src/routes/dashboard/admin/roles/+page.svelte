@@ -20,7 +20,7 @@
 	let newRole = {
 		name: '',
 		description: '',
-		type: 'MEMBER',
+		type: { value: 'MEMBER', label: 'Member' },
 		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
@@ -37,7 +37,7 @@
 		id: '',
 		name: '',
 		description: '',
-		type: 'MEMBER',
+		type: { value: 'MEMBER', label: 'Member' },
 		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
@@ -106,7 +106,7 @@
 		newRole = {
 			name: '',
 			description: '',
-			type: 'MEMBER',
+			type: { value: 'MEMBER', label: 'Member' },
 			canManageUsers: false,
 			canManageRoles: false,
 			canManageEvents: false,
@@ -124,7 +124,7 @@
 			id: role.id,
 			name: role.name,
 			description: role.description,
-			type: role.type,
+			type: roleTypes.find(rt => rt.value === role.type) || { value: 'MEMBER', label: 'Member' },
 			color: role.color || '#0284c7',
 			canManageUsers: role.canManageUsers,
 			canManageRoles: role.canManageRoles,
@@ -144,7 +144,21 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'create', ...newRole })
+				body: JSON.stringify({ 
+					action: 'create', 
+					name: newRole.name,
+					description: newRole.description,
+					type: newRole.type.value,
+					color: newRole.color,
+					canManageUsers: newRole.canManageUsers,
+					canManageRoles: newRole.canManageRoles,
+					canManageEvents: newRole.canManageEvents,
+					canManagePosts: newRole.canManagePosts,
+					canEditOthersPosts: newRole.canEditOthersPosts,
+					canManageGroups: newRole.canManageGroups,
+					canManageInvites: newRole.canManageInvites,
+					canManageTheme: newRole.canManageTheme
+				})
 			});
 
 			if (response.ok) {
@@ -167,7 +181,22 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'update', ...editRole })
+				body: JSON.stringify({ 
+					action: 'update', 
+					id: editRole.id,
+					name: editRole.name,
+					description: editRole.description,
+					type: editRole.type.value,
+					color: editRole.color,
+					canManageUsers: editRole.canManageUsers,
+					canManageRoles: editRole.canManageRoles,
+					canManageEvents: editRole.canManageEvents,
+					canManagePosts: editRole.canManagePosts,
+					canEditOthersPosts: editRole.canEditOthersPosts,
+					canManageGroups: editRole.canManageGroups,
+					canManageInvites: editRole.canManageInvites,
+					canManageTheme: editRole.canManageTheme
+				})
 			});
 
 			if (response.ok) {
@@ -351,20 +380,13 @@
 						</div>
 						<div>
 							<Label for="type">Role Type</Label>
-							<Select.Root type="single" bind:value={newRole.type}>
+							<Select.Root bind:selected={newRole.type}>
 								<Select.Trigger class="w-full">
-									{#if newRole.type.trim() === ''}
-										Select a role
-									{/if}
-									{#each roleTypes as role}
-										{#if newRole.type === role.value}
-											{role.label}
-										{/if}
-									{/each}
+									{newRole.type?.label || 'Select a role type'}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}
-										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
+										<Select.Item value={roleType}>{roleType.label}</Select.Item>
 									{/each}
 								</Select.Content>
 							</Select.Root>
@@ -442,20 +464,13 @@
 						</div>
 						<div>
 							<Label for="edit-type">Role Type</Label>
-							<Select.Root type="single" bind:value={editRole.type}>
+							<Select.Root bind:selected={editRole.type}>
 								<Select.Trigger class="w-full">
-									{#if editRole.type.trim() === ''}
-										Select a role
-									{/if}
-									{#each roleTypes as role}
-										{#if editRole.type === role.value}
-											{role.label}
-										{/if}
-									{/each}
+									{editRole.type?.label || 'Select a role type'}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}
-										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
+										<Select.Item value={roleType}>{roleType.label}</Select.Item>
 									{/each}
 								</Select.Content>
 							</Select.Root>

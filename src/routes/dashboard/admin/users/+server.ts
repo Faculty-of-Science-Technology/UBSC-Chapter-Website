@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 const { email, username, firstName, lastName, password, administrator, accountType } = body;
 
                 // Validate required fields
-                if (!email || !username || !firstName || !lastName || !password || !accountType) {
+                if (!email || !username || !firstName || !lastName || !password) {
                     throw error(400, 'Missing required fields');
                 }
 
@@ -46,14 +46,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 const [newUser] = await db
                     .insert(Users)
                     .values({
-                        AccountType: "student",
+                        AccountType: accountType || 'student',
                         Email: email,
                         Username: username,
                         FirstName: firstName,
                         LastName: lastName,
                         Password: hashedPassword,
                         Administrator: administrator || false,
-                        AccountType: accountType,
                         CreatedAt: new Date()
                     })
                     .returning();
