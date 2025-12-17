@@ -52,8 +52,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                         FirstName: firstName,
                         LastName: lastName,
                         Password: hashedPassword,
-                        Administrator: administrator || false,
-                        CreatedAt: new Date()
+                        Administrator: administrator || false
                     })
                     .returning();
 

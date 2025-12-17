@@ -567,7 +567,15 @@
 						<Label for="role-select">Select Role</Label>
 						<Select.Root bind:selected={selectedRole}>
 							<Select.Trigger class="w-full">
-								<Select.Value placeholder="Select a role..." />
+								{#if !selectedRole || selectedRole === ''}
+									Select a role...
+								{:else}
+									{#each data.availableRoles as role}
+										{#if selectedRole === role.id}
+											{role.name}
+										{/if}
+									{/each}
+								{/if}
 							</Select.Trigger>
 							<Select.Content>
 								{#each data.availableRoles as role}

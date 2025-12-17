@@ -107,6 +107,7 @@
 			name: '',
 			description: '',
 			type: { value: 'MEMBER', label: 'Member' },
+			color: '#6366f1',
 			canManageUsers: false,
 			canManageRoles: false,
 			canManageEvents: false,
