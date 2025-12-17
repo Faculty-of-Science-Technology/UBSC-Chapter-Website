@@ -28,6 +28,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     throw error(400, 'Missing required fields');
                 }
 
+                // Validate accountType
+                const validAccountTypes = ['student', 'faculty', 'staff', 'alumni'];
+                const finalAccountType = accountType && validAccountTypes.includes(accountType) ? accountType : 'student';
+
                 // Check if user already exists
                 const existingUser = await db
                     .select()
@@ -46,7 +50,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 const [newUser] = await db
                     .insert(Users)
                     .values({
-                        AccountType: accountType || 'student',
+                        AccountType: finalAccountType,
                         Email: email,
                         Username: username,
                         FirstName: firstName,

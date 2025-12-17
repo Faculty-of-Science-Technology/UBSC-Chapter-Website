@@ -13,6 +13,12 @@ export const GET: RequestHandler = async ({ url, locals }) => {
     const groupId = url.searchParams.get('groupId');
 
     if (action === 'get-members' && groupId) {
+        // Validate groupId format (UUID)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(groupId)) {
+            throw error(400, 'Invalid group ID format');
+        }
+
         try {
             const members = await db
                 .select({

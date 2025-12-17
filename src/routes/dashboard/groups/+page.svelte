@@ -515,7 +515,7 @@
 										<div class="flex items-center">
 											<div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-600">
 												<span class="text-xs font-medium text-white">
-													{member.firstName?.charAt(0) || ''}{member.lastName?.charAt(0) || ''}
+													{member.firstName?.charAt(0)?.toUpperCase() || member.username?.charAt(0)?.toUpperCase() || '?'}{member.lastName?.charAt(0)?.toUpperCase() || ''}
 												</span>
 											</div>
 											<div class="ml-3">
