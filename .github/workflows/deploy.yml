@@ -61,7 +61,7 @@ jobs:
             FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           # Download the .env using FTP
-          curl -u $FTP_USERNAME:$FTP_PASSWORD ftp://$FTP_HOST/.env -o .env
+          curl -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/.env" -o .env
           npm install
           npm run build
           echo "Dry run completed successfully - build artifacts created but not deployed"
@@ -82,7 +82,7 @@ jobs:
 
         run: |
          # Download the .env using FTP
-         curl -u $FTP_USERNAME:$FTP_PASSWORD ftp://$FTP_HOST/.env -o .env
+         curl -u "$FTP_USERNAME:$FTP_PASSWORD" "ftp://$FTP_HOST/.env" -o .env
          npm install
          npm run build
          # Destroy sourcemaps
