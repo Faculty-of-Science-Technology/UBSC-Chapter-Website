@@ -31,7 +31,7 @@ jobs:
 
       # Set up the SSH key for git access
       - name: Set up SSH
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request_target' }}
         run: |
           mkdir -p ~/.ssh
           # Ensure correct formatting of the private key with newlines
@@ -48,13 +48,13 @@ jobs:
 
       # Test SSH Connection
       - name: Test SSH Connection
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request_target' }}
         run: |
           ssh -p 7822 ubschosting@ubsc.hosting2.acm.org "echo 'SSH Connection Successful'"
 
       # Dry run - Build only (for pull requests)
       - name: Dry Run - Build Only
-        if: ${{ github.event_name == 'pull_request' || (inputs.dry_run == true && github.event_name == 'workflow_dispatch') }}
+        if: ${{ github.event_name == 'pull_request_target' || (inputs.dry_run == true && github.event_name == 'workflow_dispatch') }}
         env:
             FTP_HOST: ${{ secrets.FTP_HOST }}
             FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
