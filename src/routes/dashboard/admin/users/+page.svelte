@@ -23,7 +23,7 @@
 		firstName: '',
 		lastName: '',
 		password: '',
-		accountType: { value: 'student', label: 'Student' },
+		accountType: 'student',
 		administrator: false
 	});
 
@@ -34,7 +34,7 @@
 		username: '',
 		firstName: '',
 		lastName: '',
-		accountType: { value: 'student', label: 'Student' },
+		accountType: 'student',
 		administrator: false
 	});
 
@@ -46,7 +46,7 @@
 			firstName: '',
 			lastName: '',
 			password: '',
-			accountType: { value: 'student', label: 'Student' },
+			accountType: 'student',
 			administrator: false
 		};
 	}
@@ -59,9 +59,7 @@
 			username: user.username,
 			firstName: user.firstName,
 			lastName: user.lastName,
-			accountType: user.accountType 
-				? { value: user.accountType, label: user.accountType.charAt(0).toUpperCase() + user.accountType.slice(1) }
-				: { value: 'student', label: 'Student' },
+			accountType: user.accountType || 'student',
 			administrator: user.administrator
 		};
 		showEditUser = true;
@@ -86,7 +84,7 @@
 					firstName: newUser.firstName,
 					lastName: newUser.lastName,
 					password: newUser.password,
-					accountType: newUser.accountType.value,
+					accountType: newUser.accountType,
 					administrator: newUser.administrator
 				})
 			});
@@ -118,7 +116,7 @@
 					username: editUser.username,
 					firstName: editUser.firstName,
 					lastName: editUser.lastName,
-					accountType: editUser.accountType.value,
+					accountType: editUser.accountType,
 					administrator: editUser.administrator
 				})
 			});
@@ -432,15 +430,25 @@
 						</div>
 						<div>
 							<Label for="accountType">Account Type</Label>
-							<Select.Root bind:selected={newUser.accountType}>
+							<Select.Root type="single" bind:value={newUser.accountType}>
 								<Select.Trigger class="w-full">
-									{newUser.accountType?.label || 'Select account type'}
+									{#if newUser.accountType === 'student'}
+										Student
+									{:else if newUser.accountType === 'faculty'}
+										Faculty
+									{:else if newUser.accountType === 'staff'}
+										Staff
+									{:else if newUser.accountType === 'alumni'}
+										Alumni
+									{:else}
+										Select account type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
-									<Select.Item value={{ value: 'student', label: 'Student' }}>Student</Select.Item>
-									<Select.Item value={{ value: 'faculty', label: 'Faculty' }}>Faculty</Select.Item>
-									<Select.Item value={{ value: 'staff', label: 'Staff' }}>Staff</Select.Item>
-									<Select.Item value={{ value: 'alumni', label: 'Alumni' }}>Alumni</Select.Item>
+									<Select.Item value="student">Student</Select.Item>
+									<Select.Item value="faculty">Faculty</Select.Item>
+									<Select.Item value="staff">Staff</Select.Item>
+									<Select.Item value="alumni">Alumni</Select.Item>
 								</Select.Content>
 							</Select.Root>
 						</div>
@@ -506,15 +514,25 @@
 						</div>
 						<div>
 							<Label for="edit-accountType">Account Type</Label>
-							<Select.Root bind:selected={editUser.accountType}>
+							<Select.Root type="single" bind:value={editUser.accountType}>
 								<Select.Trigger class="w-full">
-									{editUser.accountType?.label || 'Select account type'}
+									{#if editUser.accountType === 'student'}
+										Student
+									{:else if editUser.accountType === 'faculty'}
+										Faculty
+									{:else if editUser.accountType === 'staff'}
+										Staff
+									{:else if editUser.accountType === 'alumni'}
+										Alumni
+									{:else}
+										Select account type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
-									<Select.Item value={{ value: 'student', label: 'Student' }}>Student</Select.Item>
-									<Select.Item value={{ value: 'faculty', label: 'Faculty' }}>Faculty</Select.Item>
-									<Select.Item value={{ value: 'staff', label: 'Staff' }}>Staff</Select.Item>
-									<Select.Item value={{ value: 'alumni', label: 'Alumni' }}>Alumni</Select.Item>
+									<Select.Item value="student">Student</Select.Item>
+									<Select.Item value="faculty">Faculty</Select.Item>
+									<Select.Item value="staff">Staff</Select.Item>
+									<Select.Item value="alumni">Alumni</Select.Item>
 								</Select.Content>
 							</Select.Root>
 						</div>
@@ -565,7 +583,7 @@
 					</p>
 					<div class="mt-4">
 						<Label for="role-select">Select Role</Label>
-						<Select.Root bind:selected={selectedRole}>
+						<Select.Root type="single" bind:value={selectedRole}>
 							<Select.Trigger class="w-full">
 								{#if !selectedRole || selectedRole === ''}
 									Select a role...

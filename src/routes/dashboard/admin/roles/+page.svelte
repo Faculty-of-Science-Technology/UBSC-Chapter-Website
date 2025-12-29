@@ -20,7 +20,7 @@
 	let newRole = {
 		name: '',
 		description: '',
-		type: { value: 'MEMBER', label: 'Member' },
+		type: 'MEMBER',
 		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
@@ -37,7 +37,7 @@
 		id: '',
 		name: '',
 		description: '',
-		type: { value: 'MEMBER', label: 'Member' },
+		type: 'MEMBER',
 		color: '#6366f1',
 		canManageUsers: false,
 		canManageRoles: false,
@@ -106,7 +106,7 @@
 		newRole = {
 			name: '',
 			description: '',
-			type: { value: 'MEMBER', label: 'Member' },
+			type: 'MEMBER',
 			color: '#6366f1',
 			canManageUsers: false,
 			canManageRoles: false,
@@ -125,7 +125,7 @@
 			id: role.id,
 			name: role.name,
 			description: role.description,
-			type: roleTypes.find(rt => rt.value === role.type) || { value: 'MEMBER', label: 'Member' },
+			type: role.type || 'MEMBER',
 			color: role.color || '#0284c7',
 			canManageUsers: role.canManageUsers,
 			canManageRoles: role.canManageRoles,
@@ -149,7 +149,7 @@
 					action: 'create', 
 					name: newRole.name,
 					description: newRole.description,
-					type: newRole.type.value,
+					type: newRole.type,
 					color: newRole.color,
 					canManageUsers: newRole.canManageUsers,
 					canManageRoles: newRole.canManageRoles,
@@ -187,7 +187,7 @@
 					id: editRole.id,
 					name: editRole.name,
 					description: editRole.description,
-					type: editRole.type.value,
+					type: editRole.type,
 					color: editRole.color,
 					canManageUsers: editRole.canManageUsers,
 					canManageRoles: editRole.canManageRoles,
@@ -381,13 +381,20 @@
 						</div>
 						<div>
 							<Label for="type">Role Type</Label>
-							<Select.Root bind:selected={newRole.type}>
+							<Select.Root type="single" bind:value={newRole.type}>
 								<Select.Trigger class="w-full">
-									{newRole.type?.label || 'Select a role type'}
+									{#each roleTypes as roleType}
+										{#if newRole.type === roleType.value}
+											{roleType.label}
+										{/if}
+									{/each}
+									{#if !roleTypes.find(rt => rt.value === newRole.type)}
+										Select a role type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}
-										<Select.Item value={roleType}>{roleType.label}</Select.Item>
+										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
 									{/each}
 								</Select.Content>
 							</Select.Root>
@@ -465,13 +472,20 @@
 						</div>
 						<div>
 							<Label for="edit-type">Role Type</Label>
-							<Select.Root bind:selected={editRole.type}>
+							<Select.Root type="single" bind:value={editRole.type}>
 								<Select.Trigger class="w-full">
-									{editRole.type?.label || 'Select a role type'}
+									{#each roleTypes as roleType}
+										{#if editRole.type === roleType.value}
+											{roleType.label}
+										{/if}
+									{/each}
+									{#if !roleTypes.find(rt => rt.value === editRole.type)}
+										Select a role type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}
-										<Select.Item value={roleType}>{roleType.label}</Select.Item>
+										<Select.Item value={roleType.value}>{roleType.label}</Select.Item>
 									{/each}
 								</Select.Content>
 							</Select.Root>
