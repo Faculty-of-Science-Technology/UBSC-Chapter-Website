@@ -17,8 +17,7 @@ on:
         type: boolean
 concurrency: # Multiple jobs should NOT run at the same time
   group: ${{ github.workflow }}-${{ github.event_name }}
-  cancel-in-progress: true
-
+  cancel-in-progress: ${{ !(contains(github.ref, 'dependabot/') || contains(github.ref, 'copilot/')) }}
 jobs:
   build:
     env:
