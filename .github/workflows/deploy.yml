@@ -2,7 +2,7 @@ name: (main) Deploy to service provider
 
 on:
   schedule:
-    - cron: '0 * * * 0' # Every Sunday of the month
+    - cron: '0 0 * * 0' # Every Sunday at midnight UTC
   push:
     branches: ['main']
   pull_request_target:
