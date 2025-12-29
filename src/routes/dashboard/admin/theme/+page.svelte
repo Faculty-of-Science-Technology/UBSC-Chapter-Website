@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -119,13 +120,13 @@
 			if (response.ok) {
 				await invalidateAll();
 				showEditModal = false;
-				alert('Theme saved successfully!');
+				toast.success('Theme saved successfully!');
 			} else {
 				const error = await response.text();
-				alert('Error saving theme: ' + error);
+				toast.error('Error saving theme: ' + error);
 			}
 		} catch (error) {
-			alert('Error saving theme: ' + error);
+			toast.error('Error saving theme: ' + error);
 		} finally {
 			loading = false;
 		}
@@ -142,13 +143,13 @@
 
 			if (response.ok) {
 				await invalidateAll();
-				alert('Theme selected successfully!');
+				toast.success('Theme selected successfully!');
 			} else {
 				const error = await response.text();
-				alert('Error selecting theme: ' + error);
+				toast.error('Error selecting theme: ' + error);
 			}
 		} catch (error) {
-			alert('Error selecting theme: ' + error);
+			toast.error('Error selecting theme: ' + error);
 		} finally {
 			loading = false;
 		}
@@ -167,13 +168,13 @@
 
 			if (response.ok) {
 				await invalidateAll();
-				alert('Theme deleted successfully!');
+				toast.success('Theme deleted successfully!');
 			} else {
 				const error = await response.text();
-				alert('Error deleting theme: ' + error);
+				toast.error('Error deleting theme: ' + error);
 			}
 		} catch (error) {
-			alert('Error deleting theme: ' + error);
+			toast.error('Error deleting theme: ' + error);
 		} finally {
 			loading = false;
 		}

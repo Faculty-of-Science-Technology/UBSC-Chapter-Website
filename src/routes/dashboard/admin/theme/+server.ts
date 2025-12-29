@@ -19,7 +19,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
         const { action } = body;
 
         switch (action) {
-            case 'create':
             case 'save': {
                 // Check if user already has a theme
                 const existingUserTheme = await db
