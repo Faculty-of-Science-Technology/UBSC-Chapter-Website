@@ -107,6 +107,7 @@
 			name: '',
 			description: '',
 			type: 'MEMBER',
+			color: '#6366f1',
 			canManageUsers: false,
 			canManageRoles: false,
 			canManageEvents: false,
@@ -124,7 +125,7 @@
 			id: role.id,
 			name: role.name,
 			description: role.description,
-			type: role.type,
+			type: role.type || 'MEMBER',
 			color: role.color || '#0284c7',
 			canManageUsers: role.canManageUsers,
 			canManageRoles: role.canManageRoles,
@@ -144,7 +145,21 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'create', ...newRole })
+				body: JSON.stringify({ 
+					action: 'create', 
+					name: newRole.name,
+					description: newRole.description,
+					type: newRole.type,
+					color: newRole.color,
+					canManageUsers: newRole.canManageUsers,
+					canManageRoles: newRole.canManageRoles,
+					canManageEvents: newRole.canManageEvents,
+					canManagePosts: newRole.canManagePosts,
+					canEditOthersPosts: newRole.canEditOthersPosts,
+					canManageGroups: newRole.canManageGroups,
+					canManageInvites: newRole.canManageInvites,
+					canManageTheme: newRole.canManageTheme
+				})
 			});
 
 			if (response.ok) {
@@ -167,7 +182,22 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'update', ...editRole })
+				body: JSON.stringify({ 
+					action: 'update', 
+					id: editRole.id,
+					name: editRole.name,
+					description: editRole.description,
+					type: editRole.type,
+					color: editRole.color,
+					canManageUsers: editRole.canManageUsers,
+					canManageRoles: editRole.canManageRoles,
+					canManageEvents: editRole.canManageEvents,
+					canManagePosts: editRole.canManagePosts,
+					canEditOthersPosts: editRole.canEditOthersPosts,
+					canManageGroups: editRole.canManageGroups,
+					canManageInvites: editRole.canManageInvites,
+					canManageTheme: editRole.canManageTheme
+				})
 			});
 
 			if (response.ok) {
@@ -353,14 +383,14 @@
 							<Label for="type">Role Type</Label>
 							<Select.Root type="single" bind:value={newRole.type}>
 								<Select.Trigger class="w-full">
-									{#if newRole.type.trim() === ''}
-										Select a role
-									{/if}
-									{#each roleTypes as role}
-										{#if newRole.type === role.value}
-											{role.label}
+									{#each roleTypes as roleType}
+										{#if newRole.type === roleType.value}
+											{roleType.label}
 										{/if}
 									{/each}
+									{#if !roleTypes.find(rt => rt.value === newRole.type)}
+										Select a role type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}
@@ -444,14 +474,14 @@
 							<Label for="edit-type">Role Type</Label>
 							<Select.Root type="single" bind:value={editRole.type}>
 								<Select.Trigger class="w-full">
-									{#if editRole.type.trim() === ''}
-										Select a role
-									{/if}
-									{#each roleTypes as role}
-										{#if editRole.type === role.value}
-											{role.label}
+									{#each roleTypes as roleType}
+										{#if editRole.type === roleType.value}
+											{roleType.label}
 										{/if}
 									{/each}
+									{#if !roleTypes.find(rt => rt.value === editRole.type)}
+										Select a role type
+									{/if}
 								</Select.Trigger>
 								<Select.Content>
 									{#each roleTypes as roleType}

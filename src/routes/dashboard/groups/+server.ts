@@ -1,8 +1,48 @@
 import { db } from '$lib/server/db';
-import { GroupMembers, Groups } from '$lib/server/db/schema';
+import { GroupMembers, Groups, Users } from '$lib/server/db/schema';
 import { error, isHttpError, json } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
+
+export const GET: RequestHandler = async ({ url, locals }) => {
+    if (!locals.user) {
+        throw error(401, 'Unauthorized');
+    }
+
+    const action = url.searchParams.get('action');
+    const groupId = url.searchParams.get('groupId');
+
+    if (action === 'get-members' && groupId) {
+        // Validate groupId format (UUID)
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(groupId)) {
+            throw error(400, 'Invalid group ID format');
+        }
+
+        try {
+            const members = await db
+                .select({
+                    userId: GroupMembers.UserId,
+                    firstName: Users.FirstName,
+                    lastName: Users.LastName,
+                    email: Users.Email,
+                    username: Users.Username,
+                    joinedAt: GroupMembers.CreatedAt
+                })
+                .from(GroupMembers)
+                .innerJoin(Users, eq(GroupMembers.UserId, Users.Id))
+                .where(eq(GroupMembers.GroupId, groupId))
+                .orderBy(Users.FirstName, Users.LastName);
+
+            return json({ members });
+        } catch (err) {
+            console.error('Error fetching group members:', err);
+            throw error(500, 'Failed to fetch group members');
+        }
+    }
+
+    throw error(400, 'Invalid request');
+};
 
 export const POST: RequestHandler = async ({ request, locals }) => {
     if (!locals.user) {
