@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { UserRoles, Users } from '$lib/server/db/schema';
 import { error, json } from '@sveltejs/kit';
-import bcrypt from 'bcryptjs';
+import { hash } from 'argon2';
 import { and, eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
@@ -44,7 +44,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 }
 
                 // Hash password
-                const hashedPassword = await bcrypt.hash(password, 12);
+                const hashedPassword = await hash(password);
 
                 // Create user
                 const [newUser] = await db
