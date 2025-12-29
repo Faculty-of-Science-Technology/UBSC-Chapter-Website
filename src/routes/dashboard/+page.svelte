@@ -138,53 +138,8 @@
 			{/each}
 		</div>
 
-		<div class="grid grid-cols-1 gap-8">
-			<!-- Upcoming Events -->
-			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
-				<div class="border-b border-gray-200 px-6 py-4">
-					<h2 class="text-lg font-medium text-gray-900">Upcoming Events</h2>
-				</div>
-				<div class="divide-y divide-gray-200">
-					{#if upcomingEvents.length > 0}
-						{#each upcomingEvents as event}
-							<div class="px-6 py-4">
-								<div class="flex items-center justify-between">
-									<div class="min-w-0 flex-1">
-										<h3 class="truncate text-sm font-medium text-gray-900">
-											{event.title}
-										</h3>
-										<div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
-											<span>{event.date}</span>
-											<span>•</span>
-											<span>{event.time}</span>
-											<span>•</span>
-											<span>{event.location}</span>
-										</div>
-									</div>
-									<div class="flex-shrink-0 text-right">
-										<div class="text-sm font-medium text-gray-900">
-											{event.attendees} attending
-										</div>
-									</div>
-								</div>
-							</div>
-						{/each}
-					{:else}
-						<div class="px-6 py-8 text-center">
-							<p class="text-sm text-gray-500">No upcoming events scheduled</p>
-						</div>
-					{/if}
-				</div>
-				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
-					<a href="/dashboard/events" class="text-sm font-medium text-sky-600 hover:text-sky-500">
-						View all events →
-					</a>
-				</div>
-			</div>
-		</div>
-
 		<!-- Quick Actions -->
-		<div class="mt-8 rounded-lg border border-gray-200 bg-white shadow-sm">
+		<div class="my-8 rounded-lg border border-gray-200 bg-white shadow-sm">
 			<div class="border-b border-gray-200 px-6 py-4">
 				<h2 class="text-lg font-medium text-gray-900">Quick Actions</h2>
 			</div>
@@ -291,6 +246,51 @@
 							</div>
 						</a>
 					{/if}
+				</div>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 gap-8">
+			<!-- Upcoming Events -->
+			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
+				<div class="border-b border-gray-200 px-6 py-4">
+					<h2 class="text-lg font-medium text-gray-900">Upcoming Events</h2>
+				</div>
+				<div class="divide-y divide-gray-200">
+					{#if upcomingEvents.length > 0}
+						{#each upcomingEvents as event}
+							<div class="px-6 py-4">
+								<div class="flex items-center justify-between">
+									<div class="min-w-0 flex-1">
+										<h3 class="truncate text-sm font-medium text-gray-900">
+											{event.title}
+										</h3>
+										<div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
+											<span>{event.date}</span>
+											<span>•</span>
+											<span>{event.time}</span>
+											<span>•</span>
+											<span>{event.location}</span>
+										</div>
+									</div>
+									<div class="flex-shrink-0 text-right">
+										<div class="text-sm font-medium text-gray-900">
+											{event.attendees} attending
+										</div>
+									</div>
+								</div>
+							</div>
+						{/each}
+					{:else}
+						<div class="px-6 py-8 text-center">
+							<p class="text-sm text-gray-500">No upcoming events scheduled</p>
+						</div>
+					{/if}
+				</div>
+				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
+					<a href="/dashboard/events" class="text-sm font-medium text-sky-600 hover:text-sky-500">
+						View all events →
+					</a>
 				</div>
 			</div>
 		</div>

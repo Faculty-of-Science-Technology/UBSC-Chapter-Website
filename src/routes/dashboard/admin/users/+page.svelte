@@ -23,6 +23,7 @@
 		firstName: '',
 		lastName: '',
 		password: '',
+		accountType: 'student',
 		administrator: false
 	});
 
@@ -33,6 +34,7 @@
 		username: '',
 		firstName: '',
 		lastName: '',
+		accountType: 'student',
 		administrator: false
 	});
 
@@ -44,6 +46,7 @@
 			firstName: '',
 			lastName: '',
 			password: '',
+			accountType: 'student',
 			administrator: false
 		};
 	}
@@ -56,6 +59,7 @@
 			username: user.username,
 			firstName: user.firstName,
 			lastName: user.lastName,
+			accountType: user.accountType || 'student',
 			administrator: user.administrator
 		};
 		showEditUser = true;
@@ -73,7 +77,16 @@
 			const response = await fetch('/dashboard/admin/users', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'create', ...newUser })
+				body: JSON.stringify({ 
+					action: 'create', 
+					email: newUser.email,
+					username: newUser.username,
+					firstName: newUser.firstName,
+					lastName: newUser.lastName,
+					password: newUser.password,
+					accountType: newUser.accountType,
+					administrator: newUser.administrator
+				})
 			});
 
 			if (response.ok) {
@@ -96,7 +109,16 @@
 			const response = await fetch('/dashboard/admin/users', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'update', ...editUser })
+				body: JSON.stringify({ 
+					action: 'update', 
+					id: editUser.id,
+					email: editUser.email,
+					username: editUser.username,
+					firstName: editUser.firstName,
+					lastName: editUser.lastName,
+					accountType: editUser.accountType,
+					administrator: editUser.administrator
+				})
 			});
 
 			if (response.ok) {
@@ -406,6 +428,30 @@
 							<Label for="password">Password</Label>
 							<Input type="password" id="password" bind:value={newUser.password} required />
 						</div>
+						<div>
+							<Label for="accountType">Account Type</Label>
+							<Select.Root type="single" bind:value={newUser.accountType}>
+								<Select.Trigger class="w-full">
+									{#if newUser.accountType === 'student'}
+										Student
+									{:else if newUser.accountType === 'faculty'}
+										Faculty
+									{:else if newUser.accountType === 'staff'}
+										Staff
+									{:else if newUser.accountType === 'alumni'}
+										Alumni
+									{:else}
+										Select account type
+									{/if}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="student">Student</Select.Item>
+									<Select.Item value="faculty">Faculty</Select.Item>
+									<Select.Item value="staff">Staff</Select.Item>
+									<Select.Item value="alumni">Alumni</Select.Item>
+								</Select.Content>
+							</Select.Root>
+						</div>
 						<div class="flex items-center space-x-2">
 							<Switch id="administrator" bind:checked={newUser.administrator} />
 							<Label for="administrator">Administrator</Label>
@@ -466,6 +512,30 @@
 								<Input type="text" id="edit-lastName" bind:value={editUser.lastName} required />
 							</div>
 						</div>
+						<div>
+							<Label for="edit-accountType">Account Type</Label>
+							<Select.Root type="single" bind:value={editUser.accountType}>
+								<Select.Trigger class="w-full">
+									{#if editUser.accountType === 'student'}
+										Student
+									{:else if editUser.accountType === 'faculty'}
+										Faculty
+									{:else if editUser.accountType === 'staff'}
+										Staff
+									{:else if editUser.accountType === 'alumni'}
+										Alumni
+									{:else}
+										Select account type
+									{/if}
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="student">Student</Select.Item>
+									<Select.Item value="faculty">Faculty</Select.Item>
+									<Select.Item value="staff">Staff</Select.Item>
+									<Select.Item value="alumni">Alumni</Select.Item>
+								</Select.Content>
+							</Select.Root>
+						</div>
 						<div class="flex items-center space-x-2">
 							<Switch id="edit-administrator" bind:checked={editUser.administrator} />
 							<Label for="edit-administrator">Administrator</Label>
@@ -513,9 +583,17 @@
 					</p>
 					<div class="mt-4">
 						<Label for="role-select">Select Role</Label>
-						<Select.Root bind:selected={selectedRole}>
+						<Select.Root type="single" bind:value={selectedRole}>
 							<Select.Trigger class="w-full">
-								<Select.Value placeholder="Select a role..." />
+								{#if !selectedRole || selectedRole === ''}
+									Select a role...
+								{:else}
+									{#each data.availableRoles as role}
+										{#if selectedRole === role.id}
+											{role.name}
+										{/if}
+									{/each}
+								{/if}
 							</Select.Trigger>
 							<Select.Content>
 								{#each data.availableRoles as role}

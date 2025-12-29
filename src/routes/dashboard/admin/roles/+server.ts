@@ -10,7 +10,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     }
 
     // Check if user has permission to manage roles
-    if (!locals.user.administrator && !locals.user.permissions.canManageRoles) {
+    if (!locals.user.Administrator && !locals.user.Permissions.CanManageRoles) {
         throw error(403, 'Forbidden');
     }
 
