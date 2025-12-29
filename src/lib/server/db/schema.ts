@@ -163,7 +163,21 @@ export const ThemeSettings = pgTable('ThemeSettings', {
 	AccentColor: varchar('accent_color', { length: 7 }).notNull().default('#F59E0B'),
 	BackgroundColor: varchar('background_color', { length: 7 }).notNull().default('#FFFFFF'),
 	TextColor: varchar('text_color', { length: 7 }).notNull().default('#1F2937'),
+	HeaderColor: varchar('header_color', { length: 7 }).notNull().default('#1E40AF'),
+	SidebarColor: varchar('sidebar_color', { length: 7 }).notNull().default('#F3F4F6'),
+	LinkColor: varchar('link_color', { length: 7 }).notNull().default('#3B82F6'),
+	ButtonColor: varchar('button_color', { length: 7 }).notNull().default('#3B82F6'),
+	SuccessColor: varchar('success_color', { length: 7 }).notNull().default('#10B981'),
+	WarningColor: varchar('warning_color', { length: 7 }).notNull().default('#F59E0B'),
+	ErrorColor: varchar('error_color', { length: 7 }).notNull().default('#EF4444'),
+	LogoUrl: text('logo_url'),
+	FaviconUrl: text('favicon_url'),
+	CustomCss: text('custom_css'),
+	Selected: boolean('selected').notNull().default(false),
 	IsActive: boolean('is_active').notNull().default(true),
+	CreatedBy: uuid('created_by')
+		.references(() => Users.Id, { onDelete: 'cascade' })
+		.notNull(),
 	UpdatedBy: uuid('updated_by').references(() => Users.Id),
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
@@ -278,7 +292,8 @@ export const UsersRelations = relations(Users, ({ many }) => ({
 	groupMemberships: many(GroupMembers),
 	createdGroups: many(Groups),
 	assignedRoles: many(UserRoles, { relationName: 'assignedBy' }),
-	themeUpdates: many(ThemeSettings)
+	createdThemes: many(ThemeSettings, { relationName: 'createdThemes' }),
+	themeUpdates: many(ThemeSettings, { relationName: 'updatedThemes' })
 }));
 
 export const RolesRelations = relations(Roles, ({ many }) => ({
@@ -372,8 +387,14 @@ export const GroupMembersRelations = relations(GroupMembers, ({ one }) => ({
 }));
 
 export const ThemeSettingsRelations = relations(ThemeSettings, ({ one }) => ({
+	createdBy: one(Users, {
+		fields: [ThemeSettings.CreatedBy],
+		references: [Users.Id],
+		relationName: 'createdThemes'
+	}),
 	updatedBy: one(Users, {
 		fields: [ThemeSettings.UpdatedBy],
-		references: [Users.Id]
+		references: [Users.Id],
+		relationName: 'updatedThemes'
 	})
 }));

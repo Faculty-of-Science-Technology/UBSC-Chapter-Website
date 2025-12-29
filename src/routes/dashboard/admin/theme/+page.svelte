@@ -5,83 +5,107 @@
 	const { data }: PageProps = $props();
 
 	let loading = $state(false);
-	let previewMode = $state(false);
+	let editingTheme = $state<any>(null);
+	let showEditModal = $state(false);
 
-	// Theme form data
+	// Theme form data for editing
 	let themeData = $state({
-		...data.currentTheme
+		primaryColor: '#3B82F6',
+		secondaryColor: '#1E40AF',
+		accentColor: '#F59E0B',
+		backgroundColor: '#FFFFFF',
+		textColor: '#1F2937',
+		headerColor: '#1E40AF',
+		sidebarColor: '#F3F4F6',
+		linkColor: '#3B82F6',
+		buttonColor: '#3B82F6',
+		successColor: '#10B981',
+		warningColor: '#F59E0B',
+		errorColor: '#EF4444',
+		logoUrl: '',
+		faviconUrl: '',
+		customCss: ''
 	});
 
 	const colorSections = [
 		{
 			title: 'Primary Colors',
 			colors: [
-				{
-					key: 'primaryColor',
-					label: 'Primary Color',
-					description: 'Main brand color used for buttons and highlights'
-				},
-				{
-					key: 'secondaryColor',
-					label: 'Secondary Color',
-					description: 'Secondary brand color for accents'
-				},
-				{
-					key: 'accentColor',
-					label: 'Accent Color',
-					description: 'Color for special highlights and call-to-actions'
-				}
+				{ key: 'primaryColor', label: 'Primary Color' },
+				{ key: 'secondaryColor', label: 'Secondary Color' },
+				{ key: 'accentColor', label: 'Accent Color' }
 			]
 		},
 		{
 			title: 'Background & Text',
 			colors: [
-				{ key: 'backgroundColor', label: 'Background Color', description: 'Main background color' },
-				{ key: 'textColor', label: 'Text Color', description: 'Primary text color' },
-				{
-					key: 'headerColor',
-					label: 'Header Color',
-					description: 'Header and navigation background'
-				},
-				{ key: 'sidebarColor', label: 'Sidebar Color', description: 'Sidebar background color' }
+				{ key: 'backgroundColor', label: 'Background' },
+				{ key: 'textColor', label: 'Text' },
+				{ key: 'headerColor', label: 'Header' },
+				{ key: 'sidebarColor', label: 'Sidebar' }
 			]
 		},
 		{
-			title: 'Interactive Elements',
+			title: 'Interactive',
 			colors: [
-				{
-					key: 'linkColor',
-					label: 'Link Color',
-					description: 'Color for links and clickable text'
-				},
-				{
-					key: 'buttonColor',
-					label: 'Button Color',
-					description: 'Default button background color'
-				}
+				{ key: 'linkColor', label: 'Link' },
+				{ key: 'buttonColor', label: 'Button' }
 			]
 		},
 		{
-			title: 'Status Colors',
+			title: 'Status',
 			colors: [
-				{
-					key: 'successColor',
-					label: 'Success Color',
-					description: 'Color for success messages and positive actions'
-				},
-				{
-					key: 'warningColor',
-					label: 'Warning Color',
-					description: 'Color for warnings and caution messages'
-				},
-				{
-					key: 'errorColor',
-					label: 'Error Color',
-					description: 'Color for errors and destructive actions'
-				}
+				{ key: 'successColor', label: 'Success' },
+				{ key: 'warningColor', label: 'Warning' },
+				{ key: 'errorColor', label: 'Error' }
 			]
 		}
 	];
+
+	function openEditModal(theme: any = null) {
+		if (theme) {
+			// Edit existing theme
+			editingTheme = theme;
+			themeData = {
+				primaryColor: theme.primaryColor,
+				secondaryColor: theme.secondaryColor,
+				accentColor: theme.accentColor,
+				backgroundColor: theme.backgroundColor,
+				textColor: theme.textColor,
+				headerColor: theme.headerColor,
+				sidebarColor: theme.sidebarColor,
+				linkColor: theme.linkColor,
+				buttonColor: theme.buttonColor,
+				successColor: theme.successColor,
+				warningColor: theme.warningColor,
+				errorColor: theme.errorColor,
+				logoUrl: theme.logoUrl || '',
+				faviconUrl: theme.faviconUrl || '',
+				customCss: theme.customCss || ''
+			};
+		} else {
+			// Create new theme
+			editingTheme = null;
+			themeData = {
+				primaryColor: '#3B82F6',
+				secondaryColor: '#1E40AF',
+				accentColor: '#F59E0B',
+				backgroundColor: '#FFFFFF',
+				textColor: '#1F2937',
+				headerColor: '#1E40AF',
+				sidebarColor: '#F3F4F6',
+				linkColor: '#3B82F6',
+				buttonColor: '#3B82F6',
+				successColor: '#10B981',
+				warningColor: '#F59E0B',
+				errorColor: '#EF4444',
+				logoUrl: '',
+				faviconUrl: '',
+				customCss: ''
+			};
+		}
+		showEditModal = true;
+	}
 
 	async function saveTheme() {
 		loading = true;
@@ -94,7 +118,8 @@
 
 			if (response.ok) {
 				await invalidateAll();
-				alert('Theme settings saved successfully!');
+				showEditModal = false;
+				alert('Theme saved successfully!');
 			} else {
 				const error = await response.text();
 				alert('Error saving theme: ' + error);
@@ -106,400 +131,318 @@
 		}
 	}
 
-	async function resetToDefault() {
-		if (
-			!confirm(
-				'Are you sure you want to reset to default theme? This will overwrite all custom settings.'
-			)
-		)
-			return;
+	async function selectTheme(themeId: string) {
+		loading = true;
+		try {
+			const response = await fetch('/dashboard/admin/theme', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ action: 'select', themeId })
+			});
+
+			if (response.ok) {
+				await invalidateAll();
+				alert('Theme selected successfully!');
+			} else {
+				const error = await response.text();
+				alert('Error selecting theme: ' + error);
+			}
+		} catch (error) {
+			alert('Error selecting theme: ' + error);
+		} finally {
+			loading = false;
+		}
+	}
+
+	async function deleteTheme(themeId: string) {
+		if (!confirm('Are you sure you want to delete this theme?')) return;
 
 		loading = true;
 		try {
 			const response = await fetch('/dashboard/admin/theme', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ action: 'reset' })
+				body: JSON.stringify({ action: 'delete', themeId })
 			});
 
 			if (response.ok) {
 				await invalidateAll();
-				themeData = { ...data.currentTheme };
-				alert('Theme reset to default successfully!');
+				alert('Theme deleted successfully!');
 			} else {
 				const error = await response.text();
-				alert('Error resetting theme: ' + error);
+				alert('Error deleting theme: ' + error);
 			}
 		} catch (error) {
-			alert('Error resetting theme: ' + error);
+			alert('Error deleting theme: ' + error);
 		} finally {
 			loading = false;
 		}
 	}
-
-	function generateCSSVariables() {
-		return `
-:root {
-  --primary-color: ${themeData.primaryColor};
-  --secondary-color: ${themeData.secondaryColor};
-  --accent-color: ${themeData.accentColor};
-  --background-color: ${themeData.backgroundColor};
-  --text-color: ${themeData.textColor};
-  --header-color: ${themeData.headerColor};
-  --sidebar-color: ${themeData.sidebarColor};
-  --link-color: ${themeData.linkColor};
-  --button-color: ${themeData.buttonColor};
-  --success-color: ${themeData.successColor};
-  --warning-color: ${themeData.warningColor};
-  --error-color: ${themeData.errorColor};
-}`.trim();
-	}
-
-	function hexToRgb(hex: string) {
-		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-		return result
-			? {
-					r: parseInt(result[1], 16),
-					g: parseInt(result[2], 16),
-					b: parseInt(result[3], 16)
-				}
-			: null;
-	}
-
-	function isLightColor(hex: string) {
-		const rgb = hexToRgb(hex);
-		if (!rgb) return true;
-		const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-		return brightness > 128;
-	}
 </script>
 
 <svelte:head>
-	<title>Theme Settings - UBSC Chapter</title>
+	<title>Theme Management - UBSC Chapter</title>
 </svelte:head>
 
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Theme Settings</h1>
+			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Theme Management</h1>
 			<p class="mt-2 text-sm text-gray-700">
-				Customize the appearance and branding of your chapter website.
+				Manage website themes. Each admin can create one theme. Select a theme to make it active
+				on the website.
 			</p>
 		</div>
-		<div class="mt-4 space-x-3 sm:ml-16 sm:mt-0 sm:flex-none">
-			<button
-				type="button"
-				onclick={() => (previewMode = !previewMode)}
-				class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-			>
-				{previewMode ? 'Exit Preview' : 'Preview'}
-			</button>
-			<button
-				type="button"
-				onclick={resetToDefault}
-				disabled={loading}
-				class="inline-flex items-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 disabled:opacity-50"
-			>
-				Reset to Default
-			</button>
-			<button
-				type="button"
-				onclick={saveTheme}
-				disabled={loading}
-				class="inline-flex items-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 disabled:opacity-50"
-			>
-				{loading ? 'Saving...' : 'Save Theme'}
-			</button>
+		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+			{#if !data.userTheme}
+				<button
+					type="button"
+					onclick={() => openEditModal()}
+					class="inline-flex items-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500"
+				>
+					Create My Theme
+				</button>
+			{/if}
 		</div>
 	</div>
 
-	<div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-		<!-- Color Settings -->
-		<div class="space-y-8">
-			{#each colorSections as section}
-				<div class="rounded-lg bg-white p-6 shadow">
-					<h3 class="mb-4 text-lg font-medium text-gray-900">{section.title}</h3>
-					<div class="space-y-4">
-						{#each section.colors as color}
-							<div class="flex items-center justify-between">
-								<div class="min-w-0 flex-1">
-									<label for={color.key} class="block text-sm font-medium text-gray-700">
-										{color.label}
-									</label>
-									<p class="mt-1 text-xs text-gray-500">{color.description}</p>
-								</div>
-								<div class="ml-4 flex items-center space-x-3">
-									<div
-										class="h-10 w-10 rounded-lg border-2 border-gray-200 shadow-sm"
-										style="background-color: {themeData[color.key]};"
-									></div>
-									<input
-										type="color"
-										id={color.key}
-										bind:value={themeData[color.key]}
-										class="h-10 w-12 rounded border-gray-300 shadow-sm"
-									/>
-									<input
-										type="text"
-										bind:value={themeData[color.key]}
-										class="w-20 rounded-md border-gray-300 font-mono text-xs shadow-sm focus:border-sky-500 focus:ring-sky-500"
-									/>
-								</div>
-							</div>
-						{/each}
-					</div>
-				</div>
-			{/each}
-		</div>
-
-		<!-- Preview and Additional Settings -->
-		<div class="space-y-8">
-			<!-- Theme Preview -->
-			<div class="rounded-lg bg-white p-6 shadow">
-				<h3 class="mb-4 text-lg font-medium text-gray-900">Theme Preview</h3>
-				<div class="space-y-4">
-					<!-- Header Preview -->
-					<div
-						class="rounded-lg p-4"
-						style="background-color: {themeData.headerColor}; color: {isLightColor(
-							themeData.headerColor
-						)
-							? themeData.textColor
-							: '#FFFFFF'};"
-					>
-						<h4 class="font-semibold">UBSC Chapter Header</h4>
-						<p class="text-sm opacity-90">Navigation and branding area</p>
-					</div>
-
-					<!-- Content Preview -->
-					<div
-						class="rounded-lg border p-4"
-						style="background-color: {themeData.backgroundColor}; color: {themeData.textColor}; border-color: {themeData.primaryColor}20;"
-					>
-						<h4 class="mb-2 font-semibold">Sample Content</h4>
-						<p class="mb-3 text-sm">
-							This is how your content will look with the current theme settings.
-						</p>
-
-						<div class="space-y-2">
-							<button
-								class="rounded px-3 py-1 text-sm text-white"
-								style="background-color: {themeData.buttonColor};"
-							>
-								Primary Button
-							</button>
-
-							<a href="#" class="block text-sm" style="color: {themeData.linkColor};">
-								Sample Link
-							</a>
-
-							<div class="flex space-x-2 text-xs">
-								<span
-									class="rounded px-2 py-1 text-white"
-									style="background-color: {themeData.successColor};"
+	<!-- Themes Table -->
+	<div class="mt-8 flow-root">
+		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+					<table class="min-w-full divide-y divide-gray-300">
+						<thead class="bg-gray-50">
+							<tr>
+								<th
+									scope="col"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									>Creator</th
 								>
-									Success
-								</span>
-								<span
-									class="rounded px-2 py-1 text-white"
-									style="background-color: {themeData.warningColor};"
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+									>Colors Preview</th
 								>
-									Warning
-								</span>
-								<span
-									class="rounded px-2 py-1 text-white"
-									style="background-color: {themeData.errorColor};"
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+									>Status</th
 								>
-									Error
-								</span>
-							</div>
-						</div>
-					</div>
-
-					<!-- Sidebar Preview -->
-					<div
-						class="rounded-lg p-4"
-						style="background-color: {themeData.sidebarColor}; color: {themeData.textColor};"
-					>
-						<h4 class="mb-2 font-semibold">Sidebar Area</h4>
-						<p class="text-sm">Dashboard navigation and secondary content</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- Branding Settings -->
-			<div class="rounded-lg bg-white p-6 shadow">
-				<h3 class="mb-4 text-lg font-medium text-gray-900">Branding</h3>
-				<div class="space-y-4">
-					<div>
-						<label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL</label>
-						<input
-							type="url"
-							id="logoUrl"
-							bind:value={themeData.logoUrl}
-							placeholder="https://example.com/logo.png"
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-						/>
-						<p class="mt-1 text-xs text-gray-500">URL to your chapter logo image</p>
-					</div>
-
-					<div>
-						<label for="faviconUrl" class="block text-sm font-medium text-gray-700"
-							>Favicon URL</label
-						>
-						<input
-							type="url"
-							id="faviconUrl"
-							bind:value={themeData.faviconUrl}
-							placeholder="https://example.com/favicon.ico"
-							class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-						/>
-						<p class="mt-1 text-xs text-gray-500">URL to your website favicon</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- Custom CSS -->
-			<div class="rounded-lg bg-white p-6 shadow">
-				<h3 class="mb-4 text-lg font-medium text-gray-900">Custom CSS</h3>
-				<div class="space-y-4">
-					<div>
-						<label for="customCss" class="block text-sm font-medium text-gray-700"
-							>Additional CSS</label
-						>
-						<textarea
-							id="customCss"
-							bind:value={themeData.customCss}
-							rows="8"
-							class="mt-1 block w-full rounded-md border-gray-300 font-mono text-xs shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
-							placeholder="/* Add your custom CSS here */"
-						></textarea>
-						<p class="mt-1 text-xs text-gray-500">
-							Advanced: Add custom CSS to further customize your theme
-						</p>
-					</div>
-				</div>
-			</div>
-
-			<!-- CSS Variables Export -->
-			<div class="rounded-lg bg-white p-6 shadow">
-				<h3 class="mb-4 text-lg font-medium text-gray-900">CSS Variables</h3>
-				<div class="space-y-4">
-					<p class="text-sm text-gray-600">
-						These CSS variables are generated from your theme settings:
-					</p>
-					<pre
-						class="overflow-x-auto rounded-lg bg-gray-50 p-3 font-mono text-xs">{generateCSSVariables()}</pre>
-					<button
-						type="button"
-						onclick={() => navigator.clipboard.writeText(generateCSSVariables())}
-						class="text-sm text-sky-600 hover:text-sky-900"
-					>
-						Copy CSS Variables
-					</button>
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+									>Updated</th
+								>
+								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+									<span class="sr-only">Actions</span>
+								</th>
+							</tr>
+						</thead>
+						<tbody class="divide-y divide-gray-200 bg-white">
+							{#if data.themes.length === 0}
+								<tr>
+									<td colspan="5" class="px-3 py-4 text-center text-sm text-gray-500">
+										No themes available. Create your first theme!
+									</td>
+								</tr>
+							{:else}
+								{#each data.themes as theme}
+									<tr>
+										<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+											{theme.creatorFirstName}
+											{theme.creatorLastName}
+											<div class="text-gray-500">@{theme.creatorUsername}</div>
+										</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+											<div class="flex space-x-1">
+												<div
+													class="h-6 w-6 rounded border border-gray-300"
+													style="background-color: {theme.primaryColor};"
+													title="Primary"
+												></div>
+												<div
+													class="h-6 w-6 rounded border border-gray-300"
+													style="background-color: {theme.secondaryColor};"
+													title="Secondary"
+												></div>
+												<div
+													class="h-6 w-6 rounded border border-gray-300"
+													style="background-color: {theme.accentColor};"
+													title="Accent"
+												></div>
+												<div
+													class="h-6 w-6 rounded border border-gray-300"
+													style="background-color: {theme.buttonColor};"
+													title="Button"
+												></div>
+											</div>
+										</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+											{#if theme.selected}
+												<span
+													class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
+												>
+													Selected
+												</span>
+											{:else}
+												<span
+													class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800"
+												>
+													Not Selected
+												</span>
+											{/if}
+										</td>
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+											{new Date(theme.updatedAt).toLocaleDateString()}
+										</td>
+										<td
+											class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6"
+										>
+											<div class="flex justify-end space-x-2">
+												{#if !theme.selected}
+													<button
+														onclick={() => selectTheme(theme.id)}
+														disabled={loading}
+														class="text-sky-600 hover:text-sky-900 disabled:opacity-50"
+													>
+														Select
+													</button>
+												{/if}
+												{#if theme.createdBy === data.currentUserId}
+													<button
+														onclick={() => openEditModal(theme)}
+														disabled={loading}
+														class="text-indigo-600 hover:text-indigo-900 disabled:opacity-50"
+													>
+														Edit
+													</button>
+													<button
+														onclick={() => deleteTheme(theme.id)}
+														disabled={loading}
+														class="text-red-600 hover:text-red-900 disabled:opacity-50"
+													>
+														Delete
+													</button>
+												{/if}
+											</div>
+										</td>
+									</tr>
+								{/each}
+							{/if}
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-{#if previewMode}
-	<!-- Theme Preview Overlay -->
-	<div
-		class="fixed inset-0 z-50"
-		style="background-color: {themeData.backgroundColor}; color: {themeData.textColor};"
-	>
-		<div
-			class="flex h-16 items-center justify-between px-6"
-			style="background-color: {themeData.headerColor}; color: {isLightColor(themeData.headerColor)
-				? themeData.textColor
-				: '#FFFFFF'};"
-		>
-			<div class="flex items-center">
-				<h1 class="text-xl font-bold">UBSC Chapter</h1>
-			</div>
-			<button
-				onclick={() => (previewMode = false)}
-				class="rounded bg-white px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
+<!-- Edit/Create Theme Modal -->
+{#if showEditModal}
+	<div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+		<div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+			<!-- Background overlay -->
+			<div
+				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				onclick={() => (showEditModal = false)}
+			></div>
+
+			<!-- Modal panel -->
+			<div
+				class="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:align-middle"
 			>
-				Exit Preview
-			</button>
-		</div>
+				<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+					<div class="sm:flex sm:items-start">
+						<div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
+							<h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">
+								{editingTheme ? 'Edit Your Theme' : 'Create Your Theme'}
+							</h3>
+							<div class="mt-6">
+								<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+									{#each colorSections as section}
+										<div class="rounded-lg border border-gray-200 p-4">
+											<h4 class="mb-3 text-sm font-medium text-gray-900">{section.title}</h4>
+											<div class="space-y-3">
+												{#each section.colors as color}
+													<div class="flex items-center justify-between">
+														<label for={color.key} class="text-sm text-gray-700">
+															{color.label}
+														</label>
+														<div class="flex items-center space-x-2">
+															<div
+																class="h-8 w-8 rounded border border-gray-300"
+																style="background-color: {themeData[color.key]};"
+															></div>
+															<input
+																type="color"
+																id={color.key}
+																bind:value={themeData[color.key]}
+																class="h-8 w-12 rounded border-gray-300"
+															/>
+															<input
+																type="text"
+																bind:value={themeData[color.key]}
+																class="w-20 rounded-md border-gray-300 text-xs"
+															/>
+														</div>
+													</div>
+												{/each}
+											</div>
+										</div>
+									{/each}
+								</div>
 
-		<div class="flex h-[calc(100vh-4rem)]">
-			<div class="w-64 p-4" style="background-color: {themeData.sidebarColor};">
-				<h3 class="mb-4 font-semibold">Navigation</h3>
-				<div class="space-y-2">
-					<a
-						href="#"
-						class="block rounded p-2 hover:bg-gray-200"
-						style="color: {themeData.linkColor};">Dashboard</a
-					>
-					<a
-						href="#"
-						class="block rounded p-2 hover:bg-gray-200"
-						style="color: {themeData.linkColor};">Events</a
-					>
-					<a
-						href="#"
-						class="block rounded p-2 hover:bg-gray-200"
-						style="color: {themeData.linkColor};">Blog Posts</a
-					>
-					<a
-						href="#"
-						class="block rounded p-2 hover:bg-gray-200"
-						style="color: {themeData.linkColor};">Members</a
-					>
+								<!-- Additional fields -->
+								<div class="mt-6 space-y-4">
+									<div>
+										<label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL</label>
+										<input
+											type="url"
+											id="logoUrl"
+											bind:value={themeData.logoUrl}
+											placeholder="https://example.com/logo.png"
+											class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+										/>
+									</div>
+
+									<div>
+										<label for="faviconUrl" class="block text-sm font-medium text-gray-700">Favicon URL</label>
+										<input
+											type="url"
+											id="faviconUrl"
+											bind:value={themeData.faviconUrl}
+											placeholder="https://example.com/favicon.ico"
+											class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+										/>
+									</div>
+
+									<div>
+										<label for="customCss" class="block text-sm font-medium text-gray-700">Custom CSS</label>
+										<textarea
+											id="customCss"
+											bind:value={themeData.customCss}
+											rows="4"
+											class="mt-1 block w-full rounded-md border-gray-300 font-mono text-xs shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+											placeholder="/* Add your custom CSS here */"
+										></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-
-			<div class="flex-1 p-6">
-				<h2 class="mb-4 text-2xl font-bold">Preview Mode</h2>
-				<p class="mb-4">This is how your website will look with the current theme settings.</p>
-
-				<div class="space-y-4">
+				<div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
 					<button
-						class="rounded px-4 py-2 text-white"
-						style="background-color: {themeData.buttonColor};"
+						type="button"
+						onclick={saveTheme}
+						disabled={loading}
+						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 sm:ml-3 sm:w-auto"
 					>
-						Primary Button
+						{loading ? 'Saving...' : 'Save Theme'}
 					</button>
-
 					<button
-						class="ml-2 rounded px-4 py-2 text-white"
-						style="background-color: {themeData.secondaryColor};"
+						type="button"
+						onclick={() => (showEditModal = false)}
+						disabled={loading}
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 sm:mt-0 sm:w-auto"
 					>
-						Secondary Button
+						Cancel
 					</button>
-
-					<div class="rounded border p-4">
-						<h3 class="mb-2 font-semibold">Sample Card</h3>
-						<p class="mb-3 text-sm">
-							This is a sample card component showing how content will appear.
-						</p>
-						<a href="#" style="color: {themeData.linkColor};">Learn more →</a>
-					</div>
-
-					<div class="flex space-x-2">
-						<div
-							class="rounded px-3 py-1 text-sm text-white"
-							style="background-color: {themeData.successColor};"
-						>
-							Success message
-						</div>
-						<div
-							class="rounded px-3 py-1 text-sm text-white"
-							style="background-color: {themeData.warningColor};"
-						>
-							Warning message
-						</div>
-						<div
-							class="rounded px-3 py-1 text-sm text-white"
-							style="background-color: {themeData.errorColor};"
-						>
-							Error message
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
-import { ThemeSettings } from '$lib/server/db/schema';
+import { ThemeSettings, Users } from '$lib/server/db/schema';
 import { redirect } from '@sveltejs/kit';
-import { desc } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
@@ -15,37 +15,57 @@ export const load: PageServerLoad = async ({ locals }) => {
     }
 
     try {
-        // Fetch current theme settings
-        const currentTheme = await db
-            .select()
+        // Fetch all themes with creator information
+        const allThemes = await db
+            .select({
+                id: ThemeSettings.Id,
+                primaryColor: ThemeSettings.PrimaryColor,
+                secondaryColor: ThemeSettings.SecondaryColor,
+                accentColor: ThemeSettings.AccentColor,
+                backgroundColor: ThemeSettings.BackgroundColor,
+                textColor: ThemeSettings.TextColor,
+                headerColor: ThemeSettings.HeaderColor,
+                sidebarColor: ThemeSettings.SidebarColor,
+                linkColor: ThemeSettings.LinkColor,
+                buttonColor: ThemeSettings.ButtonColor,
+                successColor: ThemeSettings.SuccessColor,
+                warningColor: ThemeSettings.WarningColor,
+                errorColor: ThemeSettings.ErrorColor,
+                logoUrl: ThemeSettings.LogoUrl,
+                faviconUrl: ThemeSettings.FaviconUrl,
+                customCss: ThemeSettings.CustomCss,
+                selected: ThemeSettings.Selected,
+                isActive: ThemeSettings.IsActive,
+                createdBy: ThemeSettings.CreatedBy,
+                createdAt: ThemeSettings.CreatedAt,
+                updatedAt: ThemeSettings.UpdatedAt,
+                creatorFirstName: Users.FirstName,
+                creatorLastName: Users.LastName,
+                creatorUsername: Users.Username
+            })
             .from(ThemeSettings)
-            .orderBy(desc(ThemeSettings.UpdatedAt))
-            .limit(1);
+            .leftJoin(Users, eq(ThemeSettings.CreatedBy, Users.Id))
+            .where(eq(ThemeSettings.IsActive, true));
 
-        // Default theme if none exists
-        const defaultTheme = {
-            PrimaryColor: '#3B82F6',
-            SecondaryColor: '#1E40AF',
-            AccentColor: '#F59E0B',
-            BackgroundColor: '#FFFFFF',
-            TextColor: '#1F2937',
-            IsActive: true
-        };
+        // Check if the current user already has a theme
+        const userTheme = allThemes.find(theme => theme.createdBy === locals.user!.Id);
+
+        // Find the currently selected theme
+        const selectedTheme = allThemes.find(theme => theme.selected);
 
         return {
-            currentTheme: currentTheme.length > 0 ? currentTheme[0] : defaultTheme
+            themes: allThemes,
+            userTheme: userTheme || null,
+            selectedTheme: selectedTheme || null,
+            currentUserId: locals.user.Id
         };
     } catch (error) {
         console.error('Error loading theme settings:', error);
         return {
-            currentTheme: {
-                PrimaryColor: '#3B82F6',
-                SecondaryColor: '#1E40AF',
-                AccentColor: '#F59E0B',
-                BackgroundColor: '#FFFFFF',
-                TextColor: '#1F2937',
-                IsActive: true
-            }
+            themes: [],
+            userTheme: null,
+            selectedTheme: null,
+            currentUserId: locals.user.Id
         };
     }
 };
