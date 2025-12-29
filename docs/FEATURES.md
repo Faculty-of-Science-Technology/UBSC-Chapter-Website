@@ -310,25 +310,7 @@ This is an **unfinished application** currently under active development for the
 
 ## Planned Features 📋
 
-### 1. Job Board System
-
-**Status:** 📋 Database schema exists, not implemented
-
-The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
-
-**Planned:**
-- [ ] Job posting creation
-- [ ] Job application system
-- [ ] Application review workflow
-- [ ] Job status management
-- [ ] Application tracking
-
-**Note from todo.md:**
-- "Revoke application / Delete Job" - Not Implemented
-
----
-
-### 2. Notifications
+### 1. Notifications
 
 **Status:** 📋 Planned
 
@@ -340,7 +322,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 3. Analytics & Reporting
+### 2. Analytics & Reporting
 
 **Status:** 📋 Planned
 
@@ -352,7 +334,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 4. Advanced Permissions
+### 3. Advanced Permissions
 
 **Status:** 📋 Planned
 
@@ -364,7 +346,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 5. Social Features
+### 4. Social Features
 
 **Status:** 📋 Planned
 
@@ -377,7 +359,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 6. Advanced Media Features
+### 5. Advanced Media Features
 
 **Status:** 📋 Planned
 
@@ -390,7 +372,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 7. Calendar Integration
+### 6. Calendar Integration
 
 **Status:** 📋 Planned
 
@@ -402,7 +384,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 8. Advanced Search & Filters
+### 7. Advanced Search & Filters
 
 **Status:** 📋 Planned
 
@@ -414,29 +396,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 9. Mobile App
-
-**Status:** 📋 Planned
-
-- [ ] React Native app
-- [ ] Mobile-optimized API
-- [ ] Push notifications
-- [ ] Offline support
-
----
-
-### 10. Two-Factor Authentication (2FA)
-
-**Status:** 📋 Planned
-
-- [ ] TOTP implementation
-- [ ] SMS verification
-- [ ] Backup codes
-- [ ] 2FA enforcement for admins
-
----
-
-### 11. Password Reset
+### 8. Password Reset
 
 **Status:** 📋 Planned
 
@@ -447,7 +407,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 12. API Documentation
+### 9. API Documentation
 
 **Status:** 📋 Planned
 
@@ -458,7 +418,7 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 13. Testing
+### 10. Testing
 
 **Status:** 📋 Not implemented
 
@@ -470,38 +430,14 @@ The schema includes `jobTypeStatusEnum` but no corresponding tables or UI.
 
 ---
 
-### 14. Performance Optimizations
-
-**Status:** 📋 Planned
-
-- [ ] Redis caching
-- [ ] Query optimization
-- [ ] CDN integration
-- [ ] Image lazy loading
-- [ ] Code splitting optimization
-- [ ] Database indexing review
-
----
-
-### 15. Admin Features
+### 11. Admin Features
 
 **Status:** 📋 Partially planned
 
-- [ ] System logs viewer
-- [ ] User activity logs
-- [ ] Bulk operations (users, posts, etc.)
-- [ ] Data export
 - [ ] System health monitoring
-- [ ] Configuration manager
-
 ---
 
 ## Known Issues & Limitations
-
-### From `todo.md`:
-1. **Revoke application / Delete Job** - Not implemented
-
-### Other Known Issues:
 1. **Translation Coverage**: Most UI text not translated to Spanish
 2. **Email System**: Configured but not actively used
 3. **Mobile Responsiveness**: Some pages need mobile optimization
