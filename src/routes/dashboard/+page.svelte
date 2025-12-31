@@ -1,5 +1,7 @@
 <script lang="ts">
 	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
+	import { Calendar, FileText, PlusCircle, SquarePen, Ticket, User, Users } from 'lucide-svelte';
+	import type { Component } from 'svelte';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -52,16 +54,16 @@
 
 	const upcomingEvents = data.upcomingEvents;
 
-	function getIconPath(iconName: string): string {
-		const icons: Record<string, string> = {
+	function getIconPath(iconName: string): Component {
+		const icons = {
 			users:
-				'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
+				User,
 			calendar:
-				'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+				Calendar,
 			document:
-				'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
+			FileText,
 			'user-group':
-				'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 919.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z'
+				Users
 		};
 		return icons[iconName] || icons.users;
 	}
@@ -95,19 +97,9 @@
 						<div class="flex items-center">
 							<div class="flex-shrink-0">
 								<div class="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
-									<svg
-										class="h-5 w-5 text-muted"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d={getIconPath(stat.icon)}
-										></path>
-									</svg>
+									<!-- svelte-ignore svelte_component_deprecated -->
+					<svelte:component this={getIconPath(stat.icon)} class="h-5 w-5 text-muted" />
+									
 								</div>
 							</div>
 							<div class="ml-5 w-0 flex-1">
@@ -150,19 +142,7 @@
 						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
-							<svg
-								class="h-6 w-6 text-primary"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-								></path>
-							</svg>
+							<PlusCircle class="h-6 w-6 text-primary" />
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
@@ -175,19 +155,7 @@
 						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
-							<svg
-								class="h-6 w-6 text-primary"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-								></path>
-							</svg>
+						<SquarePen class="h-6 w-6 text-primary" />
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
@@ -200,19 +168,7 @@
 						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
-							<svg
-								class="h-6 w-6 text-primary"
-								fill="none"
-								stroke="currentColor"
-								viewBox="0 0 24 24"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-								></path>
-							</svg>
+							<Users class="h-6 w-6 text-primary" />
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
@@ -226,19 +182,7 @@
 							class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 						>
 							<div class="flex-shrink-0">
-								<svg
-									class="h-6 w-6 text-primary"
-									fill="none"
-									stroke="currentColor"
-									viewBox="0 0 24 24"
-								>
-									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
-										d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 11-2-4V7a2 2 0 00-2-2H5z"
-									></path>
-								</svg>
+								<Ticket class="h-6 w-6 text-primary" />
 							</div>
 							<div class="min-w-0 flex-1">
 								<span class="absolute inset-0" aria-hidden="true"></span>
