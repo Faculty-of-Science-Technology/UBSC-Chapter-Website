@@ -136,7 +136,7 @@
 </svelte:head>
 
 <div
-	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-sky-100 px-4 py-12 sm:px-6 lg:px-8"
+	class="flex min-h-screen items-center justify-center bg-gradient-to-br from-muted to-primary px-4 py-12 sm:px-6 lg:px-8"
 >
 	<div class="w-full max-w-md space-y-8">
 		<div class="text-center">
@@ -150,16 +150,16 @@
 				text=""
 				subtitle="Join using your invite code"
 			/>
-			<!-- <h2 class="mt-6 text-3xl font-bold text-gray-900">Welcome to UBSC</h2> -->
+			<!-- <h2 class="mt-6 text-3xl font-bold text-secondary">Welcome to UBSC</h2> -->
 			<!-- <p class="mt-2 text-sm text-gray-600">University of Belize ACM Chapter</p> -->
 		</div>
 
-		<div class="rounded-xl bg-white p-8 shadow-lg">
+		<div class="rounded-xl bg-muted p-8 shadow-lg">
 			{#if step === 1}
 				<!-- Invite Code Step -->
 				<form onsubmit={validateInviteCode} class="space-y-6">
 					<div>
-						<label for="inviteCode" class="mb-2 block text-sm font-medium text-gray-700">
+						<label for="inviteCode" class="mb-2 block text-sm font-medium text-secondary/70">
 							Invite Code
 						</label>
 						<input
@@ -175,7 +175,7 @@
 								formData.inviteCode = e.target.value.toUpperCase();
 							}}
 						/>
-						<p class="mt-1 text-xs text-gray-500">Enter the 8-character invite code you received</p>
+						<p class="mt-1 text-xs text-secondary/80">Enter the 8-character invite code you received</p>
 					</div>
 
 					{#if error}
@@ -187,11 +187,11 @@
 					<button
 						type="submit"
 						disabled={checkingInvite}
-						class="flex w-full justify-center rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-background shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if checkingInvite}
 							<svg
-								class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+								class="-ml-1 mr-3 h-5 w-5 animate-spin text-background"
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
@@ -260,7 +260,7 @@
 				<form onsubmit={handleRegister} class="space-y-4">
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label for="firstName" class="mb-1 block text-sm font-medium text-gray-700">
+							<label for="firstName" class="mb-1 block text-sm font-medium text-secondary/70">
 								First Name *
 							</label>
 							<input
@@ -273,7 +273,7 @@
 							/>
 						</div>
 						<div>
-							<label for="lastName" class="mb-1 block text-sm font-medium text-gray-700">
+							<label for="lastName" class="mb-1 block text-sm font-medium text-secondary/70">
 								Last Name *
 							</label>
 							<input
@@ -288,7 +288,7 @@
 					</div>
 
 					<div>
-						<label for="email" class="mb-1 block text-sm font-medium text-gray-700">
+						<label for="email" class="mb-1 block text-sm font-medium text-secondary/70">
 							Email Address *
 						</label>
 						<input
@@ -303,7 +303,7 @@
 					</div>
 
 					<div>
-						<label for="username" class="mb-1 block text-sm font-medium text-gray-700">
+						<label for="username" class="mb-1 block text-sm font-medium text-secondary/70">
 							Username *
 						</label>
 						<input
@@ -319,7 +319,7 @@
 					</div>
 
 					<div>
-						<label for="phone" class="mb-1 block text-sm font-medium text-gray-700">
+						<label for="phone" class="mb-1 block text-sm font-medium text-secondary/70">
 							Phone Number
 						</label>
 						<input
@@ -334,7 +334,7 @@
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label for="password" class="mb-1 block text-sm font-medium text-gray-700">
+							<label for="password" class="mb-1 block text-sm font-medium text-secondary/70">
 								Password *
 							</label>
 							<input
@@ -348,7 +348,7 @@
 							/>
 						</div>
 						<div>
-							<label for="confirmPassword" class="mb-1 block text-sm font-medium text-gray-700">
+							<label for="confirmPassword" class="mb-1 block text-sm font-medium text-secondary/70">
 								Confirm Password *
 							</label>
 							<input
@@ -372,11 +372,11 @@
 					<button
 						type="submit"
 						disabled={loading}
-						class="flex w-full justify-center rounded-lg border border-transparent bg-sky-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+						class="flex w-full justify-center rounded-lg border border-transparent bg-primary px-4 py-2 text-sm font-medium text-background shadow-sm transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
 					>
 						{#if loading}
 							<svg
-								class="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+								class="-ml-1 mr-3 h-5 w-5 animate-spin text-background"
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"

@@ -98,13 +98,13 @@
 									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-sky-600"
 								>
 									<div class="absolute inset-0 bg-black/40"></div>
-									<div class="absolute inset-0 flex flex-col justify-end p-4 text-white">
+									<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
 										<h3 class="mb-1 text-lg font-bold">{group.Title}</h3>
 										<p class="line-clamp-2 text-sm opacity-90">
 											{group.Description || 'A Special Interest Group for ACM members'}
 										</p>
 										<div class="mt-2 flex items-center gap-2">
-											<Badge variant="secondary" class="border-white/20 bg-white/20 text-white">
+											<Badge variant="secondary" class="border-white/20 bg-background/20 text-background">
 												SIG
 											</Badge>
 											<span class="text-xs">
@@ -125,7 +125,7 @@
 				<Card.Root class="p-12 text-center">
 					<Card.Content>
 						<p class="text-lg text-gray-600">No active Special Interest Groups at the moment.</p>
-						<p class="mt-2 text-sm text-gray-500">Check back later for new groups!</p>
+						<p class="mt-2 text-sm text-secondary/80">Check back later for new groups!</p>
 					</Card.Content>
 				</Card.Root>
 			{/if}
@@ -154,13 +154,13 @@
 									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-blue-600"
 								>
 									<div class="absolute inset-0 bg-black/40"></div>
-									<div class="absolute inset-0 flex flex-col justify-end p-4 text-white">
+									<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
 										<h3 class="mb-1 text-lg font-bold">{committee.Title}</h3>
 										<p class="line-clamp-2 text-sm opacity-90">
 											{committee.Description || 'A committee dedicated to chapter operations'}
 										</p>
 										<div class="mt-2 flex items-center gap-2">
-											<Badge variant="secondary" class="border-white/20 bg-white/20 text-white">
+											<Badge variant="secondary" class="border-white/20 bg-background/20 text-background">
 												Committee
 											</Badge>
 											<span class="text-xs">
@@ -181,7 +181,7 @@
 				<Card.Root class="p-12 text-center">
 					<Card.Content>
 						<p class="text-lg text-gray-600">No active committees at the moment.</p>
-						<p class="mt-2 text-sm text-gray-500">Check back later for committee information!</p>
+						<p class="mt-2 text-sm text-secondary/80">Check back later for committee information!</p>
 					</Card.Content>
 				</Card.Root>
 			{/if}
@@ -194,7 +194,7 @@
 					<Card.Title class="mb-4 text-3xl font-bold">Join a Group</Card.Title>
 				</Card.Header>
 				<Card.Content class="text-center">
-					<p class="mx-auto mb-8 max-w-2xl text-gray-700">
+					<p class="mx-auto mb-8 max-w-2xl text-secondary/70">
 						Interested in joining one of our groups? Connect with like-minded peers, work on
 						exciting projects, and advance your skills in your area of interest.
 					</p>
@@ -256,7 +256,7 @@
 				{#if selectedGroup.Description}
 					<div>
 						<h4 class="mb-2 font-medium">About</h4>
-						<p class="text-sm text-muted-foreground">{selectedGroup.Description}</p>
+						<p class="text-sm text-secondary/80">{selectedGroup.Description}</p>
 					</div>
 				{/if}
 
@@ -277,7 +277,7 @@
 											/>
 										{:else}
 											<div
-												class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-500/10"
+												class="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10"
 											>
 												<span class="text-xs font-medium">
 													{member.user.FirstName[0]}{member.user.LastName[0]}
@@ -293,11 +293,11 @@
 							{/each}
 						</div>
 					{:else}
-						<div class="py-4 text-center text-sm text-muted-foreground">No members yet</div>
+						<div class="py-4 text-center text-sm text-secondary/80">No members yet</div>
 					{/if}
 				</div>
 
-				<div class="text-xs text-muted-foreground">
+				<div class="text-xs text-secondary/80">
 					Created: {new Date(selectedGroup.CreatedAt).toLocaleDateString()}
 				</div>
 			</div>

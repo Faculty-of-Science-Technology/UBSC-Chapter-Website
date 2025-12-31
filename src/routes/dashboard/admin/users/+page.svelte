@@ -244,8 +244,8 @@
 				text=""
 				subtitle="Manage chapter members, assign roles, and control access permissions."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">User Management</h1>
-			<p class="mt-2 text-sm text-gray-700">
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">User Management</h1>
+			<p class="mt-2 text-sm text-secondary/70">
 				Manage chapter members, assign roles, and control access permissions.
 			</p> -->
 		</div>
@@ -253,7 +253,7 @@
 			<button
 				type="button"
 				onclick={handleCreateUser}
-				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+				class="block rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				<!-- @todo This does not work properly -->
 				Add User
@@ -264,26 +264,26 @@
 	<div class="mt-8 flow-root">
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-					<table class="min-w-full divide-y divide-gray-300">
-						<thead class="bg-gray-50">
+				<div class="overflow-clip shadow ring-1 ring-black border border-primary ring-opacity-5 md:rounded-lg">
+					<table class="min-w-full divide-y divide-gray-300 overflow-clip">
+						<thead class="bg-muted">
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 								>
 									User
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Email
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Roles
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Status
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Joined
 								</th>
 								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -291,33 +291,33 @@
 								</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
+						<tbody class="divide-y divide-muted/20 bg-background">
 							{#each data.users as user}
 								<tr>
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div class="h-10 w-10 flex-shrink-0">
 												<div
-													class="flex h-10 w-10 items-center justify-center rounded-full bg-sky-600"
+													class="flex h-10 w-10 items-center justify-center rounded-full bg-primary"
 												>
-													<span class="text-sm font-medium text-white">
+													<span class="text-sm font-medium text-background">
 														{user.firstName?.charAt(0) || ''}{user.lastName?.charAt(0) || ''}
 													</span>
 												</div>
 											</div>
 											<div class="ml-4">
-												<div class="font-medium text-gray-900">
+												<div class="font-medium text-secondary">
 													{user.firstName}
 													{user.lastName}
 												</div>
-												<div class="text-gray-500">@{user.username}</div>
+												<div class="text-secondary/80">@{user.username}</div>
 											</div>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{user.email}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div class="flex flex-wrap gap-1">
 											{#if user.administrator}
 												<span
@@ -342,13 +342,13 @@
 											{/each}
 											<button
 												onclick={() => handleAssignRole(user)}
-												class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:bg-gray-100"
+												class="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10 hover:bg-muted/80"
 											>
 												+ Add Role
 											</button>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{#if user.emailVerified}
 											<span
 												class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
@@ -363,7 +363,7 @@
 											</span>
 										{/if}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{formatDate(user.createdAt)}
 									</td>
 									<td
@@ -371,7 +371,7 @@
 									>
 										<button
 											onclick={() => handleEditUser(user)}
-											class="mr-4 text-sky-600 hover:text-sky-900"
+											class="mr-4 text-sky-600 hover:text-primary"
 										>
 											Edit
 										</button>
@@ -397,14 +397,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showCreateUser = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New User</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Create New User</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="email">Email</Label>
@@ -463,14 +463,14 @@
 						type="button"
 						onclick={submitCreateUser}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create User'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showCreateUser = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -485,14 +485,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showEditUser = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit User</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Edit User</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-email">Email</Label>
@@ -547,14 +547,14 @@
 						type="button"
 						onclick={submitEditUser}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update User'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showEditUser = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -569,15 +569,15 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showAssignRole = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Assign Role</h3>
-					<p class="mt-2 text-sm text-gray-500">
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Assign Role</h3>
+					<p class="mt-2 text-sm text-secondary/80">
 						Assign a role to {selectedUser?.firstName}
 						{selectedUser?.lastName}
 					</p>
@@ -608,14 +608,14 @@
 						type="button"
 						onclick={submitAssignRole}
 						disabled={loading || !selectedRole}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Assigning...' : 'Assign Role'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showAssignRole = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>

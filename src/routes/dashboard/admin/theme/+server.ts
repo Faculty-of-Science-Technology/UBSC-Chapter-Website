@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { ThemeSettings } from '$lib/server/db/schema';
 import { error, json } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { and, eq, ne } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -20,17 +20,39 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
         switch (action) {
             case 'save': {
+                // Check if user already has a theme
+                const existingUserTheme = await db
+                    .select()
+                    .from(ThemeSettings)
+                    .where(and(
+                        eq(ThemeSettings.CreatedBy, locals.user.Id),
+                        eq(ThemeSettings.IsActive, true)
+                    ))
+                    .limit(1);
+
                 const {
                     primaryColor,
                     secondaryColor,
                     accentColor,
                     backgroundColor,
-                    textColor
+                    textColor,
+                    headerColor,
+                    sidebarColor,
+                    linkColor,
+                    buttonColor,
+                    successColor,
+                    warningColor,
+                    errorColor,
+                    logoUrl,
+                    faviconUrl,
+                    customCss
                 } = body;
 
                 // Validate color format (basic hex validation)
                 const colorFields = [
-                    primaryColor, secondaryColor, accentColor, backgroundColor, textColor
+                    primaryColor, secondaryColor, accentColor, backgroundColor, textColor,
+                    headerColor, sidebarColor, linkColor, buttonColor,
+                    successColor, warningColor, errorColor
                 ].filter(Boolean);
 
                 const hexRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
@@ -40,17 +62,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     }
                 }
 
-                // Check if there's an existing active theme
-                const existingTheme = await db
-                    .select()
-                    .from(ThemeSettings)
-                    .where(eq(ThemeSettings.IsActive, true))
-                    .limit(1);
-
                 let savedTheme;
 
-                if (existingTheme.length > 0) {
-                    // Update existing theme
+                if (existingUserTheme.length > 0) {
+                    // Update existing theme (user can only update their own)
                     [savedTheme] = await db
                         .update(ThemeSettings)
                         .set({
@@ -59,13 +74,23 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                             AccentColor: accentColor || '#F59E0B',
                             BackgroundColor: backgroundColor || '#FFFFFF',
                             TextColor: textColor || '#1F2937',
+                            HeaderColor: headerColor || '#1E40AF',
+                            SidebarColor: sidebarColor || '#F3F4F6',
+                            LinkColor: linkColor || '#3B82F6',
+                            ButtonColor: buttonColor || '#3B82F6',
+                            SuccessColor: successColor || '#10B981',
+                            WarningColor: warningColor || '#F59E0B',
+                            ErrorColor: errorColor || '#EF4444',
+                            LogoUrl: logoUrl || null,
+                            FaviconUrl: faviconUrl || null,
+                            CustomCss: customCss || null,
                             UpdatedBy: locals.user.Id,
                             UpdatedAt: new Date()
                         })
-                        .where(eq(ThemeSettings.Id, existingTheme[0].Id))
+                        .where(eq(ThemeSettings.Id, existingUserTheme[0].Id))
                         .returning();
                 } else {
-                    // Create new theme
+                    // Create new theme - each admin can only create one
                     [savedTheme] = await db
                         .insert(ThemeSettings)
                         .values({
@@ -74,7 +99,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                             AccentColor: accentColor || '#F59E0B',
                             BackgroundColor: backgroundColor || '#FFFFFF',
                             TextColor: textColor || '#1F2937',
+                            HeaderColor: headerColor || '#1E40AF',
+                            SidebarColor: sidebarColor || '#F3F4F6',
+                            LinkColor: linkColor || '#3B82F6',
+                            ButtonColor: buttonColor || '#3B82F6',
+                            SuccessColor: successColor || '#10B981',
+                            WarningColor: warningColor || '#F59E0B',
+                            ErrorColor: errorColor || '#EF4444',
+                            LogoUrl: logoUrl || null,
+                            FaviconUrl: faviconUrl || null,
+                            CustomCss: customCss || null,
+                            Selected: false,
                             IsActive: true,
+                            CreatedBy: locals.user.Id,
                             UpdatedBy: locals.user.Id
                         })
                         .returning();
@@ -83,48 +120,71 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 return json({ success: true, theme: savedTheme });
             }
 
-            case 'reset': {
-                // Check if there's an existing active theme
-                const existingTheme = await db
-                    .select()
-                    .from(ThemeSettings)
-                    .where(eq(ThemeSettings.IsActive, true))
-                    .limit(1);
+            case 'select': {
+                const { themeId } = body;
 
-                let resetTheme;
-
-                if (existingTheme.length > 0) {
-                    // Update existing theme with defaults
-                    [resetTheme] = await db
-                        .update(ThemeSettings)
-                        .set({
-                            PrimaryColor: '#3B82F6',
-                            SecondaryColor: '#1E40AF',
-                            AccentColor: '#F59E0B',
-                            BackgroundColor: '#FFFFFF',
-                            TextColor: '#1F2937',
-                            UpdatedBy: locals.user.Id,
-                            UpdatedAt: new Date()
-                        })
-                        .where(eq(ThemeSettings.Id, existingTheme[0].Id))
-                        .returning();
-                } else {
-                    // Create new default theme
-                    [resetTheme] = await db
-                        .insert(ThemeSettings)
-                        .values({
-                            PrimaryColor: '#3B82F6',
-                            SecondaryColor: '#1E40AF',
-                            AccentColor: '#F59E0B',
-                            BackgroundColor: '#FFFFFF',
-                            TextColor: '#1F2937',
-                            IsActive: true,
-                            UpdatedBy: locals.user.Id
-                        })
-                        .returning();
+                if (!themeId) {
+                    throw error(400, 'Theme ID is required');
                 }
 
-                return json({ success: true, theme: resetTheme });
+                // Verify the theme exists and is active
+                const themeToSelect = await db
+                    .select()
+                    .from(ThemeSettings)
+                    .where(and(
+                        eq(ThemeSettings.Id, themeId),
+                        eq(ThemeSettings.IsActive, true)
+                    ))
+                    .limit(1);
+
+                if (themeToSelect.length === 0) {
+                    throw error(404, 'Theme not found');
+                }
+
+                // Set all other themes to selected = false
+                await db
+                    .update(ThemeSettings)
+                    .set({ Selected: false })
+                    .where(ne(ThemeSettings.Id, themeId));
+
+                // Set the selected theme to selected = true
+                const [selectedTheme] = await db
+                    .update(ThemeSettings)
+                    .set({ Selected: true })
+                    .where(eq(ThemeSettings.Id, themeId))
+                    .returning();
+
+                return json({ success: true, theme: selectedTheme });
+            }
+
+            case 'delete': {
+                const { themeId } = body;
+
+                if (!themeId) {
+                    throw error(400, 'Theme ID is required');
+                }
+
+                // Verify the theme exists and belongs to the current user
+                const themeToDelete = await db
+                    .select()
+                    .from(ThemeSettings)
+                    .where(and(
+                        eq(ThemeSettings.Id, themeId),
+                        eq(ThemeSettings.CreatedBy, locals.user.Id)
+                    ))
+                    .limit(1);
+
+                if (themeToDelete.length === 0) {
+                    throw error(404, 'Theme not found or you do not have permission to delete it');
+                }
+
+                // Soft delete by setting IsActive to false
+                await db
+                    .update(ThemeSettings)
+                    .set({ IsActive: false })
+                    .where(eq(ThemeSettings.Id, themeId));
+
+                return json({ success: true });
             }
 
             default:

@@ -240,8 +240,8 @@
 				text=""
 				subtitle="Manage chapter groups and committees."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Groups</h1>
-			<p class="mt-2 text-sm text-gray-700">
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">Groups</h1>
+			<p class="mt-2 text-sm text-secondary/70">
 				Manage chapter groups, committees, and working groups.
 			</p> -->
 		</div>
@@ -249,7 +249,7 @@
 			<button
 				type="button"
 				onclick={handleCreateGroup}
-				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+				class="block rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Group
 			</button>
@@ -261,22 +261,22 @@
 			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
 				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 					<table class="min-w-full divide-y divide-gray-300">
-						<thead class="bg-gray-50">
+						<thead class="bg-muted">
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 								>
 									Group
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Type
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Members
 								</th>
 
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Created
 								</th>
 								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -284,30 +284,30 @@
 								</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
+						<tbody class="divide-y divide-muted/20 bg-background">
 							{#each data.groups as group}
 								<tr>
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div class="h-10 w-10 flex-shrink-0">
 												<div
-													class="flex h-10 w-10 items-center justify-center rounded-lg font-semibold text-white"
+													class="flex h-10 w-10 items-center bg-primary/30 justify-center rounded-lg font-semibold text-primary"
 													style="background-color: {group.color}"
 												>
 													{group.name.charAt(0).toUpperCase()}
 												</div>
 											</div>
 											<div class="ml-4">
-												<div class="font-medium text-gray-900">
+												<div class="font-medium text-secondary">
 													{group.name}
 												</div>
-												<div class="text-gray-500">
+												<div class="text-secondary/80">
 													{group.description || 'No description'}
 												</div>
 											</div>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<span
 											class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {getTypeColor(
 												group.type
@@ -316,22 +316,22 @@
 											{group.type}
 										</span>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div class="flex items-center">
-											<span class="font-medium text-gray-900">{group.memberCount}</span>
+											<span class="font-medium text-secondary">{group.memberCount}</span>
 											<button
 												onclick={() => handleManageMembers(group)}
-												class="ml-2 text-sky-600 hover:text-sky-900"
+												class="ml-2 text-sky-600 hover:text-primary"
 											>
 												Manage
 											</button>
 										</div>
 									</td>
 
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div>
 											<div>{formatDate(group.createdAt.toJSON())}</div>
-											<div class="text-xs text-gray-400">
+											<div class="text-xs text-muted">
 												by {group.creatorName}
 												{group.creatorLastName}
 											</div>
@@ -342,7 +342,7 @@
 									>
 										<button
 											onclick={() => handleEditGroup(group)}
-											class="mr-4 text-sky-600 hover:text-sky-900"
+											class="mr-4 text-sky-600 hover:text-primary"
 										>
 											Edit
 										</button>
@@ -369,14 +369,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showCreateGroup = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Group</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Create New Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="title">Group Name</Label>
@@ -407,14 +407,14 @@
 						type="button"
 						onclick={submitCreateGroup}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Group'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showCreateGroup = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -429,14 +429,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showEditGroup = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Group</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Edit Group</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-title">Group Name</Label>
@@ -467,14 +467,14 @@
 						type="button"
 						onclick={submitEditGroup}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Group'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showEditGroup = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -489,40 +489,40 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showManageMembers = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Manage Members</h3>
-					<p class="mt-2 text-sm text-gray-500">
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Manage Members</h3>
+					<p class="mt-2 text-sm text-secondary/80">
 						Manage members of {selectedGroup?.name}
 					</p>
 
 					<!-- Current Members List -->
 					<div class="mt-4">
-						<h4 class="text-sm font-medium text-gray-900">Current Members ({groupMembers.length})</h4>
+						<h4 class="text-sm font-medium text-secondary">Current Members ({groupMembers.length})</h4>
 						{#if loadingMembers}
-							<p class="mt-2 text-sm text-gray-500">Loading members...</p>
+							<p class="mt-2 text-sm text-secondary/80">Loading members...</p>
 						{:else if groupMembers.length === 0}
-							<p class="mt-2 text-sm text-gray-500">No members in this group yet.</p>
+							<p class="mt-2 text-sm text-secondary/80">No members in this group yet.</p>
 						{:else}
-							<ul class="mt-2 max-h-60 divide-y divide-gray-200 overflow-y-auto rounded-md border border-gray-200">
+							<ul class="mt-2 max-h-60 divide-y divide-muted/20 overflow-y-auto rounded-md border border-muted/20">
 								{#each groupMembers as member}
 									<li class="flex items-center justify-between px-3 py-2">
 										<div class="flex items-center">
-											<div class="flex h-8 w-8 items-center justify-center rounded-full bg-sky-600">
-												<span class="text-xs font-medium text-white">
+											<div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+												<span class="text-xs font-medium text-background">
 													{member.firstName?.charAt(0)?.toUpperCase() || member.username?.charAt(0)?.toUpperCase() || '?'}{member.lastName?.charAt(0)?.toUpperCase() || ''}
 												</span>
 											</div>
 											<div class="ml-3">
-												<p class="text-sm font-medium text-gray-900">
+												<p class="text-sm font-medium text-secondary">
 													{member.firstName} {member.lastName}
 												</p>
-												<p class="text-xs text-gray-500">@{member.username}</p>
+												<p class="text-xs text-secondary/80">@{member.username}</p>
 											</div>
 										</div>
 										<button
@@ -577,7 +577,7 @@
 					<button
 						type="button"
 						onclick={() => (showManageMembers = false)}
-						class="inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+						class="inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted"
 					>
 						Close
 					</button>

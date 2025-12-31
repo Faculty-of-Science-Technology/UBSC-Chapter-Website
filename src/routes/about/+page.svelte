@@ -36,10 +36,10 @@
 			<div class="grid gap-8 md:grid-cols-2">
 				<Card.Root class="p-8">
 					<Card.Header>
-						<Card.Title class="text-2xl font-bold text-blue-600">Our Mission</Card.Title>
+						<Card.Title class="text-2xl font-bold text-primary">Our Mission</Card.Title>
 					</Card.Header>
 					<Card.Content>
-						<p class="leading-relaxed text-gray-700">
+						<p class="leading-relaxed text-secondary/70">
 							To empower students and professionals in Belize through technology education, hands-on
 							learning experiences, and collaborative innovation. We strive to bridge the gap
 							between academic learning and industry demands while fostering a vibrant tech
@@ -50,10 +50,10 @@
 
 				<Card.Root class="p-8">
 					<Card.Header>
-						<Card.Title class="text-2xl font-bold text-sky-600">Our Vision</Card.Title>
+						<Card.Title class="text-2xl font-bold text-primary">Our Vision</Card.Title>
 					</Card.Header>
 					<Card.Content>
-						<p class="leading-relaxed text-gray-700">
+						<p class="leading-relaxed text-secondary/70">
 							To become the leading technology organization in Belize, driving innovation, promoting
 							digital literacy, and creating opportunities for the next generation of technology
 							leaders and entrepreneurs.
@@ -77,10 +77,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
 						>
 							<svg
-								class="h-8 w-8 text-blue-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -106,10 +106,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
 						>
 							<svg
-								class="h-8 w-8 text-green-600"
+								class="h-8 w-8 text-secondary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -135,10 +135,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
 						>
 							<svg
-								class="h-8 w-8 text-sky-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -217,7 +217,7 @@
 								/>
 							{:else}
 								<div
-									class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gray-200"
+									class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-primary/10"
 								>
 									<span class="text-xl font-bold text-gray-600">
 										{leader.firstName[0]}{leader.lastName[0]}
@@ -239,12 +239,12 @@
 
 		<!-- Join Us Section -->
 		<section class="w-full text-center">
-			<Card.Root class="bg-gradient-to-r from-blue-50 to-sky-50 p-12">
+			<Card.Root class="bg-gradient-to-r from-primary to-secondary p-12">
 				<Card.Header>
-					<Card.Title class="mb-4 text-3xl font-bold">Join Our Community</Card.Title>
+					<Card.Title class="mb-4 text-3xl font-bold text-background">Join Our Community</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p class="mx-auto mb-8 max-w-2xl text-gray-700">
+					<p class="mx-auto mb-8 max-w-2xl text-background">
 						Whether you're a student, professional, or just passionate about technology, there's a
 						place for you in our chapter. Join us in shaping the future of technology in Belize.
 					</p>

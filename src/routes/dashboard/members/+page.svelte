@@ -95,8 +95,8 @@
 				text=""
 				subtitle="Manage chapter members, their roles, and group memberships."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Chapter Members</h1>
-			<p class="mt-2 text-sm text-gray-700">
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">Chapter Members</h1>
+			<p class="mt-2 text-sm text-secondary/70">
 				View and manage all chapter members, their roles, and group memberships.
 			</p> -->
 		</div>
@@ -104,7 +104,7 @@
 			<button
 				type="button"
 				onclick={exportMembers}
-				class="mr-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+				class="mr-3 inline-flex items-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted"
 			>
 				<svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 					<path
@@ -121,12 +121,12 @@
 
 	<!-- Statistics Cards -->
 	<div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-background shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
 						<svg
-							class="h-6 w-6 text-gray-400"
+							class="h-6 w-6 text-muted"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -141,15 +141,15 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Total Members</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.totalMembers}</dd>
+							<dt class="truncate text-sm font-medium text-secondary/80">Total Members</dt>
+							<dd class="text-lg font-medium text-secondary">{data.stats.totalMembers}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-background shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
@@ -169,15 +169,15 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Verified Members</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.verifiedMembers}</dd>
+							<dt class="truncate text-sm font-medium text-secondary/80">Verified Members</dt>
+							<dd class="text-lg font-medium text-secondary">{data.stats.verifiedMembers}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-background shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
@@ -192,15 +192,15 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Administrators</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.adminMembers}</dd>
+							<dt class="truncate text-sm font-medium text-secondary/80">Administrators</dt>
+							<dd class="text-lg font-medium text-secondary">{data.stats.adminMembers}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-background shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
@@ -220,8 +220,8 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">New This Month</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.recentMembers}</dd>
+							<dt class="truncate text-sm font-medium text-secondary/80">New This Month</dt>
+							<dd class="text-lg font-medium text-secondary">{data.stats.recentMembers}</dd>
 						</dl>
 					</div>
 				</div>
@@ -230,7 +230,7 @@
 	</div>
 
 	<!-- Filters -->
-	<div class="mt-8 rounded-lg bg-white p-6 shadow">
+	<div class="mt-8 rounded-lg bg-background p-6 shadow">
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
 			<div>
 				<Label for="search">Search</Label>
@@ -308,7 +308,7 @@
 			</div>
 		</div>
 
-		<div class="mt-4 text-sm text-gray-500">
+		<div class="mt-4 text-sm text-secondary/80">
 			Showing {filteredMembers.length} of {data.members.length} members
 		</div>
 	</div>
@@ -316,19 +316,19 @@
 	<!-- Members Grid -->
 	<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 		{#each filteredMembers as member}
-			<div class="overflow-hidden rounded-lg bg-white shadow">
+			<div class="overflow-hidden rounded-lg bg-background shadow">
 				<div class="p-6">
 					<div class="flex items-center">
 						<div class="h-12 w-12 flex-shrink-0">
-							<div class="flex h-12 w-12 items-center justify-center rounded-full bg-sky-600">
-								<span class="text-lg font-medium text-white">
+							<div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary">
+								<span class="text-lg font-medium text-background">
 									{member.firstName?.charAt(0) || ''}{member.lastName?.charAt(0) || ''}
 								</span>
 							</div>
 						</div>
 						<div class="ml-4 min-w-0 flex-1">
 							<div class="flex items-center">
-								<p class="truncate text-sm font-medium text-gray-900">
+								<p class="truncate text-sm font-medium text-secondary">
 									{member.firstName}
 									{member.lastName}
 								</p>
@@ -340,8 +340,8 @@
 									</span>
 								{/if}
 							</div>
-							<p class="truncate text-sm text-gray-500">@{member.username}</p>
-							<p class="truncate text-xs text-gray-400">{member.email}</p>
+							<p class="truncate text-sm text-secondary/80">@{member.username}</p>
+							<p class="truncate text-xs text-muted">{member.email}</p>
 						</div>
 					</div>
 
@@ -365,7 +365,7 @@
 					<!-- Roles -->
 					{#if member.roles.length > 0}
 						<div class="mt-3">
-							<p class="mb-1 text-xs text-gray-500">Roles:</p>
+							<p class="mb-1 text-xs text-secondary/80">Roles:</p>
 							<div class="flex flex-wrap gap-1">
 								{#each member.roles as role}
 									<span
@@ -382,7 +382,7 @@
 					<!-- Groups -->
 					{#if member.groups.length > 0}
 						<div class="mt-3">
-							<p class="mb-1 text-xs text-gray-500">Groups:</p>
+							<p class="mb-1 text-xs text-secondary/80">Groups:</p>
 							<div class="flex flex-wrap gap-1">
 								{#each member.groups.slice(0, 2) as group}
 									<span
@@ -393,7 +393,7 @@
 								{/each}
 								{#if member.groups.length > 2}
 									<span
-										class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
+										class="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10"
 									>
 										+{member.groups.length - 2} more
 									</span>
@@ -403,8 +403,8 @@
 					{/if}
 
 					<!-- Join Date -->
-					<div class="mt-4 border-t border-gray-200 pt-3">
-						<p class="text-xs text-gray-500">
+					<div class="mt-4 border-t border-muted/20 pt-3">
+						<p class="text-xs text-secondary/80">
 							Joined {formatDate(member.createdAt)}
 						</p>
 					</div>
@@ -416,7 +416,7 @@
 	{#if filteredMembers.length === 0}
 		<div class="mt-8 text-center">
 			<svg
-				class="mx-auto h-12 w-12 text-gray-400"
+				class="mx-auto h-12 w-12 text-muted"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor"
@@ -428,8 +428,8 @@
 					d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
 				/>
 			</svg>
-			<h3 class="mt-2 text-sm font-medium text-gray-900">No members found</h3>
-			<p class="mt-1 text-sm text-gray-500">
+			<h3 class="mt-2 text-sm font-medium text-secondary">No members found</h3>
+			<p class="mt-1 text-sm text-secondary/80">
 				{#if searchTerm || filterRole || filterGroup || filterStatus}
 					Try adjusting your search criteria or clearing the filters.
 				{:else}

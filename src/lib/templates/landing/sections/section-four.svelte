@@ -109,7 +109,7 @@
 						<!-- Featured Badge -->
 						{#if event.Id === featuredEvent?.Id}
 							<div class="absolute top-2 right-2 z-10">
-								<Badge variant="secondary" class="bg-blue-500 text-white dark:bg-blue-600">
+								<Badge variant="secondary" class="blue-primary text-background dark:bg-primary/80">
 									<BadgeCheckIcon class="w-3 h-3 mr-1" />
 									Featured
 								</Badge>
@@ -128,7 +128,7 @@
 						{:else}
 							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-sky-600">
 								<div class="flex items-center justify-center h-full">
-									<CalendarIcon class="w-12 h-12 text-white/80" />
+									<CalendarIcon class="w-12 h-12 text-background/80" />
 								</div>
 							</AspectRatio>
 						{/if}
@@ -138,7 +138,7 @@
 							<div>
 								<h3 class="font-bold text-lg mb-1 line-clamp-2">{event.Title}</h3>
 								{#if event.Excerpt}
-									<p class="text-sm text-muted-foreground line-clamp-3">
+									<p class="text-sm text-secondary/80 line-clamp-3">
 										{event.Excerpt}
 									</p>
 								{/if}
@@ -147,7 +147,7 @@
 							<!-- Event Details -->
 							<div class="space-y-2 text-sm">
 								{#if event.EventStartTime}
-									<div class="flex items-center gap-2 text-muted-foreground">
+									<div class="flex items-center gap-2 text-secondary/80">
 										<CalendarIcon class="w-4 h-4" />
 										<span>{formatDate(event.EventStartTime)}</span>
 										{#if formatTime(event.EventStartTime)}
@@ -157,14 +157,14 @@
 								{/if}
 
 								{#if event.EventLocation}
-									<div class="flex items-center gap-2 text-muted-foreground">
+									<div class="flex items-center gap-2 text-secondary/80">
 										<MapPinIcon class="w-4 h-4" />
 										<span class="truncate">{event.EventLocation}</span>
 									</div>
 								{/if}
 
 								{#if event.EventMaxAttendees}
-									<div class="flex items-center gap-2 text-muted-foreground">
+									<div class="flex items-center gap-2 text-secondary/80">
 										<UsersIcon class="w-4 h-4" />
 										<span>{event.EventCurrentAttendees}/{event.EventMaxAttendees} attendees</span>
 									</div>
@@ -191,7 +191,7 @@
 		
 		{#if events.length === 0}
 			<div class="col-span-full">
-				<div class="text-center py-12 text-muted-foreground flex flex-col gap-2">
+				<div class="text-center py-12 text-secondary/80 flex flex-col gap-2">
 					<CalendarIcon class="w-16 h-16 mx-auto mb-4 opacity-50" />
 					<p class="text-lg font-medium">No Events Scheduled</p>
 					<p class="text-sm">Check back later for upcoming chapter events!</p>
@@ -228,10 +228,10 @@
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 					{#if selectedEvent.EventStartTime}
 						<div class="flex items-center gap-3">
-							<CalendarIcon class="w-5 h-5 text-muted-foreground" />
+							<CalendarIcon class="w-5 h-5 text-secondary/80" />
 							<div>
 								<p class="font-medium">Date & Time</p>
-								<p class="text-sm text-muted-foreground">
+								<p class="text-sm text-secondary/80">
 									{formatDate(selectedEvent.EventStartTime)}
 									{#if formatTime(selectedEvent.EventStartTime)}
 										<br />at {formatTime(selectedEvent.EventStartTime)}
@@ -246,20 +246,20 @@
 
 					{#if selectedEvent.EventLocation}
 						<div class="flex items-center gap-3">
-							<MapPinIcon class="w-5 h-5 text-muted-foreground" />
+							<MapPinIcon class="w-5 h-5 text-secondary/80" />
 							<div>
 								<p class="font-medium">Location</p>
-								<p class="text-sm text-muted-foreground">{selectedEvent.EventLocation}</p>
+								<p class="text-sm text-secondary/80">{selectedEvent.EventLocation}</p>
 							</div>
 						</div>
 					{/if}
 
 					{#if selectedEvent.EventMaxAttendees}
 						<div class="flex items-center gap-3">
-							<UsersIcon class="w-5 h-5 text-muted-foreground" />
+							<UsersIcon class="w-5 h-5 text-secondary/80" />
 							<div>
 								<p class="font-medium">Attendees</p>
-								<p class="text-sm text-muted-foreground">
+								<p class="text-sm text-secondary/80">
 									{selectedEvent.EventCurrentAttendees} / {selectedEvent.EventMaxAttendees} registered
 								</p>
 							</div>
@@ -273,7 +273,7 @@
 							</div>
 							<div>
 								<p class="font-medium">Price</p>
-								<p class="text-sm text-muted-foreground">
+								<p class="text-sm text-secondary/80">
 									{selectedEvent.EventPrice === 0 ? 'Free' : `$${selectedEvent.EventPrice}`}
 								</p>
 							</div>
@@ -284,7 +284,7 @@
 				<!-- Event Description -->
 				<div>
 					<h4 class="font-medium mb-2">About This Event</h4>
-					<div class="prose prose-sm max-w-none text-muted-foreground">
+					<div class="prose prose-sm max-w-none text-secondary/80">
 						{@html selectedEvent.Content || selectedEvent.Excerpt || 'No description available.'}
 					</div>
 				</div>
@@ -300,7 +300,7 @@
 								class="w-10 h-10 rounded-full object-cover"
 							/>
 						{:else}
-							<div class="w-10 h-10 rounded-full bg-sky-500/10 flex items-center justify-center">
+							<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
 								<span class="text-sm font-medium">
 									{selectedEvent.author.FirstName[0]}{selectedEvent.author.LastName[0]}
 								</span>
@@ -308,7 +308,7 @@
 						{/if}
 						<div>
 							<p class="font-medium">{selectedEvent.author.FirstName} {selectedEvent.author.LastName}</p>
-							<p class="text-sm text-muted-foreground">Event Organizer</p>
+							<p class="text-sm text-secondary/80">Event Organizer</p>
 						</div>
 					</div>
 				</div>
@@ -316,7 +316,7 @@
 				<!-- Event Status Badges -->
 				<div class="flex flex-wrap gap-2">
 					{#if selectedEvent.Id === featuredEvent?.Id}
-						<Badge variant="secondary" class="bg-blue-500 text-white dark:bg-blue-600">
+						<Badge variant="secondary" class="bg-primary text-secondary dark:bg-primary/80">
 							<BadgeCheckIcon class="w-3 h-3 mr-1" />
 							Featured Event
 						</Badge>

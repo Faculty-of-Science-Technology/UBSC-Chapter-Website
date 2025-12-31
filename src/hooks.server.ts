@@ -30,8 +30,14 @@ export const handle: Handle = async ({ event, resolve }) => {
 			}
 		}
 
-		// Protect admin routes - require admin permissions
-		if (event.url.pathname.startsWith('/dashboard/admin')) {
+		// Protect admin theme route - require theme management permission
+		if (event.url.pathname.startsWith('/dashboard/admin/theme')) {
+			if (!event.locals.user || (!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageTheme)) {
+				throw redirect(302, '/dashboard');
+			}
+		}
+		// Protect other admin routes - require admin permissions
+		else if (event.url.pathname.startsWith('/dashboard/admin')) {
 			if (!event.locals.user || (!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageUsers)) {
 				throw redirect(302, '/dashboard');
 			}
