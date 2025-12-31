@@ -13,7 +13,7 @@
 	</a>
 	<NavigationLinks />
 	<a href="/auth/login">
-		<Button class="bg-primary hover:bg-primary/80">
+		<Button>
 			<span>Login</span>
 		</Button>
 	</a>
