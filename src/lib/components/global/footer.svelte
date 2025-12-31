@@ -13,7 +13,7 @@
 </script>
 
 <component
-	class="gap-42 flex w-full flex-col-reverse items-center justify-between self-stretch bg-slate-50 py-12 lg:flex-row lg:px-20 xl:px-80"
+	class="gap-42 flex w-full flex-col-reverse items-center justify-between self-stretch bg-muted py-12 lg:flex-row lg:px-20 xl:px-80"
 >
 	<div class="flex w-3/4 flex-col items-start gap-8 pt-12 lg:w-1/2">
 		<Logo />
@@ -52,7 +52,7 @@
 			</section>
 		</article>
 		<a href="/auth/register">
-			<Button class="bg-sky-500 hover:bg-sky-600">
+			<Button class="bg-primary hover:bg-primary/80">
 				<span>Join Us</span>
 			</Button>
 		</a>

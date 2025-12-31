@@ -208,14 +208,14 @@
 				text=""
 				subtitle="Manage chapter events, workshops, and meetings."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Events</h1>
-			<p class="mt-2 text-sm text-gray-700">Manage chapter events, workshops, and meetings.</p> -->
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">Events</h1>
+			<p class="mt-2 text-sm text-secondary/70">Manage chapter events, workshops, and meetings.</p> -->
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 			<button
 				type="button"
 				onclick={handleCreateEvent}
-				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+				class="block rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Event
 			</button>
@@ -227,24 +227,24 @@
 			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
 				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 					<table class="min-w-full divide-y divide-gray-300">
-						<thead class="bg-gray-50">
+						<thead class="bg-muted">
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 								>
 									Event
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Date & Location
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Attendees
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Price
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Status
 								</th>
 								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -252,14 +252,14 @@
 								</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
+						<tbody class="divide-y divide-muted/20 bg-background">
 							{#each data.events as event}
 								{@const status = getEventStatus(event)}
 								<tr>
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div class="ml-4">
-												<div class="font-medium text-gray-900">
+												<div class="font-medium text-secondary">
 													{event.title}
 													{#if event.featured}
 														<span
@@ -269,7 +269,7 @@
 														</span>
 													{/if}
 												</div>
-												<div class="text-gray-500">
+												<div class="text-secondary/80">
 													{#if event.groupId}
 														{#each data.availableGroups as group}
 															{#if group.id === event.groupId}
@@ -283,37 +283,37 @@
 											</div>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div>
-											<div class="font-medium text-gray-900">
+											<div class="font-medium text-secondary">
 												{formatDate(event.eventStartTime)}
 											</div>
-											<div class="text-gray-500">
+											<div class="text-secondary/80">
 												{event.eventLocation || 'Location TBD'}
 											</div>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-										<div class="text-gray-900">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
+										<div class="text-secondary">
 											{event.attendeeCount}
 											{#if event.eventCapacity}
 												/ {event.eventCapacity}
 											{/if}
 										</div>
 										{#if event.eventCapacity}
-											<div class="text-xs text-gray-500">
+											<div class="text-xs text-secondary/80">
 												{Math.round((event.attendeeCount / event.eventCapacity) * 100)}% full
 											</div>
 										{/if}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{formatPrice(event.eventPrice)}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<span
 											class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset {status.color ===
 											'gray'
-												? 'bg-gray-50 text-gray-600 ring-gray-500/10'
+												? 'bg-muted text-gray-600 ring-gray-500/10'
 												: ''} {status.color === 'green'
 												? 'bg-green-50 text-green-700 ring-green-600/20'
 												: ''} {status.color === 'red'
@@ -330,14 +330,14 @@
 									>
 										<button
 											onclick={() => togglePublished(event.id, event.published)}
-											class="mr-4 text-sky-600 hover:text-sky-900"
+											class="mr-4 text-sky-600 hover:text-primary"
 											disabled={loading}
 										>
 											{event.published ? 'Unpublish' : 'Publish'}
 										</button>
 										<button
 											onclick={() => handleEditEvent(event)}
-											class="mr-4 text-sky-600 hover:text-sky-900"
+											class="mr-4 text-sky-600 hover:text-primary"
 										>
 											Edit
 										</button>
@@ -364,14 +364,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showCreateEvent = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Event</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Create New Event</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="title">Event Title</Label>
@@ -460,14 +460,14 @@
 						type="button"
 						onclick={submitCreateEvent}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Event'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showCreateEvent = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -482,14 +482,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showEditEvent = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Event</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Edit Event</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-title">Event Title</Label>
@@ -578,14 +578,14 @@
 						type="button"
 						onclick={submitEditEvent}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Event'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showEditEvent = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>

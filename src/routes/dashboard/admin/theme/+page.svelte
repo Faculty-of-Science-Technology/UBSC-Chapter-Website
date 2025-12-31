@@ -188,10 +188,10 @@
 <div class="px-4 sm:px-6 lg:px-8">
 	<div class="sm:flex sm:items-center">
 		<div class="sm:flex-auto">
-			<h1 class="text-2xl font-semibold leading-6 text-gray-900">Theme Management</h1>
-			<p class="mt-2 text-sm text-gray-700">
-				Manage website themes. Each admin can create one theme. Select a theme to make it active
-				on the website.
+			<h1 class="text-2xl font-semibold leading-6 text-secondary">Theme Management</h1>
+			<p class="mt-2 text-sm text-secondary/70">
+				Manage website themes. Each admin can create one theme. Select a theme to make it active on
+				the website.
 			</p>
 		</div>
 		<div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -199,7 +199,7 @@
 				<button
 					type="button"
 					onclick={() => openEditModal()}
-					class="inline-flex items-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500"
+					class="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary"
 				>
 					Create My Theme
 				</button>
@@ -211,22 +211,24 @@
 	<div class="mt-8 flow-root">
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-					<table class="min-w-full divide-y divide-gray-300">
-						<thead class="bg-gray-50">
+				<div
+					class="overflow-clip border border-primary shadow ring-1 ring-primary ring-opacity-5 sm:rounded-lg"
+				>
+					<table class="min-w-full divide-y divide-secondary/20 overflow-clip">
+						<thead class="bg-muted">
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 									>Creator</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary"
 									>Colors Preview</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary"
 									>Status</th
 								>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary"
 									>Updated</th
 								>
 								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -234,22 +236,24 @@
 								</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
+						<tbody class="divide-y divide-primary/10 bg-background">
 							{#if data.themes.length === 0}
 								<tr>
-									<td colspan="5" class="px-3 py-4 text-center text-sm text-gray-500">
+									<td colspan="5" class="px-3 py-4 text-center text-sm text-secondary">
 										No themes available. Create your first theme!
 									</td>
 								</tr>
 							{:else}
 								{#each data.themes as theme}
 									<tr>
-										<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+										<td
+											class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-secondary sm:pl-6"
+										>
 											{theme.creatorFirstName}
 											{theme.creatorLastName}
-											<div class="text-gray-500">@{theme.creatorUsername}</div>
+											<div class="text-primary">@{theme.creatorUsername}</div>
 										</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-muted">
 											<div class="flex space-x-1">
 												<div
 													class="h-6 w-6 rounded border border-gray-300"
@@ -273,7 +277,7 @@
 												></div>
 											</div>
 										</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-muted">
 											{#if theme.selected}
 												<span
 													class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800"
@@ -282,13 +286,13 @@
 												</span>
 											{:else}
 												<span
-													class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800"
+													class="inline-flex rounded-full bg-muted px-2 text-xs font-semibold leading-5 text-secondary"
 												>
 													Not Selected
 												</span>
 											{/if}
 										</td>
-										<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+										<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary">
 											{new Date(theme.updatedAt).toLocaleDateString()}
 										</td>
 										<td
@@ -299,7 +303,7 @@
 													<button
 														onclick={() => selectTheme(theme.id)}
 														disabled={loading}
-														class="text-sky-600 hover:text-sky-900 disabled:opacity-50"
+														class="text-sky-600 hover:text-primary disabled:opacity-50"
 													>
 														Select
 													</button>
@@ -335,33 +339,40 @@
 
 <!-- Edit/Create Theme Modal -->
 {#if showEditModal}
-	<div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-		<div class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
+	<div
+		class="fixed inset-0 z-50 overflow-y-auto"
+		aria-labelledby="modal-title"
+		role="dialog"
+		aria-modal="true"
+	>
+		<div
+			class="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0"
+		>
 			<!-- Background overlay -->
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showEditModal = false)}
 			></div>
 
 			<!-- Modal panel -->
 			<div
-				class="inline-block transform overflow-hidden rounded-lg bg-white text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:align-middle"
+				class="inline-block transform overflow-hidden rounded-lg bg-muted text-left align-bottom shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl sm:align-middle"
 			>
-				<div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+				<div class="bg-muted px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
 					<div class="sm:flex sm:items-start">
 						<div class="mt-3 w-full text-center sm:ml-4 sm:mt-0 sm:text-left">
-							<h3 class="text-lg font-semibold leading-6 text-gray-900" id="modal-title">
+							<h3 class="text-lg font-semibold leading-6 text-secondary" id="modal-title">
 								{editingTheme ? 'Edit Your Theme' : 'Create Your Theme'}
 							</h3>
 							<div class="mt-6">
 								<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
 									{#each colorSections as section}
-										<div class="rounded-lg border border-gray-200 p-4">
-											<h4 class="mb-3 text-sm font-medium text-gray-900">{section.title}</h4>
+										<div class="rounded-lg border border-primary/50 p-4">
+											<h4 class="mb-3 text-sm font-medium text-secondary">{section.title}</h4>
 											<div class="space-y-3">
 												{#each section.colors as color}
 													<div class="flex items-center justify-between">
-														<label for={color.key} class="text-sm text-gray-700">
+														<label for={color.key} class="text-sm text-secondary/70">
 															{color.label}
 														</label>
 														<div class="flex items-center space-x-2">
@@ -391,34 +402,40 @@
 								<!-- Additional fields -->
 								<div class="mt-6 space-y-4">
 									<div>
-										<label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL</label>
+										<label for="logoUrl" class="block text-sm font-medium text-secondary/70"
+											>Logo URL</label
+										>
 										<input
 											type="url"
 											id="logoUrl"
 											bind:value={themeData.logoUrl}
 											placeholder="https://example.com/logo.png"
-											class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+											class="mt-1 block w-full rounded-md border-muted shadow-sm focus:border-primary/80 focus:ring-primary sm:text-sm"
 										/>
 									</div>
 
 									<div>
-										<label for="faviconUrl" class="block text-sm font-medium text-gray-700">Favicon URL</label>
+										<label for="faviconUrl" class="block text-sm font-medium text-secondary/70"
+											>Favicon URL</label
+										>
 										<input
 											type="url"
 											id="faviconUrl"
 											bind:value={themeData.faviconUrl}
 											placeholder="https://example.com/favicon.ico"
-											class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+											class="mt-1 block w-full rounded-md border-muted shadow-sm focus:border-primary/80 focus:ring-primary sm:text-sm"
 										/>
 									</div>
 
 									<div>
-										<label for="customCss" class="block text-sm font-medium text-gray-700">Custom CSS</label>
+										<label for="customCss" class="block text-sm font-medium text-secondary/70"
+											>Custom CSS</label
+										>
 										<textarea
 											id="customCss"
 											bind:value={themeData.customCss}
 											rows="4"
-											class="mt-1 block w-full rounded-md border-gray-300 font-mono text-xs shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
+											class="mt-1 py-2 px-2 text-muted block w-full rounded-md border-muted font-mono text-xs shadow-sm focus:border-primary/80 focus:ring-primary sm:text-sm"
 											placeholder="/* Add your custom CSS here */"
 										></textarea>
 									</div>
@@ -427,12 +444,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+				<div class="bg-muted px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
 					<button
 						type="button"
 						onclick={saveTheme}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 disabled:opacity-50 sm:ml-3 sm:w-auto"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary disabled:opacity-50 sm:ml-3 sm:w-auto"
 					>
 						{loading ? 'Saving...' : 'Save Theme'}
 					</button>
@@ -440,7 +457,7 @@
 						type="button"
 						onclick={() => (showEditModal = false)}
 						disabled={loading}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 disabled:opacity-50 sm:mt-0 sm:w-auto"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-muted px-3 py-2 text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-primary hover:bg-primary/10 disabled:opacity-50 sm:mt-0 sm:w-auto"
 					>
 						Cancel
 					</button>

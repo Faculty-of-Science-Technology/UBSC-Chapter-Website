@@ -84,14 +84,14 @@
 							onclick={() => selectedGroup = group}
 						>
 							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-sky-600 relative overflow-hidden">
-								<div class="absolute inset-0 bg-black/40"></div>
-								<div class="absolute inset-0 flex flex-col justify-end p-4 text-white">
+								<div class="absolute inset-0 bg-muted/40"></div>
+								<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
 									<h3 class="font-bold text-lg mb-1">{group.Title}</h3>
 									<p class="text-sm opacity-90 line-clamp-2">
 										{group.Description || 'A Special Interest Group for ACM members'}
 									</p>
 									<div class="flex items-center gap-2 mt-2">
-										<span class="text-xs bg-white/20 px-2 py-1 rounded">
+										<span class="text-xs bg-background/20 px-2 py-1 rounded">
 											{group.Type}
 										</span>
 										<span class="text-xs">
@@ -109,7 +109,7 @@
 				<Carousel.Item class="pl-1 md:basis-1/2">
 					<div class="p-1">
 						<AspectRatio ratio={16 / 9} class="bg-muted flex items-center justify-center">
-							<div class="text-center text-muted-foreground">
+							<div class="text-center text-secondary/80">
 								<p class="text-lg font-medium">No Active Groups</p>
 								<p class="text-sm">Check back later for new Special Interest Groups!</p>
 							</div>
@@ -138,7 +138,7 @@
 				{#if selectedGroup.Description}
 					<div>
 						<h4 class="font-medium mb-2">About</h4>
-						<p class="text-sm text-muted-foreground">{selectedGroup.Description}</p>
+						<p class="text-sm text-secondary/80">{selectedGroup.Description}</p>
 					</div>
 				{/if}
 				
@@ -155,7 +155,7 @@
 											class="w-8 h-8 rounded-full object-cover"
 										/>
 									{:else}
-										<div class="w-8 h-8 rounded-full bg-sky-500/10 flex items-center justify-center">
+										<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
 											<span class="text-xs font-medium">
 												{member.user.FirstName[0]}{member.user.LastName[0]}
 											</span>
@@ -168,14 +168,14 @@
 							{/if}
 						{/each}
 						{#if selectedGroup.members.filter(m => m.user).length === 0}
-							<div class="col-span-2 text-center text-sm text-muted-foreground py-4">
+							<div class="col-span-2 text-center text-sm text-secondary/80 py-4">
 								No members yet
 							</div>
 						{/if}
 					</div>
 				</div>
 				
-				<div class="text-xs text-muted-foreground">
+				<div class="text-xs text-secondary/80">
 					Created: {new Date(selectedGroup.CreatedAt).toLocaleDateString()}
 				</div>
 			</div>

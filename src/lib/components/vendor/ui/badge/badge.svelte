@@ -5,7 +5,7 @@
 		variants: {
 			variant: {
 				default:
-					"bg-sky-500 text-primary-foreground hover:bg-sky-500/80 border-transparent shadow",
+					"bg-primary text-primary-foreground hover:bg-primary/80 border-transparent shadow",
 				secondary:
 					"bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent",
 				destructive:

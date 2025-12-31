@@ -145,8 +145,8 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ 
-					action: 'create', 
+				body: JSON.stringify({
+					action: 'create',
 					name: newRole.name,
 					description: newRole.description,
 					type: newRole.type,
@@ -182,8 +182,8 @@
 			const response = await fetch('/dashboard/admin/roles', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ 
-					action: 'update', 
+				body: JSON.stringify({
+					action: 'update',
 					id: editRole.id,
 					name: editRole.name,
 					description: editRole.description,
@@ -265,8 +265,8 @@
 				text=""
 				subtitle="Create and manage user roles with granular permissions to control access to different features."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Role Management</h1>
-			<p class="mt-2 text-sm text-gray-700">
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">Role Management</h1>
+			<p class="mt-2 text-sm text-secondary/70">
 				Create and manage user roles with granular permissions to control access to different
 				features.
 			</p> -->
@@ -275,7 +275,7 @@
 			<button
 				type="button"
 				onclick={handleCreateRole}
-				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+				class="block rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
 			>
 				Create Role
 			</button>
@@ -284,7 +284,9 @@
 
 	<div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 		{#each data.roles as role}
-			<div class="relative overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:px-6">
+			<div
+				class="relative overflow-hidden rounded-lg border border-primary bg-muted px-4 py-5 shadow sm:px-6"
+			>
 				<div class="flex items-center justify-between">
 					<div class="flex items-center">
 						<div
@@ -296,14 +298,14 @@
 							</span>
 						</div>
 						<div>
-							<h3 class="truncate text-lg font-medium text-gray-900">{role.name}</h3>
-							<p class="text-sm text-gray-500">{role.type}</p>
+							<h3 class="truncate text-lg font-medium text-secondary">{role.name}</h3>
+							<p class="text-sm text-secondary/80">{role.type}</p>
 						</div>
 					</div>
 					<div class="flex space-x-2">
 						<button
 							onclick={() => handleEditRole(role)}
-							class="text-sm text-sky-600 hover:text-sky-900"
+							class="text-sm text-sky-600 hover:text-primary"
 						>
 							Edit
 						</button>
@@ -316,22 +318,22 @@
 					</div>
 				</div>
 
-				<p class="mt-2 line-clamp-2 text-sm text-gray-500">
+				<p class="mt-2 line-clamp-2 text-sm text-secondary/80">
 					{role.description || 'No description provided'}
 				</p>
 
-				<div class="mt-4 flex items-center justify-between text-sm text-gray-500">
+				<div class="mt-4 flex items-center justify-between text-sm text-secondary/80">
 					<span>{role.userCount} {role.userCount === 1 ? 'user' : 'users'}</span>
 					<span>{getPermissionCount(role)} permissions</span>
 				</div>
 
 				<div class="mt-3">
-					<div class="text-xs text-gray-400">Permissions:</div>
+					<div class="text-xs text-secondary">Permissions:</div>
 					<div class="mt-1 flex flex-wrap gap-1">
 						{#each permissions.slice(0, 4) as perm}
 							{#if role[perm.key]}
 								<span
-									class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
+									class="inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
 								>
 									{perm.label}
 								</span>
@@ -339,7 +341,8 @@
 						{/each}
 						{#if getPermissionCount(role) > 4}
 							<span
-								class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20"
+								onclick={() => handleEditRole(role)}
+								class="inline-flex cursor-pointer items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-secondary/70 ring-1 ring-inset ring-gray-600/20 hover:bg-primary/10"
 							>
 								+{getPermissionCount(role) - 4} more
 							</span>
@@ -347,7 +350,7 @@
 					</div>
 				</div>
 
-				<div class="mt-3 text-xs text-gray-400">
+				<div class="mt-3 text-xs text-muted">
 					Created {formatDate(role.createdAt.toJSON())}
 				</div>
 			</div>
@@ -360,14 +363,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showCreateRole = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+				class="relative transform overflow-hidden rounded-lg border border-primary bg-secondary px-4 pb-4 pt-5 text-left text-muted shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Role</h3>
+					<h3 class="text-lg font-semibold leading-6 text-muted">Create New Role</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="name">Role Name</Label>
@@ -388,7 +391,7 @@
 											{roleType.label}
 										{/if}
 									{/each}
-									{#if !roleTypes.find(rt => rt.value === newRole.type)}
+									{#if !roleTypes.find((rt) => rt.value === newRole.type)}
 										Select a role type
 									{/if}
 								</Select.Trigger>
@@ -413,16 +416,20 @@
 							/>
 						</div>
 						<div>
-							<div class="mb-3 text-sm font-medium text-gray-700">Permissions</div>
+							<div class="mb-3 text-sm font-medium text-muted">Permissions</div>
 							<div class="space-y-3">
 								{#each permissions as perm}
 									<div class="flex items-start space-x-3">
-										<Switch id="perm-{perm.key}" bind:checked={newRole[perm.key]} />
+										<Switch
+											id="perm-{perm.key}"
+											class="bg-muted"
+											bind:checked={newRole[perm.key]}
+										/>
 										<div class="text-sm">
-											<Label for="perm-{perm.key}" class="font-medium text-gray-700"
+											<Label for="perm-{perm.key}" class="font-medium text-muted"
 												>{perm.label}</Label
 											>
-											<p class="text-gray-500">{perm.description}</p>
+											<p class="text-muted/70">{perm.description}</p>
 										</div>
 									</div>
 								{/each}
@@ -435,14 +442,14 @@
 						type="button"
 						onclick={submitCreateRole}
 						disabled={loading || !newRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-muted shadow-sm hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Role'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showCreateRole = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-muted px-3 py-2 text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>
@@ -457,14 +464,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showEditRole = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
+				class="relative transform overflow-hidden rounded-lg border border-primary bg-muted px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-2xl sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Edit Role</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Edit Role</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="edit-name">Role Name</Label>
@@ -479,7 +486,7 @@
 											{roleType.label}
 										{/if}
 									{/each}
-									{#if !roleTypes.find(rt => rt.value === editRole.type)}
+									{#if !roleTypes.find((rt) => rt.value === editRole.type)}
 										Select a role type
 									{/if}
 								</Select.Trigger>
@@ -499,16 +506,16 @@
 							<Textarea id="edit-description" bind:value={editRole.description} rows={3} />
 						</div>
 						<div>
-							<div class="mb-3 text-sm font-medium text-gray-700">Permissions</div>
+							<div class="mb-3 text-sm font-medium text-secondary/70">Permissions</div>
 							<div class="space-y-3">
 								{#each permissions as perm}
 									<div class="flex items-start space-x-3">
 										<Switch id="edit-perm-{perm.key}" bind:checked={editRole[perm.key]} />
 										<div class="text-sm">
-											<Label for="edit-perm-{perm.key}" class="font-medium text-gray-700"
+											<Label for="edit-perm-{perm.key}" class="font-medium text-secondary/70"
 												>{perm.label}</Label
 											>
-											<p class="text-gray-500">{perm.description}</p>
+											<p class="text-secondary/80">{perm.description}</p>
 										</div>
 									</div>
 								{/each}
@@ -521,14 +528,14 @@
 						type="button"
 						onclick={submitEditRole}
 						disabled={loading || !editRole.name}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Updating...' : 'Update Role'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showEditRole = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-muted px-3 py-2 text-sm font-semibold text-primary shadow-sm ring-1 ring-inset ring-primary hover:bg-primary/20 sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>

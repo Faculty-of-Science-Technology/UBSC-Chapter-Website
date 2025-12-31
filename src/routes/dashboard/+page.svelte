@@ -81,8 +81,8 @@
 				text=""
 				subtitle="Welcome back, {data.user?.FirstName}! Here's what's happening with UBSC."
 			/>
-			<!-- <h1 class="text-2xl font-bold text-gray-900"></h1>
-			<p class="mt-1 text-sm text-gray-500">
+			<!-- <h1 class="text-2xl font-bold text-secondary"></h1>
+			<p class="mt-1 text-sm text-secondary/80">
 				
 			</p> -->
 		</div>
@@ -90,13 +90,13 @@
 		<!-- Stats -->
 		<div class="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
 			{#each stats as stat}
-				<div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+				<div class="overflow-hidden rounded-lg border border-muted bg-secondary shadow-sm">
 					<div class="p-5">
 						<div class="flex items-center">
 							<div class="flex-shrink-0">
-								<div class="flex h-8 w-8 items-center justify-center rounded-md bg-sky-500">
+								<div class="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
 									<svg
-										class="h-5 w-5 text-white"
+										class="h-5 w-5 text-muted"
 										fill="none"
 										stroke="currentColor"
 										viewBox="0 0 24 24"
@@ -112,11 +112,11 @@
 							</div>
 							<div class="ml-5 w-0 flex-1">
 								<dl>
-									<dt class="truncate text-sm font-medium text-gray-500">
+									<dt class="truncate text-sm font-medium text-muted/70">
 										{stat.name}
 									</dt>
 									<dd class="flex items-baseline">
-										<div class="text-2xl font-semibold text-gray-900">
+										<div class="text-2xl font-semibold text-muted">
 											{stat.value}
 										</div>
 										<div
@@ -125,7 +125,7 @@
 												? 'text-green-600'
 												: stat.changeType === 'decrease'
 													? 'text-red-600'
-													: 'text-gray-500'}"
+													: 'text-muted/50'}"
 										>
 											{stat.change}
 										</div>
@@ -139,19 +139,19 @@
 		</div>
 
 		<!-- Quick Actions -->
-		<div class="my-8 rounded-lg border border-gray-200 bg-white shadow-sm">
-			<div class="border-b border-gray-200 px-6 py-4">
-				<h2 class="text-lg font-medium text-gray-900">Quick Actions</h2>
+		<div class="my-8 rounded-lg border border-primary overflow-clip bg-secondary shadow-sm">
+			<div class="border-b border-muted/30 px-6 py-4">
+				<h2 class="text-lg font-medium text-muted">Quick Actions</h2>
 			</div>
 			<div class="p-6">
 				<div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
 					<a
 						href="/dashboard/events/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-sky-600"
+								class="h-6 w-6 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -166,17 +166,17 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
-							<p class="text-sm font-medium text-gray-900">New Event</p>
+							<p class="text-sm font-medium text-muted">New Event</p>
 						</div>
 					</a>
 
 					<a
 						href="/dashboard/posts/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-sky-600"
+								class="h-6 w-6 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -191,17 +191,17 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
-							<p class="text-sm font-medium text-gray-900">New Post</p>
+							<p class="text-sm font-medium text-muted">New Post</p>
 						</div>
 					</a>
 
 					<a
 						href="/dashboard/groups/new"
-						class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+						class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 					>
 						<div class="flex-shrink-0">
 							<svg
-								class="h-6 w-6 text-sky-600"
+								class="h-6 w-6 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -216,18 +216,18 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<span class="absolute inset-0" aria-hidden="true"></span>
-							<p class="text-sm font-medium text-gray-900">New Group</p>
+							<p class="text-sm font-medium text-muted">New Group</p>
 						</div>
 					</a>
 
 					{#if data.user?.Permissions.CanManageInvites}
 						<a
 							href="/dashboard/admin/invites"
-							class="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+							class="relative flex items-center space-x-3 rounded-lg border-4 border-primary bg-transparent px-6 py-5 shadow-sm transition-colors hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
 						>
 							<div class="flex-shrink-0">
 								<svg
-									class="h-6 w-6 text-sky-600"
+									class="h-6 w-6 text-primary"
 									fill="none"
 									stroke="currentColor"
 									viewBox="0 0 24 24"
@@ -242,7 +242,7 @@
 							</div>
 							<div class="min-w-0 flex-1">
 								<span class="absolute inset-0" aria-hidden="true"></span>
-								<p class="text-sm font-medium text-gray-900">Manage Invites</p>
+								<p class="text-sm font-medium text-muted">Manage Invites</p>
 							</div>
 						</a>
 					{/if}
@@ -252,20 +252,20 @@
 
 		<div class="grid grid-cols-1 gap-8">
 			<!-- Upcoming Events -->
-			<div class="rounded-lg border border-gray-200 bg-white shadow-sm">
-				<div class="border-b border-gray-200 px-6 py-4">
-					<h2 class="text-lg font-medium text-gray-900">Upcoming Events</h2>
+			<div class="rounded-lg border border-primary overflow-clip bg-secondary shadow-sm">
+				<div class="border-b border-muted/30 px-6 py-4">
+					<h2 class="text-lg font-medium text-muted">Upcoming Events</h2>
 				</div>
-				<div class="divide-y divide-gray-200">
+				<div class="divide-y divide-primary/30">
 					{#if upcomingEvents.length > 0}
 						{#each upcomingEvents as event}
 							<div class="px-6 py-4">
 								<div class="flex items-center justify-between">
 									<div class="min-w-0 flex-1">
-										<h3 class="truncate text-sm font-medium text-gray-900">
+										<h3 class="truncate text-sm font-medium text-muted">
 											{event.title}
 										</h3>
-										<div class="mt-1 flex items-center space-x-2 text-xs text-gray-500">
+										<div class="mt-1 flex items-center space-x-2 text-xs text-muted/70">
 											<span>{event.date}</span>
 											<span>•</span>
 											<span>{event.time}</span>
@@ -274,7 +274,7 @@
 										</div>
 									</div>
 									<div class="flex-shrink-0 text-right">
-										<div class="text-sm font-medium text-gray-900">
+										<div class="text-sm font-medium text-secondary">
 											{event.attendees} attending
 										</div>
 									</div>
@@ -283,12 +283,12 @@
 						{/each}
 					{:else}
 						<div class="px-6 py-8 text-center">
-							<p class="text-sm text-gray-500">No upcoming events scheduled</p>
+							<p class="text-sm text-muted">No upcoming events scheduled</p>
 						</div>
 					{/if}
 				</div>
-				<div class="border-t border-gray-200 bg-gray-50 px-6 py-3">
-					<a href="/dashboard/events" class="text-sm font-medium text-sky-600 hover:text-sky-500">
+				<div class="border-t border-primary/30 bg-background px-6 py-3">
+					<a href="/dashboard/events" class="text-sm font-medium text-primary hover:text-primary/80">
 						View all events →
 					</a>
 				</div>

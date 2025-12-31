@@ -110,7 +110,7 @@ src/
 
 1. **Use Tailwind CSS** for styling:
    ```svelte
-   <div class="flex items-center gap-4 p-4 bg-white rounded-lg shadow">
+   <div class="flex items-center gap-4 p-4 bg-background rounded-lg shadow">
    ```
 
 2. **Use `cn()` helper** for conditional classes:

@@ -127,8 +127,8 @@
 				text=""
 				subtitle="Create and manage invite codes to control chapter membership registration."
 			/>
-			<!-- <h1 class="text-2xl font-semibold leading-6 text-gray-900">Invite Code Management</h1>
-			<p class="mt-2 text-sm text-gray-700">
+			<!-- <h1 class="text-2xl font-semibold leading-6 text-secondary">Invite Code Management</h1>
+			<p class="mt-2 text-sm text-secondary/70">
 				Create and manage invite codes to control chapter membership registration.
 			</p> -->
 		</div>
@@ -136,7 +136,7 @@
 			<button
 				type="button"
 				onclick={handleCreateInvite}
-				class="block rounded-md bg-sky-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600"
+				class="block rounded-md bg-primary px-3 py-2 text-center text-sm font-semibold text-background shadow-sm hover:bg-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
 			>
 				Create Invite Code
 			</button>
@@ -145,12 +145,12 @@
 
 	<!-- Statistics Cards -->
 	<div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-secondary shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
 						<svg
-							class="h-6 w-6 text-gray-400"
+							class="h-6 w-6 text-primary"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -165,15 +165,15 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Total Invites</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.totalInvites}</dd>
+							<dt class="truncate text-sm font-medium text-muted/70">Total Invites</dt>
+							<dd class="text-lg font-medium text-muted">{data.stats.totalInvites}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-secondary shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
@@ -193,20 +193,20 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Active Invites</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.activeInvites}</dd>
+							<dt class="truncate text-sm font-medium text-muted/70">Active Invites</dt>
+							<dd class="text-lg font-medium text-muted">{data.stats.activeInvites}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-secondary shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
 						<svg
-							class="h-6 w-6 text-blue-400"
+							class="h-6 w-6 text-primary"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -221,15 +221,15 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Total Uses</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.totalUsages}</dd>
+							<dt class="truncate text-sm font-medium text-muted/70">Total Uses</dt>
+							<dd class="text-lg font-medium text-muted">{data.stats.totalUsages}</dd>
 						</dl>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="overflow-hidden rounded-lg bg-white shadow">
+		<div class="overflow-hidden rounded-lg bg-secondary shadow">
 			<div class="p-5">
 				<div class="flex items-center">
 					<div class="flex-shrink-0">
@@ -244,8 +244,8 @@
 					</div>
 					<div class="ml-5 w-0 flex-1">
 						<dl>
-							<dt class="truncate text-sm font-medium text-gray-500">Expired/Full</dt>
-							<dd class="text-lg font-medium text-gray-900">{data.stats.expiredInvites}</dd>
+							<dt class="truncate text-sm font-medium text-muted/70">Expired/Full</dt>
+							<dd class="text-lg font-medium text-muted">{data.stats.expiredInvites}</dd>
 						</dl>
 					</div>
 				</div>
@@ -258,25 +258,25 @@
 		<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 			<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
 				<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-					<table class="min-w-full divide-y divide-gray-300">
-						<thead class="bg-gray-50">
+					<table class="min-w-full divide-y divide-muted/30">
+						<thead class="bg-muted">
 							<tr>
 								<th
 									scope="col"
-									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+									class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 								>
 									Code
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Description
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Usage
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Status
 								</th>
-								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+								<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 									Created
 								</th>
 								<th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
@@ -284,34 +284,34 @@
 								</th>
 							</tr>
 						</thead>
-						<tbody class="divide-y divide-gray-200 bg-white">
+						<tbody class="divide-y divide-muted/60 bg-muted/10">
 							{#each data.invites as invite}
 								<tr>
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div
-												class="rounded bg-gray-100 px-2 py-1 font-mono font-medium text-gray-900"
+												class="rounded bg-gray-100 px-2 py-1 font-mono font-medium text-secondary"
 											>
 												{invite.code}
 											</div>
 											<button
 												onclick={() => copyToClipboard(getInviteUrl(invite.code))}
-												class="ml-2 text-xs text-sky-600 hover:text-sky-900"
+												class="ml-2 text-xs text-sky-600 hover:text-primary"
 												title="Copy invite URL"
 											>
 												Copy URL
 											</button>
 										</div>
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{invite.description || 'No description'}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{invite.usageCount}{#if invite.maxUses}
 											/ {invite.maxUses}{:else}
 											/ ∞{/if}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										{#if getInviteStatus(invite).color === 'green'}
 											<span
 												class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20"
@@ -326,12 +326,12 @@
 											</span>
 										{/if}
 									</td>
-									<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div>
 											{formatDate(invite.createdAt.toJSON())}
 										</div>
 										{#if invite.creatorName}
-											<div class="text-xs text-gray-400">
+											<div class="text-xs text-muted">
 												by {invite.creatorName}
 												{invite.creatorLastName}
 											</div>
@@ -359,41 +359,41 @@
 	<!-- Recent Registrations -->
 	{#if data.recentRegistrations.length > 0}
 		<div class="mt-8">
-			<h3 class="mb-4 text-lg font-medium text-gray-900">Recent Registrations</h3>
+			<h3 class="mb-4 text-lg font-medium text-secondary">Recent Registrations</h3>
 			<div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
 				<table class="min-w-full divide-y divide-gray-300">
-					<thead class="bg-gray-50">
+					<thead class="bg-muted">
 						<tr>
 							<th
 								scope="col"
-								class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+								class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-secondary sm:pl-6"
 							>
 								User
 							</th>
-							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 								Code Used
 							</th>
-							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+							<th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-secondary">
 								Registered
 							</th>
 						</tr>
 					</thead>
-					<tbody class="divide-y divide-gray-200 bg-white">
+					<tbody class="divide-y divide-muted/20 bg-background">
 						{#each data.recentRegistrations as registration}
 							<tr>
 								<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-									<div class="font-medium text-gray-900">
+									<div class="font-medium text-secondary">
 										{registration.userName}
 										{registration.userLastName}
 									</div>
-									<div class="text-gray-500">{registration.userEmail}</div>
+									<div class="text-secondary/80">{registration.userEmail}</div>
 								</td>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 									<span class="rounded bg-gray-100 px-2 py-1 font-mono text-xs">
 										{registration.code}
 									</span>
 								</td>
-								<td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+								<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 									{formatDate(registration.usedAt.toJSON())}
 								</td>
 							</tr>
@@ -410,14 +410,14 @@
 	<div class="fixed inset-0 z-50 overflow-y-auto">
 		<div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
 			<div
-				class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+				class="fixed inset-0 bg-muted bg-opacity-75 transition-opacity"
 				onclick={() => (showCreateInvite = false)}
 			></div>
 			<div
-				class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
+				class="relative transform overflow-hidden rounded-lg bg-background px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6"
 			>
 				<div>
-					<h3 class="text-lg font-semibold leading-6 text-gray-900">Create New Invite Code</h3>
+					<h3 class="text-lg font-semibold leading-6 text-secondary">Create New Invite Code</h3>
 					<div class="mt-4 space-y-4">
 						<div>
 							<Label for="description">Description (Optional)</Label>
@@ -454,14 +454,14 @@
 						type="button"
 						onclick={submitCreateInvite}
 						disabled={loading}
-						class="inline-flex w-full justify-center rounded-md bg-sky-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
+						class="inline-flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-background shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 disabled:opacity-50 sm:col-start-2"
 					>
 						{loading ? 'Creating...' : 'Create Invite Code'}
 					</button>
 					<button
 						type="button"
 						onclick={() => (showCreateInvite = false)}
-						class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+						class="mt-3 inline-flex w-full justify-center rounded-md bg-background px-3 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-muted sm:col-start-1 sm:mt-0"
 					>
 						Cancel
 					</button>

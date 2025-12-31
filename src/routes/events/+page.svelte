@@ -173,7 +173,7 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"
 						>
 							<svg
 								class="h-8 w-8 text-sky-600"
@@ -247,7 +247,7 @@
 									<!-- Featured Badge -->
 									{#if event.featured}
 										<div class="absolute right-2 top-2 z-10">
-											<Badge variant="secondary" class="bg-yellow-500 text-white">Featured</Badge>
+											<Badge variant="secondary" class="bg-yellow-500 text-background">Featured</Badge>
 										</div>
 									{/if}
 
@@ -257,18 +257,18 @@
 										class="relative overflow-hidden bg-gradient-to-br from-blue-500 to-green-600"
 									>
 										<div class="absolute inset-0 bg-black/40"></div>
-										<div class="absolute inset-0 flex flex-col justify-start p-4 text-white">
-											<h3 class="mb-2 text-xl font-bold text-white drop-shadow-lg">
+										<div class="absolute inset-0 flex flex-col justify-start p-4 text-background">
+											<h3 class="mb-2 text-xl font-bold text-background drop-shadow-lg">
 												{event.title}
 											</h3>
 											<div class="mt-auto">
 												<div class="mb-2 flex flex-wrap gap-2">
-													<Badge variant="secondary" class="border-white/20 bg-white/20 text-white">
+													<Badge variant="secondary" class="border-white/20 bg-background/20 text-background">
 														{formatPrice(event.eventPrice)}
 													</Badge>
 													<Badge
 														variant="secondary"
-														class={`${status.color === 'green' ? 'bg-green-500/80' : status.color === 'blue' ? 'bg-blue-500/80' : 'bg-red-500/80'} border-white/20 text-white`}
+														class={`${status.color === 'green' ? 'bg-green-500/80' : status.color === 'blue' ? 'bg-blue-500/80' : 'bg-red-500/80'} border-white/20 text-background`}
 													>
 														{status.text}
 													</Badge>
@@ -280,7 +280,7 @@
 									<!-- Event Content -->
 									<div class="space-y-3 p-4">
 										<div class="space-y-2 text-sm">
-											<div class="flex items-center gap-2 text-muted-foreground">
+											<div class="flex items-center gap-2 text-secondary/80">
 												<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 													<path
 														stroke-linecap="round"
@@ -293,7 +293,7 @@
 											</div>
 
 											{#if event.eventLocation}
-												<div class="flex items-center gap-2 text-muted-foreground">
+												<div class="flex items-center gap-2 text-secondary/80">
 													<svg
 														class="h-4 w-4"
 														fill="none"
@@ -318,7 +318,7 @@
 											{/if}
 
 											{#if event.eventCapacity}
-												<div class="flex items-center gap-2 text-muted-foreground">
+												<div class="flex items-center gap-2 text-secondary/80">
 													<svg
 														class="h-4 w-4"
 														fill="none"
@@ -339,11 +339,11 @@
 
 										<!-- Event Summary -->
 										{#if event.content && event.content.length > 100}
-											<p class="line-clamp-3 text-sm text-muted-foreground">
+											<p class="line-clamp-3 text-sm text-secondary/80">
 												{event.content.substring(0, 150)}...
 											</p>
 										{:else if event.content}
-											<p class="line-clamp-3 text-sm text-muted-foreground">
+											<p class="line-clamp-3 text-sm text-secondary/80">
 												{event.content}
 											</p>
 										{/if}
@@ -357,7 +357,7 @@
 				<Card.Root class="p-12 text-center">
 					<Card.Content>
 						<p class="text-lg text-gray-600">No upcoming events scheduled at the moment.</p>
-						<p class="mt-2 text-sm text-gray-500">Check back soon for new events!</p>
+						<p class="mt-2 text-sm text-secondary/80">Check back soon for new events!</p>
 					</Card.Content>
 				</Card.Root>
 			{/if}
@@ -389,18 +389,18 @@
 										class="relative overflow-hidden bg-gradient-to-br from-gray-500 to-gray-700"
 									>
 										<div class="absolute inset-0 bg-black/50"></div>
-										<div class="absolute inset-0 flex flex-col justify-start p-4 text-white">
-											<h3 class="mb-2 text-xl font-bold text-white drop-shadow-lg">
+										<div class="absolute inset-0 flex flex-col justify-start p-4 text-background">
+											<h3 class="mb-2 text-xl font-bold text-background drop-shadow-lg">
 												{event.title}
 											</h3>
 											<div class="mt-auto">
 												<div class="mb-2 flex flex-wrap gap-2">
-													<Badge variant="secondary" class="border-white/20 bg-white/20 text-white">
+													<Badge variant="secondary" class="border-white/20 bg-background/20 text-background">
 														{formatPrice(event.eventPrice)}
 													</Badge>
 													<Badge
 														variant="secondary"
-														class="border-white/20 bg-gray-500/80 text-white"
+														class="border-white/20 bg-muted/80 text-background"
 													>
 														{status.text}
 													</Badge>
@@ -412,7 +412,7 @@
 									<!-- Event Content -->
 									<div class="space-y-3 p-4">
 										<div class="space-y-2 text-sm">
-											<div class="flex items-center gap-2 text-muted-foreground">
+											<div class="flex items-center gap-2 text-secondary/80">
 												<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 													<path
 														stroke-linecap="round"
@@ -425,7 +425,7 @@
 											</div>
 
 											{#if event.eventLocation}
-												<div class="flex items-center gap-2 text-muted-foreground">
+												<div class="flex items-center gap-2 text-secondary/80">
 													<svg
 														class="h-4 w-4"
 														fill="none"
@@ -450,7 +450,7 @@
 											{/if}
 
 											{#if event.attendeeCount}
-												<div class="flex items-center gap-2 text-muted-foreground">
+												<div class="flex items-center gap-2 text-secondary/80">
 													<svg
 														class="h-4 w-4"
 														fill="none"
@@ -471,11 +471,11 @@
 
 										<!-- Event Summary -->
 										{#if event.content && event.content.length > 100}
-											<p class="line-clamp-3 text-sm text-muted-foreground">
+											<p class="line-clamp-3 text-sm text-secondary/80">
 												{event.content.substring(0, 150)}...
 											</p>
 										{:else if event.content}
-											<p class="line-clamp-3 text-sm text-muted-foreground">
+											<p class="line-clamp-3 text-sm text-secondary/80">
 												{event.content}
 											</p>
 										{/if}
@@ -506,7 +506,7 @@
 					<Card.Title class="mb-4 text-3xl font-bold">Stay Updated</Card.Title>
 				</Card.Header>
 				<Card.Content class="text-center">
-					<p class="mx-auto mb-8 max-w-2xl text-gray-700">
+					<p class="mx-auto mb-8 max-w-2xl text-secondary/70">
 						Don't miss out on our upcoming events! Join our community to receive notifications about
 						new workshops, seminars, and networking opportunities.
 					</p>
@@ -544,30 +544,30 @@
 				{#if selectedEvent.content}
 					<div>
 						<h4 class="mb-2 font-medium">Description</h4>
-						<p class="text-sm text-muted-foreground">{selectedEvent.content}</p>
+						<p class="text-sm text-secondary/80">{selectedEvent.content}</p>
 					</div>
 				{/if}
 
 				<div class="grid grid-cols-2 gap-4">
 					<div>
 						<h4 class="mb-1 font-medium">Date & Time</h4>
-						<p class="text-sm text-muted-foreground">{formatDate(selectedEvent.eventStartTime)}</p>
+						<p class="text-sm text-secondary/80">{formatDate(selectedEvent.eventStartTime)}</p>
 					</div>
 					<div>
 						<h4 class="mb-1 font-medium">Location</h4>
-						<p class="text-sm text-muted-foreground">{selectedEvent.eventLocation || 'TBD'}</p>
+						<p class="text-sm text-secondary/80">{selectedEvent.eventLocation || 'TBD'}</p>
 					</div>
 				</div>
 
 				<div class="grid grid-cols-2 gap-4">
 					<div>
 						<h4 class="mb-1 font-medium">Price</h4>
-						<p class="text-sm text-muted-foreground">{formatPrice(selectedEvent.eventPrice)}</p>
+						<p class="text-sm text-secondary/80">{formatPrice(selectedEvent.eventPrice)}</p>
 					</div>
 					{#if selectedEvent.eventCapacity}
 						<div>
 							<h4 class="mb-1 font-medium">Capacity</h4>
-							<p class="text-sm text-muted-foreground">
+							<p class="text-sm text-secondary/80">
 								{selectedEvent.attendeeCount || 0} / {selectedEvent.eventCapacity}
 							</p>
 						</div>
@@ -577,7 +577,7 @@
 				{#if selectedEvent.authorName}
 					<div>
 						<h4 class="mb-1 font-medium">Organized by</h4>
-						<p class="text-sm text-muted-foreground">
+						<p class="text-sm text-secondary/80">
 							{selectedEvent.authorName}
 							{selectedEvent.authorLastName}
 						</p>
