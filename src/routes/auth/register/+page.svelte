@@ -141,7 +141,7 @@
 	<div class="w-full max-w-md space-y-8">
 		<div class="text-center">
 			<div class="mx-auto flex h-fit w-full items-center justify-center">
-				<Logo mode="dark" size="md" />
+				<Logo mode="light" size="md" />
 			</div>
 			<HeroText
 				class="items-center"
