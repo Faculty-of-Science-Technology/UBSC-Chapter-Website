@@ -9,7 +9,7 @@
 		<Label for="email-2">Email</Label>
 		<div class="flex items-start gap-1.5 self-stretch">
 			<Input type="email" id="email-2" placeholder="Enter your email address" />
-			<Button class="bg-primary hover:bg-primary/80">Subscribe</Button>
+			<Button>Subscribe</Button>
 		</div>
 		<p class="text-secondary/80 text-sm">Enter your email address.</p>
 	</input-combo>

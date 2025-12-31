@@ -331,7 +331,7 @@
 									<td class="whitespace-nowrap px-3 py-4 text-sm text-secondary/80">
 										<div>
 											<div>{formatDate(group.createdAt.toJSON())}</div>
-											<div class="text-xs text-muted">
+											<div class="text-xs text-secondary/80">
 												by {group.creatorName}
 												{group.creatorLastName}
 											</div>
@@ -542,7 +542,7 @@
 					<div class="mt-4">
 						<Label for="member-select">Add Member</Label>
 						<div class="mt-1 flex space-x-2">
-							<Select.Root bind:selected={selectedMember}>
+							<Select.Root type="single" bind:value={selectedMember}>
 								<Select.Trigger class="w-full">
 									{#if !selectedMember || selectedMember === ''}
 										Select a member...

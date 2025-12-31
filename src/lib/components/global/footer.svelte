@@ -52,7 +52,7 @@
 			</section>
 		</article>
 		<a href="/auth/register">
-			<Button class="bg-primary hover:bg-primary/80">
+			<Button>
 				<span>Join Us</span>
 			</Button>
 		</a>
