@@ -304,7 +304,7 @@
 			</div>
 
 			<div class="flex items-end">
-				<Button onclick={clearFilters} variant="secondary" class="w-full">Clear Filters</Button>
+				<Button onclick={clearFilters} variant="default" class="w-full">Clear Filters</Button>
 			</div>
 		</div>
 
