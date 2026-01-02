@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/state';
+	import DashHeadPattern from '$lib/components/global/branding/dash_head_pattern.svelte';
 	import Logo from '$lib/components/global/branding/logo.svelte';
 	import {
 		Calendar,
@@ -204,8 +205,15 @@
 	<!-- Main content -->
 	<div class="w-full">
 		<!-- Top bar -->
-		<div class="sticky top-0 z-10 border-b border-muted bg-background px-4 sm:px-6 lg:px-8">
+		<div class="sticky top-0 z-10 border-b border-muted  bg-muted px-4 sm:px-6 lg:p-0">
 			<div class="flex h-16 items-center justify-between">
+				<!-- Pseudo-element container for the background image -->
+				<div
+					class="relative mr-[0.75rem] overflow-clip w-full h-full inset-0 text-primary/25"
+				>
+					<DashHeadPattern class="absolute scale-[2.5] -top-4" />
+				</div>
+
 				<button class="lg:hidden" onclick={() => (sidebarOpen = true)}>
 					<svg
 						class="h-6 w-6 text-secondary/80"
