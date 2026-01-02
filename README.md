@@ -28,7 +28,7 @@ The UBSC Chapter Website is built using modern web application patterns to deliv
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd UBSC-Chapter-Website
+cd <repository-directory>
 
 # Install dependencies
 npm install
@@ -45,7 +45,7 @@ npm run db:seed
 npm run dev
 ```
 
-The development server will start and display the local URL in your terminal.
+The development server will start and display the application URL in your terminal (typically `http://localhost:5173` unless configured otherwise).
 
 ## 📚 Documentation
 
