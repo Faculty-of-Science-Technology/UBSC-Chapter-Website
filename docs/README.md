@@ -80,9 +80,9 @@ The platform follows modern web application patterns:
 
 This platform follows established patterns and conventions:
 
-1. **Architecture First**: Understand design patterns before coding ([ARCHITECTURE.md](ARCHITECTURE.md))
-2. **Follow Standards**: Adhere to coding standards defined in ([DEVELOPMENT.md](DEVELOPMENT.md))
-3. **Database Changes**: Use migration tools and update schema documentation ([DATABASE.md](DATABASE.md))
+1. **Architecture First**: Understand design patterns before coding - see [ARCHITECTURE.md](ARCHITECTURE.md)
+2. **Follow Standards**: Adhere to coding standards defined in [DEVELOPMENT.md](DEVELOPMENT.md)
+3. **Database Changes**: Use migration tools and update schema documentation in [DATABASE.md](DATABASE.md)
 4. **Test Thoroughly**: Validate changes across different environments
 5. **Document Changes**: Update relevant documentation when modifying functionality
 
