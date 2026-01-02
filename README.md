@@ -45,7 +45,7 @@ npm run db:seed
 npm run dev
 ```
 
-The development server will start and display the application URL in your terminal (typically `http://localhost:5173` unless configured otherwise).
+The development server will start and display the local application URL in your terminal.
 
 ## 📚 Documentation
 
