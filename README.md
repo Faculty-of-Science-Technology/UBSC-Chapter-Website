@@ -27,7 +27,7 @@ The UBSC Chapter Website is built using modern web application patterns to deliv
 
 ```bash
 # Clone the repository
-git clone https://github.com/Faculty-of-Science-Technology/UBSC-Chapter-Website.git
+git clone <repository-url>
 cd UBSC-Chapter-Website
 
 # Install dependencies
@@ -45,7 +45,7 @@ npm run db:seed
 npm run dev
 ```
 
-Visit `http://localhost:5173` to see the application.
+The development server will start and display the local URL in your terminal.
 
 ## 📚 Documentation
 
