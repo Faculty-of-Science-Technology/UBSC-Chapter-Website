@@ -2,7 +2,7 @@
 
 A comprehensive management platform for the University of Belize ACM Student Chapter (UBSC) and similar organizations. This platform provides complete digital infrastructure for managing members, content, events, and organizational activities.
 
-## 🎯 Overview
+## Overview
 
 The UBSC Chapter Website is built using modern web application patterns to deliver a full-featured management system with:
 
@@ -15,7 +15,7 @@ The UBSC Chapter Website is built using modern web application patterns to deliv
 - **Media Management**: Centralized media storage and organization
 - **Theme Management**: Customizable visual appearance
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -47,7 +47,7 @@ npm run dev
 
 The development server will start and typically display the local application URL in your terminal.
 
-## 📚 Documentation
+## Documentation
 
 Comprehensive documentation is available in the [`docs/`](docs/) directory:
 
@@ -61,7 +61,7 @@ Comprehensive documentation is available in the [`docs/`](docs/) directory:
 - **[Features Documentation](docs/FEATURES.md)** - Feature catalog and capabilities
 - **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
 
-## 🛠️ Technology Foundation
+## Technology Stack Used
 
 This platform is built on modern web technologies:
 
@@ -76,7 +76,7 @@ This platform is built on modern web technologies:
 
 For specific versions and implementation details, see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## 📖 Development
+## Development
 
 ```bash
 # Start development server with hot reload
@@ -104,7 +104,7 @@ npm run db:seed      # Seed database with sample data
 
 See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for detailed development workflows and best practices.
 
-## 🤝 Contributing
+## ✅ Contributing
 
 Contributions are welcome! Please follow these guidelines:
 
