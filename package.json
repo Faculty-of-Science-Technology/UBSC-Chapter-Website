@@ -62,7 +62,7 @@
 		"@neondatabase/serverless": "^0.10.4",
 		"@sveltejs/adapter-node": "^5.4.0",
 		"@sveltejs/adapter-vercel": "^5.10.3",
-		"@tailwindcss/typography": "^0.5.15",
+		"@tailwindcss/typography": "^0.5.19",
 		"argon2": "^0.44.0",
 		"bcryptjs": "^3.0.2",
 		"dotenv": "^16.5.0",
