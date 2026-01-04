@@ -6,18 +6,8 @@
 	import * as Card from '$lib/components/vendor/ui/card';
 	import HeroBlock from '$lib/templates/landing/blocks/hero-block.svelte';
 
-	let posts = [
-		{
-			title: 'First Post',
-			date: '2025-02-10',
-			excerpt: 'This is my first post.'
-		},
-		{
-			title: 'Second Post',
-			date: '2025-02-15',
-			excerpt: 'Another post example.'
-		}
-	];
+	export let data: PageData;
+	const { posts } = data;
 </script>
 
 <svelte:head>
@@ -37,38 +27,44 @@
 				subtitle="Announcements, updates, and articles from our student chapter."
 			/>
 		</section>
-     <br>
+
 		<!-- Posts -->
 		<section class="w-full flex justify-center">
-	       <div class="w-full max-w-7xl px-6">
-             <div class="mb-12 text-center">
-				<h2 class="text-3xl font-bold">Latest Posts</h2>
-			</div>
+			<div class="w-full max-w-7xl px-6">
+				<div class="mb-12 text-center">
+					<h2 class="text-3xl font-bold">Latest Posts</h2>
+				</div>
 
-			<div class="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2 ">
-				{#each posts as post}
-					<Card.Root class="p-6 transition-transform hover:scale-105">
-						<Card.Header>
-							<Card.Title class="text-xl font-bold">
-								{post.title}
-							</Card.Title>
-							<p class="text-sm text-secondary/70">
-								{post.date}
-							</p>
-						</Card.Header>
+				{#if posts.length === 0}
+					<p class="text-center text-secondary/70">
+						No posts available yet.
+					</p>
+				{:else}
+					<div class="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
+						{#each posts as post}
+							<Card.Root class="p-6 transition-transform hover:scale-105">
+								<Card.Header>
+									<Card.Title class="text-xl font-bold">
+										{post.title}
+									</Card.Title>
+									<p class="text-sm text-secondary/70">
+										{new Date(post.date).toLocaleDateString()}
+									</p>
+								</Card.Header>
 
-						<Card.Content>
-							<p class="text-sm text-secondary/80">
-								{post.excerpt}
-							</p>
-						</Card.Content>
+								<Card.Content>
+									<p class="text-sm text-secondary/80">
+										{post.excerpt}
+									</p>
+								</Card.Content>
 
-						<Card.Footer class="flex gap-2">
-							<Badge variant="outline">Post</Badge>
-						</Card.Footer>
-					</Card.Root>
-				{/each}
-               </div>
+								<Card.Footer class="flex gap-2">
+									<Badge variant="outline">Blog</Badge>
+								</Card.Footer>
+							</Card.Root>
+						{/each}
+					</div>
+				{/if}
 			</div>
 		</section>
 	</main>
