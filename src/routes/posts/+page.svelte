@@ -19,7 +19,7 @@
 
 	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
 		<!-- Hero -->
-		<section class="w-full ml-4">
+		<section class="w-full">
 			<HeroBlock
 				no_signup
 				text_light_blue="Chapter"
