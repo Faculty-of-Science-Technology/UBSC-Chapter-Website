@@ -20,7 +20,7 @@ export const load: PageServerLoad = async () => {
 			date: post.PublishedAt ?? post.CreatedAt,
 			excerpt:
 				post.Excerpt ??
-				post.Content.slice(0, 150) + '...'
+				(post.Content ?? '').slice(0, 150) + '...'
 		}))
 	};
 };
