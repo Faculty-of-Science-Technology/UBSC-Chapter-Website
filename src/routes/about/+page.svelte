@@ -205,7 +205,7 @@
 				</p>
 			</div>
 
-			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 ">
 				{#each data.leadership || [] as leader}
 					<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 						<Card.Header>
@@ -219,16 +219,17 @@
 								<div
 									class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-primary/10"
 								>
-									<span class="text-xl font-bold text-gray-600">
+									<span class="text-xl font-bold text-gray-600 text-primary">
 										{leader.firstName[0]}{leader.lastName[0]}
 									</span>
 								</div>
 							{/if}
-							<Card.Title class="text-lg">{leader.firstName} {leader.lastName}</Card.Title>
-							<Badge variant="secondary" class="mb-2">{leader.role}</Badge>
+							<Card.Title class="text-lg text-foreground">{leader.firstName} {leader.lastName}</Card.Title>
+							<Badge variant="secondary" class="mx-auto mb-2 block text-sky-700 bg-sky-200 hover:bg-sky-300 hover:text-sky-600">
+									 {leader.role}</Badge>
 						</Card.Header>
 						{#if leader.bio}
-							<Card.Content>
+							<Card.Content class="text-center bg-blue-10/10 text-gray-500 rounded-md p-4">
 								<p class="text-sm text-gray-600">{leader.bio}</p>
 							</Card.Content>
 						{/if}
