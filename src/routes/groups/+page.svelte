@@ -45,7 +45,7 @@
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-blue-600"
+						<Card.Title class="text-3xl font-bold text-sky-600"
 							>{data.statistics.totalGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Groups</p>
@@ -53,7 +53,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-green-600"
+						<Card.Title class="text-3xl font-bold text-sky-600"
 							>{data.statistics.activeGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Active Groups</p>
@@ -69,7 +69,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-orange-600">{committees.length}</Card.Title>
+						<Card.Title class="text-3xl font-bold text-sky-600">{committees.length}</Card.Title>
 						<p class="text-sm text-gray-600">Committees</p>
 					</Card.Header>
 				</Card.Root>
