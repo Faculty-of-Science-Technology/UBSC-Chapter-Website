@@ -15,7 +15,7 @@
 	<div class="mx-auto max-w-7xl px-6">
 		<!-- Heading -->
 		<div class="mb-16 text-center">
-			<h2 class="mb-4 text-3xl font-bold">
+			<h2 class="mb-4 text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
 				UB ACM Student Chapter Officers
 			</h2>
 			<p class="mx-auto max-w-3xl text-gray-600">
@@ -50,14 +50,15 @@
 
 						<Badge
 							variant="secondary"
-							class="mx-auto mt-2 bg-sky-200 text-sky-700 hover:bg-sky-300"
+							class="mx-auto mt-2 bg-primary/30 text-secondary hover:bg-accent text-secondary"
 						>
+						
 							{officer.role}
 						</Badge>
 					</Card.Header>
 
 					{#if officer.bio}
-						<Card.Content class="mt-4 rounded-md bg-sky-50 p-4 text-sm text-gray-600">
+						<Card.Content class="mt-4 rounded-md bg-primary/30 text-secondary hover:bg-accent text-secondary">
 							{officer.bio}
 						</Card.Content>
 					{/if}
