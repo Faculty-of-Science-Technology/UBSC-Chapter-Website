@@ -229,7 +229,7 @@
 									 {leader.role}</Badge>
 						</Card.Header>
 						{#if leader.bio}
-							<Card.Content class="text-center bg-blue-100/10 text-gray-500 rounded-md p-4">
+							<Card.Content class="text-center bg-secondary text-gray-500 rounded-md p-4">
 								<p class="text-sm text-gray-600">{leader.bio}</p>
 							</Card.Content>
 						{/if}
