@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
-	import PublicNav from '$lib/components/public/nav.svelte';
 	import { AspectRatio } from '$lib/components/vendor/ui/aspect-ratio';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
@@ -27,9 +26,9 @@
 	/>
 </svelte:head>
 
-<page class="inline-flex h-full w-full flex-col items-center gap-32">
-	<PublicNav />
-	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
+<page class="inline-flex h-full w-full flex-col items-center gap-32 mt-24">
+	
+	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-32">
 		<!-- Hero Section -->
 		<section class="w-full">
 			<HeroBlock

@@ -145,6 +145,15 @@
 							Register with invite code
 						</a>
 					</p>
+					<p class="text-sm text-gray-600">
+						Forgot your password?
+						<a
+							href="/auth/forgot-password"
+							class="font-medium text-sky-600 transition-colors hover:text-sky-500"
+						>
+							Reset it here
+						</a>
+					</p>
 				</div>
 			</form>
 		</div>

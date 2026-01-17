@@ -25,12 +25,12 @@
 			text="First ACM Chapter"
 			subtitle="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
 		>
-			<Activity center data={{ title: 'Active Members', number: statistics.totalMembers.toString() }} />
-			<Activity center data={{ title: 'Active Groups', number: statistics.activeGroups.toString() }} />
+			<Activity data={{ title: 'Active Members', number: statistics.totalMembers.toString() }} />
+			<Activity data={{ title: 'Active Groups', number: statistics.activeGroups.toString() }} />
 		</HeroBlock>
 	</div>
 	<HeroPillBlock>
 		<Pill text="Join a Global Organization" background="/landing/pill/world-map.png" />
-		<Pill text="Find Your Passion" bg-primary="bg-blue-500" background="/landing/pill/man-holding-laptop.jpg" class="text-sky-400" />
+		<Pill text="Find Your Passion" background="/landing/pill/man-holding-laptop.jpg"/>
 	</HeroPillBlock>
 </assembly>
