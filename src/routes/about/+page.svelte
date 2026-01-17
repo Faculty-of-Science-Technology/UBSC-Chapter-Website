@@ -219,7 +219,7 @@
 								<div
 									class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-primary/10"
 								>
-									<span class="text-xl font-bold text-gray-600 text-primary">
+									<span class="text-xl font-bold text-primary">
 										{leader.firstName[0]}{leader.lastName[0]}
 									</span>
 								</div>
