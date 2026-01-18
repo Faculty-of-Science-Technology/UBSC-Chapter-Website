@@ -239,7 +239,7 @@
 							>
 							<Badge
 								variant="secondary"
-								class="mx-auto mb-2 block bg-sky-200 text-sky-700 hover:bg-sky-300 hover:text-sky-600"
+								class="mx-auto mb-2 block bg-primary/40 text-sky-700 hover:bg-primary/70 hover:text-primary"
 							>
 								{leader.role}</Badge
 							>

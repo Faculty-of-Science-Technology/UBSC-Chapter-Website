@@ -140,7 +140,7 @@
 						Don't have an account?
 						<a
 							href="/auth/register"
-							class="font-medium text-sky-600 transition-colors hover:text-sky-500"
+							class="font-medium text-primary transition-colors hover:text-sky-500"
 						>
 							Register with invite code
 						</a>
@@ -149,7 +149,7 @@
 						Forgot your password?
 						<a
 							href="/auth/forgot-password"
-							class="font-medium text-sky-600 transition-colors hover:text-sky-500"
+							class="font-medium text-primary transition-colors hover:text-sky-500"
 						>
 							Reset it here
 						</a>

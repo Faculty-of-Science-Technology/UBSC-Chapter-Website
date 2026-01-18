@@ -330,14 +330,14 @@
 									>
 										<button
 											onclick={() => togglePublished(event.id, event.published)}
-											class="mr-4 text-sky-600 hover:text-primary"
+											class="mr-4 text-primary hover:text-primary"
 											disabled={loading}
 										>
 											{event.published ? 'Unpublish' : 'Publish'}
 										</button>
 										<button
 											onclick={() => handleEditEvent(event)}
-											class="mr-4 text-sky-600 hover:text-primary"
+											class="mr-4 text-primary hover:text-primary"
 										>
 											Edit
 										</button>

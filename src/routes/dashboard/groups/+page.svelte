@@ -321,7 +321,7 @@
 											<span class="font-medium text-secondary">{group.memberCount}</span>
 											<button
 												onclick={() => handleManageMembers(group)}
-												class="ml-2 text-sky-600 hover:text-primary"
+												class="ml-2 text-primary hover:text-primary"
 											>
 												Manage
 											</button>
@@ -342,7 +342,7 @@
 									>
 										<button
 											onclick={() => handleEditGroup(group)}
-											class="mr-4 text-sky-600 hover:text-primary"
+											class="mr-4 text-primary hover:text-primary"
 										>
 											Edit
 										</button>

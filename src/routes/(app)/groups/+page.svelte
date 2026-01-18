@@ -44,7 +44,7 @@
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Groups</p>
@@ -52,7 +52,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.activeGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Active Groups</p>
@@ -60,7 +60,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalMembers}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Members</p>
@@ -68,7 +68,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600">{committees.length}</Card.Title>
+						<Card.Title class="text-3xl font-bold text-primary">{committees.length}</Card.Title>
 						<p class="text-sm text-gray-600">Committees</p>
 					</Card.Header>
 				</Card.Root>
@@ -222,7 +222,7 @@
 							<div
 								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-100"
 							>
-								<span class="text-xl font-bold text-sky-600">3</span>
+								<span class="text-xl font-bold text-primary">3</span>
 							</div>
 							<h4 class="mb-2 font-semibold">Get Involved</h4>
 							<p class="text-sm text-gray-600">

@@ -81,7 +81,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{upcomingEvents.length}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Upcoming Events</p>
@@ -97,7 +97,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Active Groups</p>
@@ -149,7 +149,7 @@
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-sky-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -201,7 +201,7 @@
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-sky-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"

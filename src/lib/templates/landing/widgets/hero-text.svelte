@@ -30,7 +30,7 @@
 			{prelude}
 		</prelude>
 		<div class={`${size_text ?? "text-5xl"} font-light text-sky-500`}>
-			{text_light_blue} <span class="text-sky-600">{text}</span>
+			{text_light_blue} <span class="text-primary">{text}</span>
 		</div>
 	</div>
 	<p class="inter text-sm font-normal leading-snug">

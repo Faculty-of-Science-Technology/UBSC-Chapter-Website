@@ -128,7 +128,7 @@
 				<div class="text-center">
 					<p class="text-sm text-gray-600">
 						Remember your password?
-						<a href="/auth/login" class="font-medium text-sky-600 transition-colors hover:text-sky-500">
+						<a href="/auth/login" class="font-medium text-primary transition-colors hover:text-sky-500">
 							Log in
 						</a>
 					</p>

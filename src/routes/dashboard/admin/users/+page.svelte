@@ -371,7 +371,7 @@
 									>
 										<button
 											onclick={() => handleEditUser(user)}
-											class="mr-4 text-sky-600 hover:text-primary"
+											class="mr-4 text-primary hover:text-primary"
 										>
 											Edit
 										</button>
