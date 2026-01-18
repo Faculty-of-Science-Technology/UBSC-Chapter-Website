@@ -303,7 +303,7 @@
 													<button
 														onclick={() => selectTheme(theme.id)}
 														disabled={loading}
-														class="text-sky-600 hover:text-primary disabled:opacity-50"
+														class="text-primary hover:text-primary disabled:opacity-50"
 													>
 														Select
 													</button>

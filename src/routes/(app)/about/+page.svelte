@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
-	import PublicNav from '$lib/components/public/nav.svelte';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
 	import * as Card from '$lib/components/vendor/ui/card';
@@ -19,24 +18,23 @@
 </svelte:head>
 
 <page class="inline-flex h-full w-full flex-col items-center gap-32">
-	<PublicNav />
-	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
-		<!-- Hero Section -->
-		<section class="w-full">
-			<HeroBlock
-				no_signup
-				text_light_blue="About"
-				text="UBSC Chapter"
-				subtitle="The University of Belize's Associate for Computer Machinery (ACM) Chapter is dedicated to advancing technology education, fostering innovation, and building a strong community of technology enthusiasts in Belize."
-			/>
-		</section>
-
+	<!-- Hero Section -->
+	<section class="flex h-[300px] w-full items-center justify-center bg-muted md:px-32">
+		<HeroBlock
+			class="self-auto"
+			no_signup
+			text_light_blue="About"
+			text="UBSC Chapter"
+			subtitle="The University of Belize's Associate for Computer Machinery (ACM) Chapter is dedicated to advancing technology education, fostering innovation, and building a strong community of technology enthusiasts in Belize."
+		/>
+	</section>
+	<main class="mx-2 flex flex-col items-center gap-32 self-stretch lg:mx-20 xl:mx-32">
 		<!-- Mission & Vision Section -->
 		<section class="w-full">
 			<div class="grid gap-8 md:grid-cols-2">
-				<Card.Root class="p-8">
+				<Card.Root class="border-primary/20 p-8">
 					<Card.Header>
-						<Card.Title class="text-2xl font-bold text-primary">Our Mission</Card.Title>
+						<Card.Title class="text-8xl font-semibold text-primary">Our Mission</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<p class="leading-relaxed text-secondary/70">
@@ -48,9 +46,9 @@
 					</Card.Content>
 				</Card.Root>
 
-				<Card.Root class="p-8">
+				<Card.Root class="border-primary/20 p-8">
 					<Card.Header>
-						<Card.Title class="text-2xl font-bold text-primary">Our Vision</Card.Title>
+						<Card.Title class="text-8xl font-semibold text-primary">Our Vision</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<p class="leading-relaxed text-secondary/70">
@@ -66,15 +64,18 @@
 		<!-- What We Do Section -->
 		<section class="w-full">
 			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">What We Do</h2>
-				<p class="mx-auto max-w-2xl text-gray-600">
-					Our chapter provides diverse opportunities for learning, networking, and professional
-					development
-				</p>
+				<HeroBlock
+					center
+					no_signup
+					text_light_blue="What"
+					text="We Do"
+					subtitle="Our chapter provides diverse opportunities for learning, networking, and professional development"
+					size_text="text-6xl"
+				/>
 			</div>
 
 			<div class="grid gap-6 md:grid-cols-3">
-				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
+				<Card.Root class="border-primary/20 p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
@@ -93,7 +94,9 @@
 								/>
 							</svg>
 						</div>
-						<Card.Title>Education & Workshops</Card.Title>
+						<Card.Title class="text-2xl font-semibold text-primary"
+							>Education & Workshops</Card.Title
+						>
 					</Card.Header>
 					<Card.Content>
 						<p class="text-gray-600">
@@ -103,7 +106,7 @@
 					</Card.Content>
 				</Card.Root>
 
-				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
+				<Card.Root class="border-primary/20 p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
@@ -122,7 +125,7 @@
 								/>
 							</svg>
 						</div>
-						<Card.Title>Networking Events</Card.Title>
+						<Card.Title class="text-2xl font-semibold text-primary">Networking Events</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<p class="text-gray-600">
@@ -132,7 +135,7 @@
 					</Card.Content>
 				</Card.Root>
 
-				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
+				<Card.Root class="border-primary/20 p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10"
@@ -151,7 +154,7 @@
 								/>
 							</svg>
 						</div>
-						<Card.Title>Innovation Projects</Card.Title>
+						<Card.Title class="text-2xl font-semibold text-primary">Innovation Projects</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<p class="text-gray-600">
@@ -166,30 +169,33 @@
 		<!-- Core Values Section -->
 		<section class="w-full">
 			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Our Core Values</h2>
-				<p class="mx-auto max-w-2xl text-gray-600">
-					These principles guide everything we do and shape our community culture
-				</p>
+				<HeroBlock
+					center
+					no_signup
+					text_light_blue="Our"
+					text="Core Values"
+					subtitle="These principles guide everything we do and shape our community culture"
+					size_text="text-6xl"
+				/>
 			</div>
 
-			<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+			<div class="grid gap-6 md:grid-cols-2">
 				<div class="text-center">
-					<Badge variant="outline" class="mb-3 px-4 py-2 text-lg">Innovation</Badge>
-					<p class="text-sm text-gray-600">Embracing new technologies and creative solutions</p>
+					<Badge variant="outline" class="mb-3 px-4 py-2 text-8xl text-primary">Innovation</Badge>
+					<p class="text-sm text-primary">Embracing new technologies and creative solutions</p>
 				</div>
 				<div class="text-center">
-					<Badge variant="outline" class="mb-3 px-4 py-2 text-lg">Collaboration</Badge>
-					<p class="text-sm text-gray-600">Working together to achieve common goals</p>
+					<Badge variant="outline" class="mb-3 px-4 py-2 text-8xl text-primary">Collaboration</Badge
+					>
+					<p class="text-sm text-primary">Working together to achieve common goals</p>
 				</div>
 				<div class="text-center">
-					<Badge variant="outline" class="mb-3 px-4 py-2 text-lg">Excellence</Badge>
-					<p class="text-sm text-gray-600">
-						Striving for the highest standards in everything we do
-					</p>
+					<Badge variant="outline" class="mb-3 px-4 py-2 text-8xl text-primary">Excellence</Badge>
+					<p class="text-sm text-primary">Striving for the highest standards in everything we do</p>
 				</div>
 				<div class="text-center">
-					<Badge variant="outline" class="mb-3 px-4 py-2 text-lg">Community</Badge>
-					<p class="text-sm text-gray-600">
+					<Badge variant="outline" class="mb-3 px-4 py-2 text-8xl text-primary">Community</Badge>
+					<p class="text-sm text-primary">
 						Building strong relationships and supporting each other
 					</p>
 				</div>
@@ -199,15 +205,19 @@
 		<!-- Leadership Section -->
 		<section class="w-full">
 			<div class="mb-12 text-center">
-				<h2 class="mb-4 text-3xl font-bold">Leadership Team</h2>
-				<p class="mx-auto max-w-2xl text-gray-600">
-					Meet the dedicated individuals who help guide our chapter's direction and activities
-				</p>
+				<HeroBlock
+					class="self-auto"
+					no_signup
+					text_light_blue="Leadership"
+					text="Team"
+					subtitle="Meet the dedicated individuals who help guide our chapter's direction and activities"
+					size_text="text-8xl"
+				/>
 			</div>
 
 			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 ">
 				{#each data.leadership || [] as leader}
-					<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
+					<Card.Root class="border-primary/20 p-6 text-center transition-shadow hover:shadow-lg">
 						<Card.Header>
 							{#if leader.profilePicture}
 								<img
@@ -224,12 +234,18 @@
 									</span>
 								</div>
 							{/if}
-							<Card.Title class="text-lg text-foreground">{leader.firstName} {leader.lastName}</Card.Title>
-							<Badge variant="secondary" class="mx-auto mb-2 block text-sky-700 bg-sky-200 hover:bg-sky-300 hover:text-sky-600">
-									 {leader.role}</Badge>
+							<Card.Title class="pb-8 text-2xl font-semibold text-primary"
+								>{leader.firstName} {leader.lastName}</Card.Title
+							>
+							<Badge
+								variant="secondary"
+								class="mx-auto mb-2 block bg-primary/40 text-sky-700 hover:bg-primary/70 hover:text-primary"
+							>
+								{leader.role}</Badge
+							>
 						</Card.Header>
 						{#if leader.bio}
-							<Card.Content class="text-center bg-secondary text-gray-500 rounded-md p-4">
+							<Card.Content class="mt-4 rounded-md bg-muted p-4 text-center text-secondary/80">
 								<p class="text-sm text-gray-600">{leader.bio}</p>
 							</Card.Content>
 						{/if}
@@ -242,7 +258,8 @@
 		<section class="w-full text-center">
 			<Card.Root class="bg-gradient-to-r from-primary to-secondary p-12">
 				<Card.Header>
-					<Card.Title class="mb-4 text-3xl font-bold text-background">Join Our Community</Card.Title>
+					<Card.Title class="mb-4 text-3xl font-bold text-background">Join Our Community</Card.Title
+					>
 				</Card.Header>
 				<Card.Content>
 					<p class="mx-auto mb-8 max-w-2xl text-background">

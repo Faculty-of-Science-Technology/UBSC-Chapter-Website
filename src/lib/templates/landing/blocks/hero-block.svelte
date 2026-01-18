@@ -13,6 +13,9 @@
 		no_signup?: boolean;
 		activities_column_on_mobile?: boolean;
 		class?: string;
+		size_prelude?: string;
+		size_text?: string;
+		center?: boolean;
 	}
 	
 	let {
@@ -22,12 +25,15 @@
 		text = '',
 		subtitle = '',
 		no_signup = false,
-		activities_column_on_mobile = false
+		activities_column_on_mobile = false,
+		size_prelude = undefined,
+		size_text = undefined,
+		center = false
 	}: Props = $props();
 </script>
 
-<assembly class={cn("flex flex-col items-start self-stretch gap-8", className)}>
-	<HeroText {prelude} {text_light_blue} {text} {subtitle} />
+<assembly class={cn(`flex flex-col ${center? "items-center" : "items-start"} self-stretch gap-8`, className)}>
+	<HeroText {prelude} {text_light_blue} {text} {subtitle} {size_prelude} {size_text} {center}/>
 	{#if !no_signup}
 		<HeroSignup />
 	{/if}

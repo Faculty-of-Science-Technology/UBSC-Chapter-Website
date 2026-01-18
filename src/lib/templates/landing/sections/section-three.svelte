@@ -83,7 +83,7 @@
 							class="w-full text-left transition-transform hover:scale-105"
 							onclick={() => selectedGroup = group}
 						>
-							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-blue-500 to-sky-600 relative overflow-hidden">
+							<AspectRatio ratio={16 / 9} class="bg-gradient-to-br from-sky-600 via-primary to-blue-600 relative overflow-hidden rounded-xl">
 								<div class="absolute inset-0 bg-muted/40"></div>
 								<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
 									<h3 class="font-bold text-lg mb-1">{group.Title}</h3>

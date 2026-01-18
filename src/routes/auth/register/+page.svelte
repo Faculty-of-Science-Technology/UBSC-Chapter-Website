@@ -221,7 +221,7 @@
 							Already have an account?
 							<a
 								href="/auth/login"
-								class="font-medium text-sky-600 transition-colors hover:text-sky-500"
+								class="font-medium text-primary transition-colors hover:text-sky-500"
 							>
 								Sign in
 							</a>
@@ -233,7 +233,7 @@
 				<div class="mb-4 flex items-center">
 					<button
 						onclick={goBackToInviteStep}
-						class="flex items-center text-sm font-medium text-sky-600 transition-colors hover:text-sky-500"
+						class="flex items-center text-sm font-medium text-primary transition-colors hover:text-sky-500"
 					>
 						<svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
