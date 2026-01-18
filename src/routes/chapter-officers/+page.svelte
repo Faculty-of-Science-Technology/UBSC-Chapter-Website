@@ -7,6 +7,22 @@
 
 	export let data: PageData;
 	const officers = data.officers;
+
+	const roleOrder = [
+	'Faculty Sponsor',
+	'Chapter Chair',
+	'Vice Chair',
+	'Secretary',
+	'Treasurer',
+	'Webmaster',
+	'Chapter Officer'
+ ];
+
+    const sortedOfficers = [...officers].sort(
+    	(a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role)
+    );
+
+   console.log(sortedOfficers.map(o => o.role));
 </script>
 
 <PublicNav />
@@ -27,7 +43,7 @@
 
 		<!-- Officers Grid -->
 		<div class="grid justify-center gap-8 sm:grid-cols-2 md:grid-cols-3">
-			{#each officers as officer}
+			{#each sortedOfficers as officer}
 				<Card.Root class="max-w-xs p-6 text-center hover:shadow-lg transition-shadow">
 					<Card.Header>
 						{#if officer.profilePicture}
