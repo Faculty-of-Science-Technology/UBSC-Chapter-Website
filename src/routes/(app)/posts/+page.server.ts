@@ -1,5 +1,4 @@
 import { db } from '$lib/server/db';
-import { Posts } from '$lib/server/db/schema';
 import { and, eq, desc } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
