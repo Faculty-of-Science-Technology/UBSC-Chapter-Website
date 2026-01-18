@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
-	import PublicNav from '$lib/components/public/nav.svelte';
 	import { AspectRatio } from '$lib/components/vendor/ui/aspect-ratio';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
@@ -27,9 +26,9 @@
 	/>
 </svelte:head>
 
-<page class="inline-flex h-full w-full flex-col items-center gap-32">
-	<PublicNav />
-	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
+<page class="inline-flex h-full w-full flex-col items-center gap-32 mt-24">
+	
+	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-32">
 		<!-- Hero Section -->
 		<section class="w-full">
 			<HeroBlock
@@ -45,7 +44,7 @@
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-blue-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Groups</p>
@@ -53,7 +52,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-green-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.activeGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Active Groups</p>
@@ -61,7 +60,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalMembers}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Members</p>
@@ -69,7 +68,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-orange-600">{committees.length}</Card.Title>
+						<Card.Title class="text-3xl font-bold text-primary">{committees.length}</Card.Title>
 						<p class="text-sm text-gray-600">Committees</p>
 					</Card.Header>
 				</Card.Root>
@@ -223,7 +222,7 @@
 							<div
 								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-100"
 							>
-								<span class="text-xl font-bold text-sky-600">3</span>
+								<span class="text-xl font-bold text-primary">3</span>
 							</div>
 							<h4 class="mb-2 font-semibold">Get Involved</h4>
 							<p class="text-sm text-gray-600">

@@ -26,7 +26,7 @@
 			subtitle="The Association for Computing Machinery (ACM) is the world's largest scientific and educational computing society. The University of Belize's chapter of the ACM is only the second Student Chapter in Central America, and a part of the growing ACM network. The ACM offers members the opportunity to be an active part of the association by organizing activities such as technical talks, forums, field trips, and programming contests."
 		>
 			<preload class="hidden text-3xl"></preload>
-			<Activity size="text-3xl" data={{ title: 'Total Members', number: statistics.totalMembers.toLocaleString() }} />
+			<Activity center size="text-3xl" data={{ title: 'Total Members', number: statistics.totalMembers.toLocaleString() }} />
 			<Activity center size="text-3xl" data={{ title: 'Published Posts', number: statistics.totalPosts.toString() }} />
 			<Activity center size="text-3xl" data={{ title: 'Events Hosted', number: statistics.totalEvents.toString() }} />
 		</HeroBlock>

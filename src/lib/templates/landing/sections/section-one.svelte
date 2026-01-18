@@ -31,6 +31,6 @@
 	</div>
 	<HeroPillBlock>
 		<Pill text="Join a Global Organization" background="/landing/pill/world-map.png" />
-		<Pill text="Find Your Passion" background="/landing/pill/man-holding-laptop.jpg" />
+		<Pill text="Find Your Passion" background="/landing/pill/man-holding-laptop.jpg"/>
 	</HeroPillBlock>
 </assembly>

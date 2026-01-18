@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
-	import PublicNav from '$lib/components/public/nav.svelte';
 	import { AspectRatio } from '$lib/components/vendor/ui/aspect-ratio';
 	import { Badge } from '$lib/components/vendor/ui/badge';
 	import { Button } from '$lib/components/vendor/ui/button';
@@ -56,9 +55,9 @@
 	/>
 </svelte:head>
 
-<page class="inline-flex h-full w-full flex-col items-center gap-32">
-	<PublicNav />
-	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-60">
+<page class="inline-flex h-full w-full flex-col items-center gap-32 mt-24">
+	
+	<main class="mx-2 flex flex-col items-center gap-8 self-stretch lg:mx-20 xl:mx-32">
 		<!-- Hero Section -->
 		<section class="w-full">
 			<HeroBlock
@@ -82,7 +81,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-green-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{upcomingEvents.length}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Upcoming Events</p>
@@ -90,7 +89,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-sky-600"
+						<Card.Title class="text-3xl font-bold text-blue-600"
 							>{data.statistics.totalAttendees}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Attendees</p>
@@ -98,7 +97,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-orange-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalGroups}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Active Groups</p>
@@ -137,7 +136,7 @@
 							</svg>
 						</div>
 						<Card.Title class="mb-2 text-lg">Workshops</Card.Title>
-						<Card.Description class="text-sm">
+						<Card.Description class="text-sm text-secondary/80">
 							Hands-on technical workshops covering the latest technologies and programming
 							languages.
 						</Card.Description>
@@ -147,10 +146,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-green-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -164,7 +163,7 @@
 							</svg>
 						</div>
 						<Card.Title class="mb-2 text-lg">Networking</Card.Title>
-						<Card.Description class="text-sm">
+						<Card.Description class="text-sm text-secondary/80">
 							Connect with industry professionals, alumni, and fellow students in informal settings.
 						</Card.Description>
 					</Card.Header>
@@ -173,10 +172,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
 						>
 							<svg
-								class="h-8 w-8 text-sky-600"
+								class="h-8 w-8 text-blue-600"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -190,7 +189,7 @@
 							</svg>
 						</div>
 						<Card.Title class="mb-2 text-lg">Seminars</Card.Title>
-						<Card.Description class="text-sm">
+						<Card.Description class="text-sm text-secondary/80">
 							Educational talks by industry experts on emerging technologies and career development.
 						</Card.Description>
 					</Card.Header>
@@ -199,10 +198,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
 						>
 							<svg
-								class="h-8 w-8 text-orange-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -216,7 +215,7 @@
 							</svg>
 						</div>
 						<Card.Title class="mb-2 text-lg">Hackathons</Card.Title>
-						<Card.Description class="text-sm">
+						<Card.Description class="text-sm text-secondary/80">
 							Intensive coding competitions and collaborative problem-solving events.
 						</Card.Description>
 					</Card.Header>
@@ -235,7 +234,7 @@
 
 			{#if upcomingEvents.length > 0}
 				<!-- Masonry Grid for Upcoming Events -->
-				<div class="w-full columns-1 gap-4 space-y-4 md:columns-2 lg:columns-3">
+				<div class="w-full columns-1 gap-4 space-y-4 md:columns-2">
 					{#each upcomingEvents as event}
 						{@const status = getEventStatus(event)}
 						<div class="mb-4 break-inside-avoid">
@@ -484,7 +483,7 @@
 										<div class="flex items-center gap-2 pt-2">
 											<Badge variant="outline" class="text-xs">Past Event</Badge>
 											{#if event.authorName}
-												<Badge variant="secondary" class="text-xs">
+												<Badge variant="secondary" class="text-xs text-background bg-sky-400">
 													By {event.authorName}
 													{event.authorLastName}
 												</Badge>

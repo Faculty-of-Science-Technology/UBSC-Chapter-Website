@@ -305,7 +305,7 @@
 					<div class="flex space-x-2">
 						<button
 							onclick={() => handleEditRole(role)}
-							class="text-sm text-sky-600 hover:text-primary"
+							class="text-sm text-primary hover:text-primary"
 						>
 							Edit
 						</button>

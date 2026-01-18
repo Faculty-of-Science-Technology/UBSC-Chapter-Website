@@ -254,7 +254,7 @@
 											</div>
 											<button
 												onclick={() => copyToClipboard(getInviteUrl(invite.code))}
-												class="ml-2 text-xs text-sky-600 hover:text-primary"
+												class="ml-2 text-xs text-primary hover:text-primary"
 												title="Copy invite URL"
 											>
 												Copy URL
