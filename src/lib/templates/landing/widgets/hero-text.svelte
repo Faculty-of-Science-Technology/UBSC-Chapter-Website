@@ -18,18 +18,18 @@
 		text_light_blue = '',
 		subtitle = '<no subtitle provided>',
 		class: className,
-		size_prelude = 'xl',
-		size_text = '5xl',
+		size_prelude = undefined,
+		size_text = undefined,
 		center = false
 	}: Props = $props();
 </script>
 
-<article class={cn(`flex flex-col items-${center ? "center" : "start"} gap-3`, className)}>
+<article class={cn(`flex flex-col ${center ? "items-center" : "items-start"} gap-3`, className)}>
 	<div>
-		<prelude class={`text-${size_prelude} font-light text-sky-500`}>
+		<prelude class={`${size_prelude ?? "text-xl"} font-light text-sky-500`}>
 			{prelude}
 		</prelude>
-		<div class={`text-${size_text} font-light text-sky-500`}>
+		<div class={`${size_text ?? "text-5xl"} font-light text-sky-500`}>
 			{text_light_blue} <span class="text-sky-600">{text}</span>
 		</div>
 	</div>

@@ -70,7 +70,7 @@
 					text_light_blue="What"
 					text="We Do"
 					subtitle="Our chapter provides diverse opportunities for learning, networking, and professional development"
-					size_text="6xl"
+					size_text="text-6xl"
 				/>
 			</div>
 
@@ -175,7 +175,7 @@
 					text_light_blue="Our"
 					text="Core Values"
 					subtitle="These principles guide everything we do and shape our community culture"
-					size_text="6xl"
+					size_text="text-6xl"
 				/>
 			</div>
 
@@ -211,7 +211,7 @@
 					text_light_blue="Leadership"
 					text="Team"
 					subtitle="Meet the dedicated individuals who help guide our chapter's direction and activities"
-					size_text="8xl"
+					size_text="text-8xl"
 				/>
 			</div>
 

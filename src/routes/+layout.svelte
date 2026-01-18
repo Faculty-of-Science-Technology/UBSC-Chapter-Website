@@ -4,7 +4,6 @@
 		PUBLIC_PLATFORM_UPDATED_AT,
 		PUBLIC_PLATFORM_VERSION
 	} from '$env/static/public';
-	import PublicNav from '$lib/components/public/nav.svelte';
 	import { Toaster } from '$lib/components/vendor/ui/sonner';
 	import { i18n } from '$lib/i18n';
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
@@ -33,7 +32,6 @@
 {/if}
 <ParaglideJS {i18n}>
 	<Toaster />
-	<PublicNav/>
 	{@render props.children()}
 </ParaglideJS>
 

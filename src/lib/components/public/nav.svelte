@@ -5,7 +5,7 @@
 	import { Button } from '$lib/components/vendor/ui/button';
 	import { cn } from '../vendor/utils';
 
-	const { class: className } = $props();
+	const { class: className }: { class?: string } = $props();
 </script>
 
 <component

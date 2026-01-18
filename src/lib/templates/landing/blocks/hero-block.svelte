@@ -26,13 +26,13 @@
 		subtitle = '',
 		no_signup = false,
 		activities_column_on_mobile = false,
-		size_prelude = "xl",
-		size_text = "5xl",
+		size_prelude = undefined,
+		size_text = undefined,
 		center = false
 	}: Props = $props();
 </script>
 
-<assembly class={cn(`flex flex-col items-${center? "center" : "start"} self-stretch gap-8`, className)}>
+<assembly class={cn(`flex flex-col ${center? "items-center" : "items-start"} self-stretch gap-8`, className)}>
 	<HeroText {prelude} {text_light_blue} {text} {subtitle} {size_prelude} {size_text} {center}/>
 	{#if !no_signup}
 		<HeroSignup />
