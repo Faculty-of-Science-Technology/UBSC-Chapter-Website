@@ -27,8 +27,8 @@ export const load: PageServerLoad = async () => {
 					lastName: m.user!.LastName,
 					email: m.user!.Email,
 					profilePicture: m.user!.ProfilePicture,
-					role: 'Chapter Officer', // TODO: replace with Roles join via UserRoles
-					bio: m.user?.Bio ?? null // ← nullable
+					role: 'Chapter Officer',
+					bio: m.user!.Bio ?? null
 				})) ?? []
 	};
 };
