@@ -5,7 +5,7 @@ import { db } from '$lib/server/db';
 import { Groups, Posts, Users } from '$lib/server/db/schema';
 import { and, count, eq, isNull } from 'drizzle-orm';
 import { fail, setError, setMessage } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { Actions, PageServerLoad } from './$types';
@@ -142,7 +142,7 @@ export const load: PageServerLoad = async (request) => {
 		events: group.posts
 	}));
 
-	const form = await superValidate(request, zod(eventRegisterSchema));
+	const form = await superValidate(request, zod4(eventRegisterSchema));
 
 	// Prepare statistics for the landing page
 	const statistics = {
@@ -167,7 +167,7 @@ export const load: PageServerLoad = async (request) => {
 export const actions: Actions = {
 	signUpForDefaultEvent: async ({ request }) => {
 		// Validate form data using superValidate
-		const form = await superValidate(request, zod(eventRegisterSchema));
+		const form = await superValidate(request, zod4(eventRegisterSchema));
 
 		if (form.data.name.trim() === '') {
 			setError(form, 'name', "That doesn't look right. Please enter a valid name.");

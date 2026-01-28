@@ -1,16 +1,13 @@
-import { i18n } from '$lib/i18n';
+import { paraglideMiddleware } from '$lib/paraglide/server';
 import { AuthService } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
 import { redirect } from '@sveltejs/kit';
 
-const handleI18n: Handle = i18n.handle();
-
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = event.cookies;
 	const authToken = cookies.get('auth_token');
-	
-	try {
 
+	try {
 		// Check if the user is authenticated
 		if (authToken) {
 			const authResult = await AuthService.verifyToken(authToken);
@@ -32,13 +29,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 		// Protect admin theme route - require theme management permission
 		if (event.url.pathname.startsWith('/dashboard/admin/theme')) {
-			if (!event.locals.user || (!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageTheme)) {
+			if (
+				!event.locals.user ||
+				(!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageTheme)
+			) {
 				throw redirect(302, '/dashboard');
 			}
 		}
 		// Protect other admin routes - require admin permissions
 		else if (event.url.pathname.startsWith('/dashboard/admin')) {
-			if (!event.locals.user || (!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageUsers)) {
+			if (
+				!event.locals.user ||
+				(!event.locals.user.Administrator && !event.locals.user.Permissions.CanManageUsers)
+			) {
 				throw redirect(302, '/dashboard');
 			}
 		}
@@ -47,7 +50,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		if (event.url.pathname.startsWith('/auth/') && event.locals.user) {
 			throw redirect(302, '/dashboard');
 		}
-
 	} catch (error) {
 		// If it's a redirect, re-throw it
 		if (error instanceof Response && error.status >= 300 && error.status < 400) {
@@ -58,6 +60,16 @@ export const handle: Handle = async ({ event, resolve }) => {
 		cookies.delete('auth_token', { path: '/' });
 	}
 
-	const response = await handleI18n({ event, resolve });
+	const response = paraglideMiddleware(
+		event.request,
+		({ request: localizedRequest, locale }: { request: Request; locale: string }) => {
+			event.request = localizedRequest;
+			return resolve(event, {
+				transformPageChunk: ({ html }: { html: string }) => {
+					return html.replace('%lang%', locale);
+				}
+			});
+		}
+	);
 	return response;
 };
