@@ -1,7 +1,7 @@
 import { paraglideMiddleware } from '$lib/paraglide/server';
 import { AuthService } from '$lib/server/auth';
 import type { Handle } from '@sveltejs/kit';
-import { redirect } from '@sveltejs/kit';
+import { isRedirect, redirect } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const cookies = event.cookies;
@@ -52,7 +52,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 	} catch (error) {
 		// If it's a redirect, re-throw it
-		if (error instanceof Response && error.status >= 300 && error.status < 400) {
+		if (isRedirect(error)) {
 			throw error;
 		}
 		console.error('Authentication error:', error);
