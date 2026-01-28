@@ -202,58 +202,6 @@
 			</div>
 		</section>
 
-		<!-- Leadership Section -->
-		<section class="w-full">
-			<div class="mb-12 text-center">
-				<HeroBlock
-					class="self-auto"
-					no_signup
-					text_light_blue="Leadership"
-					text="Team"
-					subtitle="Meet the dedicated individuals who help guide our chapter's direction and activities"
-					size_text="text-8xl"
-				/>
-			</div>
-
-			<div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 ">
-				{#each data.leadership || [] as leader}
-					<Card.Root class="border-primary/20 p-6 text-center transition-shadow hover:shadow-lg">
-						<Card.Header>
-							{#if leader.profilePicture}
-								<img
-									src={leader.profilePicture}
-									alt="{leader.firstName} {leader.lastName}"
-									class="mx-auto mb-4 h-24 w-24 rounded-full object-cover"
-								/>
-							{:else}
-								<div
-									class="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-primary/10"
-								>
-									<span class="text-xl font-bold text-primary">
-										{leader.firstName[0]}{leader.lastName[0]}
-									</span>
-								</div>
-							{/if}
-							<Card.Title class="pb-8 text-2xl font-semibold text-primary"
-								>{leader.firstName} {leader.lastName}</Card.Title
-							>
-							<Badge
-								variant="secondary"
-								class="mx-auto mb-2 block bg-primary/40 text-sky-700 hover:bg-primary/70 hover:text-primary"
-							>
-								{leader.role}</Badge
-							>
-						</Card.Header>
-						{#if leader.bio}
-							<Card.Content class="mt-4 rounded-md bg-muted p-4 text-center text-secondary/80">
-								<p class="text-sm text-gray-600">{leader.bio}</p>
-							</Card.Content>
-						{/if}
-					</Card.Root>
-				{/each}
-			</div>
-		</section>
-
 		<!-- Join Us Section -->
 		<section class="w-full text-center">
 			<Card.Root class="bg-gradient-to-r from-primary to-secondary p-12">

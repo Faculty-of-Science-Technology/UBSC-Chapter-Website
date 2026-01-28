@@ -35,13 +35,19 @@
 								alt="{officer.firstName} {officer.lastName}"
 								class="mx-auto mb-4 h-28 w-28 rounded-full object-cover"
 							/>
-						{:else}
+						{:else if officer.firstName && officer.lastName}
 							<div
 								class="mx-auto mb-4 flex h-28 w-28 items-center justify-center rounded-full bg-primary/10"
 							>
 								<span class="text-2xl font-bold text-primary">
 									{officer.firstName[0]}{officer.lastName[0]}
 								</span>
+							</div>
+						{:else}
+							<div
+								class="mx-auto mb-4 flex h-28 w-28 items-center justify-center rounded-full bg-primary/10"
+							>
+								<span class="text-2xl font-bold text-primary">??</span>
 							</div>
 						{/if}
 
