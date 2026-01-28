@@ -58,7 +58,7 @@
 
 						<Badge
 							variant="secondary"
-							class="mx-auto mt-2 bg-primary/30 text-secondary text-secondary hover:bg-accent"
+							class="mx-auto mt-2 bg-primary/30 text-secondary hover:bg-accent"
 						>
 							{officer.role}
 						</Badge>
@@ -66,7 +66,7 @@
 
 					{#if officer.bio}
 						<Card.Content
-							class="mt-4 rounded-md bg-primary/30 text-secondary text-secondary hover:bg-accent"
+							class="mt-4 rounded-md bg-primary/30 text-secondary hover:bg-accent"
 						>
 							{officer.bio}
 						</Card.Content>
