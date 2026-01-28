@@ -17,7 +17,7 @@ export const load: PageServerLoad = async () => {
 			roleName: Roles.Name
 		})
 		.from(GroupMembers)
-		.leftJoin(Users, eq(GroupMembers.UserId, Users.Id))
+		.innerJoin(Users, eq(GroupMembers.UserId, Users.Id))
 		.leftJoin(UserRoles, eq(UserRoles.UserId, Users.Id))
 		.leftJoin(Roles, eq(UserRoles.RoleId, Roles.Id))
 		.where(eq(GroupMembers.GroupId, CHAPTER_OFFICERS_GROUP_ID));
