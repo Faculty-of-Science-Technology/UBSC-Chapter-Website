@@ -204,6 +204,7 @@ export const Groups = pgTable('Groups', {
 	Description: text('description'),
 	Type: groupTypeEnum('type').notNull().default('STANDARD'),
 	IsActive: boolean('is_active').notNull().default(true),
+	IsSystemRow: boolean('system_row').notNull().default(false),
 	CreatedBy: uuid('created_by').references(() => Users.Id, { onDelete: 'cascade' }),
 	CreatedAt: timestamp('__created_at__', { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
