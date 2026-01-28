@@ -9,9 +9,9 @@
 	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
 	import { ExternalLink } from 'lucide-svelte';
 	import '../app.css';
-	import type { PageProps } from './$types';
+	import type { LayoutData } from './$types';
 	let props = $props();
-	const { data }: PageProps = props;
+	const data: LayoutData = props;
 </script>
 
 {#if data.debug}

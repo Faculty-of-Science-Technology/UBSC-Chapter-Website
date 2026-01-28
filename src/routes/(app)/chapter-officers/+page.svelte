@@ -1,33 +1,30 @@
 <script lang="ts">
 	import Footer from '$lib/components/global/footer.svelte';
-	import PublicNav from '$lib/components/public/nav.svelte';
-	import * as Card from '$lib/components/vendor/ui/card';
 	import { Badge } from '$lib/components/vendor/ui/badge';
-	import type { PageData } from './$types';
+	import * as Card from '$lib/components/vendor/ui/card';
+	import type { PageProps } from './$types';
 
-	export let data: PageData;
+	const { data }: PageProps = $props();
 	const officers = data.officers;
 
-	const roleOrder = [
-	'Faculty Sponsor',
-	'Chapter Chair',
-	'Vice Chair',
-	'Secretary',
-	'Treasurer',
-	'Webmaster',
-	'Chapter Officer'
- ];
+// 	const roleOrder = [
+// 	'Faculty Sponsor',
+// 	'Chapter Chair',
+// 	'Vice Chair',
+// 	'Secretary',
+// 	'Treasurer',
+// 	'Webmaster',
+// 	'Chapter Officer'
+//  ];
 
-    const sortedOfficers = [...officers].sort(
-    	(a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role)
-    );
+//     const sortedOfficers = [...officers].sort(
+//     	(a, b) => roleOrder.indexOf(a.role) - roleOrder.indexOf(b.role)
+//     );
 
-   console.log(sortedOfficers.map(o => o.role));
+//    console.log(sortedOfficers.map(o => o.role));
 </script>
 
-<PublicNav />
-
-<section class="w-full py-20">
+<section class="w-full py-20 mt-24">
 	<div class="mx-auto max-w-7xl px-6">
 		<!-- Heading -->
 		<div class="mb-16 text-center">
@@ -43,7 +40,7 @@
 
 		<!-- Officers Grid -->
 		<div class="grid justify-center gap-8 sm:grid-cols-2 md:grid-cols-3">
-			{#each sortedOfficers as officer}
+			{#each officers as officer}
 				<Card.Root class="max-w-xs p-6 text-center hover:shadow-lg transition-shadow">
 					<Card.Header>
 						{#if officer.profilePicture}

@@ -1,5 +1,5 @@
 import { db } from '$lib/server/db';
-import { Groups, GroupMembers, Users, UserRoles, Roles } from '$lib/server/db/schema';
+import { GroupMembers, Roles, UserRoles, Users } from '$lib/server/db/schema';
 import { eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
