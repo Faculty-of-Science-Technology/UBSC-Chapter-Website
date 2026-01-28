@@ -23,7 +23,7 @@
 		<HeroBlock
 			text_light_blue="Belize's"
 			text="First ACM Chapter"
-			subtitle="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
+			subtitle="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACMSC) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
 		>
 			<Activity data={{ title: 'Active Members', number: statistics.totalMembers.toString() }} />
 			<Activity data={{ title: 'Active Groups', number: statistics.activeGroups.toString() }} />

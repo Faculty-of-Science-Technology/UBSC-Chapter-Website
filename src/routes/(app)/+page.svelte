@@ -13,7 +13,7 @@
 	<title>UBACMSC &mdash; UB ACM Student Chapter</title>
 	<meta
 		name="description"
-		content="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
+		content="The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACMSC) at The University of Belize is dedicated to upskilling and informing Belizeans about Technology."
 	/>
 </svelte:head>
 

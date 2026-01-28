@@ -22,7 +22,7 @@
 			class="inter flex flex-col items-start justify-center gap-2.5 text-sm font-light leading-tight"
 		>
 			<section>
-				The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACM) at The
+				The University of Belize's Associate for Computer Machinery (ACM) Chapter (UBACMSC) at The
 				University of Belize is dedicated to upskilling and informing Belizeans about Technology.
 			</section>
 			<section class="flex items-center justify-center gap-8">
@@ -39,7 +39,7 @@
 				<a href="https://twitter.com/AcmUB" target="_blank" rel="noopener noreferrer">
 					<Fa icon={faTwitter} />
 				</a>
-				<a href="https://www.linkedin.com/company/ubacm/" target="_blank" rel="noopener noreferrer">
+				<a href="https://www.linkedin.com/company/UBACMSC/" target="_blank" rel="noopener noreferrer">
 					<Fa icon={faLinkedin} />
 				</a>
 				<a
