@@ -99,6 +99,19 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                     throw error(400, 'Group ID is required');
                 }
 
+                // Is this a system group?
+                const group = await db
+                    .select().from(Groups)
+                    .where(eq(Groups.Id, groupId))
+                    .limit(1)
+                    .then(res => res[0]);
+                if (!group) {
+                    throw error(404, 'Group not found');
+                }
+                if (group.IsSystemRow) {
+                    throw error(403, 'Cannot delete a system group');
+                }
+
                 // Delete group members first
                 await db.delete(GroupMembers).where(eq(GroupMembers.GroupId, groupId));
                 
