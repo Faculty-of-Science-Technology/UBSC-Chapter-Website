@@ -94,7 +94,7 @@
 							<div class="p-1">
 								<AspectRatio
 									ratio={16 / 9}
-									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-blue-500 to-sky-600"
+									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary/80"
 								>
 									<div class="absolute inset-0 bg-black/40"></div>
 									<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
@@ -150,7 +150,7 @@
 							<div class="p-1">
 								<AspectRatio
 									ratio={16 / 9}
-									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-green-500 to-blue-600"
+									class="relative overflow-hidden rounded-lg bg-gradient-to-br from-secondary to-primary"
 								>
 									<div class="absolute inset-0 bg-black/40"></div>
 									<div class="absolute inset-0 flex flex-col justify-end p-4 text-background">
@@ -200,9 +200,9 @@
 					<div class="mb-8 grid gap-6 md:grid-cols-3">
 						<div class="text-center">
 							<div
-								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100"
+								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted"
 							>
-								<span class="text-xl font-bold text-blue-600">1</span>
+								<span class="text-xl font-bold text-primary">1</span>
 							</div>
 							<h4 class="mb-2 font-semibold">Explore Groups</h4>
 							<p class="text-sm text-gray-600">
@@ -211,16 +211,16 @@
 						</div>
 						<div class="text-center">
 							<div
-								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100"
+								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted"
 							>
-								<span class="text-xl font-bold text-green-600">2</span>
+								<span class="text-xl font-bold text-primary">2</span>
 							</div>
 							<h4 class="mb-2 font-semibold">Contact Us</h4>
 							<p class="text-sm text-gray-600">Reach out to express your interest in joining</p>
 						</div>
 						<div class="text-center">
 							<div
-								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-100"
+								class="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted"
 							>
 								<span class="text-xl font-bold text-primary">3</span>
 							</div>

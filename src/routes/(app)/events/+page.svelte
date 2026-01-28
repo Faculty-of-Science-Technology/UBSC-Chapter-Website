@@ -73,7 +73,7 @@
 			<div class="grid grid-cols-2 gap-6 md:grid-cols-4">
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-blue-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalEvents}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Events</p>
@@ -89,7 +89,7 @@
 				</Card.Root>
 				<Card.Root class="p-6 text-center">
 					<Card.Header>
-						<Card.Title class="text-3xl font-bold text-blue-600"
+						<Card.Title class="text-3xl font-bold text-primary"
 							>{data.statistics.totalAttendees}</Card.Title
 						>
 						<p class="text-sm text-gray-600">Total Attendees</p>
@@ -122,7 +122,7 @@
 							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
 						>
 							<svg
-								class="h-8 w-8 text-blue-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -146,7 +146,7 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"
 						>
 							<svg
 								class="h-8 w-8 text-primary"
@@ -172,10 +172,10 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"
 						>
 							<svg
-								class="h-8 w-8 text-blue-600"
+								class="h-8 w-8 text-primary"
 								fill="none"
 								stroke="currentColor"
 								viewBox="0 0 24 24"
@@ -198,7 +198,7 @@
 				<Card.Root class="p-6 text-center transition-shadow hover:shadow-lg">
 					<Card.Header>
 						<div
-							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-sky-100"
+							class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted"
 						>
 							<svg
 								class="h-8 w-8 text-primary"
@@ -483,7 +483,7 @@
 										<div class="flex items-center gap-2 pt-2">
 											<Badge variant="outline" class="text-xs">Past Event</Badge>
 											{#if event.authorName}
-												<Badge variant="secondary" class="text-xs text-background bg-sky-400">
+												<Badge variant="secondary" class="text-xs text-background bg-primary">
 													By {event.authorName}
 													{event.authorLastName}
 												</Badge>
