@@ -28,10 +28,9 @@
 		</a>
 	</p>
 {/if}
-<ParaglideJS {i18n}>
-	<Toaster />
-	{@render props.children()}
-</ParaglideJS>
+
+<Toaster />
+{@render props.children()}
 
 <style>
 	:root {
