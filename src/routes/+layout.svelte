@@ -11,7 +11,7 @@
 	import '../app.css';
 	import type { LayoutData } from './$types';
 	let props = $props();
-	const data: LayoutData = props;
+	const { data }: { data: LayoutData } = props;
 </script>
 
 {#if data.debug}
