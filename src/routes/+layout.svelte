@@ -5,8 +5,6 @@
 		PUBLIC_PLATFORM_VERSION
 	} from '$env/static/public';
 	import { Toaster } from '$lib/components/vendor/ui/sonner';
-	import { i18n } from '$lib/i18n';
-	import { ParaglideJS } from '@inlang/paraglide-sveltekit';
 	import { ExternalLink } from 'lucide-svelte';
 	import '../app.css';
 	import type { LayoutData } from './$types';
@@ -30,10 +28,9 @@
 		</a>
 	</p>
 {/if}
-<ParaglideJS {i18n}>
-	<Toaster />
-	{@render props.children()}
-</ParaglideJS>
+
+<Toaster />
+{@render props.children()}
 
 <style>
 	:root {
