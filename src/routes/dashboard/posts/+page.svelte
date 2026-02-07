@@ -6,6 +6,7 @@
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
+	import * as Dialog from '$lib/components/vendor/ui/dialog'
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
@@ -14,6 +15,7 @@
 	let showEditPost = $state(false);
 	let selectedPost: any = $state(null);
 	let loading = $state(false);
+
 
 	// Form data for creating new post
 	let newPost = $state({
@@ -255,7 +257,7 @@
 						</thead>
 						<tbody class="divide-y divide-muted/20 bg-background">
 							{#each data.posts as post}
-								<tr>
+                                <tr>
 									<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 										<div class="flex items-center">
 											<div class="ml-4">
@@ -578,3 +580,5 @@
 		</div>
 	</div>
 {/if}
+
+
