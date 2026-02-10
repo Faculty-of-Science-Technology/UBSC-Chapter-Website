@@ -6,7 +6,7 @@
 	import { Switch } from '$lib/components/vendor/ui/switch';
 	import { Textarea } from '$lib/components/vendor/ui/textarea';
 	import HeroText from '$lib/templates/landing/widgets/hero-text.svelte';
-	import * as Dialog from '$lib/components/vendor/ui/dialog'
+	import * as Dialog from '$lib/components/vendor/ui/dialog';
 	import type { PageProps } from './$types';
 
 	const { data }: PageProps = $props();
