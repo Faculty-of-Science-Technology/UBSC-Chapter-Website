@@ -16,7 +16,6 @@
 	let selectedPost: any = $state(null);
 	let loading = $state(false);
 
-
 	// Form data for creating new post
 	let newPost = $state({
 		title: '',
