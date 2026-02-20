@@ -14,12 +14,15 @@ export const load: PageServerLoad = async () => {
 	});
 
 	return {
-		posts: posts.map((post) => ({
-			title: post.Title,
-			date: post.PublishedAt ?? post.CreatedAt,
-			excerpt:
-				post.Excerpt ??
-				(post.Content ?? '').slice(0, 150) + '...'
-		}))
-	};
+	posts: posts.map((post) => ({
+		id: post.Id,
+		title: post.Title,
+		content: post.Content,
+		date: post.PublishedAt ?? post.CreatedAt,
+		excerpt:
+			post.Excerpt ??
+			(post.Content ?? '').slice(0, 150) + '...'
+	}))
 };
+};
+

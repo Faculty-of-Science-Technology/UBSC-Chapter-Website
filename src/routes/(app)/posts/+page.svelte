@@ -9,7 +9,16 @@
 	export let data: PageData;
 	const { posts } = data;
 
-	let selectedPost: any = null;
+	interface Post {
+	id: string;
+	title: string;
+	content: string;
+	excerpt: string;
+	date: Date;
+}
+
+	//adding $state() caused an error
+	let selectedPost: any = null; 
 	let showDialog = false;
 
 	function openPost(post: any) {
@@ -21,6 +30,7 @@
 		showDialog = false;
 		selectedPost = null;
 	}
+
 </script>
 
 <svelte:head>
@@ -54,8 +64,13 @@
 					<div class="mx-auto grid max-w-3xl grid-cols-1 gap-6 md:grid-cols-2">
 						{#each posts as post}
 							<Card.Root
-								class="p-6 transition-transform hover:scale-105 cursor-pointer"
+								role="button"
 								onclick={() => openPost(post)}
+								onkeydown={(e) => {
+		                      if (e.key === 'Enter' || e.key === ' ') {
+			                     openPost(post);
+		                            }
+	                            }}
 							>
 								<Card.Header>
 									<Card.Title class="text-xl font-bold">
@@ -88,7 +103,10 @@
 
 <!-- POST VIEW DIALOG -->
 {#if selectedPost}
-	<Dialog.Root open={showDialog} onOpenChange={closePost}>
+	<Dialog.Root open={showDialog} onOpenChange={(open) => {
+		showDialog = open;
+		if (!open) selectedPost = null;
+	}}>
 		<Dialog.Content class="max-w-2xl">
 			<Dialog.Header>
 				<Dialog.Title class="text-xl font-bold">
@@ -104,14 +122,13 @@
 			</div>
 
 			<div class="mt-6 flex justify-end">
-				<button
-					class="px-4 py-2 rounded bg-primary text-background"
-					onclick={closePost}
-				>
-					Close
-				</button>
+				<Dialog.Close>
+	                 <button class="px-4 py-2 rounded bg-primary text-background">
+		               Close
+	               </button>
+               </Dialog.Close>
 			</div>
 		</Dialog.Content>
 	</Dialog.Root>
 {/if}
-```
+
